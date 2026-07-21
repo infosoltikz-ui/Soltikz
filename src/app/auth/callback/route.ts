@@ -10,7 +10,11 @@ export async function GET(request: Request) {
     const supabase = await createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
-      return NextResponse.redirect(new URL(next, request.url))
+      const redirectUrl = new URL(next, request.url)
+      if (redirectUrl.pathname === '/dashboard') {
+        redirectUrl.searchParams.set('login', 'success')
+      }
+      return NextResponse.redirect(redirectUrl)
     }
   }
 

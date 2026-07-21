@@ -2,6 +2,7 @@
 
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { ReactNode } from 'react'
+import { Toaster } from 'react-hot-toast'
 
 export function Providers({ children }: { children: ReactNode }) {
   // Use a fallback or throw if missing in a real production app
@@ -9,6 +10,7 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <GoogleOAuthProvider clientId={clientId}>
+      <Toaster position="top-center" reverseOrder={false} />
       {children}
     </GoogleOAuthProvider>
   )

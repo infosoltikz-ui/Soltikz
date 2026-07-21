@@ -1,11 +1,27 @@
 "use client";
-import { useState, useTransition } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useTransition, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Eye, EyeOff, Mail, Lock, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { createClient } from '@/utils/supabase/client'
 import { login } from '../actions'
+import { toast } from 'react-hot-toast'
+import { Suspense } from 'react'
+
+function LoginToast() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (searchParams.get('logout') === 'success') {
+      toast.success('Successfully logged out!')
+      router.replace('/login')
+    }
+  }, [searchParams, router])
+
+  return null
+}
 
 export default function LoginPage() {
   const router = useRouter()
@@ -46,7 +62,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-[#F8FAFC]">
+      <Suspense fallback={null}>
+        <LoginToast />
+      </Suspense>
 
       {/* ── Left Panel (Image) ─────────────────────────── */}
       <div className="hidden lg:flex lg:w-[48%] xl:w-[52%] relative overflow-hidden bg-white items-center justify-center border-r border-slate-100">
