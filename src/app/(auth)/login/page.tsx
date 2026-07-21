@@ -1,12 +1,14 @@
 "use client";
 import { ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Eye, EyeOff, Mail, Lock, ArrowRight, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useGoogleLogin } from '@react-oauth/google'
 
 export default function LoginPage() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -15,7 +17,7 @@ export default function LoginPage() {
     onSuccess: (tokenResponse) => {
       console.log('Google login success:', tokenResponse);
       // In a real app, send the token to your backend here
-      alert('Google Login Successful! Check console for token.');
+      router.push('/dashboard');
     },
     onError: () => {
       console.error('Google login failed');
@@ -94,7 +96,13 @@ export default function LoginPage() {
           </div>
 
           {/* Form */}
-          <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+          <form 
+            className="space-y-5" 
+            onSubmit={(e) => {
+              e.preventDefault()
+              router.push('/dashboard')
+            }}
+          >
 
             {/* Email */}
             <div>
