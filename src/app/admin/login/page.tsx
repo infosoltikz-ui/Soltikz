@@ -86,8 +86,7 @@ export default function AdminLoginPage() {
     if (error) {
       toast.error(error.message)
     } else {
-      toast.success('Admin authentication successful!')
-      router.push('/admin')
+      router.push('/admin?login=success')
     }
   }
 

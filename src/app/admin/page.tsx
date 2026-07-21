@@ -6,10 +6,15 @@ import { ActivityTimeline } from '@/components/admin/dashboard/ActivityTimeline'
 import { QuickActions } from '@/components/admin/dashboard/QuickActions'
 import { SystemHealth } from '@/components/admin/dashboard/SystemHealth'
 import { RecentPaymentsTable } from '@/components/admin/dashboard/RecentPaymentsTable'
+import { LoginSuccessToast } from '@/components/admin/LoginSuccessToast'
+import { Suspense } from 'react'
 
 export default function AdminDashboardPage() {
   return (
     <div className="flex">
+      <Suspense fallback={null}>
+        <LoginSuccessToast />
+      </Suspense>
       {/* Main Center Content */}
       <div className="flex-1 p-8 overflow-x-hidden">
         <AnalyticsCards />
