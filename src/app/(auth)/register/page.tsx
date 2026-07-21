@@ -7,15 +7,11 @@ import { Button } from '@/components/ui/Button'
 import { cn } from '@/utils/cn'
 import { useGoogleLogin } from '@react-oauth/google'
 
-const plans = [
-  { id: 'free', label: 'Free', desc: 'Get started', price: '$0' },
-  { id: 'pro', label: 'Pro', desc: 'Most popular', price: '$9.99', badge: true },
-]
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
-  const [selectedPlan, setSelectedPlan] = useState('free')
+
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -83,40 +79,6 @@ export default function RegisterPage() {
             <p className="text-slate-500 font-medium">Free forever. Upgrade when you're ready.</p>
           </div>
 
-          {/* Plan Toggle */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            {plans.map((plan) => (
-              <button
-                key={plan.id}
-                onClick={() => setSelectedPlan(plan.id)}
-                className={cn(
-                  "relative flex flex-col items-start p-4 rounded-xl border-2 transition-all text-left",
-                  selectedPlan === plan.id
-                    ? "border-primary bg-primary/5"
-                    : "border-slate-200 bg-white hover:border-primary/40"
-                )}
-              >
-                {plan.badge && (
-                  <div className="absolute -top-2.5 right-3 bg-accent text-white text-[10px] font-black px-2.5 py-0.5 rounded-full">
-                    Popular
-                  </div>
-                )}
-                <div className="flex items-center gap-2 mb-1">
-                  <div className={cn(
-                    "w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0",
-                    selectedPlan === plan.id ? "border-primary bg-primary" : "border-slate-300"
-                  )}>
-                    {selectedPlan === plan.id && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
-                  </div>
-                  <span className="text-sm font-black text-slate-900">{plan.label}</span>
-                </div>
-                <div className="text-[11px] font-medium text-slate-500">{plan.desc}</div>
-                <div className={cn("text-lg font-black mt-1", selectedPlan === plan.id ? "text-primary" : "text-slate-700")}>
-                  {plan.price}<span className="text-xs font-bold text-slate-400">/mo</span>
-                </div>
-              </button>
-            ))}
-          </div>
 
           {/* Social Signup */}
           <div className="grid grid-cols-2 gap-3 mb-6">
