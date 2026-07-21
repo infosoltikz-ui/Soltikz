@@ -42,11 +42,11 @@ export default function RegisterPage() {
     <div className="min-h-screen flex">
 
       {/* ── Left Panel (Image) ─────────────────────────── */}
-      <div className="hidden lg:flex lg:w-[44%] xl:w-[48%] relative overflow-hidden bg-black items-center justify-center">
+      <div className="hidden lg:flex lg:w-[44%] xl:w-[48%] relative overflow-hidden bg-white items-center justify-center border-r border-slate-100">
         <img
           src="/login side pannel image.png"
           alt="Soltkiz - Build Resumes That Actually Get Results"
-          className="w-full h-full object-contain p-8"
+          className="w-full h-full object-contain p-4 lg:p-8"
         />
       </div>
 
