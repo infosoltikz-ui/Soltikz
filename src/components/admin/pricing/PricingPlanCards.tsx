@@ -3,7 +3,23 @@
 import { CheckCircle2, Copy, Edit3, Power, HelpCircle } from 'lucide-react'
 import { useState } from 'react'
 
-const PLANS = [
+type Feature = {
+  name: string;
+  val: string;
+  disabled?: boolean;
+}
+
+type Plan = {
+  id: string;
+  name: string;
+  price: string;
+  period?: string;
+  popular: boolean;
+  status: string;
+  features: Feature[];
+}
+
+const PLANS: Plan[] = [
   {
     id: 'free',
     name: 'Free',
