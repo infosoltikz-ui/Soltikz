@@ -1,20 +1,49 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { ArrowRight, Lock, Shield, Server, FileText, BarChart3, Database, ArrowLeft, Key, Activity, Fingerprint } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import Link from 'next/link'
+import { createClient } from '@/utils/supabase/client'
+import { useRouter } from 'next/navigation'
+import { toast } from 'react-hot-toast'
+
+const ADMIN_EMAILS = [
+  'info.soltikz@gmail.com',
+  'balajiprojects049@gmail.com'
+]
 
 export default function AdminLoginPage() {
   const [step, setStep] = useState<'email' | 'otp'>('email')
   const [email, setEmail] = useState('')
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
+  const [isLoading, setIsLoading] = useState(false)
   const otpRefs = useRef<(HTMLInputElement | null)[]>([])
+  const router = useRouter()
 
-  const handleSendOTP = (e: React.FormEvent) => {
+  const handleSendOTP = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (email) {
+    
+    if (!ADMIN_EMAILS.includes(email.toLowerCase().trim())) {
+      toast.error('Unauthorized email address.')
+      return
+    }
+
+    setIsLoading(true)
+    const supabase = createClient()
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        shouldCreateUser: false
+      }
+    })
+    setIsLoading(false)
+
+    if (error) {
+      toast.error(error.message)
+    } else {
+      toast.success('Security code sent to your email!')
       setStep('otp')
     }
   }
@@ -37,9 +66,29 @@ export default function AdminLoginPage() {
     }
   }
 
-  const handleVerifyOTP = (e: React.FormEvent) => {
+  const handleVerifyOTP = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Verify OTP logic
+    const token = otp.join('')
+    if (token.length !== 6) {
+      toast.error('Please enter all 6 digits.')
+      return
+    }
+
+    setIsLoading(true)
+    const supabase = createClient()
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: 'email'
+    })
+    setIsLoading(false)
+
+    if (error) {
+      toast.error(error.message)
+    } else {
+      toast.success('Admin authentication successful!')
+      router.push('/admin/dashboard')
+    }
   }
 
   return (
@@ -197,9 +246,9 @@ export default function AdminLoginPage() {
                     className="h-12 bg-slate-50/50 border-slate-200 focus:bg-white text-[15px] rounded-xl"
                   />
                 </div>
-                <Button type="submit" className="w-full h-12 text-[15px] font-bold rounded-xl shadow-lg shadow-primary/20 group">
-                  Send OTP
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" strokeWidth={2.5} />
+                <Button type="submit" disabled={isLoading} className="w-full h-12 text-[15px] font-bold rounded-xl shadow-lg shadow-primary/20 group">
+                  {isLoading ? 'Sending...' : 'Send OTP'}
+                  {!isLoading && <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" strokeWidth={2.5} />}
                 </Button>
               </form>
             ) : (
@@ -230,8 +279,8 @@ export default function AdminLoginPage() {
                     ))}
                   </div>
 
-                  <Button type="submit" className="w-full h-12 text-[15px] font-bold rounded-xl shadow-lg shadow-primary/20">
-                    Verify & Authenticate
+                  <Button type="submit" disabled={isLoading} className="w-full h-12 text-[15px] font-bold rounded-xl shadow-lg shadow-primary/20">
+                    {isLoading ? 'Verifying...' : 'Verify & Authenticate'}
                   </Button>
 
                   <div className="mt-5 flex items-center justify-between text-[13px] font-bold">
