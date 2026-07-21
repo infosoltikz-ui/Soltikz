@@ -35,6 +35,9 @@ interface SidebarProps {
   setIsMobileOpen?: (val: boolean) => void;
 }
 
+import { createClient } from '@/utils/supabase/client'
+import { useRouter } from 'next/navigation'
+
 export function Sidebar({ 
   isCollapsed = false, 
   setIsCollapsed,
@@ -42,6 +45,13 @@ export function Sidebar({
   setIsMobileOpen
 }: SidebarProps) {
   const pathname = usePathname()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
 
   return (
     <>
@@ -122,6 +132,7 @@ export function Sidebar({
         <div className="pt-4 mt-4 border-t border-slate-100">
           <button 
             title={isCollapsed ? "Logout" : undefined}
+            onClick={handleLogout}
             className={cn(
               "w-full flex items-center px-4 py-3.5 rounded-xl text-[14px] font-bold text-red-500 hover:bg-red-50 transition-all duration-200",
               isCollapsed ? "justify-center" : "gap-3"
