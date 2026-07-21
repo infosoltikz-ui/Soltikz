@@ -36,7 +36,7 @@ export default function LoginPage() {
       </div>
 
       {/* ── Right Panel (Form) ─────────────────────────── */}
-      <div className="flex-1 flex flex-col justify-center px-6 py-12 sm:px-10 lg:px-16 xl:px-24 bg-white">
+      <div className="flex-1 flex flex-col justify-start px-6 pt-12 pb-12 sm:px-10 lg:px-16 lg:pt-24 xl:px-24 bg-white overflow-y-auto">
 
 
 
