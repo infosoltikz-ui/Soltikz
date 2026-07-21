@@ -5,8 +5,8 @@ export async function middleware(request: NextRequest) {
   // Update the Supabase session
   const { supabaseResponse, user } = await updateSession(request)
 
-  const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register')
-  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') || request.nextUrl.pathname.startsWith('/admin')
+  const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register') || request.nextUrl.pathname === '/admin/login'
+  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') || (request.nextUrl.pathname.startsWith('/admin') && request.nextUrl.pathname !== '/admin/login')
 
   // If user is logged in and tries to access an auth route, redirect to dashboard
   if (user && isAuthRoute) {
