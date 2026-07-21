@@ -37,6 +37,7 @@ interface SidebarProps {
 
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
+import { toast } from 'react-hot-toast'
 
 export function Sidebar({ 
   isCollapsed = false, 
@@ -52,6 +53,34 @@ export function Sidebar({
     await supabase.auth.signOut()
     router.push('/login?logout=success')
     router.refresh()
+  }
+
+  const handleLogoutClick = () => {
+    toast((t) => (
+      <div>
+        <p className="mb-3 font-bold text-slate-800">Are you sure you want to log out?</p>
+        <div className="flex gap-2 justify-end mt-2">
+          <button 
+            onClick={() => toast.dismiss(t.id)} 
+            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[13px] font-bold transition-colors"
+          >
+            Cancel
+          </button>
+          <button 
+            onClick={() => {
+              toast.dismiss(t.id)
+              handleLogout()
+            }} 
+            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-[13px] font-bold transition-colors shadow-sm"
+          >
+            Log Out
+          </button>
+        </div>
+      </div>
+    ), { 
+      duration: Infinity,
+      position: 'top-center'
+    })
   }
 
   return (
@@ -133,7 +162,7 @@ export function Sidebar({
         <div className="pt-4 mt-4 border-t border-slate-100">
           <button 
             title={isCollapsed ? "Logout" : undefined}
-            onClick={handleLogout}
+            onClick={handleLogoutClick}
             className={cn(
               "w-full flex items-center px-4 py-3.5 rounded-xl text-[14px] font-bold text-red-500 hover:bg-red-50 transition-all duration-200",
               isCollapsed ? "justify-center" : "gap-3"
