@@ -1,3 +1,4 @@
+"use client"
 import { DashboardHeader } from '@/components/dashboard/Header'
 import { StatCards } from '@/components/dashboard/StatCards'
 import { PlanDetails } from '@/components/dashboard/PlanDetails'
