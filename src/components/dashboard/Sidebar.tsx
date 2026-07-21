@@ -13,7 +13,8 @@ import {
   Crown,
   ArrowRight,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  X
 } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { Button } from '@/components/ui/Button'
@@ -30,18 +31,42 @@ const NAV_ITEMS = [
 interface SidebarProps {
   isCollapsed?: boolean;
   setIsCollapsed?: (val: boolean) => void;
+  isMobileOpen?: boolean;
+  setIsMobileOpen?: (val: boolean) => void;
 }
 
-export function Sidebar({ isCollapsed = false, setIsCollapsed }: SidebarProps) {
+export function Sidebar({ 
+  isCollapsed = false, 
+  setIsCollapsed,
+  isMobileOpen = false,
+  setIsMobileOpen
+}: SidebarProps) {
   const pathname = usePathname()
 
   return (
-    <aside 
-      className={cn(
-        "h-screen bg-white border-r border-slate-100 flex flex-col fixed left-0 top-0 z-40 transition-all duration-300 ease-in-out",
-        isCollapsed ? "w-[80px]" : "w-[280px]"
+    <>
+      {/* Mobile Overlay */}
+      {isMobileOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 transition-opacity"
+          onClick={() => setIsMobileOpen?.(false)}
+        />
       )}
-    >
+
+      <aside 
+        className={cn(
+          "h-screen bg-white border-r border-slate-100 flex flex-col fixed left-0 top-0 z-50 transition-all duration-300 ease-in-out",
+          isCollapsed ? "md:w-[80px]" : "w-[280px]",
+          isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        )}
+      >
+        {/* Mobile Close Button */}
+        <button 
+          onClick={() => setIsMobileOpen?.(false)}
+          className="md:hidden absolute top-6 right-4 p-2 text-slate-400 hover:text-slate-600 transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
       {/* Toggle Button */}
       {setIsCollapsed && (
         <button 
@@ -110,7 +135,7 @@ export function Sidebar({ isCollapsed = false, setIsCollapsed }: SidebarProps) {
 
       {/* Current Plan Card */}
       {!isCollapsed && (
-        <div className="p-6 animate-in fade-in duration-300">
+        <div className="p-6 animate-in fade-in duration-300 hidden md:block">
           <div className="bg-[#FAFAF8] rounded-2xl p-5 border border-slate-200 shadow-sm relative overflow-hidden">
             {/* Decorative background element */}
             <div className="absolute -top-10 -right-10 w-24 h-24 bg-primary/5 rounded-full blur-2xl"></div>
@@ -163,5 +188,6 @@ export function Sidebar({ isCollapsed = false, setIsCollapsed }: SidebarProps) {
         </div>
       )}
     </aside>
+    </>
   )
 }
