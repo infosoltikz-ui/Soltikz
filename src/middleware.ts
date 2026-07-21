@@ -25,13 +25,13 @@ export async function middleware(request: NextRequest) {
     if (isAuthRoute) {
       // Normal auth route -> dashboard
       const url = request.nextUrl.clone()
-      url.pathname = isAdmin ? '/admin/dashboard' : '/dashboard'
+      url.pathname = isAdmin ? '/admin' : '/dashboard'
       return Response.redirect(url)
     }
     if (isAdminAuthRoute) {
       // Admin auth route -> admin dashboard
       const url = request.nextUrl.clone()
-      url.pathname = isAdmin ? '/admin/dashboard' : '/dashboard'
+      url.pathname = isAdmin ? '/admin' : '/dashboard'
       return Response.redirect(url)
     }
   }
