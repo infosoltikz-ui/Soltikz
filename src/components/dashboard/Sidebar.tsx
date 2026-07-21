@@ -23,7 +23,7 @@ const NAV_ITEMS = [
   { label: 'Master Profile', href: '/dashboard/profile', icon: User },
   { label: 'Create Resume', href: '/dashboard/create', icon: FileEdit },
   { label: 'My Resumes', href: '/dashboard/resumes', icon: Folder },
-  { label: 'Pricing', href: '/pricing', icon: DollarSign },
+  { label: 'Pricing', href: '/dashboard/pricing', icon: DollarSign },
   { label: 'Settings', href: '/dashboard/settings', icon: Settings },
 ]
 
@@ -108,28 +108,56 @@ export function Sidebar({ isCollapsed = false, setIsCollapsed }: SidebarProps) {
         </div>
       </nav>
 
-      {/* Upgrade CTA */}
+      {/* Current Plan Card */}
       {!isCollapsed && (
         <div className="p-6 animate-in fade-in duration-300">
-          <div className="bg-[#F8FAFC] rounded-2xl p-5 border border-slate-100">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center shrink-0">
-                <Crown className="w-3 h-3 text-orange-500" strokeWidth={3} />
+          <div className="bg-[#FAFAF8] rounded-2xl p-5 border border-slate-200 shadow-sm relative overflow-hidden">
+            {/* Decorative background element */}
+            <div className="absolute -top-10 -right-10 w-24 h-24 bg-primary/5 rounded-full blur-2xl"></div>
+            
+            <div className="flex items-center justify-between mb-4 relative z-10">
+              <div className="flex items-center gap-2">
+                <Crown className="w-4 h-4 text-orange-500" strokeWidth={2.5} />
+                <h4 className="font-black text-slate-900 text-[14px]">Free Plan</h4>
               </div>
-              <h4 className="font-black text-slate-900 text-[15px]">Upgrade to Premium</h4>
+              <span className="px-2 py-0.5 bg-green-100 text-primary text-[10px] font-black rounded uppercase tracking-wider">Active</span>
             </div>
-            <Button 
-              className="group w-full h-10 text-[13px] font-bold rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden"
-              rightIcon={
-                <div className="w-0 overflow-hidden group-hover:w-4 transition-all duration-300 ease-out flex items-center justify-start">
-                  <ArrowRight 
-                    className="w-4 h-4 opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-out delay-75" 
-                    strokeWidth={3} 
-                  />
+
+            <div className="space-y-3 mb-5 relative z-10">
+              {/* Resume Usage */}
+              <div>
+                <div className="flex items-center justify-between text-[11px] font-bold mb-1.5">
+                  <span className="text-slate-500">Resumes</span>
+                  <span className="text-slate-900">8 / 10</span>
                 </div>
-              }
+                <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-primary rounded-full w-[80%]"></div>
+                </div>
+              </div>
+
+              {/* ATS Optimizations */}
+              <div>
+                <div className="flex items-center justify-between text-[11px] font-bold mb-1.5">
+                  <span className="text-slate-500">ATS Scans</span>
+                  <span className="text-slate-900">12 / 20</span>
+                </div>
+                <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-orange-500 rounded-full w-[60%]"></div>
+                </div>
+              </div>
+              
+              {/* AI Credits */}
+              <div className="pt-1">
+                <span className="text-[11px] font-bold text-slate-500 block">
+                  <strong className="text-slate-900">80</strong> AI Credits Remaining
+                </span>
+              </div>
+            </div>
+
+            <Button 
+              className="w-full h-10 text-[13px] font-bold rounded-xl shadow-sm hover:shadow-md transition-all relative z-10"
             >
-              Upgrade Now
+              Upgrade Plan
             </Button>
           </div>
         </div>
