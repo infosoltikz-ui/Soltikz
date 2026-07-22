@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     const { resumeId, parsedJdData, resumeContent } = await req.json();
     if (!resumeId || !parsedJdData || !resumeContent) return NextResponse.json({ error: 'Missing payload data' }, { status: 400 });
 
-    const aiResponse = await generateAIResponse({
+    const aiResponse = await generateAIResponse<any>({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt: `Job Description:\n${JSON.stringify(parsedJdData)}\n\nCandidate Resume:\n${JSON.stringify(resumeContent)}`,
       model: 'gpt-4o', 

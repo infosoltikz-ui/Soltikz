@@ -1,7 +1,7 @@
 import { Plus, Trash2, FolderOpen, Globe } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
-export function ProjectsForm() {
+export function ProjectsForm({ profile, setProfile }: { profile?: any, setProfile?: (p: any) => void }) {
   const projects = [1, 2, 3, 4, 5, 6]
 
   return (

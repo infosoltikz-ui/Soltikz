@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { User, Settings, LogOut } from 'lucide-react'
 
-export function ProfileHeader() {
+export function ProfileHeader({ profile }: { profile?: any }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 

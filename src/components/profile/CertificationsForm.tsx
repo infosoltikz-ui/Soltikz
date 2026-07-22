@@ -1,7 +1,7 @@
 import { Plus, Trash2, Award, Building2, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
-export function CertificationsForm() {
+export function CertificationsForm({ profile, setProfile }: { profile?: any, setProfile?: (p: any) => void }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
       

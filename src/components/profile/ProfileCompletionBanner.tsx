@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react'
 
-export function ProfileCompletionBanner() {
+export function ProfileCompletionBanner({ profile }: { profile?: any }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col lg:flex-row items-center gap-8 mt-6">
       

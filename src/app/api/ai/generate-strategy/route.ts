@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     }
 
     // Call the AI Gateway
-    const aiResponse = await generateAIResponse({
+    const aiResponse = await generateAIResponse<any>({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt: `Master Profile:\n${JSON.stringify(masterProfile)}\n\nParsed Job Description:\n${JSON.stringify(parsedJdData)}`,
       model: 'gpt-4o', // Using the smarter model for complex strategic reasoning

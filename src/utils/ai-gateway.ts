@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 
 // Initialize OpenAI. It automatically looks for process.env.OPENAI_API_KEY
-const openai = new OpenAI();
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'dummy_build_key' });
 
 export type AIProvider = 'openai' | 'claude' | 'gemini';
 
@@ -46,7 +46,7 @@ export async function generateAIResponse<T = string>(
 
   try {
     if (provider === 'openai') {
-      const completion = await openai.beta.chat.completions.parse({
+      const completion = await openai.chat.completions.parse({
         model: model,
         messages: [
           { role: 'system', content: options.systemPrompt },

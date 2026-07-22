@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     }
 
     // Call the AI Gateway
-    const aiResponse = await generateAIResponse({
+    const aiResponse = await generateAIResponse<any>({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt: `Parse the following Job Description:\n\n${jobDescription}`,
       model: 'gpt-4o-mini', // 4o-mini is great for fast text parsing

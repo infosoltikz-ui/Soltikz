@@ -1,7 +1,7 @@
 import { Plus, X, Wrench, Search } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
-export function SkillsForm() {
+export function SkillsForm({ profile, setProfile }: { profile?: any, setProfile?: (p: any) => void }) {
   const defaultSkills = [
     { name: 'JavaScript', category: 'Programming Languages' },
     { name: 'React.js', category: 'Libraries & Frameworks' },

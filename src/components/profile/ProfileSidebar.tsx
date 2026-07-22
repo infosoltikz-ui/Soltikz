@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
-export function ProfileSidebar() {
+export function ProfileSidebar({ profile }: { profile?: any }) {
   const summaryItems = [
     { label: 'Name', value: 'John Doe', icon: User },
     { label: 'Email', value: 'john.doe@example.com', icon: Mail },

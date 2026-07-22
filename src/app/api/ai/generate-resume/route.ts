@@ -70,7 +70,7 @@ export async function POST(req: Request) {
     }
 
     // Call the AI Gateway
-    const aiResponse = await generateAIResponse({
+    const aiResponse = await generateAIResponse<any>({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt: `Resume Type: ${resumeType}\n\nMaster Profile:\n${JSON.stringify(masterProfile)}\n\nParsed JD:\n${JSON.stringify(parsedJdData)}\n\nStrategy:\n${JSON.stringify(strategyData)}`,
       model: 'gpt-4o', // Must use 4o for complex generation and strict instruction following
