@@ -1,31 +1,38 @@
+'use client'
+
 import { Search, Bell, Settings, User } from 'lucide-react'
 import { Input } from '@/components/ui/Input'
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '@/utils/supabase/client'
+import { useState, useEffect } from 'react'
 
 interface DashboardHeaderProps {
   title: string;
   subtitle?: string;
 }
 
-export async function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  
-  let fullName = 'User'
-  
-  if (user) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('full_name')
-      .eq('id', user.id)
-      .single()
-      
-    if (profile) {
-      fullName = profile.full_name || user.user_metadata?.full_name || 'User'
-    } else {
-      fullName = user.user_metadata?.full_name || 'User'
+export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
+  const [fullName, setFullName] = useState('User')
+
+  useEffect(() => {
+    async function fetchUser() {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('id', user.id)
+          .single()
+        
+        if (profile) {
+          setFullName(profile.full_name || user.user_metadata?.full_name || 'User')
+        } else {
+          setFullName(user.user_metadata?.full_name || 'User')
+        }
+      }
     }
-  }
+    fetchUser()
+  }, [])
 
   const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=16A34A&color=fff&bold=true`
 
