@@ -27,7 +27,7 @@ export default function CreateResumePage() {
   const resumeRef = useRef<HTMLDivElement>(null)
   
   const handlePrint = useReactToPrint({
-    content: () => resumeRef.current,
+    contentRef: resumeRef,
     documentTitle: 'My_Tailored_Resume',
   })
 
