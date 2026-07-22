@@ -1,13 +1,37 @@
 import { Search, Bell, HelpCircle } from 'lucide-react'
+import { createClient } from '@/utils/supabase/server'
 
-export function DashboardHeader() {
+export async function DashboardHeader() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  let fullName = 'User'
+  let plan = 'Free Plan'
+  
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('full_name, subscription_tier')
+      .eq('id', user.id)
+      .single()
+      
+    if (profile) {
+      fullName = profile.full_name || user.user_metadata?.full_name || 'User'
+      plan = profile.subscription_tier === 'PRO_MONTHLY' ? 'Premium Plan' : 'Free Plan'
+    } else {
+      fullName = user.user_metadata?.full_name || 'User'
+    }
+  }
+
+  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=16A34A&color=fff&bold=true`
+
   return (
     <header className="flex items-center justify-between py-8">
       {/* Left: Titles */}
       <div>
         <h1 className="text-3xl font-black text-slate-900 mb-2">Dashboard</h1>
         <p className="text-[15px] font-bold text-slate-700">
-          Welcome back, John Doe! <span className="inline-block animate-wave">👋</span>
+          Welcome back, {fullName}! <span className="inline-block animate-wave">👋</span>
           <span className="block font-medium text-slate-500 mt-0.5">
             Let's build your best resume today.
           </span>
@@ -41,13 +65,13 @@ export function DashboardHeader() {
         {/* Profile */}
         <div className="flex items-center gap-3 pl-2 border-l border-slate-200">
           <img 
-            src="https://ui-avatars.com/api/?name=John+Doe&background=16A34A&color=fff&bold=true" 
-            alt="John Doe" 
+            src={avatarUrl} 
+            alt={fullName} 
             className="w-10 h-10 rounded-full border-2 border-white shadow-sm"
           />
           <div className="hidden sm:block">
-            <div className="text-[14px] font-black text-slate-900 leading-tight">John Doe</div>
-            <div className="text-[11px] font-bold text-slate-500">Premium Plan</div>
+            <div className="text-[14px] font-black text-slate-900 leading-tight">{fullName}</div>
+            <div className="text-[11px] font-bold text-slate-500">{plan}</div>
           </div>
         </div>
 

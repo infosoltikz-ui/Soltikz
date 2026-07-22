@@ -1,12 +1,34 @@
 import { Search, Bell, Settings, User } from 'lucide-react'
 import { Input } from '@/components/ui/Input'
+import { createClient } from '@/utils/supabase/server'
 
 interface DashboardHeaderProps {
   title: string;
   subtitle?: string;
 }
 
-export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
+export async function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  let fullName = 'User'
+  
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('full_name')
+      .eq('id', user.id)
+      .single()
+      
+    if (profile) {
+      fullName = profile.full_name || user.user_metadata?.full_name || 'User'
+    } else {
+      fullName = user.user_metadata?.full_name || 'User'
+    }
+  }
+
+  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=16A34A&color=fff&bold=true`
+
   return (
     <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pl-12 md:pl-0">
       <div>
@@ -31,8 +53,8 @@ export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
         </button>
 
         {/* User Profile */}
-        <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center shrink-0 border border-primary/20 cursor-pointer">
-          <span className="text-[13px] font-black text-primary">JD</span>
+        <div className="w-10 h-10 rounded-xl overflow-hidden shrink-0 border border-slate-200 cursor-pointer shadow-sm">
+          <img src={avatarUrl} alt={fullName} className="w-full h-full object-cover" />
         </div>
       </div>
     </header>
