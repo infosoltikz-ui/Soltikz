@@ -1,28 +1,76 @@
 'use client'
 
 import { X, FileText, Download, Target, Calendar, User, Briefcase, Award, GraduationCap, LayoutTemplate, Trash2 } from 'lucide-react'
-import { RESUMES_DATA } from './ResumeTable'
 import { Button } from '@/components/ui/Button'
+import { useState, useEffect } from 'react'
+import { createClient } from '@/utils/supabase/client'
+import { format } from 'date-fns'
 
 interface ResumePreviewDrawerProps {
-  resumeId: number | null;
+  resumeId: string;
   onClose: () => void;
 }
 
 export function ResumePreviewDrawer({ resumeId, onClose }: ResumePreviewDrawerProps) {
-  const resume = RESUMES_DATA.find(r => r.id === resumeId)
-  
+  const [resume, setResume] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchResume() {
+      const supabase = createClient()
+      const { data } = await supabase
+        .from('resumes')
+        .select('*, profiles(full_name)')
+        .eq('id', resumeId)
+        .single()
+      
+      if (data) setResume(data)
+      setIsLoading(false)
+    }
+    if (resumeId) {
+      fetchResume()
+    }
+  }, [resumeId])
+
+  if (isLoading) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-[60]" onClick={onClose} />
+        <div className="fixed top-0 right-0 h-screen w-full max-w-xl bg-white shadow-2xl z-[70] p-6">
+          <div className="animate-pulse flex space-x-4">
+            <div className="flex-1 space-y-6 py-1">
+              <div className="h-2 bg-slate-200 rounded"></div>
+              <div className="space-y-3">
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="h-2 bg-slate-200 rounded col-span-2"></div>
+                  <div className="h-2 bg-slate-200 rounded col-span-1"></div>
+                </div>
+                <div className="h-2 bg-slate-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  }
+
   if (!resume) return null
+
+  const userName = resume.profiles?.full_name || 'Unknown User'
+  const resumeType = 'Full-Time' // Dummy since not in schema
+  const templateName = resume.content?.template || 'Default Template'
+  const status = resume.status || 'draft'
+  const experienceEntries = resume.content?.experience?.length || 0
+  const educationEntries = resume.content?.education?.length || 0
+  const skillsCount = resume.content?.skills?.length || 0
 
   return (
     <>
-      {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-[60] animate-in fade-in duration-300"
         onClick={onClose}
-      ></div>
+      />
 
-      {/* Drawer */}
       <div className="fixed top-0 right-0 h-screen w-full max-w-xl bg-white shadow-[0_0_40px_rgba(0,0,0,0.1)] z-[70] animate-in slide-in-from-right duration-300 flex flex-col border-l border-slate-200">
         
         {/* Header */}
@@ -40,16 +88,16 @@ export function ResumePreviewDrawer({ resumeId, onClose }: ResumePreviewDrawerPr
               </div>
             </div>
             <div className="py-1">
-              <h2 className="text-[20px] font-black text-slate-900 mb-1">{resume.name}</h2>
+              <h2 className="text-[20px] font-black text-slate-900 mb-1">{resume.title || 'Untitled Resume'}</h2>
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-[13px] font-medium text-slate-500 flex items-center gap-1.5"><User className="w-4 h-4" /> {resume.user}</span>
+                <span className="text-[13px] font-medium text-slate-500 flex items-center gap-1.5"><User className="w-4 h-4" /> {userName}</span>
                 <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
-                <span className="text-[13px] font-bold text-primary flex items-center gap-1.5"><Target className="w-4 h-4" /> {resume.ats} ATS</span>
+                <span className="text-[13px] font-bold text-primary flex items-center gap-1.5"><Target className="w-4 h-4" /> {resume.ats_score || 0} ATS</span>
               </div>
               <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider
-                  ${resume.type === 'Full-Time' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'}`}
+                  ${status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}
                 >
-                  {resume.type}
+                  {status}
               </span>
             </div>
           </div>
@@ -70,22 +118,22 @@ export function ResumePreviewDrawer({ resumeId, onClose }: ResumePreviewDrawerPr
             <div className="grid grid-cols-2 gap-3">
               <div className="p-4 bg-[#FAFAF8] border border-slate-200 rounded-xl">
                 <Briefcase className="w-5 h-5 text-slate-400 mb-2" />
-                <div className="text-[14px] font-black text-slate-900">{resume.role}</div>
+                <div className="text-[14px] font-black text-slate-900">{resume.target_role || '-'}</div>
                 <div className="text-[11px] font-bold text-slate-500">Target Role</div>
               </div>
               <div className="p-4 bg-[#FAFAF8] border border-slate-200 rounded-xl">
                 <div className="w-5 h-5 bg-slate-200 rounded mb-2 flex items-center justify-center text-[10px] font-black text-slate-500">🏢</div>
-                <div className="text-[14px] font-black text-slate-900">{resume.company}</div>
+                <div className="text-[14px] font-black text-slate-900">{resume.target_company || '-'}</div>
                 <div className="text-[11px] font-bold text-slate-500">Target Company</div>
               </div>
               <div className="p-4 bg-[#FAFAF8] border border-slate-200 rounded-xl">
                 <LayoutTemplate className="w-5 h-5 text-slate-400 mb-2" />
-                <div className="text-[14px] font-black text-slate-900">{resume.template}</div>
+                <div className="text-[14px] font-black text-slate-900">{templateName}</div>
                 <div className="text-[11px] font-bold text-slate-500">Template Used</div>
               </div>
               <div className="p-4 bg-[#FAFAF8] border border-slate-200 rounded-xl">
                 <Calendar className="w-5 h-5 text-slate-400 mb-2" />
-                <div className="text-[14px] font-black text-slate-900">{resume.modified}</div>
+                <div className="text-[14px] font-black text-slate-900">{format(new Date(resume.updated_at), 'MMM dd, yyyy')}</div>
                 <div className="text-[11px] font-bold text-slate-500">Last Modified</div>
               </div>
             </div>
@@ -100,31 +148,21 @@ export function ResumePreviewDrawer({ resumeId, onClose }: ResumePreviewDrawerPr
                   <Briefcase className="w-4 h-4 text-slate-400" />
                   <div className="text-[13px] font-bold text-slate-700">Experience Entries</div>
                 </div>
-                <span className="text-[14px] font-black text-slate-900">4</span>
+                <span className="text-[14px] font-black text-slate-900">{experienceEntries}</span>
               </div>
               <div className="flex items-center gap-3 justify-between">
                 <div className="flex items-center gap-3">
                   <GraduationCap className="w-4 h-4 text-slate-400" />
                   <div className="text-[13px] font-bold text-slate-700">Education Entries</div>
                 </div>
-                <span className="text-[14px] font-black text-slate-900">2</span>
+                <span className="text-[14px] font-black text-slate-900">{educationEntries}</span>
               </div>
               <div className="flex items-center gap-3 justify-between">
                 <div className="flex items-center gap-3">
                   <Award className="w-4 h-4 text-slate-400" />
                   <div className="text-[13px] font-bold text-slate-700">Skills Detected</div>
                 </div>
-                <span className="text-[14px] font-black text-slate-900">24</span>
-              </div>
-              <div className="mt-4 pt-4 border-t border-slate-100">
-                <div className="text-[12px] font-bold text-slate-900 mb-2">Keywords Found</div>
-                <div className="flex flex-wrap gap-2">
-                  <span className="px-2 py-1 bg-green-50 text-green-700 text-[11px] font-bold rounded">React</span>
-                  <span className="px-2 py-1 bg-green-50 text-green-700 text-[11px] font-bold rounded">TypeScript</span>
-                  <span className="px-2 py-1 bg-green-50 text-green-700 text-[11px] font-bold rounded">Node.js</span>
-                  <span className="px-2 py-1 bg-green-50 text-green-700 text-[11px] font-bold rounded">AWS</span>
-                  <span className="px-2 py-1 bg-slate-50 text-slate-600 text-[11px] font-bold rounded">+20 more</span>
-                </div>
+                <span className="text-[14px] font-black text-slate-900">{skillsCount}</span>
               </div>
             </div>
           </div>

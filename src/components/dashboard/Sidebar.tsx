@@ -59,12 +59,12 @@ export function Sidebar({
       if (user) {
         const { data } = await supabase
           .from('profiles')
-          .select('subscription_tier, credits_remaining')
+          .select('plan_id, credits_remaining')
           .eq('id', user.id)
           .single()
         
         if (data) {
-          setSubscriptionTier(data.subscription_tier || 'FREE')
+          setSubscriptionTier(data.plan_id || 'FREE')
           setCreditsRemaining(data.credits_remaining ?? 5)
         }
       }

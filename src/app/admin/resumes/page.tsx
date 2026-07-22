@@ -9,8 +9,8 @@ import { ResumeCharts } from '@/components/admin/resumes/ResumeCharts'
 import { TopAtsResumes } from '@/components/admin/resumes/TopAtsResumes'
 import { ResumeActivityTimeline } from '@/components/admin/resumes/ResumeActivityTimeline'
 
-export default function ResumeManagementPage() {
-  const [selectedResumeId, setSelectedResumeId] = useState<number | null>(null)
+export default function ResumesManagementPage() {
+  const [selectedResumeId, setSelectedResumeId] = useState<string | null>(null)
 
   return (
     <div className="flex">

@@ -10,7 +10,7 @@ import { UserSubscriptionChart } from '@/components/admin/users/UserSubscription
 import { TopActiveUsers } from '@/components/admin/users/TopActiveUsers'
 
 export default function UserManagementPage() {
-  const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null)
 
   return (
     <div className="flex">

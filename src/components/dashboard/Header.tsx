@@ -11,13 +11,13 @@ export async function DashboardHeader() {
   if (user) {
     const { data: profile } = await supabase
       .from('profiles')
-      .select('full_name, subscription_tier')
+      .select('full_name, plan_id')
       .eq('id', user.id)
       .single()
       
     if (profile) {
       fullName = profile.full_name || user.user_metadata?.full_name || 'User'
-      plan = profile.subscription_tier === 'PRO_MONTHLY' ? 'Premium Plan' : 'Free Plan'
+      plan = profile.plan_id === 'PRO_MONTHLY' ? 'Premium Plan' : 'Free Plan'
     } else {
       fullName = user.user_metadata?.full_name || 'User'
     }
