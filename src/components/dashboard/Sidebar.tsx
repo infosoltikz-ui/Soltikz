@@ -126,14 +126,8 @@ export function Sidebar({
 
       {/* Logo */}
       <div className={cn("h-20 flex flex-col justify-center border-b border-transparent", isCollapsed ? "px-0 items-center" : "px-8")}>
-        <Link href="/" className={cn("flex items-center", isCollapsed ? "justify-center" : "gap-2")}>
-          <img src="/LOGO.png" alt="Soltkiz Logo" className="w-8 h-8 object-contain shrink-0" />
-          {!isCollapsed && (
-            <div className="overflow-hidden whitespace-nowrap animate-in fade-in duration-300">
-              <div className="text-xl font-black tracking-tight text-slate-900 leading-none">Soltkiz</div>
-              <div className="text-[10px] font-bold text-slate-400 mt-1">AI-Powered. ATS-Optimized.</div>
-            </div>
-          )}
+        <Link href="/" className="flex items-center justify-center">
+          <img src="/LOGO.png" alt="Resume Builder Logo" className={cn("object-contain transition-all", isCollapsed ? "h-8 w-auto" : "h-10 w-auto")} />
         </Link>
       </div>
 

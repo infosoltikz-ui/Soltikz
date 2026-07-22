@@ -38,12 +38,8 @@ export function Header() {
       >
         <div className="container mx-auto px-4 lg:px-8 h-full flex items-center justify-between gap-4 max-w-[1400px]">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-            <img src="/LOGO.png" alt="Soltkiz Logo" className="w-10 h-10 object-contain" />
-            <span className="font-extrabold text-2xl tracking-tight text-slate-900 leading-none">
-              ATS
-              <span className="block text-[11px] font-bold text-slate-600 tracking-normal mt-0.5">Resume Builder</span>
-            </span>
+          <Link href="/" className="flex items-center shrink-0 group py-2">
+            <img src="/LOGO.png" alt="Resume Builder Logo" className="h-12 w-auto object-contain" />
           </Link>
 
           {/* Desktop Nav */}

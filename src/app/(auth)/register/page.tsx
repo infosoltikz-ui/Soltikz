@@ -84,12 +84,10 @@ export default function RegisterPage() {
 
       {/* ── Right Panel (Form) ─────────────────────────── */}
       <div className="flex-1 flex flex-col justify-center px-6 py-10 sm:px-10 lg:px-14 xl:px-20 bg-white overflow-y-auto">
-
         {/* Mobile Logo */}
         <div className="lg:hidden mb-8">
-          <Link href="/" className="flex items-center gap-2">
-            <img src="/LOGO.png" alt="Soltkiz Logo" className="w-9 h-9 object-contain" />
-            <span className="text-xl font-black text-slate-900">Soltkiz</span>
+          <Link href="/" className="flex items-center justify-center">
+            <img src="/LOGO.png" alt="Resume Builder Logo" className="h-10 w-auto object-contain" />
           </Link>
         </div>
 

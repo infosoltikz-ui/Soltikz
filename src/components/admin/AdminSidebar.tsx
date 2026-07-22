@@ -35,12 +35,8 @@ export function AdminSidebar() {
     <>
       <aside className="w-[280px] h-screen fixed left-0 top-0 bg-white border-r border-slate-100 flex flex-col z-50">
       {/* Logo */}
-      <div className="h-20 px-8 flex items-center gap-3">
-        <img src="/LOGO.png" alt="Soltkiz Logo" className="w-8 h-8 object-contain" />
-        <div>
-          <div className="text-[18px] font-black tracking-tight text-slate-900 leading-none">Soltikz</div>
-          <div className="text-[10px] font-black text-orange-500 uppercase tracking-widest mt-1">Admin Portal</div>
-        </div>
+      <div className="h-20 px-8 flex items-center">
+        <img src="/LOGO.png" alt="Resume Builder Logo" className="h-10 w-auto object-contain" />
       </div>
 
       {/* Navigation */}
