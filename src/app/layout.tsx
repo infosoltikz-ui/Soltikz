@@ -10,9 +10,6 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "ATS Resume Builder",
   description: "Build ATS-Optimized Resumes That Get You Hired Faster",
-  icons: {
-    icon: '/Fevicon icon.png',
-  },
 }
 
 export default function RootLayout({
