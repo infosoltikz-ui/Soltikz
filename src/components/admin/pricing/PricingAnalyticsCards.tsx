@@ -2,16 +2,64 @@
 
 import { Layers, Users, IndianRupee, TrendingUp, Crown, Target } from 'lucide-react'
 
-const CARDS = [
-  { title: 'Total Plans', value: '3', icon: Layers, color: 'text-slate-600', bg: 'bg-slate-50' },
-  { title: 'Active Subscribers', value: '2,184', icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
-  { title: 'Monthly Revenue', value: '₹24,860', growth: '+14%', icon: IndianRupee, color: 'text-green-600', bg: 'bg-green-50' },
-  { title: 'Annual Revenue', value: '₹298,000', icon: TrendingUp, color: 'text-green-600', bg: 'bg-green-50' },
-  { title: 'Most Popular Plan', value: 'Pro', icon: Crown, color: 'text-orange-500', bg: 'bg-orange-50' },
-  { title: 'Conversion Rate', value: '28%', isCircular: true, icon: Target, color: 'text-primary', bg: 'bg-primary/10' },
-]
+import { useEffect, useState } from 'react'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export function PricingAnalyticsCards() {
+  const supabase = createClientComponentClient()
+  const [stats, setStats] = useState({
+    totalPlans: 0,
+    activeSubscribers: 0,
+    monthlyRevenue: 0,
+    annualRevenue: 0,
+    popularPlan: 'Pro',
+    conversionRate: 28
+  })
+
+  useEffect(() => {
+    async function fetchStats() {
+      const { count: plansCount } = await supabase.from('pricing_plans').select('*', { count: 'exact', head: true })
+      
+      const { data: profiles } = await supabase.from('profiles').select('plan_id')
+      let activeSubscribers = 0
+      let freeSubscribers = 0
+      
+      if (profiles) {
+        profiles.forEach(p => {
+          if (p.plan_id !== 'FREE') activeSubscribers++
+          else freeSubscribers++
+        })
+      }
+
+      // Fetch Pro plan price to estimate revenue
+      const { data: proPlan } = await supabase.from('pricing_plans').select('price_inr').eq('id', 'PRO_MONTHLY').single()
+      const price = proPlan?.price_inr || 499
+
+      const monthlyRevenue = activeSubscribers * price
+      const annualRevenue = monthlyRevenue * 12
+      const totalUsers = activeSubscribers + freeSubscribers
+      const conversionRate = totalUsers > 0 ? Math.round((activeSubscribers / totalUsers) * 100) : 0
+
+      setStats({
+        totalPlans: plansCount || 0,
+        activeSubscribers,
+        monthlyRevenue,
+        annualRevenue,
+        popularPlan: 'Pro', // Static for now, can be computed if multiple paid plans exist
+        conversionRate
+      })
+    }
+    fetchStats()
+  }, [])
+
+  const CARDS = [
+    { title: 'Total Plans', value: stats.totalPlans.toLocaleString(), icon: Layers, color: 'text-slate-600', bg: 'bg-slate-50' },
+    { title: 'Active Subscribers', value: stats.activeSubscribers.toLocaleString(), icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { title: 'Monthly Revenue', value: `₹${stats.monthlyRevenue.toLocaleString()}`, growth: '+14%', icon: IndianRupee, color: 'text-green-600', bg: 'bg-green-50' },
+    { title: 'Annual Revenue', value: `₹${stats.annualRevenue.toLocaleString()}`, icon: TrendingUp, color: 'text-green-600', bg: 'bg-green-50' },
+    { title: 'Most Popular Plan', value: stats.popularPlan, icon: Crown, color: 'text-orange-500', bg: 'bg-orange-50' },
+    { title: 'Conversion Rate', value: `${stats.conversionRate}%`, isCircular: true, icon: Target, color: 'text-primary', bg: 'bg-primary/10' },
+  ]
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-4">
       {CARDS.map((card, i) => {

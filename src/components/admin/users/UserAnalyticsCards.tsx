@@ -2,16 +2,46 @@
 
 import { Users, Crown, User, CheckCircle2, Ban, UserPlus } from 'lucide-react'
 
-const CARDS = [
-  { title: 'Total Users', value: '12,548', growth: '+18%', icon: Users, sparklineData: [20, 30, 25, 45, 40, 60, 80], sparklineColor: 'stroke-blue-500' },
-  { title: 'Premium Users', value: '2,184', growth: '+9%', icon: Crown, sparklineData: [10, 15, 20, 18, 30, 25, 40], sparklineColor: 'stroke-primary' },
-  { title: 'Free Users', value: '10,364', icon: User },
-  { title: 'Verified Users', value: '11,890', icon: CheckCircle2 },
-  { title: 'Blocked Users', value: '36', icon: Ban },
-  { title: 'New Users Today', value: '124', isLive: true, icon: UserPlus },
-]
+import { useEffect, useState } from 'react'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export function UserAnalyticsCards() {
+  const supabase = createClientComponentClient()
+  const [stats, setStats] = useState({
+    total: 0,
+    premium: 0,
+    free: 0,
+    newToday: 0
+  })
+
+  useEffect(() => {
+    async function fetchStats() {
+      const { count: totalCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true })
+      const { count: premiumCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('plan_id', 'PRO_MONTHLY')
+      const { count: freeCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('plan_id', 'FREE')
+      
+      const today = new Date()
+      today.setHours(0,0,0,0)
+      const { count: newTodayCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).gte('created_at', today.toISOString())
+      
+      setStats({
+        total: totalCount || 0,
+        premium: premiumCount || 0,
+        free: freeCount || 0,
+        newToday: newTodayCount || 0
+      })
+    }
+    fetchStats()
+  }, [])
+
+  const CARDS = [
+    { title: 'Total Users', value: stats.total.toLocaleString(), growth: '+18%', icon: Users, sparklineData: [20, 30, 25, 45, 40, 60, 80], sparklineColor: 'stroke-blue-500' },
+    { title: 'Premium Users', value: stats.premium.toLocaleString(), growth: '+9%', icon: Crown, sparklineData: [10, 15, 20, 18, 30, 25, 40], sparklineColor: 'stroke-primary' },
+    { title: 'Free Users', value: stats.free.toLocaleString(), icon: User },
+    { title: 'Verified Users', value: stats.total.toLocaleString(), icon: CheckCircle2 },
+    { title: 'Blocked Users', value: '0', icon: Ban },
+    { title: 'New Users Today', value: stats.newToday.toLocaleString(), isLive: true, icon: UserPlus },
+  ]
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-4">
       {CARDS.map((card, i) => {

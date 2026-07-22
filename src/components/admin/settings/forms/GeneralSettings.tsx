@@ -21,12 +21,12 @@ export function GeneralSettings() {
       const supabase = createClient()
       const { data } = await supabase
         .from('system_settings')
-        .select('value')
-        .eq('key', 'general')
+        .select('metadata')
+        .eq('id', 'GLOBAL_CONFIG')
         .single()
       
-      if (data && data.value) {
-        setSettings({ ...settings, ...data.value })
+      if (data && data.metadata) {
+        setSettings({ ...settings, ...data.metadata })
       }
       setIsLoading(false)
     }
