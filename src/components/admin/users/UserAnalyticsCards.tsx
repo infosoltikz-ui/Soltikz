@@ -3,10 +3,10 @@
 import { Users, Crown, User, CheckCircle2, Ban, UserPlus } from 'lucide-react'
 
 import { useEffect, useState } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '@/utils/supabase/client'
 
 export function UserAnalyticsCards() {
-  const supabase = createClientComponentClient()
+  const supabase = createClient()
   const [stats, setStats] = useState({
     total: 0,
     premium: 0,

@@ -3,10 +3,10 @@
 import { Layers, Users, IndianRupee, TrendingUp, Crown, Target } from 'lucide-react'
 
 import { useEffect, useState } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '@/utils/supabase/client'
 
 export function PricingAnalyticsCards() {
-  const supabase = createClientComponentClient()
+  const supabase = createClient()
   const [stats, setStats] = useState({
     totalPlans: 0,
     activeSubscribers: 0,

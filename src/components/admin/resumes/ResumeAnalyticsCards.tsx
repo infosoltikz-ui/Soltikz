@@ -3,10 +3,10 @@
 import { FileText, FileUp, Target, Briefcase, Users, Download } from 'lucide-react'
 
 import { useEffect, useState } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '@/utils/supabase/client'
 
 export function ResumeAnalyticsCards() {
-  const supabase = createClientComponentClient()
+  const supabase = createClient()
   const [stats, setStats] = useState({
     total: 0,
     today: 0,
