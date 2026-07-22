@@ -127,11 +127,7 @@ export function Sidebar({
       {/* Logo */}
       <div className={cn("h-20 flex flex-col justify-center border-b border-transparent", isCollapsed ? "px-0 items-center" : "px-8")}>
         <Link href="/" className={cn("flex items-center", isCollapsed ? "justify-center" : "gap-2")}>
-          <div className="w-8 h-8 bg-primary rounded-[10px] flex items-center justify-center shadow-sm shrink-0">
-            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-          </div>
+          <img src="/LOGO.png" alt="Soltkiz Logo" className="w-8 h-8 object-contain shrink-0" />
           {!isCollapsed && (
             <div className="overflow-hidden whitespace-nowrap animate-in fade-in duration-300">
               <div className="text-xl font-black tracking-tight text-slate-900 leading-none">Soltkiz</div>

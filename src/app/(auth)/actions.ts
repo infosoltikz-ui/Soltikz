@@ -38,7 +38,7 @@ export async function signup(formData: FormData) {
     return { error: 'Email and password are required' }
   }
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -50,6 +50,23 @@ export async function signup(formData: FormData) {
 
   if (error) {
     return { error: error.message }
+  }
+
+  // Auto-confirm the user's email using the Service Role Key so they can login immediately
+  if (data?.user?.id && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    const { createClient: createSupabaseClient } = require('@supabase/supabase-js')
+    const adminSupabase = createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    )
+    
+    await adminSupabase.auth.admin.updateUserById(data.user.id, { email_confirm: true })
   }
 
   revalidatePath('/dashboard')
