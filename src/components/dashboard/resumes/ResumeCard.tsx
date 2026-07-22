@@ -10,10 +10,10 @@ export interface ResumeData {
   template: string;
   atsScore: number;
   lastUpdated: string;
-  status: 'Completed' | 'Draft';
+  status: 'Completed' | 'Draft' | string;
 }
 
-export function ResumeCard({ data }: { data: ResumeData }) {
+export function ResumeCard({ data, onDelete }: { data: ResumeData, onDelete?: () => void }) {
   const isFullTime = data.type === 'Full-Time'
 
   return (
@@ -92,16 +92,7 @@ export function ResumeCard({ data }: { data: ResumeData }) {
           </div>
           
           <div className="flex items-center gap-2">
-            <button className="text-slate-400 hover:text-blue-500 transition-colors" title="Download PDF">
-              <Download className="w-4 h-4" />
-            </button>
-            <button className="text-slate-400 hover:text-orange-500 transition-colors" title="Download DOCX">
-              <FileOutput className="w-4 h-4" />
-            </button>
-            <button className="text-slate-400 hover:text-slate-900 transition-colors" title="Duplicate">
-              <Copy className="w-4 h-4" />
-            </button>
-            <button className="text-slate-400 hover:text-red-500 transition-colors" title="Delete">
+            <button onClick={onDelete} className="text-slate-400 hover:text-red-500 transition-colors" title="Delete">
               <Trash2 className="w-4 h-4" />
             </button>
           </div>

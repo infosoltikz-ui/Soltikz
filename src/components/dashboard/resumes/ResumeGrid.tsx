@@ -1,79 +1,58 @@
-import { ResumeCard, ResumeData } from './ResumeCard'
-import { FileText } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
+'use client'
 
-// Mock Data
-const MOCK_RESUMES: ResumeData[] = [
-  {
-    id: '1',
-    name: 'Senior Java Developer',
-    type: 'Full-Time',
-    company: 'Google',
-    role: 'Java Developer',
-    template: 'Modern ATS Template',
-    atsScore: 94,
-    lastUpdated: 'Yesterday',
-    status: 'Completed'
-  },
-  {
-    id: '2',
-    name: 'Backend Engineer (Contract)',
-    type: 'C2C',
-    company: 'Meta',
-    role: 'Backend Engineer',
-    template: 'Tech Professional',
-    atsScore: 88,
-    lastUpdated: '2 days ago',
-    status: 'Completed'
-  },
-  {
-    id: '3',
-    name: 'Software Engineer II',
-    type: 'Full-Time',
-    company: 'Amazon',
-    role: 'SDE II',
-    template: 'Executive Clean',
-    atsScore: 92,
-    lastUpdated: 'Last week',
-    status: 'Completed'
-  },
-  {
-    id: '4',
-    name: 'Contract Developer',
-    type: 'C2C',
-    company: 'Netflix',
-    role: 'Software Developer',
-    template: 'Modern ATS Template',
-    atsScore: 75,
-    lastUpdated: 'Last week',
-    status: 'Completed'
-  },
-  {
-    id: '5',
-    name: 'Draft Resume',
-    type: 'Full-Time',
-    company: 'Apple',
-    role: 'Frontend Engineer',
-    template: 'Creative Minimal',
-    atsScore: 45,
-    lastUpdated: '2 weeks ago',
-    status: 'Draft'
-  },
-  {
-    id: '6',
-    name: 'Staff Software Engineer',
-    type: 'Full-Time',
-    company: 'Microsoft',
-    role: 'Staff Engineer',
-    template: 'Executive Clean',
-    atsScore: 97,
-    lastUpdated: '1 month ago',
-    status: 'Completed'
-  },
-]
+import { useState, useEffect } from 'react'
+import { FileText, Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
+import { ResumeCard } from './ResumeCard'
+import { createClient } from '@/utils/supabase/client'
+import { formatDistanceToNow } from 'date-fns'
 
 export function ResumeGrid() {
-  const resumes = MOCK_RESUMES
+  const [resumes, setResumes] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  const fetchResumes = async () => {
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return
+
+    // Fetch resumes with their ATS score and JD details
+    const { data, error } = await supabase
+      .from('resumes_v2')
+      .select(`
+        *,
+        ats_analyses ( overall_score ),
+        parsed_job_descriptions ( company_name, job_title )
+      `)
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error(error)
+    } else {
+      setResumes(data || [])
+    }
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    fetchResumes()
+  }, [])
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this resume?')) return;
+    const supabase = createClient()
+    await supabase.from('resumes_v2').delete().eq('id', id);
+    fetchResumes(); // Refresh
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center p-24">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    )
+  }
 
   if (resumes.length === 0) {
     return (
@@ -85,7 +64,7 @@ export function ResumeGrid() {
         <p className="text-[14px] text-slate-500 max-w-[300px] mb-8">
           Get started by building your first ATS-optimized resume using our AI tools.
         </p>
-        <Button className="h-12 px-8 font-bold text-[14px] rounded-xl">
+        <Button className="h-12 px-8 font-bold text-[14px] rounded-xl" onClick={() => window.location.href = '/dashboard/create'}>
           Create Your First Resume
         </Button>
       </div>
@@ -94,9 +73,28 @@ export function ResumeGrid() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-      {resumes.map(resume => (
-        <ResumeCard key={resume.id} data={resume} />
-      ))}
+      {resumes.map(resume => {
+        const atsScore = resume.ats_analyses?.[0]?.overall_score || 0;
+        const jd = resume.parsed_job_descriptions;
+        
+        return (
+          <ResumeCard 
+            key={resume.id} 
+            data={{
+              id: resume.id,
+              name: resume.title,
+              type: resume.resume_type as 'Full-Time' | 'C2C',
+              company: jd?.company_name || 'N/A',
+              role: jd?.job_title || 'N/A',
+              template: 'Modern ATS Template',
+              atsScore: atsScore,
+              lastUpdated: formatDistanceToNow(new Date(resume.updated_at), { addSuffix: true }),
+              status: resume.status as 'Completed' | 'Draft'
+            }}
+            onDelete={() => handleDelete(resume.id)}
+          />
+        )
+      })}
     </div>
   )
 }

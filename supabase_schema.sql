@@ -19,6 +19,7 @@ CREATE TABLE profiles (
     location TEXT,
     plan_id TEXT DEFAULT 'FREE',
     resumes_generated INTEGER DEFAULT 0,
+    credits_remaining INTEGER DEFAULT 5,
     master_resume_data JSONB DEFAULT '{}'::jsonb,
     settings JSONB DEFAULT '{"theme": "light", "email_notifications": true}'::jsonb,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
@@ -98,13 +99,14 @@ INSERT INTO system_settings (id, maintenance_mode, allow_new_signups, announceme
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
 BEGIN
-  INSERT INTO public.profiles (id, email, full_name, plan_id, resumes_generated, master_resume_data)
+  INSERT INTO public.profiles (id, email, full_name, plan_id, resumes_generated, credits_remaining, master_resume_data)
   VALUES (
     new.id, 
     new.email, 
     new.raw_user_meta_data->>'full_name',
     'FREE',
     0,
+    5,
     '{}'::jsonb
   );
   RETURN new;

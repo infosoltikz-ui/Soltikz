@@ -24,6 +24,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing core data' }, { status: 400 });
     }
 
+    // --- PAYWALL / QUOTA CHECK ---
+    const { data: profile } = await supabase.from('profiles').select('plan_id, credits_remaining').eq('id', user.id).single();
+    
+    if (profile?.plan_id === 'FREE' && (profile?.credits_remaining || 0) <= 0) {
+      return NextResponse.json({ 
+        error: 'Paywall', 
+        message: 'You have used all 5 of your free AI generation credits. Please upgrade to Pro to continue generating unlimited resumes.' 
+      }, { status: 403 });
+    }
+    // -----------------------------
+
     // Determine the base URL for internal fetch calls
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
     const reqHeaders = { 'Content-Type': 'application/json', 'cookie': req.headers.get('cookie') || '' };
@@ -101,6 +112,15 @@ export async function POST(req: Request) {
 
     // Update Resume Status to Ready
     await supabase.from('resumes_v2').update({ status: 'Ready' }).eq('id', resume.resume_id);
+
+    // --- DEDUCT QUOTA ---
+    if (profile?.plan_id === 'FREE') {
+      await supabase.rpc('decrement_credits', { user_id: user.id });
+      // Note: If you don't have the RPC, we can do a standard update:
+      // await supabase.from('profiles').update({ credits_remaining: (profile.credits_remaining - 1) }).eq('id', user.id);
+      await supabase.from('profiles').update({ credits_remaining: (profile.credits_remaining - 1) }).eq('id', user.id);
+    }
+    // --------------------
 
     console.log('[Orchestrator] Pipeline Complete!');
 
