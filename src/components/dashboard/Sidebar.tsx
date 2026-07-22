@@ -77,6 +77,7 @@ export function Sidebar({
   const resumesUsed = Math.max(0, maxResumes - creditsRemaining)
   const resumePercentage = isPremium ? 100 : (resumesUsed / maxResumes) * 100
 
+  const [showLogoutModal, setShowLogoutModal] = useState(false)
 
   const handleLogout = async () => {
     const supabase = createClient()
@@ -86,31 +87,7 @@ export function Sidebar({
   }
 
   const handleLogoutClick = () => {
-    toast((t) => (
-      <div>
-        <p className="mb-3 font-bold text-slate-800">Are you sure you want to log out?</p>
-        <div className="flex gap-2 justify-end mt-2">
-          <button 
-            onClick={() => toast.dismiss(t.id)} 
-            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[13px] font-bold transition-colors"
-          >
-            Cancel
-          </button>
-          <button 
-            onClick={() => {
-              toast.dismiss(t.id)
-              handleLogout()
-            }} 
-            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-[13px] font-bold transition-colors shadow-sm"
-          >
-            Log Out
-          </button>
-        </div>
-      </div>
-    ), { 
-      duration: Infinity,
-      position: 'top-center'
-    })
+    setShowLogoutModal(true)
   }
 
   return (
@@ -261,6 +238,42 @@ export function Sidebar({
         </div>
       )}
     </aside>
+
+    {/* Logout Confirmation Modal */}
+    {showLogoutModal && (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-0">
+        <div 
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" 
+          onClick={() => setShowLogoutModal(false)}
+        />
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-sm overflow-hidden z-10 animate-in zoom-in-95 duration-200">
+          <div className="p-6 text-center">
+            <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <LogOut className="w-8 h-8" strokeWidth={2} />
+            </div>
+            <h3 className="text-xl font-black text-slate-900 mb-2">Log out of Soltkiz?</h3>
+            <p className="text-sm text-slate-500 font-medium px-4">
+              You can always log back in to access your resumes and profile.
+            </p>
+          </div>
+          <div className="flex border-t border-slate-100 bg-slate-50/50 p-4 gap-3">
+            <button
+              onClick={() => setShowLogoutModal(false)}
+              className="flex-1 px-4 py-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-sm font-bold transition-colors shadow-sm"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex-1 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-bold transition-colors shadow-sm"
+            >
+              Log Out
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
     </>
   )
 }
+
