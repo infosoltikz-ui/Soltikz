@@ -6,6 +6,7 @@ import { RecentResumes } from '@/components/dashboard/RecentResumes'
 import { QuickActions } from '@/components/dashboard/QuickActions'
 import { AITipBanner } from '@/components/dashboard/AITipBanner'
 import { LoginToast } from '@/components/dashboard/LoginToast'
+import { OnboardingSteps } from '@/components/dashboard/OnboardingSteps'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { format } from 'date-fns'
@@ -63,6 +64,8 @@ export default async function DashboardPage() {
       <DashboardHeader />
       
       <main>
+        <OnboardingSteps profileCompletion={profileCompletion} resumesCreated={resumesCreated} />
+
         <StatCards 
           resumesCreated={resumesCreated}
           planName={planName}
