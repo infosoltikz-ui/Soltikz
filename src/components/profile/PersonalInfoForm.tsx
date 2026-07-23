@@ -1,4 +1,4 @@
-import { Camera, MapPin, Globe, Loader2 } from 'lucide-react'
+import { MapPin, Globe, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
@@ -69,28 +69,9 @@ export function PersonalInfoForm({ profile, setProfile }: { profile: any, setPro
         <p className="text-[13px] font-medium text-slate-500">Add your basic details here.</p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-10">
-        
-        {/* Avatar Upload */}
-        <div className="flex flex-col items-center shrink-0">
-          <div className="relative mb-4">
-            <img 
-              src={`https://ui-avatars.com/api/?name=${formData.firstName}+${formData.lastName}&background=16A34A&color=fff&size=150`}
-              alt="Avatar" 
-              className="w-32 h-32 rounded-full border-4 border-slate-50 object-cover shadow-sm"
-            />
-            <button className="absolute bottom-1 right-1 w-8 h-8 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-500 hover:text-primary hover:border-primary transition-colors shadow-sm">
-              <Camera className="w-4 h-4" />
-            </button>
-          </div>
-          <div className="text-center">
-            <div className="text-[11px] font-bold text-slate-500">JPG, PNG or WEBP</div>
-            <div className="text-[10px] font-medium text-slate-400">Max size 2MB</div>
-          </div>
-        </div>
-
+      <div className="w-full">
         {/* Form Fields */}
-        <div className="flex-1 space-y-6">
+        <div className="space-y-6">
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
