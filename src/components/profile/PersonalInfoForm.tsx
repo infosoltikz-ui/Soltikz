@@ -120,9 +120,9 @@ export function PersonalInfoForm({ profile, setProfile }: { profile: any, setPro
               <input 
                 name="email"
                 value={formData.email}
-                disabled
+                onChange={handleChange}
                 type="email" 
-                className="w-full h-11 px-4 rounded-xl border border-slate-200 bg-slate-50 text-slate-500 focus:outline-none text-[14px] font-medium transition-colors"
+                className="w-full h-11 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors"
               />
             </div>
             <div>
