@@ -42,14 +42,12 @@ export function EmploymentForm({ profile, setProfile }: { profile: any, setProfi
       }
 
       const updates = {
-        master_resume_data: newMasterData,
-        updated_at: new Date().toISOString()
+        master_resume_data: newMasterData
       }
 
       const { error } = await supabase
         .from('profiles')
-        .update(updates)
-        .eq('id', profile.id)
+        .upsert({ id: profile.id, ...updates })
 
       if (error) throw error
 

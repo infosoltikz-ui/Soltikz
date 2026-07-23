@@ -41,8 +41,7 @@ export function PersonalInfoForm({ profile, setProfile }: { profile: any, setPro
       const updates = {
         full_name: `${formData.firstName} ${formData.lastName}`.trim(),
         phone: formData.phone,
-        master_resume_data: newMasterData,
-        updated_at: new Date().toISOString()
+        master_resume_data: newMasterData
       }
 
       const { error } = await supabase
