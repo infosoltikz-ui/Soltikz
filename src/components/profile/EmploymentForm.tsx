@@ -47,7 +47,11 @@ export function EmploymentForm({ profile, setProfile }: { profile: any, setProfi
 
       const { error } = await supabase
         .from('profiles')
-        .upsert({ id: profile.id, ...updates })
+        .upsert({ 
+          id: profile.id, 
+          email: profile.email,
+          ...updates 
+        })
 
       if (error) throw error
 

@@ -46,7 +46,11 @@ export function EducationForm({ profile, setProfile }: { profile: any, setProfil
 
       const { error } = await supabase
         .from('profiles')
-        .upsert({ id: profile.id, ...updates })
+        .upsert({ 
+          id: profile.id, 
+          email: profile.email,
+          ...updates 
+        })
 
       if (error) throw error
 
