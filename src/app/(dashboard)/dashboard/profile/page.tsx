@@ -11,11 +11,15 @@ export default async function ProfilePage() {
   }
 
   // Fetch Profile
-  const { data: profile } = await supabase
+  let { data: profile } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)
     .single()
+
+  if (!profile) {
+    profile = { id: user.id, email: user.email, full_name: user.user_metadata?.full_name || '' }
+  }
 
   return (
     <div className="px-8 pb-8 max-w-[1600px] mx-auto">

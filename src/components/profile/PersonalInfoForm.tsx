@@ -47,8 +47,7 @@ export function PersonalInfoForm({ profile, setProfile }: { profile: any, setPro
 
       const { error } = await supabase
         .from('profiles')
-        .update(updates)
-        .eq('id', profile.id)
+        .upsert({ id: profile.id, ...updates })
 
       if (error) throw error
 
