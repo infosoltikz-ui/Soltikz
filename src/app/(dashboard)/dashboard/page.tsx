@@ -1,7 +1,6 @@
 import { DashboardHeader } from '@/components/dashboard/Header'
 import { StatCards } from '@/components/dashboard/StatCards'
 import { PlanDetails } from '@/components/dashboard/PlanDetails'
-import { RecentActivity } from '@/components/dashboard/RecentActivity'
 import { RecentResumes } from '@/components/dashboard/RecentResumes'
 import { QuickActions } from '@/components/dashboard/QuickActions'
 import { AITipBanner } from '@/components/dashboard/AITipBanner'
@@ -48,7 +47,7 @@ export default async function DashboardPage() {
   const resumesCreated = profile?.resumes_generated || 0
   const planName = profile?.plan_id || 'FREE'
   const validUntil = subscription?.valid_until ? format(new Date(subscription.valid_until), 'dd MMM, yyyy') : null
-  
+
   const atsScores = resumes?.map(r => r.ats_score).filter(Boolean) || []
   const avgAts = atsScores.length > 0 ? Math.round(atsScores.reduce((a, b) => a + b, 0) / atsScores.length) : 0
 
@@ -64,11 +63,11 @@ export default async function DashboardPage() {
     <div className="px-8 pb-8 max-w-[1600px] mx-auto">
       <LoginToast />
       <DashboardHeader />
-      
+
       <main>
         <OnboardingSteps profileCompletion={profileCompletion} resumesCreated={resumesCreated} />
 
-        <StatCards 
+        <StatCards
           resumesCreated={resumesCreated}
           planName={planName}
           avgAts={avgAts}
@@ -76,14 +75,13 @@ export default async function DashboardPage() {
           validUntil={validUntil}
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6 mb-6">
-          <PlanDetails 
+        <div className="mb-6">
+          <PlanDetails
             planName={planName}
             resumesUsed={resumesCreated}
             validUntil={validUntil}
             features={planName === 'FREE' ? ['5 AI Resume Generations', 'Basic Templates', 'PDF Export'] : ['Unlimited AI Resumes', 'Premium Templates', 'Advanced ATS Matching', 'Cover Letter Generator']}
           />
-          <RecentActivity activities={[]} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

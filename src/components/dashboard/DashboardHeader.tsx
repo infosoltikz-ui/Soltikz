@@ -1,6 +1,6 @@
 'use client'
 
-import { Search, Bell, Settings, User } from 'lucide-react'
+import { Search, Settings, User } from 'lucide-react'
 import { Input } from '@/components/ui/Input'
 import { createClient } from '@/utils/supabase/client'
 import { useState, useEffect } from 'react'
@@ -53,11 +53,6 @@ export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
           />
         </div>
 
-        {/* Notifications */}
-        <button className="relative w-10 h-10 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors shrink-0 shadow-sm">
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-orange-500 rounded-full border border-white"></span>
-        </button>
 
         {/* User Profile */}
         <div className="w-10 h-10 rounded-xl overflow-hidden shrink-0 border border-slate-200 cursor-pointer shadow-sm">

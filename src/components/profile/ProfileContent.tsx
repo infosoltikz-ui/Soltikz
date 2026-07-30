@@ -33,17 +33,20 @@ export function ProfileContent({ initialProfile }: { initialProfile: any }) {
   return (
     <>
       <ProfileHeader profile={profile} />
-      <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />
-      
+
+      <div className="mb-2">
+        <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />
+      </div>
+
       <main>
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Form Area */}
           <div className="flex-1 min-w-0">
             {renderActiveForm()}
           </div>
-          
+
           {/* Sidebar */}
-          <div className="w-full lg:w-[320px] xl:w-[380px] shrink-0">
+          <div className="w-full lg:w-[260px] xl:w-[280px] shrink-0">
             <ProfileSidebar profile={profile} />
           </div>
         </div>

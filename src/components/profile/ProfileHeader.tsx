@@ -47,68 +47,74 @@ export function ProfileHeader({ profile }: { profile?: any }) {
   }
 
   return (
-    <header className="flex flex-col md:flex-row md:items-center justify-between py-8 gap-6">
-      {/* Left: Titles */}
-      <div>
-        <h1 className="text-3xl font-black text-slate-900 mb-2">Master Profile</h1>
-        <p className="text-[15px] font-bold text-slate-500">
-          Build your profile once and use it to create multiple resumes.
-        </p>
-      </div>
-
-      {/* Right: Profile Dropdown */}
-      <div className="flex items-center gap-6">
-        
-        <div className="relative" ref={dropdownRef}>
-          <div 
-            className="flex items-center gap-3 pl-2 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition-colors"
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          >
-            <img 
-              src={avatarUrl} 
-              alt={userData.name} 
-              className="w-10 h-10 rounded-full border-2 border-white shadow-sm"
-            />
-            <div className="hidden sm:block">
-              <div className="text-[14px] font-black text-slate-900 leading-tight flex items-center gap-1">
-                {userData.name}
-                <svg className={`w-3.5 h-3.5 text-slate-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-              </div>
-              <div className="text-[11px] font-bold text-slate-500">{userData.plan}</div>
+    <header className="mb-8">
+      {/* Top bar */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-slate-200">
+        {/* Left: Titles */}
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <User className="w-5 h-5 text-primary" strokeWidth={2.5} />
             </div>
+            <h1 className="text-3xl font-black text-slate-900">Master Profile</h1>
           </div>
-
-          {/* Dropdown Menu */}
-          {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 py-2 z-50">
-              <div className="px-4 py-3 border-b border-slate-100 mb-2">
-                <p className="text-[13px] font-bold text-slate-900">{userData.name}</p>
-                <p className="text-[12px] font-medium text-slate-500 truncate">{userData.email}</p>
-              </div>
-              
-              <button className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-bold text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors text-left">
-                <User className="w-4 h-4" />
-                Profile Checking
-              </button>
-              
-              <button className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-bold text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors text-left">
-                <Settings className="w-4 h-4" />
-                Settings
-              </button>
-              
-              <div className="h-px bg-slate-100 my-2 mx-4"></div>
-              
-              <button 
-                onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-bold text-red-600 hover:bg-red-50 transition-colors text-left"
-              >
-                <LogOut className="w-4 h-4" />
-                Log out
-              </button>
-            </div>
-          )}
+          <p className="text-[15px] font-medium text-slate-500 ml-[52px]">
+            Build your profile once and use it to create multiple resumes.
+          </p>
         </div>
 
+        {/* Right: Profile Dropdown */}
+        <div className="flex items-center gap-4">
+          <div className="relative" ref={dropdownRef}>
+            <div
+              className="flex items-center gap-3 cursor-pointer bg-white border border-slate-200 hover:border-slate-300 px-4 py-2.5 rounded-xl transition-all shadow-sm hover:shadow"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              <img
+                src={avatarUrl}
+                alt={userData.name}
+                className="w-9 h-9 rounded-full border-2 border-white shadow-sm"
+              />
+              <div className="hidden sm:block">
+                <div className="text-[14px] font-black text-slate-900 leading-tight flex items-center gap-1.5">
+                  {userData.name}
+                  <svg className={`w-3.5 h-3.5 text-slate-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div className="text-[11px] font-semibold text-slate-500">{userData.plan}</div>
+              </div>
+            </div>
+
+            {/* Dropdown Menu */}
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 py-2 z-50">
+                <div className="px-4 py-3 border-b border-slate-100 mb-2">
+                  <p className="text-[13px] font-bold text-slate-900">{userData.name}</p>
+                  <p className="text-[12px] font-medium text-slate-500 truncate">{userData.email}</p>
+                </div>
+
+                <button className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-bold text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors text-left">
+                  <User className="w-4 h-4" />
+                  Profile Checking
+                </button>
+
+                <button className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-bold text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors text-left">
+                  <Settings className="w-4 h-4" />
+                  Settings
+                </button>
+
+                <div className="h-px bg-slate-100 my-2 mx-4"></div>
+
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-bold text-red-600 hover:bg-red-50 transition-colors text-left"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Log out
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </header>
   )

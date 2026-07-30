@@ -1,4 +1,4 @@
-import { Search, Bell, HelpCircle } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 
 export async function DashboardHeader() {
@@ -32,9 +32,6 @@ export async function DashboardHeader() {
         <h1 className="text-3xl font-black text-slate-900 mb-2">Dashboard</h1>
         <p className="text-[15px] font-bold text-slate-700">
           Welcome back, {fullName}! <span className="inline-block animate-wave">👋</span>
-          <span className="block font-medium text-slate-500 mt-0.5">
-            Let's build your best resume today.
-          </span>
         </p>
       </div>
 
@@ -51,16 +48,6 @@ export async function DashboardHeader() {
           <Search className="w-4 h-4 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2" />
         </div>
 
-        {/* Icons */}
-        <div className="flex items-center gap-4 text-slate-500">
-          <button className="relative p-2 hover:bg-slate-100 rounded-full transition-colors">
-            <Bell className="w-[22px] h-[22px]" strokeWidth={2.5} />
-            <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
-          </button>
-          <button className="p-2 hover:bg-slate-100 rounded-full transition-colors">
-            <HelpCircle className="w-[22px] h-[22px]" strokeWidth={2.5} />
-          </button>
-        </div>
 
         {/* Profile */}
         <div className="flex items-center gap-3 pl-2 border-l border-slate-200">

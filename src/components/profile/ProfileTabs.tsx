@@ -27,9 +27,9 @@ export function ProfileTabs({
   ]
 
   return (
-    <div className="flex flex-col xl:flex-row xl:items-center justify-between border-b border-slate-200 mb-8 gap-4">
-      {/* Tabs */}
-      <div className="flex overflow-x-auto hide-scrollbar">
+    <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-8">
+      {/* Tabs container */}
+      <div className="bg-slate-100/80 rounded-2xl p-1.5 flex overflow-x-auto hide-scrollbar gap-1">
         {tabs.map((tab) => {
           const Icon = tab.icon
           return (
@@ -37,10 +37,10 @@ export function ProfileTabs({
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
               className={cn(
-                "flex items-center gap-2 px-4 py-4 border-b-2 font-bold text-[13px] whitespace-nowrap transition-colors",
+                "flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-[13px] whitespace-nowrap transition-all duration-200",
                 activeTab === tab.id
-                  ? "border-primary text-primary" 
-                  : "border-transparent text-slate-500 hover:text-slate-900"
+                  ? "bg-white text-primary shadow-sm border border-slate-200/60"
+                  : "text-slate-500 hover:text-slate-900 hover:bg-white/60"
               )}
             >
               <Icon className="w-4 h-4" strokeWidth={2.5} />
@@ -51,8 +51,11 @@ export function ProfileTabs({
       </div>
 
       {/* Action Button */}
-      <div className="pb-4 xl:pb-0 shrink-0">
-        <Button className="h-10 px-5 text-[13px] font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 rounded-xl" leftIcon={<Eye className="w-4 h-4" />}>
+      <div className="shrink-0">
+        <Button
+          className="h-11 px-6 text-[13px] font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 rounded-xl"
+          leftIcon={<Eye className="w-4 h-4" />}
+        >
           Preview Full Profile
         </Button>
       </div>

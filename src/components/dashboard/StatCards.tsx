@@ -14,10 +14,10 @@ export function StatCards({
   validUntil: string | null
 }) {
   return (
-    <div className="grid grid-cols-5 gap-5 mb-6">
+    <div className="grid grid-cols-5 gap-6 mb-8">
       
       {/* Resumes Created */}
-      <div className="bg-white rounded-2xl p-5 border-2 border-primary/20 shadow-sm relative overflow-hidden">
+      <div className="bg-white rounded-2xl p-6 border-2 border-primary/20 shadow-sm relative overflow-hidden">
         <div className="flex justify-between items-start mb-4">
           <div>
             <div className="text-[12px] font-bold text-slate-500 mb-1">Resumes Created</div>
@@ -34,7 +34,7 @@ export function StatCards({
       </div>
 
       {/* ATS Score */}
-      <div className="bg-white rounded-2xl p-5 border border-orange-200 shadow-sm">
+      <div className="bg-white rounded-2xl p-6 border border-orange-200 shadow-sm">
         <div className="flex justify-between items-start mb-4">
           <div>
             <div className="text-[12px] font-bold text-slate-500 mb-1">ATS Score (Avg)</div>
@@ -50,7 +50,7 @@ export function StatCards({
       </div>
 
       {/* Downloads */}
-      <div className="bg-white rounded-2xl p-5 border border-purple-100 shadow-sm">
+      <div className="bg-white rounded-2xl p-6 border border-purple-100 shadow-sm">
         <div className="flex justify-between items-start mb-4">
           <div>
             <div className="text-[12px] font-bold text-slate-500 mb-1">Downloads</div>
@@ -66,7 +66,7 @@ export function StatCards({
       </div>
 
       {/* Profile Completion */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center justify-between">
+      <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex items-center justify-between">
         <div>
           <div className="text-[12px] font-bold text-slate-500 mb-1">Profile Completion</div>
           <div className="text-4xl font-black text-slate-900 mb-2">{profileCompletion}%</div>
@@ -97,7 +97,7 @@ export function StatCards({
       </div>
 
       {/* Plan */}
-      <div className="bg-white rounded-2xl p-5 border border-yellow-200 shadow-sm relative overflow-hidden">
+      <div className="bg-white rounded-2xl p-6 border border-yellow-200 shadow-sm relative overflow-hidden">
         <div className="flex justify-between items-start mb-4">
           <div>
             <div className="text-[12px] font-bold text-slate-500 mb-1">Plan</div>

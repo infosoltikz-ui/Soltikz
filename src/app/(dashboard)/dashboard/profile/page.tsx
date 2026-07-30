@@ -22,7 +22,7 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className="px-8 pb-8 max-w-[1600px] mx-auto">
+    <div className="px-10 py-10 max-w-[1600px] mx-auto">
       <ProfileContent initialProfile={profile} />
     </div>
   )
