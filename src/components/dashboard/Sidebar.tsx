@@ -127,7 +127,7 @@ export function Sidebar({
       {/* Logo */}
       <div className={cn("h-20 flex flex-col justify-center border-b border-transparent", isCollapsed ? "px-0 items-center" : "px-8")}>
         <Link href="/" className="flex items-center justify-center">
-          <img src="/LOGO.png" alt="Resume Builder Logo" className={cn("object-contain transition-all", isCollapsed ? "h-8 w-auto" : "h-10 w-auto")} />
+          <img src="/LOGO.png" alt="Resume Builder Logo" className={cn("object-contain transition-all", isCollapsed ? "h-14 w-auto" : "h-18 w-auto")} />
         </Link>
       </div>
 

@@ -39,7 +39,7 @@ export function Header() {
         <div className="container mx-auto px-4 lg:px-8 h-full flex items-center justify-between gap-4 max-w-[1400px]">
           {/* Logo */}
           <Link href="/" className="flex items-center shrink-0 group py-2">
-            <img src="/LOGO.png" alt="Resume Builder Logo" className="h-12 w-auto object-contain" />
+            <img src="/LOGO.png" alt="Resume Builder Logo" className="h-16 w-auto object-contain" />
           </Link>
 
           {/* Desktop Nav */}
