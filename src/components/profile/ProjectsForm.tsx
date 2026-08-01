@@ -5,7 +5,19 @@ import { createClient } from '@/utils/supabase/client'
 import { toast } from 'react-hot-toast'
 import { formatMonthYear } from '@/utils/dateFormatter'
 
-export function ProjectsForm({ profile, setProfile, onNext }: { profile?: any, setProfile?: (p: any) => void, onNext?: () => void }) {
+export function ProjectsForm({ 
+  profile, 
+  setProfile, 
+  onNext, 
+  localMode, 
+  onLocalSave 
+}: { 
+  profile?: any, 
+  setProfile?: (p: any) => void, 
+  onNext?: () => void,
+  localMode?: boolean,
+  onLocalSave?: (profile: any) => void
+}) {
   const supabase = createClient()
   const [isLoading, setIsLoading] = useState(false)
   const masterData = profile?.master_resume_data || {}
@@ -45,21 +57,26 @@ export function ProjectsForm({ profile, setProfile, onNext }: { profile?: any, s
       const updates = {
         master_resume_data: newMasterData
       }
+      
+      const updatedProfile = { ...profile, ...updates }
 
-      const { error } = await supabase
-        .from('profiles')
-        .upsert({ 
-          id: profile.id, 
-          email: profile.email,
-          ...updates 
-        })
+      if (localMode && onLocalSave) {
+        onLocalSave(updatedProfile)
+        toast.success('Local changes saved!')
+      } else {
+        const { error } = await supabase
+          .from('profiles')
+          .upsert({ 
+            id: profile.id, 
+            email: profile.email,
+            ...updates 
+          })
 
-      if (error) throw error
+        if (error) throw error
 
-      if (setProfile) {
-        setProfile({ ...profile, ...updates })
+        if (setProfile) setProfile(updatedProfile)
+        toast.success('Projects saved!')
       }
-      toast.success('Projects saved!')
       if (onNext) onNext()
     } catch (error: any) {
       toast.error(error.message || 'Failed to save projects')

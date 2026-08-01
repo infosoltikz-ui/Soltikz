@@ -5,7 +5,19 @@ import { createClient } from '@/utils/supabase/client'
 import { toast } from 'react-hot-toast'
 import { formatMonthYear } from '@/utils/dateFormatter'
 
-export function CertificationsForm({ profile, setProfile, onNext }: { profile?: any, setProfile?: (p: any) => void, onNext?: () => void }) {
+export function CertificationsForm({ 
+  profile, 
+  setProfile, 
+  onNext, 
+  localMode, 
+  onLocalSave 
+}: { 
+  profile?: any, 
+  setProfile?: (p: any) => void, 
+  onNext?: () => void,
+  localMode?: boolean,
+  onLocalSave?: (profile: any) => void
+}) {
   const supabase = createClient()
   const [isLoading, setIsLoading] = useState(false)
   const masterData = profile?.master_resume_data || {}
@@ -40,15 +52,29 @@ export function CertificationsForm({ profile, setProfile, onNext }: { profile?: 
         ...masterData,
         certifications: certList
       }
-      const updates = { master_resume_data: newMasterData }
-      const { error } = await supabase
-        .from('profiles')
-        .upsert({ id: profile.id, email: profile.email, ...updates })
+      const updates = {
+        master_resume_data: newMasterData
+      }
+      
+      const updatedProfile = { ...profile, ...updates }
 
-      if (error) throw error
+      if (localMode && onLocalSave) {
+        onLocalSave(updatedProfile)
+        toast.success('Local changes saved!')
+      } else {
+        const { error } = await supabase
+          .from('profiles')
+          .upsert({ 
+            id: profile.id, 
+            email: profile.email,
+            ...updates 
+          })
 
-      if (setProfile) setProfile({ ...profile, ...updates })
-      toast.success('Certifications saved!')
+        if (error) throw error
+
+        if (setProfile) setProfile(updatedProfile)
+        toast.success('Certifications saved!')
+      }
       if (onNext) onNext()
     } catch (error: any) {
       toast.error(error.message || 'Failed to save certifications')

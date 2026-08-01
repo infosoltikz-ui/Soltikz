@@ -4,7 +4,19 @@ import { useState } from 'react'
 import { ProfilePreviewModal } from '@/components/profile/ProfilePreviewModal'
 import { createClient } from '@/utils/supabase/client'
 
-export function SkillsForm({ profile, setProfile, onFinalSave }: { profile?: any, setProfile?: (p: any) => void, onFinalSave?: (profile: any) => void }) {
+export function SkillsForm({ 
+  profile, 
+  setProfile, 
+  onFinalSave,
+  localMode,
+  onLocalSave 
+}: { 
+  profile?: any, 
+  setProfile?: (p: any) => void, 
+  onFinalSave?: (profile: any) => void,
+  localMode?: boolean,
+  onLocalSave?: (profile: any) => void
+}) {
   const masterData = profile?.master_resume_data || {}
 
   const defaultSkills = [
@@ -35,19 +47,28 @@ export function SkillsForm({ profile, setProfile, onFinalSave }: { profile?: any
       }
 
       const updates = { master_resume_data: newMasterData }
-      const { error } = await supabase
-        .from('profiles')
-        .upsert({ id: profile.id, email: profile.email, ...updates })
+      const updatedProfile = { ...profile, ...updates }
 
-      if (error) throw error
+      if (localMode && onLocalSave) {
+        onLocalSave(updatedProfile)
+        import('react-hot-toast').then(({ toast }) => {
+          toast.success('Local changes saved!')
+        })
+      } else {
+        const { error } = await supabase
+          .from('profiles')
+          .upsert({ id: profile.id, email: profile.email, ...updates })
 
-      const savedProfile = { ...profile, ...updates }
-      if (setProfile) setProfile(savedProfile)
-      import('react-hot-toast').then(({ toast }) => {
-        toast.success('Profile fully saved!')
-      })
+        if (error) throw error
+
+        if (setProfile) setProfile(updatedProfile)
+        import('react-hot-toast').then(({ toast }) => {
+          toast.success('Profile fully saved!')
+        })
+      }
+      
       setShowPreview(false)
-      if (onFinalSave) onFinalSave(savedProfile)
+      if (onFinalSave) onFinalSave(updatedProfile)
     } catch (error: any) {
       import('react-hot-toast').then(({ toast }) => toast.error('Failed to save profile'))
     } finally {
