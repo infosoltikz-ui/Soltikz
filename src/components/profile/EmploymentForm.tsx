@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/Button'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'react-hot-toast'
 
-export function EmploymentForm({ profile, setProfile }: { profile: any, setProfile: (p: any) => void }) {
+export function EmploymentForm({ profile, setProfile, onNext }: { profile: any, setProfile: (p: any) => void, onNext?: () => void }) {
   const supabase = createClient()
   const [isLoading, setIsLoading] = useState(false)
   const masterData = profile?.master_resume_data || {}
@@ -57,6 +57,7 @@ export function EmploymentForm({ profile, setProfile }: { profile: any, setProfi
 
       setProfile({ ...profile, ...updates })
       toast.success('Employment history saved!')
+      if (onNext) onNext()
     } catch (error: any) {
       toast.error(error.message || 'Failed to save employment')
     } finally {
@@ -167,8 +168,8 @@ export function EmploymentForm({ profile, setProfile }: { profile: any, setProfi
         ))}
 
         <div className="flex items-center gap-4 pt-4 border-t border-slate-100">
-          <Button onClick={handleSave} disabled={isLoading} className="h-11 px-6 rounded-xl font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30">
-            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Save Changes'}
+          <Button onClick={handleSave} disabled={isLoading} className="h-11 px-6 rounded-xl font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 min-w-[160px]">
+            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Save & Next'}
           </Button>
           <button className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors">
             Cancel

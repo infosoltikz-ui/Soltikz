@@ -20,13 +20,13 @@ export function ProfileContent({ initialProfile }: { initialProfile: any }) {
 
   const renderActiveForm = () => {
     switch (activeTab) {
-      case 'personal': return <PersonalInfoForm profile={profile} setProfile={setProfile} />
-      case 'education': return <EducationForm profile={profile} setProfile={setProfile} />
-      case 'employment': return <EmploymentForm profile={profile} setProfile={setProfile} />
-      case 'skills': return <SkillsForm profile={profile} setProfile={setProfile} />
-      case 'projects': return <ProjectsForm profile={profile} setProfile={setProfile} />
-      case 'certifications': return <CertificationsForm profile={profile} setProfile={setProfile} />
-      default: return <PersonalInfoForm profile={profile} setProfile={setProfile} />
+      case 'personal': return <PersonalInfoForm profile={profile} setProfile={setProfile} onNext={() => setActiveTab('education')} />
+      case 'education': return <EducationForm profile={profile} setProfile={setProfile} onNext={() => setActiveTab('employment')} />
+      case 'employment': return <EmploymentForm profile={profile} setProfile={setProfile} onNext={() => setActiveTab('projects')} />
+      case 'projects': return <ProjectsForm profile={profile} setProfile={setProfile} onNext={() => setActiveTab('certifications')} />
+      case 'certifications': return <CertificationsForm profile={profile} setProfile={setProfile} onNext={() => setActiveTab('skills')} />
+      case 'skills': return <SkillsForm profile={profile} setProfile={setProfile} onNext={() => setActiveTab('personal')} />
+      default: return <PersonalInfoForm profile={profile} setProfile={setProfile} onNext={() => setActiveTab('education')} />
     }
   }
 

@@ -1,7 +1,16 @@
 import { Plus, Trash2, Award, Building2, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
-export function CertificationsForm({ profile, setProfile }: { profile?: any, setProfile?: (p: any) => void }) {
+export function CertificationsForm({ profile, setProfile, onNext }: { profile?: any, setProfile?: (p: any) => void, onNext?: () => void }) {
+  const certifications = [1, 2, 3]
+
+  const handleSave = () => {
+    import('react-hot-toast').then(({ toast }) => {
+      toast.success('Certifications saved!')
+      if (onNext) onNext()
+    })
+  }
+
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
       
@@ -93,8 +102,8 @@ export function CertificationsForm({ profile, setProfile }: { profile?: any, set
         </div>
 
         <div className="flex items-center gap-4 pt-4 border-t border-slate-100">
-          <Button className="h-11 px-6 rounded-xl font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30">
-            Save Changes
+          <Button onClick={handleSave} className="h-11 px-6 rounded-xl font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 min-w-[160px]">
+            Save & Next
           </Button>
           <button className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors">
             Cancel

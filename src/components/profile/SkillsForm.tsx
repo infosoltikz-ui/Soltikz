@@ -1,7 +1,7 @@
 import { Plus, X, Wrench, Search } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
-export function SkillsForm({ profile, setProfile }: { profile?: any, setProfile?: (p: any) => void }) {
+export function SkillsForm({ profile, setProfile, onNext }: { profile?: any, setProfile?: (p: any) => void, onNext?: () => void }) {
   const defaultSkills = [
     { name: 'JavaScript', category: 'Programming Languages' },
     { name: 'React.js', category: 'Libraries & Frameworks' },
@@ -11,6 +11,13 @@ export function SkillsForm({ profile, setProfile }: { profile?: any, setProfile?
     { name: 'Figma', category: 'Tools' },
     { name: 'Agile Methodology', category: 'Soft Skills' }
   ]
+
+  const handleSave = () => {
+    import('react-hot-toast').then(({ toast }) => {
+      toast.success('Skills saved!')
+      if (onNext) onNext()
+    })
+  }
 
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
@@ -64,8 +71,8 @@ export function SkillsForm({ profile, setProfile }: { profile?: any, setProfile?
         </div>
 
         <div className="flex items-center gap-4 pt-4 border-t border-slate-100">
-          <Button className="h-11 px-6 rounded-xl font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30">
-            Save Changes
+          <Button onClick={handleSave} className="h-11 px-6 rounded-xl font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 min-w-[160px]">
+            Save & Next
           </Button>
           <button className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors">
             Cancel

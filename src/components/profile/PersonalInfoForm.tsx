@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'react-hot-toast'
 
-export function PersonalInfoForm({ profile, setProfile }: { profile: any, setProfile: (p: any) => void }) {
+export function PersonalInfoForm({ profile, setProfile, onNext }: { profile: any, setProfile: (p: any) => void, onNext?: () => void }) {
   const supabase = createClient()
   const [isLoading, setIsLoading] = useState(false)
   const masterData = profile?.master_resume_data || {}
@@ -56,6 +56,7 @@ export function PersonalInfoForm({ profile, setProfile }: { profile: any, setPro
 
       setProfile({ ...profile, ...updates })
       toast.success('Personal information saved!')
+      if (onNext) onNext()
     } catch (error: any) {
       toast.error(error.message || 'Failed to save information')
     } finally {
@@ -203,7 +204,7 @@ export function PersonalInfoForm({ profile, setProfile }: { profile: any, setPro
           disabled={isLoading}
           className="h-11 px-8 rounded-xl font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 min-w-[160px]"
         >
-          {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Save Changes'}
+          {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Save & Next'}
         </Button>
         <button className="h-11 px-6 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
           Cancel
