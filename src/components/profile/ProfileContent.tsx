@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { ProfileHeader } from '@/components/profile/ProfileHeader'
 import { ProfileTabs } from '@/components/profile/ProfileTabs'
 import { ProfileSidebar } from '@/components/profile/ProfileSidebar'
@@ -19,8 +18,7 @@ import { CertificationsForm } from '@/components/profile/CertificationsForm'
 export function ProfileContent({ initialProfile }: { initialProfile: any }) {
   const [activeTab, setActiveTab] = useState('personal')
   const [profile, setProfile] = useState(initialProfile)
-  const [viewMode, setViewMode] = useState(false)
-  const [sidebarVisible, setSidebarVisible] = useState(true)  // false = editing, true = view after save
+  const [viewMode, setViewMode] = useState(false)  // false = editing, true = view after save
 
   // Called by SkillsForm after Final Save
   const handleFinalSave = (savedProfile: any) => {
@@ -66,21 +64,9 @@ export function ProfileContent({ initialProfile }: { initialProfile: any }) {
               {renderActiveForm()}
             </div>
 
-            {/* Sidebar with toggle */}
-            <div className="relative shrink-0" style={{ width: sidebarVisible ? undefined : '40px' }}>
-              {/* Toggle button */}
-              <button
-                onClick={() => setSidebarVisible(!sidebarVisible)}
-                title={sidebarVisible ? 'Hide sidebar' : 'Show sidebar'}
-                className="absolute -left-4 top-4 z-10 w-7 h-7 bg-white border border-slate-200 rounded-full flex items-center justify-center shadow-sm hover:shadow-md hover:border-primary hover:text-primary text-slate-400 transition-all hidden lg:flex"
-              >
-                {sidebarVisible ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
-              </button>
-
-              {/* Sidebar content */}
-              <div className={`w-full lg:w-[260px] xl:w-[280px] transition-all duration-300 overflow-hidden ${sidebarVisible ? 'opacity-100 max-w-[280px]' : 'opacity-0 max-w-0 pointer-events-none'}`}>
-                <ProfileSidebar profile={profile} />
-              </div>
+            {/* Sidebar */}
+            <div className="w-full lg:w-[260px] xl:w-[280px] shrink-0">
+              <ProfileSidebar profile={profile} />
             </div>
           </div>
         )}
