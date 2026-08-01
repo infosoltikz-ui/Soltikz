@@ -18,7 +18,16 @@ import { CertificationsForm } from '@/components/profile/CertificationsForm'
 export function ProfileContent({ initialProfile }: { initialProfile: any }) {
   const [activeTab, setActiveTab] = useState('personal')
   const [profile, setProfile] = useState(initialProfile)
-  const [viewMode, setViewMode] = useState(false)  // false = editing, true = view after save
+
+  // If master_resume_data already has content (user has saved before),
+  // start in view mode so they see their profile — not a blank form — on refresh.
+  const hasExistingData = !!(
+    initialProfile?.master_resume_data?.personal_info?.firstName ||
+    initialProfile?.master_resume_data?.employment?.length > 0 ||
+    initialProfile?.master_resume_data?.education?.length > 0 ||
+    initialProfile?.master_resume_data?.skills?.length > 0
+  )
+  const [viewMode, setViewMode] = useState(hasExistingData)
 
   // Called by SkillsForm after Final Save
   const handleFinalSave = (savedProfile: any) => {
