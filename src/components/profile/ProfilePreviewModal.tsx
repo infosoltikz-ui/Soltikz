@@ -1,4 +1,4 @@
-import { X, CheckCircle2, User, Briefcase, GraduationCap, FolderOpen, Award, Wrench, MapPin, Phone, Mail, Linkedin, Link as LinkIcon, Trophy, Loader2 } from 'lucide-react'
+import { X, CheckCircle2, User, Briefcase, GraduationCap, FolderOpen, Award, Wrench, MapPin, Phone, Mail, Link as LinkIcon, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
 interface ProfilePreviewModalProps {
