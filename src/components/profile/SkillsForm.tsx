@@ -72,7 +72,10 @@ export function SkillsForm({ profile, setProfile, onNext }: { profile?: any, set
 
         <div className="flex items-center gap-4 pt-4 border-t border-slate-100">
           <Button onClick={handleSave} className="h-11 px-6 rounded-xl font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 min-w-[160px]">
-            Save & Next
+            Final Save
+          </Button>
+          <Button variant="outline" className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors min-w-[160px]">
+            Preview
           </Button>
           <button className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors">
             Cancel
