@@ -92,9 +92,9 @@ export default function CreateResumePage() {
       }
       
       setStep(3)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Generation failed:', error)
-      alert('Failed to generate resume. Please try again.')
+      alert(`Failed to generate resume: ${error.message || error}`)
     } finally {
       setIsGenerating(false)
     }

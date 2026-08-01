@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     // -----------------------------
 
     // Determine the base URL for internal fetch calls
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://127.0.0.1:3000';
     const reqHeaders = { 'Content-Type': 'application/json', 'cookie': req.headers.get('cookie') || '' };
 
     console.log('[Orchestrator] Starting Pipeline...');
