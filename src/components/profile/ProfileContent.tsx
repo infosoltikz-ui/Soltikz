@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ProfileHeader } from '@/components/profile/ProfileHeader'
 import { ProfileTabs } from '@/components/profile/ProfileTabs'
 import { ProfileSidebar } from '@/components/profile/ProfileSidebar'
@@ -31,6 +31,11 @@ export function ProfileContent({ initialProfile }: { initialProfile: any }) {
     setActiveTab(tab)
     setViewMode(false)
   }
+
+  // Scroll to top whenever tab changes or view mode toggles
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [activeTab, viewMode])
 
   const renderActiveForm = () => {
     switch (activeTab) {
