@@ -1,5 +1,6 @@
 import { Plus, Trash2, Trophy, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { formatMonthYear } from '@/utils/dateFormatter'
 
 export function AchievementsForm() {
   return (
@@ -47,6 +48,7 @@ export function AchievementsForm() {
                   type="text" 
                   placeholder="MM/YYYY"
                   defaultValue="2022-12" 
+                  onChange={(e) => e.target.value = formatMonthYear(e.target.value)} 
                   className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
                 />
               </div>

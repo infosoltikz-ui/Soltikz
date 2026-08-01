@@ -3,6 +3,7 @@ import { Plus, Trash2, Briefcase, Building2, MapPin, Loader2 } from 'lucide-reac
 import { Button } from '@/components/ui/Button'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'react-hot-toast'
+import { formatMonthYear } from '@/utils/dateFormatter'
 
 export function EmploymentForm({ profile, setProfile, onNext }: { profile: any, setProfile: (p: any) => void, onNext?: () => void }) {
   const supabase = createClient()
@@ -118,7 +119,7 @@ export function EmploymentForm({ profile, setProfile, onNext }: { profile: any, 
                   type="text" 
                   placeholder="MM/YYYY"
                   value={job.startDate}
-                  onChange={(e) => handleChange(index, 'startDate', e.target.value)}
+                  onChange={(e) => handleChange(index, 'startDate', formatMonthYear(e.target.value))}
                   className="w-full h-11 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
                 />
               </div>
@@ -128,7 +129,7 @@ export function EmploymentForm({ profile, setProfile, onNext }: { profile: any, 
                   type="text" 
                   placeholder="MM/YYYY"
                   value={job.endDate}
-                  onChange={(e) => handleChange(index, 'endDate', e.target.value)}
+                  onChange={(e) => handleChange(index, 'endDate', formatMonthYear(e.target.value))}
                   disabled={job.current}
                   className="w-full h-11 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white disabled:bg-slate-100 disabled:text-slate-400"
                 />

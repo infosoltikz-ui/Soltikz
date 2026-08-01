@@ -1,5 +1,6 @@
 import { Plus, Trash2, Award, Building2, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { formatMonthYear } from '@/utils/dateFormatter'
 
 export function CertificationsForm({ profile, setProfile, onNext }: { profile?: any, setProfile?: (p: any) => void, onNext?: () => void }) {
   const certifications = [1, 2, 3]
@@ -71,6 +72,7 @@ export function CertificationsForm({ profile, setProfile, onNext }: { profile?: 
                   type="text" 
                   placeholder="MM/YYYY"
                   defaultValue="2022-09" 
+                  onChange={(e) => e.target.value = formatMonthYear(e.target.value)} 
                   className="w-full h-11 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
                 />
               </div>
@@ -82,6 +84,7 @@ export function CertificationsForm({ profile, setProfile, onNext }: { profile?: 
                   type="text" 
                   placeholder="MM/YYYY"
                   defaultValue="2025-09" 
+                  onChange={(e) => e.target.value = formatMonthYear(e.target.value)} 
                   className="w-full h-11 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
                 />
               </div>

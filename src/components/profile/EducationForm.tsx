@@ -3,6 +3,7 @@ import { Plus, Trash2, GraduationCap, Building, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'react-hot-toast'
+import { formatMonthYear } from '@/utils/dateFormatter'
 
 export function EducationForm({ profile, setProfile, onNext }: { profile: any, setProfile: (p: any) => void, onNext?: () => void }) {
   const supabase = createClient()
@@ -126,7 +127,7 @@ export function EducationForm({ profile, setProfile, onNext }: { profile: any, s
                   type="text" 
                   placeholder="MM/YYYY"
                   value={edu.startDate}
-                  onChange={(e) => handleChange(index, 'startDate', e.target.value)}
+                  onChange={(e) => handleChange(index, 'startDate', formatMonthYear(e.target.value))}
                   className="w-full h-11 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
                 />
               </div>
@@ -136,7 +137,7 @@ export function EducationForm({ profile, setProfile, onNext }: { profile: any, s
                   type="text" 
                   placeholder="MM/YYYY"
                   value={edu.endDate}
-                  onChange={(e) => handleChange(index, 'endDate', e.target.value)}
+                  onChange={(e) => handleChange(index, 'endDate', formatMonthYear(e.target.value))}
                   className="w-full h-11 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
                 />
               </div>

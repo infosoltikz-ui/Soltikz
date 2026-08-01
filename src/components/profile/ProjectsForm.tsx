@@ -1,5 +1,6 @@
 import { Plus, Trash2, FolderOpen, Globe } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { formatMonthYear } from '@/utils/dateFormatter'
 
 export function ProjectsForm({ profile, setProfile, onNext }: { profile?: any, setProfile?: (p: any) => void, onNext?: () => void }) {
   const projects = [1, 2, 3, 4, 5, 6]
@@ -82,6 +83,7 @@ export function ProjectsForm({ profile, setProfile, onNext }: { profile?: any, s
                   <input 
                     type="text" 
                     placeholder="MM/YYYY"
+                    onChange={(e) => e.target.value = formatMonthYear(e.target.value)}
                     className="w-full h-11 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
                   />
                 </div>
@@ -92,6 +94,7 @@ export function ProjectsForm({ profile, setProfile, onNext }: { profile?: any, s
                   <input 
                     type="text" 
                     placeholder="MM/YYYY"
+                    onChange={(e) => e.target.value = formatMonthYear(e.target.value)}
                     className="w-full h-11 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
                   />
                 </div>
