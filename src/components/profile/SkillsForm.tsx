@@ -1,5 +1,8 @@
-import { Plus, X, Wrench, Search } from 'lucide-react'
+import { Plus, X, Wrench, Search, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { useState } from 'react'
+import { ProfilePreviewModal } from '@/components/profile/ProfilePreviewModal'
+import { createClient } from '@/utils/supabase/client'
 
 export function SkillsForm({ profile, setProfile, onNext }: { profile?: any, setProfile?: (p: any) => void, onNext?: () => void }) {
   const defaultSkills = [
@@ -12,11 +15,40 @@ export function SkillsForm({ profile, setProfile, onNext }: { profile?: any, set
     { name: 'Agile Methodology', category: 'Soft Skills' }
   ]
 
-  const handleSave = () => {
-    import('react-hot-toast').then(({ toast }) => {
-      toast.success('Skills saved!')
-      if (onNext) onNext()
-    })
+  const [showPreview, setShowPreview] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const supabase = createClient()
+
+  // For now, these are the selected skills.
+  const [skillsList, setSkillsList] = useState(defaultSkills)
+
+  const handleSave = async () => {
+    if (!profile?.id) return;
+    setIsLoading(true)
+    try {
+      const newMasterData = {
+        ...profile.master_resume_data,
+        skills: skillsList
+      }
+
+      const updates = { master_resume_data: newMasterData }
+      const { error } = await supabase
+        .from('profiles')
+        .upsert({ id: profile.id, email: profile.email, ...updates })
+
+      if (error) throw error
+
+      if (setProfile) setProfile({ ...profile, ...updates })
+      import('react-hot-toast').then(({ toast }) => {
+        toast.success('Profile fully saved!')
+      })
+      setShowPreview(false)
+      // They can navigate away or we show success
+    } catch (error: any) {
+      import('react-hot-toast').then(({ toast }) => toast.error('Failed to save profile'))
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -71,10 +103,10 @@ export function SkillsForm({ profile, setProfile, onNext }: { profile?: any, set
         </div>
 
         <div className="flex items-center gap-4 pt-4 border-t border-slate-100">
-          <Button onClick={handleSave} className="h-11 px-6 rounded-xl font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 min-w-[160px]">
-            Final Save
+          <Button onClick={handleSave} disabled={isLoading} className="h-11 px-6 rounded-xl font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 min-w-[160px]">
+            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Final Save'}
           </Button>
-          <Button variant="outline" className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors min-w-[160px]">
+          <Button onClick={() => setShowPreview(true)} variant="outline" className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors min-w-[160px]">
             Preview
           </Button>
           <button className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors">
@@ -83,6 +115,15 @@ export function SkillsForm({ profile, setProfile, onNext }: { profile?: any, set
         </div>
 
       </div>
+
+      {showPreview && (
+        <ProfilePreviewModal 
+          profile={{ ...profile, master_resume_data: { ...profile?.master_resume_data, skills: skillsList } }} 
+          onClose={() => setShowPreview(false)}
+          onSave={handleSave}
+          isLoading={isLoading}
+        />
+      )}
     </div>
   )
 }
