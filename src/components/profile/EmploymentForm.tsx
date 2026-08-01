@@ -115,7 +115,8 @@ export function EmploymentForm({ profile, setProfile, onNext }: { profile: any, 
               <div>
                 <label className="block text-[13px] font-bold text-slate-700 mb-2">Start Date</label>
                 <input 
-                  type="month" 
+                  type="text" 
+                  placeholder="MM/YYYY"
                   value={job.startDate}
                   onChange={(e) => handleChange(index, 'startDate', e.target.value)}
                   className="w-full h-11 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
@@ -124,7 +125,8 @@ export function EmploymentForm({ profile, setProfile, onNext }: { profile: any, 
               <div>
                 <label className="block text-[13px] font-bold text-slate-700 mb-2">End Date</label>
                 <input 
-                  type="month" 
+                  type="text" 
+                  placeholder="MM/YYYY"
                   value={job.endDate}
                   onChange={(e) => handleChange(index, 'endDate', e.target.value)}
                   disabled={job.current}

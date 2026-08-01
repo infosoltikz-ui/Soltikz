@@ -80,7 +80,8 @@ export function ProjectsForm({ profile, setProfile, onNext }: { profile?: any, s
                     Start Date
                   </label>
                   <input 
-                    type="month" 
+                    type="text" 
+                    placeholder="MM/YYYY"
                     className="w-full h-11 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
                   />
                 </div>
@@ -89,7 +90,8 @@ export function ProjectsForm({ profile, setProfile, onNext }: { profile?: any, s
                     End Date
                   </label>
                   <input 
-                    type="month" 
+                    type="text" 
+                    placeholder="MM/YYYY"
                     className="w-full h-11 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
                   />
                 </div>

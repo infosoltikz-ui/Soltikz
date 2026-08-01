@@ -44,7 +44,8 @@ export function AchievementsForm() {
               <div className="relative">
                 <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input 
-                  type="month" 
+                  type="text" 
+                  placeholder="MM/YYYY"
                   defaultValue="2022-12" 
                   className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
                 />
