@@ -5,6 +5,8 @@ import { ProfilePreviewModal } from '@/components/profile/ProfilePreviewModal'
 import { createClient } from '@/utils/supabase/client'
 
 export function SkillsForm({ profile, setProfile, onFinalSave }: { profile?: any, setProfile?: (p: any) => void, onFinalSave?: (profile: any) => void }) {
+  const masterData = profile?.master_resume_data || {}
+
   const defaultSkills = [
     { name: 'JavaScript', category: 'Programming Languages' },
     { name: 'React.js', category: 'Libraries & Frameworks' },
@@ -15,12 +17,13 @@ export function SkillsForm({ profile, setProfile, onFinalSave }: { profile?: any
     { name: 'Agile Methodology', category: 'Soft Skills' }
   ]
 
+  // Load saved skills from profile; fall back to defaults only when nothing saved yet
+  const [skillsList, setSkillsList] = useState<any[]>(
+    masterData.skills?.length > 0 ? masterData.skills : defaultSkills
+  )
   const [showPreview, setShowPreview] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const supabase = createClient()
-
-  // For now, these are the selected skills.
-  const [skillsList, setSkillsList] = useState(defaultSkills)
 
   const handleSave = async () => {
     if (!profile?.id) return;
