@@ -16,7 +16,7 @@ const GeneratedResumeFormat = z.object({
     role: z.string(),
     company: z.string(),
     duration: z.string(),
-    environment: z.array(z.string()).optional().describe("List of tools/tech used. ONLY provide this for the first 2 most recent projects if C2C."),
+    environment: z.array(z.string()).nullable().describe("List of tools/tech used. ONLY provide this for the first 2 most recent projects if C2C."),
     bullets: z.array(z.string()).describe("Action-driven bullet points for this role.")
   })),
   education: z.array(z.object({
