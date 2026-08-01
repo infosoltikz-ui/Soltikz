@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { ProfileHeader } from '@/components/profile/ProfileHeader'
 import { ProfileTabs } from '@/components/profile/ProfileTabs'
 import { ProfileSidebar } from '@/components/profile/ProfileSidebar'
-import { ProfileCompletionBanner } from '@/components/profile/ProfileCompletionBanner'
+
 import { ProfileView } from '@/components/profile/ProfileView'
 
 // Form Components
@@ -71,7 +71,7 @@ export function ProfileContent({ initialProfile }: { initialProfile: any }) {
           </div>
         )}
 
-        {!viewMode && <ProfileCompletionBanner profile={profile} />}
+
       </main>
     </>
   )
