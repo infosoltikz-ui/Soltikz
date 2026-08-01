@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { ProfilePreviewModal } from '@/components/profile/ProfilePreviewModal'
 import { createClient } from '@/utils/supabase/client'
 
-export function SkillsForm({ profile, setProfile, onNext }: { profile?: any, setProfile?: (p: any) => void, onNext?: () => void }) {
+export function SkillsForm({ profile, setProfile, onFinalSave }: { profile?: any, setProfile?: (p: any) => void, onFinalSave?: (profile: any) => void }) {
   const defaultSkills = [
     { name: 'JavaScript', category: 'Programming Languages' },
     { name: 'React.js', category: 'Libraries & Frameworks' },
@@ -38,12 +38,13 @@ export function SkillsForm({ profile, setProfile, onNext }: { profile?: any, set
 
       if (error) throw error
 
-      if (setProfile) setProfile({ ...profile, ...updates })
+      const savedProfile = { ...profile, ...updates }
+      if (setProfile) setProfile(savedProfile)
       import('react-hot-toast').then(({ toast }) => {
         toast.success('Profile fully saved!')
       })
       setShowPreview(false)
-      // They can navigate away or we show success
+      if (onFinalSave) onFinalSave(savedProfile)
     } catch (error: any) {
       import('react-hot-toast').then(({ toast }) => toast.error('Failed to save profile'))
     } finally {
