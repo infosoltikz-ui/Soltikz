@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { Button } from '@/components/ui/Button'
+import { PoweredBySoltkiz } from '@/components/ui/PoweredBySoltkiz'
 
 const NAV_ITEMS = [
   { label: 'Dashboard', href: '/dashboard', icon: FileText },
@@ -243,6 +244,10 @@ export function Sidebar({
               </Link>
             </div>
           )}
+
+          <div className="mt-6 flex justify-center">
+            <PoweredBySoltkiz />
+          </div>
         </div>
       )}
     </aside>
