@@ -206,7 +206,7 @@ export default function CreateResumePage() {
                   </div>
                 )}
                 {/* Note: In a real app we would capture form inputs here and pass to handleGenerate */}
-                <CompanyDetailsSection onGenerate={() => handleGenerate('Example Corp', 'Senior Engineer', 'We need a senior engineer with React and Node.js experience...')} />
+                <CompanyDetailsSection onGenerate={(company, role, jd) => handleGenerate(company, role, jd)} />
               </div>
               
               <div className="w-full xl:w-[400px] shrink-0 space-y-6">
