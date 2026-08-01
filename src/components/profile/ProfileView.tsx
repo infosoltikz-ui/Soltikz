@@ -5,10 +5,11 @@ import { Button } from '@/components/ui/Button'
 
 interface ProfileViewProps {
   profile: any
-  onEdit: (tab: string) => void
+  onEdit?: (tab: string) => void
+  hideBanner?: boolean
 }
 
-function SectionHeader({ icon, title, tab, onEdit }: { icon: React.ReactNode; title: string; tab: string; onEdit: (tab: string) => void }) {
+function SectionHeader({ icon, title, tab, onEdit }: { icon: React.ReactNode; title: string; tab: string; onEdit?: (tab: string) => void }) {
   return (
     <div className="flex items-center justify-between mb-5 pb-3 border-b-2 border-primary/20">
       <h2 className="text-[18px] font-black text-slate-900 flex items-center gap-3">
@@ -17,13 +18,15 @@ function SectionHeader({ icon, title, tab, onEdit }: { icon: React.ReactNode; ti
         </span>
         {title}
       </h2>
-      <button
-        onClick={() => onEdit(tab)}
-        className="flex items-center gap-1.5 text-[12px] font-bold text-primary hover:text-primary/80 bg-primary/10 hover:bg-primary/15 px-3 py-1.5 rounded-lg transition-colors"
-      >
-        <Pencil className="w-3.5 h-3.5" />
-        Edit
-      </button>
+      {onEdit && (
+        <button
+          onClick={() => onEdit(tab)}
+          className="flex items-center gap-1.5 text-[12px] font-bold text-primary hover:text-primary/80 bg-primary/10 hover:bg-primary/15 px-3 py-1.5 rounded-lg transition-colors"
+        >
+          <Pencil className="w-3.5 h-3.5" />
+          Edit
+        </button>
+      )}
     </div>
   )
 }
@@ -32,7 +35,7 @@ function EmptyState({ text }: { text: string }) {
   return <p className="text-[14px] text-slate-400 italic">— {text}</p>
 }
 
-export function ProfileView({ profile, onEdit }: ProfileViewProps) {
+export function ProfileView({ profile, onEdit, hideBanner }: ProfileViewProps) {
   const data = profile?.master_resume_data || {}
   const pi = data.personal_info || {}
   const fullName = [pi.firstName, pi.middleName, pi.lastName].filter(Boolean).join(' ')
@@ -43,13 +46,15 @@ export function ProfileView({ profile, onEdit }: ProfileViewProps) {
     <div className="space-y-8">
 
       {/* ── SUCCESS BANNER ────────────────────────── */}
-      <div className="bg-gradient-to-r from-primary/10 to-emerald-50 border border-primary/20 rounded-2xl px-6 py-4 flex items-center gap-4">
-        <CheckCircle2 className="w-8 h-8 text-primary shrink-0" />
-        <div>
-          <p className="text-[15px] font-black text-slate-900">Profile Saved Successfully!</p>
-          <p className="text-[13px] text-slate-600 mt-0.5">Your master profile is ready. Review it below and click <strong>Edit</strong> on any section to make changes.</p>
+      {!hideBanner && (
+        <div className="bg-gradient-to-r from-primary/10 to-emerald-50 border border-primary/20 rounded-2xl px-6 py-4 flex items-center gap-4">
+          <CheckCircle2 className="w-8 h-8 text-primary shrink-0" />
+          <div>
+            <p className="text-[15px] font-black text-slate-900">Profile Saved Successfully!</p>
+            <p className="text-[13px] text-slate-600 mt-0.5">Your master profile is ready. Review it below and click <strong>Edit</strong> on any section to make changes.</p>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── 1. PERSONAL INFO ──────────────────────── */}
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
