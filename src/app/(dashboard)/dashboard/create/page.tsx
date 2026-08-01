@@ -100,7 +100,7 @@ export default function CreateResumePage() {
                  {/* Temporary wrapper just to show we capture state, ResumeTypeSelector should ideally accept props */}
                 <ResumeTypeSelector />
               </div>
-              <PersonalInfoSection />
+              <PersonalInfoSection profileData={profileData} />
             </div>
 
             <div className="flex justify-end pt-4">

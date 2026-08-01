@@ -3,8 +3,19 @@
 import { useState } from 'react'
 import { User, Edit2 } from 'lucide-react'
 
-export function PersonalInfoSection() {
+export function PersonalInfoSection({ profileData }: { profileData?: any }) {
   const [isEditingPersonal, setIsEditingPersonal] = useState(false)
+
+  // Extract real data
+  const personalInfo = profileData?.master_resume_data?.personal_info || {}
+  
+  const fullName = [personalInfo.firstName, personalInfo.middleName, personalInfo.lastName]
+    .filter(Boolean)
+    .join(' ') || profileData?.full_name || 'Name not set'
+    
+  const email = personalInfo.email || profileData?.email || 'Email not set'
+  const phone = personalInfo.phone || profileData?.phone || 'Phone not set'
+  const location = personalInfo.location || profileData?.location || 'Location not set'
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
@@ -38,7 +49,7 @@ export function PersonalInfoSection() {
             <label className="block text-[12px] font-bold text-slate-700 mb-2">Full Name</label>
             <input 
               type="text" 
-              defaultValue="John Doe" 
+              defaultValue={fullName !== 'Name not set' ? fullName : ''} 
               className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </div>
@@ -47,7 +58,7 @@ export function PersonalInfoSection() {
             <label className="block text-[12px] font-bold text-slate-700 mb-2">Email Address</label>
             <input 
               type="email" 
-              defaultValue="john.doe@example.com" 
+              defaultValue={email !== 'Email not set' ? email : ''} 
               className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </div>
@@ -56,7 +67,7 @@ export function PersonalInfoSection() {
             <label className="block text-[12px] font-bold text-slate-700 mb-2">Phone Number</label>
             <input 
               type="text" 
-              defaultValue="+91 98765 43210" 
+              defaultValue={phone !== 'Phone not set' ? phone : ''} 
               className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </div>
@@ -65,25 +76,25 @@ export function PersonalInfoSection() {
             <label className="block text-[12px] font-bold text-slate-700 mb-2">Location</label>
             <input 
               type="text" 
-              defaultValue="Bengaluru, Karnataka, India" 
+              defaultValue={location !== 'Location not set' ? location : ''} 
               className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </div>
         </div>
       ) : (
         <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 space-y-2">
-          <div className="text-[16px] font-black text-slate-900">John Doe</div>
+          <div className="text-[16px] font-black text-slate-900">{fullName}</div>
           <div className="text-[14px] font-medium text-slate-600 flex items-center gap-2">
             <span className="w-4 h-4 text-slate-400 flex items-center justify-center">@</span>
-            john.doe@example.com
+            {email}
           </div>
           <div className="text-[14px] font-medium text-slate-600 flex items-center gap-2">
             <span className="w-4 h-4 text-slate-400 flex items-center justify-center">#</span>
-            +91 98765 43210
+            {phone}
           </div>
           <div className="text-[14px] font-medium text-slate-600 flex items-center gap-2">
             <span className="w-4 h-4 text-slate-400 flex items-center justify-center">📍</span>
-            Bengaluru, Karnataka, India
+            {location}
           </div>
         </div>
       )}
