@@ -18,6 +18,7 @@ export function PersonalInfoForm({ profile, setProfile, onNext }: { profile: any
     phone: profile?.phone || '',
     linkedin: personalInfo.linkedin || '',
     location: personalInfo.location || '',
+    summary: personalInfo.summary || '',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +35,8 @@ export function PersonalInfoForm({ profile, setProfile, onNext }: { profile: any
           middleName: formData.middleName,
           lastName: formData.lastName,
           linkedin: formData.linkedin,
-          location: formData.location
+          location: formData.location,
+          summary: formData.summary
         }
       }
 
@@ -191,6 +193,24 @@ export function PersonalInfoForm({ profile, setProfile, onNext }: { profile: any
                   />
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Professional Summary */}
+          <div>
+            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4">Professional Summary</p>
+            <div>
+              <label className="block text-[13px] font-semibold text-slate-700 mb-2">
+                Summary
+              </label>
+              <textarea
+                name="summary"
+                value={formData.summary}
+                onChange={handleChange as any}
+                rows={5}
+                placeholder="A brief summary of your professional background and career goals..."
+                className="w-full p-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-[14px] font-medium text-slate-900 transition-all placeholder:text-slate-300 resize-y"
+              ></textarea>
             </div>
           </div>
 
