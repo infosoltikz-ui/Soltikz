@@ -24,6 +24,11 @@ import { createClient } from '@/utils/supabase/client'
 
 export default function CreateResumePage() {
   const [step, setStep] = useState(1)
+
+  // Scroll to top when step changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [step])
   const [isGenerating, setIsGenerating] = useState(false)
   const [resumeType, setResumeType] = useState('C2C')
   const [profileData, setProfileData] = useState<any>({})
