@@ -100,6 +100,39 @@ export default function CreateResumePage() {
     }
   }
 
+  const applyBaseResumeFallback = () => {
+    if (!generatedResume || !profileData || !profileData.master_resume_data?.employment) {
+      toast.error('No base employment data found.');
+      return;
+    }
+    
+    // Clone the generated resume
+    const newResume = { ...generatedResume };
+    
+    // Keep the first 2 projects from AI
+    const aiProjects = newResume.experience.slice(0, 2);
+    
+    // Map the older projects from original profile data
+    const baseProjects = profileData.master_resume_data.employment.slice(2).map((exp: any) => {
+      let durationStr = exp.startDate || '';
+      if (exp.current) durationStr += ' - Present';
+      else if (exp.endDate) durationStr += ` - ${exp.endDate}`;
+      
+      return {
+        id: exp.id || '',
+        role: exp.title || '',
+        company: exp.company || '',
+        duration: durationStr,
+        bullets: exp.responsibilities ? exp.responsibilities.split('\n').map((s: string) => s.trim()).filter(Boolean) : [],
+        environment: []
+      };
+    });
+    
+    newResume.experience = [...aiProjects, ...baseProjects];
+    setGeneratedResume(newResume);
+    toast.success('Restored older roles to original base data');
+  };
+
   const handleLocalSave = (updatedProfile: any) => {
     setProfileData(updatedProfile)
     setEditingTab(null)
@@ -231,12 +264,19 @@ export default function CreateResumePage() {
               <div className="text-[14px] font-bold text-slate-800">
                 Final Step: Review & Download
               </div>
-              <Button onClick={handlePrint} className="h-10 px-6 rounded-lg bg-green-600 hover:bg-green-700 text-white shadow-md">
-                <div className="flex items-center gap-2">
-                  <Download className="w-4 h-4" />
-                  Export to PDF
-                </div>
-              </Button>
+              <div className="flex items-center gap-3">
+                <Button onClick={applyBaseResumeFallback} variant="outline" className="h-10 px-4 rounded-lg border-slate-300 text-slate-700 bg-white shadow-sm hover:bg-slate-50">
+                  <div className="flex items-center gap-2">
+                    Fallback: Base Data for Older Roles
+                  </div>
+                </Button>
+                <Button onClick={handlePrint} className="h-10 px-6 rounded-lg bg-green-600 hover:bg-green-700 text-white shadow-md">
+                  <div className="flex items-center gap-2">
+                    <Download className="w-4 h-4" />
+                    Export to PDF
+                  </div>
+                </Button>
+              </div>
             </div>
 
             <div className="flex flex-col xl:flex-row gap-6">

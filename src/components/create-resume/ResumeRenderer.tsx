@@ -27,7 +27,7 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeRendererPro
       ref={ref} 
       // A4 Aspect Ratio roughly, white background, black text for professional look
       className="bg-white w-full max-w-[850px] mx-auto min-h-[1100px] shadow-sm border border-slate-200 p-[40px] text-black"
-      style={{ fontFamily: 'Arial, sans-serif', color: '#000000' }}
+      style={{ fontFamily: 'Calibri, Arial, "Times New Roman", sans-serif', color: '#000000' }}
     >
       {/* Top Header - Name (14-15pt) */}
       <div className="text-center mb-6">
@@ -65,7 +65,7 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeRendererPro
           </h2>
           <ul className="list-disc pl-5 space-y-1" style={{ fontSize: '11pt' }}>
             {resumeData.summary.map((point, i) => (
-              <li key={i} className="pl-1 leading-snug">{point}</li>
+              <li key={i} className="pl-1 leading-snug line-clamp-2 overflow-hidden" title={point}>{point}</li>
             ))}
           </ul>
         </div>
@@ -118,7 +118,7 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeRendererPro
 
                 <ul className="list-disc pl-5 space-y-1" style={{ fontSize: '11pt' }}>
                   {exp.bullets.map((bullet, j) => (
-                    <li key={j} className="pl-1 leading-snug">{bullet}</li>
+                    <li key={j} className="pl-1 leading-snug line-clamp-2 overflow-hidden" title={bullet}>{bullet}</li>
                   ))}
                 </ul>
               </div>
