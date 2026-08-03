@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/Button'
 import { ArrowRight, ArrowLeft, Loader2, Download } from 'lucide-react'
 import { ResumeRenderer } from '@/components/create-resume/ResumeRenderer'
 import { createClient } from '@/utils/supabase/client'
+import { toast } from 'react-hot-toast'
 
 export default function CreateResumePage() {
   const [step, setStep] = useState(1)
