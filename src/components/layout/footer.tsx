@@ -27,6 +27,7 @@ const footerLinks = {
     { label: 'Careers', href: '/careers' },
     { label: 'Privacy Policy', href: '/privacy' },
     { label: 'Terms of Service', href: '/terms' },
+    { label: 'Refund Policy', href: '/refund' },
     { label: 'Affiliate Program', href: '/affiliates' },
     { label: 'Press Kit', href: '/press' },
   ],
@@ -54,8 +55,7 @@ export function Footer() {
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
               </div>
               <span className="font-black text-[22px] tracking-tight text-slate-900 leading-none">
-                ATS
-                <span className="block text-[11px] font-bold text-slate-600 tracking-normal mt-0.5">Resume Builder</span>
+                Resume Builder One
               </span>
             </Link>
             
@@ -199,13 +199,15 @@ export function Footer() {
           </div>
 
           <div className="text-[13px] font-medium relative z-10">
-            © 2024 ATS Resume Builder. All rights reserved.
+            © 2024 Resume Builder One. All rights reserved.
           </div>
 
           <div className="flex items-center gap-4 lg:gap-8 text-[13px] font-medium relative z-10">
             <Link href="/privacy" className="hover:text-white/80 transition-colors">Privacy Policy</Link>
             <span className="text-white/30">|</span>
             <Link href="/terms" className="hover:text-white/80 transition-colors">Terms of Service</Link>
+            <span className="text-white/30">|</span>
+            <Link href="/refund" className="hover:text-white/80 transition-colors">Refund Policy</Link>
             <span className="text-white/30">|</span>
             <Link href="/cookies" className="hover:text-white/80 transition-colors">Cookies Policy</Link>
             
