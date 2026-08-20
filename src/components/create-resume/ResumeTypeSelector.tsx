@@ -1,24 +1,26 @@
 'use client'
 
-import { useState } from 'react'
 import { Briefcase, FileText, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/utils/cn'
 
-export function ResumeTypeSelector() {
-  const [selectedType, setSelectedType] = useState<'fulltime' | 'c2c'>('fulltime')
+interface ResumeTypeSelectorProps {
+  selectedType: 'fulltime' | 'c2c'
+  onChange: (type: 'fulltime' | 'c2c') => void
+}
 
+export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelectorProps) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
       <div className="mb-6">
-        <h2 className="text-[18px] font-black text-slate-900 mb-1">Step 1: Select Resume Type</h2>
+        <h2 className="text-[18px] font-black text-slate-900 mb-1">Select Resume Type</h2>
         <p className="text-[13px] font-medium text-slate-500">Choose the type of resume you want to create</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {/* Full Time Toggle */}
-        <button 
-          onClick={() => setSelectedType('fulltime')}
+        <button
+          onClick={() => onChange('fulltime')}
           className={cn(
             "relative p-6 rounded-2xl border-2 text-left transition-all duration-200 group flex items-start gap-4",
             selectedType === 'fulltime' 
@@ -45,8 +47,8 @@ export function ResumeTypeSelector() {
         </button>
 
         {/* C2C Toggle */}
-        <button 
-          onClick={() => setSelectedType('c2c')}
+        <button
+          onClick={() => onChange('c2c')}
           className={cn(
             "relative p-6 rounded-2xl border-2 text-left transition-all duration-200 group flex items-start gap-4",
             selectedType === 'c2c' 

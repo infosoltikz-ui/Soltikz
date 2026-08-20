@@ -2,7 +2,7 @@ import { Download, FileText, ArrowLeft, ArrowRight, Layers, FileOutput } from 'l
 import { Button } from '@/components/ui/Button'
 import Image from 'next/image'
 
-export function DownloadSidebar() {
+export function DownloadSidebar({ onDownloadPdf }: { onDownloadPdf?: () => void }) {
   return (
     <aside className="w-full xl:w-[380px] shrink-0 space-y-6">
       {/* Download Actions */}
@@ -19,7 +19,8 @@ export function DownloadSidebar() {
 
         <div className="space-y-3">
           <Button 
-            className="w-full h-12 text-[14px] font-black rounded-xl shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all gap-2"
+            onClick={onDownloadPdf}
+            className="w-full h-12 text-[14px] font-black rounded-xl shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all gap-2 cursor-pointer"
             leftIcon={<Download className="w-4 h-4" />}
           >
             Download PDF
@@ -27,7 +28,8 @@ export function DownloadSidebar() {
           
           <Button 
             variant="outline"
-            className="w-full h-12 text-[14px] font-bold rounded-xl border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 transition-all gap-2"
+            onClick={() => onDownloadPdf ? onDownloadPdf() : null}
+            className="w-full h-12 text-[14px] font-bold rounded-xl border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 transition-all gap-2 cursor-pointer"
             leftIcon={<FileText className="w-4 h-4" />}
           >
             Download DOCX
