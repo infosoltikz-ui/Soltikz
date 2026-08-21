@@ -1,4 +1,5 @@
-import { MoreHorizontal, FileText, Building2, Target, Calendar, CheckCircle2, Eye, Edit3, Copy, Download, Trash2, FileOutput } from 'lucide-react'
+import { FileText, Building2, Target, Calendar, CheckCircle2, Eye, Edit3, Trash2, Copy, GitBranch, Loader2, Share2 } from 'lucide-react'
+import Link from 'next/link'
 import { cn } from '@/utils/cn'
 
 export interface ResumeData {
@@ -11,9 +12,20 @@ export interface ResumeData {
   atsScore: number;
   lastUpdated: string;
   status: 'Completed' | 'Draft' | string;
+  versionNumber?: number;
+  isPublic?: boolean;
 }
 
-export function ResumeCard({ data, onDelete }: { data: ResumeData, onDelete?: () => void }) {
+interface ResumeCardProps {
+  data: ResumeData
+  onDelete?: () => void
+  onDuplicate?: () => void
+  isDuplicating?: boolean
+  onToggleShare?: () => void
+  isTogglingShare?: boolean
+}
+
+export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggleShare, isTogglingShare }: ResumeCardProps) {
   const isFullTime = data.type === 'Full-Time'
 
   return (
@@ -39,12 +51,12 @@ export function ResumeCard({ data, onDelete }: { data: ResumeData, onDelete?: ()
 
         {/* Action Overlay on Hover */}
         <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 backdrop-blur-[2px]">
-          <button className="w-10 h-10 bg-white text-slate-900 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm" title="Preview">
+          <Link href={`/dashboard/create?id=${data.id}`} className="w-10 h-10 bg-white text-slate-900 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm" title="Preview">
             <Eye className="w-4 h-4" strokeWidth={2.5} />
-          </button>
-          <button className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm" title="Edit">
+          </Link>
+          <Link href={`/dashboard/create?id=${data.id}`} className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm" title="Edit">
             <Edit3 className="w-4 h-4" strokeWidth={2.5} />
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -52,9 +64,20 @@ export function ResumeCard({ data, onDelete }: { data: ResumeData, onDelete?: ()
       <div className="p-5 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-2 mb-2">
           <h3 className="text-[16px] font-black text-slate-900 line-clamp-1">{data.name}</h3>
-          <button className="text-slate-400 hover:text-slate-900 transition-colors">
-            <MoreHorizontal className="w-5 h-5" />
-          </button>
+          <div className="shrink-0 flex items-center gap-1.5">
+            {data.isPublic && (
+              <span className="flex items-center gap-1 text-[10px] font-black text-primary bg-primary/10 px-2 py-0.5 rounded-full" title="Anyone with the link can view this resume">
+                <Share2 className="w-3 h-3" />
+                Public
+              </span>
+            )}
+            {data.versionNumber != null && data.versionNumber > 1 && (
+              <span className="flex items-center gap-1 text-[10px] font-black text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full" title="Duplicated from an earlier version">
+                <GitBranch className="w-3 h-3" />
+                v{data.versionNumber}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center gap-2 mb-4">
@@ -91,7 +114,24 @@ export function ResumeCard({ data, onDelete }: { data: ResumeData, onDelete?: ()
             Updated {data.lastUpdated}
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            <Link href={`/dashboard/create?id=${data.id}`} className="text-slate-400 hover:text-slate-900 transition-colors" title="Edit">
+              <Edit3 className="w-4 h-4" />
+            </Link>
+            <button onClick={onDuplicate} disabled={isDuplicating} className="text-slate-400 hover:text-slate-900 transition-colors disabled:opacity-50" title="Duplicate">
+              {isDuplicating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Copy className="w-4 h-4" />}
+            </button>
+            <button
+              onClick={onToggleShare}
+              disabled={isTogglingShare}
+              className={cn(
+                "transition-colors disabled:opacity-50",
+                data.isPublic ? "text-primary" : "text-slate-400 hover:text-slate-900"
+              )}
+              title={data.isPublic ? "Make private" : "Make public & copy link"}
+            >
+              {isTogglingShare ? <Loader2 className="w-4 h-4 animate-spin" /> : <Share2 className="w-4 h-4" />}
+            </button>
             <button onClick={onDelete} className="text-slate-400 hover:text-red-500 transition-colors" title="Delete">
               <Trash2 className="w-4 h-4" />
             </button>

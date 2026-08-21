@@ -17,7 +17,7 @@ export function UserAnalyticsCards() {
   useEffect(() => {
     async function fetchStats() {
       const { count: totalCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true })
-      const { count: premiumCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('plan_id', 'PRO_MONTHLY')
+      const { count: premiumCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).in('plan_id', ['PRO_MONTHLY', 'PRO_YEARLY'])
       const { count: freeCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('plan_id', 'FREE')
       
       const today = new Date()

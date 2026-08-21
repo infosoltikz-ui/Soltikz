@@ -1,25 +1,30 @@
 'use client'
 
 import { useState } from 'react'
-import { 
-  Sparkles, 
-  MessageSquare, 
-  Lightbulb, 
-  CheckCircle2, 
-  Copy, 
-  Check, 
-  Code2, 
-  Users2, 
-  Star, 
-  ShieldCheck, 
-  Building, 
+import {
+  Sparkles,
+  MessageSquare,
+  Lightbulb,
+  CheckCircle2,
+  Copy,
+  Check,
+  Code2,
+  Users2,
+  Star,
+  ShieldCheck,
+  Building,
   AlertCircle,
   HelpCircle,
   Clock,
-  ArrowRight
+  ArrowRight,
+  FileSignature,
+  Loader2
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { cn } from '@/utils/cn'
+import { Button } from '@/components/ui/Button'
+import { CoverLetterViewer } from './CoverLetterViewer'
+import type { CoverLetterData } from './coverLetterTypes'
 
 export interface InterviewPrepData {
   hr_questions?: string[]
@@ -53,12 +58,40 @@ export interface ATSAnalysisData {
 interface WorkspaceSectionProps {
   interviewPrep?: InterviewPrepData | null
   atsData?: ATSAnalysisData | null
+  resumeId?: string | null
+  candidateName?: string
 }
 
-export function WorkspaceSection({ interviewPrep, atsData }: WorkspaceSectionProps) {
-  const [activeTab, setActiveTab] = useState<'intro' | 'tech' | 'hr' | 'star' | 'ats' | 'company'>('intro')
+export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateName }: WorkspaceSectionProps) {
+  const [activeTab, setActiveTab] = useState<'intro' | 'tech' | 'hr' | 'star' | 'ats' | 'company' | 'cover'>('intro')
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const [expandedStarIdx, setExpandedStarIdx] = useState<number | null>(0)
+
+  const [coverLetter, setCoverLetter] = useState<CoverLetterData | null>(null)
+  const [isGeneratingCoverLetter, setIsGeneratingCoverLetter] = useState(false)
+
+  const handleGenerateCoverLetter = async () => {
+    if (!resumeId) {
+      toast.error('No resume selected to write a cover letter for.')
+      return
+    }
+    setIsGeneratingCoverLetter(true)
+    try {
+      const res = await fetch('/api/ai/generate-cover-letter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resumeId }),
+      })
+      const data = await res.json()
+      if (!data.success) throw new Error(data.error || 'Failed to generate cover letter')
+      setCoverLetter(data.cover_letter)
+      toast.success('Cover letter generated!')
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to generate cover letter')
+    } finally {
+      setIsGeneratingCoverLetter(false)
+    }
+  }
 
   const handleCopy = (text: string, key: string, label = 'Copied to clipboard!') => {
     navigator.clipboard.writeText(text)
@@ -113,6 +146,19 @@ export function WorkspaceSection({ interviewPrep, atsData }: WorkspaceSectionPro
       {/* Interactive Tabs Header */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-2">
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+          <button
+            onClick={() => setActiveTab('cover')}
+            className={cn(
+              "flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer",
+              activeTab === 'cover'
+                ? "bg-primary text-white shadow-sm shadow-primary/30"
+                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+            )}
+          >
+            <FileSignature className="w-4 h-4" />
+            <span>Cover Letter</span>
+          </button>
+
           <button
             onClick={() => setActiveTab('intro')}
             className={cn(
@@ -208,8 +254,8 @@ export function WorkspaceSection({ interviewPrep, atsData }: WorkspaceSectionPro
             onClick={() => setActiveTab('company')}
             className={cn(
               "flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer",
-              activeTab === 'company' 
-                ? "bg-primary text-white shadow-sm shadow-primary/30" 
+              activeTab === 'company'
+                ? "bg-primary text-white shadow-sm shadow-primary/30"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
             )}
           >
@@ -577,6 +623,39 @@ export function WorkspaceSection({ interviewPrep, atsData }: WorkspaceSectionPro
               <strong>Tip:</strong> Align your project descriptions and metrics directly with the company's business domain (e.g. FinTech latency, E-Commerce conversion, SaaS onboarding).
             </p>
           </div>
+        </div>
+      )}
+
+      {/* TAB 7: Cover Letter */}
+      {activeTab === 'cover' && (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-5 animate-in fade-in duration-300">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+              <FileSignature className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-[17px] font-black text-slate-900">Tailored Cover Letter</h3>
+              <p className="text-[12px] font-medium text-slate-500">Grounded in your real experience, matched to this JD</p>
+            </div>
+          </div>
+
+          {!coverLetter ? (
+            <div className="text-center py-10">
+              <p className="text-[13px] text-slate-500 font-medium max-w-md mx-auto mb-5">
+                Generate a cover letter written from your Master Profile and tailored to this job description's own keywords.
+              </p>
+              <Button
+                onClick={handleGenerateCoverLetter}
+                disabled={isGeneratingCoverLetter}
+                className="h-11 px-6 rounded-xl font-bold shadow-md shadow-primary/20"
+                leftIcon={isGeneratingCoverLetter ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+              >
+                {isGeneratingCoverLetter ? 'Generating...' : 'Generate Cover Letter'}
+              </Button>
+            </div>
+          ) : (
+            <CoverLetterViewer content={coverLetter} candidateName={candidateName} documentTitle="Cover_Letter" />
+          )}
         </div>
       )}
     </div>

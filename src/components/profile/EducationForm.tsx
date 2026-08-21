@@ -5,18 +5,20 @@ import { createClient } from '@/utils/supabase/client'
 import { toast } from 'react-hot-toast'
 import { formatMonthYear } from '@/utils/dateFormatter'
 
-export function EducationForm({ 
-  profile, 
-  setProfile, 
-  onNext, 
-  localMode, 
-  onLocalSave 
-}: { 
-  profile?: any, 
-  setProfile?: (p: any) => void, 
+export function EducationForm({
+  profile,
+  setProfile,
+  onNext,
+  localMode,
+  onLocalSave,
+  onCancel
+}: {
+  profile?: any,
+  setProfile?: (p: any) => void,
   onNext?: () => void,
   localMode?: boolean,
-  onLocalSave?: (profile: any) => void
+  onLocalSave?: (profile: any) => void,
+  onCancel?: () => void
 }) {
   const supabase = createClient()
   const [isLoading, setIsLoading] = useState(false)
@@ -189,9 +191,11 @@ export function EducationForm({
           <Button onClick={handleSave} disabled={isLoading} className="h-11 px-6 rounded-xl font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 min-w-[160px]">
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Save & Next'}
           </Button>
-          <button className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors">
-            Cancel
-          </button>
+          {onCancel && (
+            <button onClick={onCancel} className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors">
+              Cancel
+            </button>
+          )}
         </div>
 
       </div>

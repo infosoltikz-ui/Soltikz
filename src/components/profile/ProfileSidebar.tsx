@@ -1,18 +1,49 @@
-import { 
-  CheckCircle2, 
-  User, 
-  Briefcase, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Globe, 
-  Eye, 
-  Lightbulb,
-  Circle
-} from 'lucide-react'
-import { Button } from '@/components/ui/Button'
+'use client'
 
-export function ProfileSidebar({ profile }: { profile?: any }) {
+import { useRef, useState } from 'react'
+import {
+  CheckCircle2,
+  User,
+  Mail,
+  MapPin,
+  Lightbulb,
+  Circle,
+  Link2,
+  Loader2,
+  UploadCloud
+} from 'lucide-react'
+import { toast } from 'react-hot-toast'
+
+export function ProfileSidebar({ profile, onImport }: { profile?: any; onImport?: (parsedData: any) => void }) {
+  const [isImporting, setIsImporting] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = '' // allow re-selecting the same file later
+    if (!file) return
+
+    setIsImporting(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const res = await fetch('/api/ai/parse-linkedin-pdf', {
+        method: 'POST',
+        body: formData,
+      })
+      const data = await res.json()
+      if (!data.success) throw new Error(data.error || 'Failed to parse LinkedIn PDF')
+
+      onImport?.(data.parsed_data)
+      toast.success('LinkedIn profile imported — review and save each section')
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to import LinkedIn profile')
+    } finally {
+      setIsImporting(false)
+    }
+  }
+
   const masterData = profile?.master_resume_data || {}
   const personalInfo = masterData?.personal_info || {}
 
@@ -51,17 +82,52 @@ export function ProfileSidebar({ profile }: { profile?: any }) {
 
   return (
     <div className="space-y-4">
-      
+
+      {/* LinkedIn Import Card */}
+      <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-4">
+        <div className="flex items-center gap-2 mb-2">
+          <Link2 className="w-4 h-4 text-[#0A66C2]" strokeWidth={2.5} />
+          <h3 className="text-[13px] font-black text-slate-900">Import from LinkedIn</h3>
+        </div>
+        <p className="text-[11px] font-medium text-slate-500 mb-3 leading-relaxed">
+          Upload your LinkedIn "Save to PDF" export and we'll pre-fill these forms for you to review.
+        </p>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="application/pdf"
+          className="hidden"
+          onChange={handleFileSelected}
+        />
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          disabled={isImporting}
+          className="w-full h-9 text-[12px] font-bold border border-slate-200 text-slate-700 hover:border-primary/40 hover:text-primary rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-60"
+        >
+          {isImporting ? (
+            <>
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              Parsing PDF...
+            </>
+          ) : (
+            <>
+              <UploadCloud className="w-3.5 h-3.5" />
+              Upload PDF
+            </>
+          )}
+        </button>
+      </div>
+
       {/* Profile Summary Card */}
       <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-4">
         <h3 className="text-[14px] font-black text-slate-900 mb-3">Profile Summary</h3>
         
-        <div className={`rounded-lg p-3 flex items-start gap-2.5 border mb-4 ${completion >= 80 ? 'bg-[#F0FDF4] border-primary/20' : completion >= 50 ? 'bg-amber-50 border-amber-200' : 'bg-red-50 border-red-200'}`}>
-          <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 shadow-sm ${completion >= 80 ? 'bg-primary' : completion >= 50 ? 'bg-amber-500' : 'bg-red-400'}`}>
+        <div className={`rounded-lg p-3 flex items-start gap-2.5 border mb-4 ${completion >= 80 ? 'bg-[#F0FDF4] border-primary/20' : completion >= 20 ? 'bg-amber-50 border-amber-200' : 'bg-slate-50 border-slate-200'}`}>
+          <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 shadow-sm ${completion >= 80 ? 'bg-primary' : completion >= 20 ? 'bg-amber-500' : 'bg-slate-400'}`}>
             <CheckCircle2 className="w-3 h-3 text-white" strokeWidth={3} />
           </div>
           <div>
-            <div className="text-[12px] font-black text-slate-900">{completion >= 80 ? 'Great job!' : completion >= 50 ? 'Keep going!' : 'Just getting started!'}</div>
+            <div className="text-[12px] font-black text-slate-900">{completion >= 80 ? 'Great job!' : completion >= 20 ? 'Keep going!' : 'Just getting started!'}</div>
             <div className="text-[11px] font-medium text-slate-600 mt-0.5">Your profile is {completion}% complete.</div>
           </div>
         </div>
@@ -85,14 +151,6 @@ export function ProfileSidebar({ profile }: { profile?: any }) {
             )
           })}
         </div>
-
-        <Button 
-          variant="outline" 
-          className="w-full h-9 text-[12px] font-bold border-primary text-primary hover:bg-primary/5 rounded-lg"
-          leftIcon={<Eye className="w-3.5 h-3.5" />}
-        >
-          Preview Full Profile
-        </Button>
       </div>
 
       {/* Tips Card */}

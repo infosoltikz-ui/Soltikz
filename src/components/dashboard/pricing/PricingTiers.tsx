@@ -1,8 +1,11 @@
 import { CheckCircle2, Star } from 'lucide-react'
+import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
-import { cn } from '@/utils/cn'
+import { getPlan } from '@/utils/pricingPlans'
 
-export function PricingTiers() {
+export function PricingTiers({ isYearly }: { isYearly: boolean }) {
+  const plan = getPlan(isYearly)
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20 max-w-4xl mx-auto">
       
@@ -55,18 +58,20 @@ export function PricingTiers() {
 
         <h3 className="text-xl font-black text-white mb-2 relative z-10">Pro</h3>
         <div className="flex items-baseline gap-1 mb-6 relative z-10">
-          <span className="text-4xl font-black text-white">$19</span>
-          <span className="text-[14px] text-primary-50 font-medium">/month</span>
+          <span className="text-4xl font-black text-white">₹{plan.amountInr}</span>
+          <span className="text-[14px] text-primary-50 font-medium">/{isYearly ? 'year' : 'month'}</span>
         </div>
         <p className="text-[14px] text-primary-50 font-medium mb-8 relative z-10">
           Unlock the full power of AI and build recruiter-approved resumes effortlessly.
         </p>
-        
-        <Button 
-          className="w-full h-12 text-[14px] font-bold rounded-xl bg-white text-primary hover:bg-slate-50 relative z-10 shadow-sm"
-        >
-          Upgrade Now
-        </Button>
+
+        <Link href={`/dashboard/settings?tab=billing&period=${isYearly ? 'yearly' : 'monthly'}`}>
+          <Button
+            className="w-full h-12 text-[14px] font-bold rounded-xl bg-white text-primary hover:bg-slate-50 relative z-10 shadow-sm"
+          >
+            Upgrade Now
+          </Button>
+        </Link>
 
         <div className="mt-8 space-y-4 flex-1 relative z-10">
           <div className="text-[12px] font-bold text-white uppercase tracking-wider mb-4">Everything in Free, plus</div>

@@ -2,22 +2,20 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { 
-  FileText, 
-  User, 
-  FileEdit, 
-  Folder, 
-  DollarSign, 
-  Settings, 
+import {
+  FileText,
+  User,
+  FileEdit,
+  Folder,
+  FileSignature,
+  DollarSign,
+  Settings,
   LogOut,
-  Crown,
-  ArrowRight,
   ChevronLeft,
   ChevronRight,
   X
 } from 'lucide-react'
 import { cn } from '@/utils/cn'
-import { Button } from '@/components/ui/Button'
 import { PoweredBySoltkiz } from '@/components/ui/PoweredBySoltkiz'
 
 const NAV_ITEMS = [
@@ -25,6 +23,7 @@ const NAV_ITEMS = [
   { label: 'Master Profile', href: '/dashboard/profile', icon: User },
   { label: 'Create Resume', href: '/dashboard/create', icon: FileEdit },
   { label: 'My Resumes', href: '/dashboard/resumes', icon: Folder },
+  { label: 'Cover Letters', href: '/dashboard/cover-letters', icon: FileSignature },
   { label: 'Pricing', href: '/dashboard/pricing', icon: DollarSign },
   { label: 'Settings', href: '/dashboard/settings', icon: Settings },
 ]
@@ -36,7 +35,7 @@ interface SidebarProps {
   setIsMobileOpen?: (val: boolean) => void;
 }
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
@@ -49,35 +48,6 @@ export function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
-  
-  const [subscriptionTier, setSubscriptionTier] = useState('FREE')
-  const [creditsRemaining, setCreditsRemaining] = useState(5)
-  const [planVisible, setPlanVisible] = useState(true)
-
-  useEffect(() => {
-    async function loadData() {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        const { data } = await supabase
-          .from('profiles')
-          .select('plan_id, credits_remaining')
-          .eq('id', user.id)
-          .single()
-        
-        if (data) {
-          setSubscriptionTier(data.plan_id || 'FREE')
-          setCreditsRemaining(data.credits_remaining ?? 5)
-        }
-      }
-    }
-    loadData()
-  }, [])
-
-  const isPremium = subscriptionTier === 'PRO_MONTHLY'
-  const maxResumes = 5
-  const resumesUsed = Math.max(0, maxResumes - creditsRemaining)
-  const resumePercentage = isPremium ? 100 : (resumesUsed / maxResumes) * 100
 
   const [showLogoutModal, setShowLogoutModal] = useState(false)
 
@@ -173,81 +143,9 @@ export function Sidebar({
         </div>
       </nav>
 
-      {/* Current Plan Card */}
       {!isCollapsed && (
-        <div className="px-6 pb-6 animate-in fade-in duration-300 hidden md:block">
-          {/* Toggle header */}
-          <button
-            onClick={() => setPlanVisible(!planVisible)}
-            className="w-full flex items-center justify-between mb-2 group"
-          >
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Current Plan</span>
-            <span className="text-[11px] font-bold text-primary flex items-center gap-1 group-hover:underline">
-              {planVisible ? 'Hide' : 'Show'}
-              {planVisible
-                ? <ChevronLeft className="w-3.5 h-3.5 rotate-90" />
-                : <ChevronRight className="w-3.5 h-3.5 rotate-90" />}
-            </span>
-          </button>
-
-          {/* Collapsible plan card */}
-          {planVisible && (
-            <div className="bg-[#FAFAF8] rounded-2xl p-5 border border-slate-200 shadow-sm relative overflow-hidden">
-              {/* Decorative background element */}
-              <div className="absolute -top-10 -right-10 w-24 h-24 bg-primary/5 rounded-full blur-2xl"></div>
-              
-              <div className="flex items-center justify-between mb-4 relative z-10">
-                <div className="flex items-center gap-2">
-                  <Crown className="w-4 h-4 text-orange-500" strokeWidth={2.5} />
-                  <h4 className="font-black text-slate-900 text-[14px]">{isPremium ? 'Pro Plan' : 'Free Plan'}</h4>
-                </div>
-                <span className="px-2 py-0.5 bg-green-100 text-primary text-[10px] font-black rounded uppercase tracking-wider">Active</span>
-              </div>
-
-              <div className="space-y-3 mb-5 relative z-10">
-                {/* Resume Usage */}
-                <div>
-                  <div className="flex items-center justify-between text-[11px] font-bold mb-1.5">
-                    <span className="text-slate-500">Resumes</span>
-                    <span className="text-slate-900">{isPremium ? 'Unlimited' : `${resumesUsed} / ${maxResumes}`}</span>
-                  </div>
-                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-primary rounded-full" style={{ width: `${resumePercentage}%` }}></div>
-                  </div>
-                </div>
-
-                {/* ATS Optimizations */}
-                <div>
-                  <div className="flex items-center justify-between text-[11px] font-bold mb-1.5">
-                    <span className="text-slate-500">ATS Scans</span>
-                    <span className="text-slate-900">12 / 20</span>
-                  </div>
-                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-orange-500 rounded-full w-[60%]"></div>
-                  </div>
-                </div>
-                
-                {/* AI Credits */}
-                <div className="pt-1">
-                  <span className="text-[11px] font-bold text-slate-500 block">
-                    <strong className="text-slate-900">{creditsRemaining}</strong> AI Credits Remaining
-                  </span>
-                </div>
-              </div>
-
-              <Link href="/dashboard/pricing">
-                <Button 
-                  className="w-full h-10 text-[13px] font-bold rounded-xl shadow-sm hover:shadow-md transition-all relative z-10"
-                >
-                  {isPremium ? 'Manage Plan' : 'Upgrade Plan'}
-                </Button>
-              </Link>
-            </div>
-          )}
-
-          <div className="mt-6 flex justify-center">
-            <PoweredBySoltkiz />
-          </div>
+        <div className="px-6 pb-6 hidden md:flex justify-center">
+          <PoweredBySoltkiz />
         </div>
       )}
     </aside>

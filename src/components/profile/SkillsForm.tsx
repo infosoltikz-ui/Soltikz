@@ -4,18 +4,20 @@ import { useState } from 'react'
 import { ProfilePreviewModal } from '@/components/profile/ProfilePreviewModal'
 import { createClient } from '@/utils/supabase/client'
 
-export function SkillsForm({ 
-  profile, 
-  setProfile, 
+export function SkillsForm({
+  profile,
+  setProfile,
   onFinalSave,
   localMode,
-  onLocalSave 
-}: { 
-  profile?: any, 
-  setProfile?: (p: any) => void, 
+  onLocalSave,
+  onCancel
+}: {
+  profile?: any,
+  setProfile?: (p: any) => void,
   onFinalSave?: (profile: any) => void,
   localMode?: boolean,
-  onLocalSave?: (profile: any) => void
+  onLocalSave?: (profile: any) => void,
+  onCancel?: () => void
 }) {
   const masterData = profile?.master_resume_data || {}
 
@@ -134,9 +136,11 @@ export function SkillsForm({
           <Button onClick={() => setShowPreview(true)} variant="outline" className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors min-w-[160px]">
             Preview
           </Button>
-          <button className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors">
-            Cancel
-          </button>
+          {onCancel && (
+            <button onClick={onCancel} className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors">
+              Cancel
+            </button>
+          )}
         </div>
 
       </div>

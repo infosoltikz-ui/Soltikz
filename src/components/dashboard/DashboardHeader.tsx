@@ -1,16 +1,16 @@
 'use client'
 
-import { Search, Settings, User } from 'lucide-react'
-import { Input } from '@/components/ui/Input'
 import { createClient } from '@/utils/supabase/client'
 import { useState, useEffect } from 'react'
+import { UserMenu } from './UserMenu'
 
 interface DashboardHeaderProps {
   title: string;
   subtitle?: string;
+  greeting?: boolean;
 }
 
-export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
+export function DashboardHeader({ title, subtitle, greeting }: DashboardHeaderProps) {
   const [fullName, setFullName] = useState('User')
 
   useEffect(() => {
@@ -34,31 +34,19 @@ export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
     fetchUser()
   }, [])
 
-  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=16A34A&color=fff&bold=true`
-
   return (
-    <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pl-12 md:pl-0">
+    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pl-12 md:pl-0 pb-6 border-b border-slate-200">
       <div>
-        <h1 className="text-2xl font-black text-slate-900 tracking-tight">{title}</h1>
-        {subtitle && <p className="text-[14px] font-medium text-slate-500 mt-1">{subtitle}</p>}
+        <h1 className="text-[26px] font-black text-slate-900 tracking-tight leading-tight">{title}</h1>
+        {greeting && (
+          <p className="text-[14px] font-medium text-slate-500 mt-1.5">
+            Welcome back, <span className="font-bold text-slate-700">{fullName}</span> <span className="inline-block animate-wave">👋</span>
+          </p>
+        )}
+        {!greeting && subtitle && <p className="text-[14px] font-medium text-slate-500 mt-1.5">{subtitle}</p>}
       </div>
 
-      <div className="flex items-center gap-3 w-full md:w-auto">
-        {/* Search */}
-        <div className="relative flex-1 md:w-64">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <Input 
-            placeholder="Search..." 
-            className="pl-9 h-10 w-full bg-white border-slate-200 rounded-xl text-[13px]"
-          />
-        </div>
-
-
-        {/* User Profile */}
-        <div className="w-10 h-10 rounded-xl overflow-hidden shrink-0 border border-slate-200 cursor-pointer shadow-sm">
-          <img src={avatarUrl} alt={fullName} className="w-full h-full object-cover" />
-        </div>
-      </div>
+      <UserMenu />
     </header>
   )
 }

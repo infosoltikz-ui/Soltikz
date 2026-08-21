@@ -10,12 +10,14 @@ import {
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/utils/cn'
 
-export function ProfileTabs({ 
-  activeTab, 
-  onTabChange 
-}: { 
-  activeTab: string, 
-  onTabChange: (tabId: string) => void 
+export function ProfileTabs({
+  activeTab,
+  onTabChange,
+  onPreview
+}: {
+  activeTab: string,
+  onTabChange: (tabId: string) => void,
+  onPreview?: () => void
 }) {
   const tabs = [
     { id: 'personal', label: 'Personal Info', icon: User },
@@ -53,6 +55,7 @@ export function ProfileTabs({
       {/* Action Button */}
       <div className="shrink-0">
         <Button
+          onClick={onPreview}
           className="h-11 px-6 text-[13px] font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 rounded-xl"
           leftIcon={<Eye className="w-4 h-4" />}
         >

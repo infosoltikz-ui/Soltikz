@@ -1,7 +1,6 @@
 'use client'
 
-import { FileText, Briefcase, Users, Download, Activity } from 'lucide-react'
-import { cn } from '@/utils/cn'
+import { FileText, Briefcase, Users, Activity, Download } from 'lucide-react'
 import { createClient } from '@/utils/supabase/client'
 import { useState, useEffect } from 'react'
 
@@ -11,49 +10,54 @@ export function ResumeStats() {
     fullTimeCount: 0,
     c2cCount: 0,
     avgAtsScore: 0,
-    totalDownloads: 0
+    totalDownloads: 0,
   })
 
   useEffect(() => {
     async function fetchStats() {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
 
-      if (user) {
-        const { data: resumes } = await supabase
-          .from('resumes')
-          .select('title, ats_score')
-          .eq('user_id', user.id)
-          
-        if (resumes && resumes.length > 0) {
-          let totalAts = 0
-          let atsCount = 0
-          let c2cCount = 0
-          let fullTimeCount = 0
-          
-          resumes.forEach(r => {
-            const title = (r.title || '').toLowerCase()
-            if (title.includes('c2c') || title.includes('contract')) {
-              c2cCount++
-            } else {
-              fullTimeCount++
-            }
-            
-            if (r.ats_score != null && r.ats_score > 0) {
-              totalAts += r.ats_score
-              atsCount++
-            }
-          })
-          
-          setStats({
-            totalResumes: resumes.length,
-            fullTimeCount,
-            c2cCount,
-            avgAtsScore: atsCount > 0 ? Math.round(totalAts / atsCount) : 0,
-            totalDownloads: 0 // Feature pending
-          })
+      const { data: resumes } = await supabase
+        .from('resumes_v2')
+        .select('id, resume_type, ats_analyses ( overall_score )')
+        .eq('user_id', user.id)
+
+      let totalAts = 0
+      let atsCount = 0
+      let c2cCount = 0
+      let fullTimeCount = 0
+
+      resumes?.forEach((r: any) => {
+        if (r.resume_type === 'C2C') c2cCount++
+        else fullTimeCount++
+
+        const score = r.ats_analyses?.[0]?.overall_score
+        if (score != null && score > 0) {
+          totalAts += score
+          atsCount++
         }
+      })
+
+      const resumeIds = (resumes || []).map((r: any) => r.id)
+      let totalDownloads = 0
+      if (resumeIds.length > 0) {
+        const { count } = await supabase
+          .from('usage_events')
+          .select('id', { count: 'exact', head: true })
+          .in('event_type', ['pdf_download', 'docx_download'])
+          .in('resume_id', resumeIds)
+        totalDownloads = count || 0
       }
+
+      setStats({
+        totalResumes: resumes?.length || 0,
+        fullTimeCount,
+        c2cCount,
+        avgAtsScore: atsCount > 0 ? Math.round(totalAts / atsCount) : 0,
+        totalDownloads,
+      })
     }
     fetchStats()
   }, [])
@@ -61,7 +65,7 @@ export function ResumeStats() {
   const { totalResumes, fullTimeCount, c2cCount, avgAtsScore, totalDownloads } = stats
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
       {/* Total Resumes */}
       <div className="bg-[#FAFAF8] rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
         <div className="flex items-center gap-3 mb-4">
@@ -95,8 +99,19 @@ export function ResumeStats() {
         <div className="text-3xl font-black text-slate-900 tracking-tight">{c2cCount}</div>
       </div>
 
+      {/* Downloads */}
+      <div className="bg-[#FAFAF8] rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-8 h-8 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
+            <Download className="w-4 h-4" strokeWidth={2.5} />
+          </div>
+          <span className="text-[13px] font-bold text-slate-500">Downloads</span>
+        </div>
+        <div className="text-3xl font-black text-slate-900 tracking-tight">{totalDownloads}</div>
+      </div>
+
       {/* Average ATS Score */}
-      <div className="bg-[#FAFAF8] rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow col-span-2 md:col-span-1">
+      <div className="bg-[#FAFAF8] rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
         <div className="flex flex-col h-full justify-between">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
@@ -106,7 +121,7 @@ export function ResumeStats() {
           </div>
           <div className="text-3xl font-black text-slate-900 tracking-tight">{avgAtsScore}%</div>
         </div>
-        
+
         {/* Circular Progress */}
         <div className="relative w-16 h-16 shrink-0">
           <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
@@ -128,17 +143,6 @@ export function ResumeStats() {
             />
           </svg>
         </div>
-      </div>
-
-      {/* Downloads */}
-      <div className="bg-[#FAFAF8] rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
-            <Download className="w-4 h-4" strokeWidth={2.5} />
-          </div>
-          <span className="text-[13px] font-bold text-slate-500">Downloads</span>
-        </div>
-        <div className="text-3xl font-black text-slate-900 tracking-tight">{totalDownloads}</div>
       </div>
 
     </div>

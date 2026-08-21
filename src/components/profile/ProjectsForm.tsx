@@ -5,18 +5,20 @@ import { createClient } from '@/utils/supabase/client'
 import { toast } from 'react-hot-toast'
 import { formatMonthYear } from '@/utils/dateFormatter'
 
-export function ProjectsForm({ 
-  profile, 
-  setProfile, 
-  onNext, 
-  localMode, 
-  onLocalSave 
-}: { 
-  profile?: any, 
-  setProfile?: (p: any) => void, 
+export function ProjectsForm({
+  profile,
+  setProfile,
+  onNext,
+  localMode,
+  onLocalSave,
+  onCancel
+}: {
+  profile?: any,
+  setProfile?: (p: any) => void,
   onNext?: () => void,
   localMode?: boolean,
-  onLocalSave?: (profile: any) => void
+  onLocalSave?: (profile: any) => void,
+  onCancel?: () => void
 }) {
   const supabase = createClient()
   const [isLoading, setIsLoading] = useState(false)
@@ -217,9 +219,11 @@ export function ProjectsForm({
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Save & Next'}
           </Button>
-          <button className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors">
-            Cancel
-          </button>
+          {onCancel && (
+            <button onClick={onCancel} className="h-11 px-6 rounded-xl font-bold text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors">
+              Cancel
+            </button>
+          )}
         </div>
 
       </div>

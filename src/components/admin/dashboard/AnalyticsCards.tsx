@@ -20,7 +20,7 @@ export function AnalyticsCards() {
       try {
         // Since Admin RLS allows viewing all, these counts will work for admins
         const { count: totalUsers } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
-        const { count: proUsers } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('plan_id', 'PRO_MONTHLY');
+        const { count: proUsers } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).in('plan_id', ['PRO_MONTHLY', 'PRO_YEARLY']);
         const { count: totalResumes } = await supabase.from('resumes_v2').select('*', { count: 'exact', head: true });
         
         // Sum revenue

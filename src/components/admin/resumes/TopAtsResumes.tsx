@@ -12,39 +12,63 @@ export function TopAtsResumes() {
   useEffect(() => {
     async function fetchResumes() {
       const { data } = await supabase
-        .from('resumes')
+        .from('resumes_v2')
         .select(`
-          *,
-          profiles (
-            full_name,
-            email
-          )
+          id, title, resume_type, created_at,
+          profiles ( full_name, email ),
+          ats_analyses ( overall_score ),
+          parsed_job_descriptions ( company_name )
         `)
-        .order('ats_score', { ascending: false, nullsFirst: false })
-        .limit(4)
+        .order('created_at', { ascending: false })
+        .limit(50)
 
-      if (data) {
-        const mapped = data.map((resume: any) => {
-          const profile = Array.isArray(resume.profiles) ? resume.profiles[0] : resume.profiles;
-          const user = profile?.full_name || profile?.email?.split('@')[0] || 'Unknown User'
-          
-          let company = 'General'
-          if (resume.target_job_description && resume.target_job_description.trim().length > 0) {
-            // Very naive extraction: just take the first few words of the job description if no role is found
-            company = resume.target_job_description.split(' ').slice(0, 3).join(' ') + '...'
-          }
-
-          return {
-            name: resume.title || 'Untitled Resume',
-            user: user,
-            score: resume.ats_score ? `${resume.ats_score}%` : 'N/A',
-            company: company,
-            template: resume.content?.template || 'Modern ATS',
-            downloads: Math.floor(Math.random() * 50) + 10 // Mocking downloads since we don't track them yet
-          }
-        })
-        setTopResumes(mapped)
+      if (!data) {
+        setIsLoading(false)
+        return
       }
+
+      // ats_analyses is a to-many join; sort client-side by score (1:1 in practice)
+      // to get the true top scorers rather than just the most recent resumes.
+      const withScore = data
+        .map((resume: any) => ({
+          ...resume,
+          score: resume.ats_analyses?.[0]?.overall_score ?? null,
+        }))
+        .filter((r) => r.score != null)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 4)
+
+      const resumeIds = withScore.map((r) => r.id)
+      const downloadCounts: Record<string, number> = {}
+      if (resumeIds.length > 0) {
+        const { data: events } = await supabase
+          .from('usage_events')
+          .select('resume_id')
+          .in('event_type', ['pdf_download', 'docx_download'])
+          .in('resume_id', resumeIds)
+
+        events?.forEach((e: any) => {
+          downloadCounts[e.resume_id] = (downloadCounts[e.resume_id] || 0) + 1
+        })
+      }
+
+      const mapped = withScore.map((resume: any) => {
+        const profile = Array.isArray(resume.profiles) ? resume.profiles[0] : resume.profiles
+        const jd = Array.isArray(resume.parsed_job_descriptions) ? resume.parsed_job_descriptions[0] : resume.parsed_job_descriptions
+        const user = profile?.full_name || profile?.email?.split('@')[0] || 'Unknown User'
+
+        return {
+          id: resume.id,
+          name: resume.title || 'Untitled Resume',
+          user,
+          score: `${resume.score}%`,
+          company: jd?.company_name || 'General',
+          template: resume.resume_type || 'Standard',
+          downloads: downloadCounts[resume.id] || 0,
+        }
+      })
+
+      setTopResumes(mapped)
       setIsLoading(false)
     }
     fetchResumes()
@@ -57,7 +81,6 @@ export function TopAtsResumes() {
           <h3 className="text-[18px] font-black text-slate-900">Highest ATS Scores</h3>
           <p className="text-[13px] font-medium text-slate-500">Platform's best performing resumes</p>
         </div>
-        <button className="text-[12px] font-bold text-primary hover:text-primary/80 transition-colors">View All</button>
       </div>
 
       {isLoading ? (
@@ -66,13 +89,13 @@ export function TopAtsResumes() {
         </div>
       ) : topResumes.length === 0 ? (
         <div className="flex justify-center items-center h-32 text-slate-500 font-medium text-sm">
-          No resumes found.
+          No scored resumes found.
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {topResumes.map((resume, i) => (
-            <div key={i} className="p-5 rounded-2xl bg-[#FAFAF8] border border-slate-100 hover:border-slate-300 transition-colors group cursor-pointer flex flex-col h-full">
-              
+          {topResumes.map((resume) => (
+            <div key={resume.id} className="p-5 rounded-2xl bg-[#FAFAF8] border border-slate-100 hover:border-slate-300 transition-colors group flex flex-col h-full">
+
               <div className="flex items-start justify-between mb-4">
                 <div className="w-12 h-16 bg-white border border-slate-200 shadow-sm rounded-md overflow-hidden relative shrink-0">
                   <div className="absolute inset-0 bg-slate-50 opacity-50 p-1.5 flex flex-col gap-1">
@@ -87,17 +110,17 @@ export function TopAtsResumes() {
                   <span className="text-[13px] font-black">{resume.score}</span>
                 </div>
               </div>
-              
+
               <h4 className="text-[14px] font-black text-slate-900 mb-1 group-hover:text-primary transition-colors line-clamp-1">{resume.name}</h4>
               <p className="text-[12px] font-medium text-slate-500 mb-4 flex-1">By {resume.user}</p>
-              
+
               <div className="space-y-2 pt-4 border-t border-slate-100">
                 <div className="flex justify-between items-center text-[12px]">
                   <span className="text-slate-500 font-bold">Target</span>
                   <span className="text-slate-900 font-black truncate max-w-[100px]" title={resume.company}>{resume.company}</span>
                 </div>
                 <div className="flex justify-between items-center text-[12px]">
-                  <span className="text-slate-500 font-bold">Template</span>
+                  <span className="text-slate-500 font-bold">Type</span>
                   <span className="text-slate-900 font-black">{resume.template}</span>
                 </div>
                 <div className="flex justify-between items-center text-[12px]">

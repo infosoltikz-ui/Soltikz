@@ -1,6 +1,6 @@
 import { cn } from '@/utils/cn'
 
-export type TabId = 'account' | 'profile' | 'billing'
+export type TabId = 'account' | 'billing'
 
 interface SettingsTabsProps {
   activeTab: TabId
@@ -9,7 +9,6 @@ interface SettingsTabsProps {
 
 const TABS: { id: TabId; label: string }[] = [
   { id: 'account', label: 'Account' },
-  { id: 'profile', label: 'Profile' },
   { id: 'billing', label: 'Billing' }
 ]
 

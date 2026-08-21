@@ -4,18 +4,20 @@ import { useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'react-hot-toast'
 
-export function PersonalInfoForm({ 
-  profile, 
-  setProfile, 
-  onNext, 
-  localMode, 
-  onLocalSave 
-}: { 
-  profile: any, 
-  setProfile?: (p: any) => void, 
+export function PersonalInfoForm({
+  profile,
+  setProfile,
+  onNext,
+  localMode,
+  onLocalSave,
+  onCancel
+}: {
+  profile: any,
+  setProfile?: (p: any) => void,
   onNext?: () => void,
   localMode?: boolean,
-  onLocalSave?: (profile: any) => void
+  onLocalSave?: (profile: any) => void,
+  onCancel?: () => void
 }) {
   const supabase = createClient()
   const [isLoading, setIsLoading] = useState(false)
@@ -245,9 +247,11 @@ export function PersonalInfoForm({
         >
           {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Save & Next'}
         </Button>
-        <button className="h-11 px-6 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
-          Cancel
-        </button>
+        {onCancel && (
+          <button onClick={onCancel} className="h-11 px-6 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+            Cancel
+          </button>
+        )}
       </div>
     </div>
   )

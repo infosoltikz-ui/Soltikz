@@ -1,15 +1,20 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { CreditCard, Calendar, Download, Zap, CheckCircle2, Loader2, AlertTriangle } from 'lucide-react'
+import { Zap, Loader2, AlertTriangle } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { createClient } from '@/utils/supabase/client'
+import { getPlan, isPremiumPlan } from '@/utils/pricingPlans'
+import { cn } from '@/utils/cn'
 import Script from 'next/script'
 
-export function BillingTab() {
+export function BillingTab({ initialYearly = false }: { initialYearly?: boolean }) {
   const [loading, setLoading] = useState(true)
   const [profile, setProfile] = useState<any>(null)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [isYearly, setIsYearly] = useState(initialYearly)
+
+  const selectedPlan = getPlan(isYearly)
 
   const fetchProfile = async () => {
     const supabase = createClient()
@@ -28,27 +33,24 @@ export function BillingTab() {
   const handleUpgrade = async () => {
     setIsProcessing(true)
     try {
-      // 1. Create order on our backend
+      // 1. Create order on our backend (amount is derived server-side from planId)
       const res = await fetch('/api/razorpay/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          planId: 'PRO_MONTHLY',
-          amountInr: 499 // 499 INR for example
-        })
+        body: JSON.stringify({ planId: selectedPlan.id })
       });
       const data = await res.json();
-      
+
       if (!data.success) throw new Error(data.error);
 
       // 2. Open Razorpay Checkout
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
-        amount: data.amount, 
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: data.amount,
         currency: data.currency,
         name: "Soltkiz Resume Builder",
-        description: "Upgrade to Pro Monthly",
-        order_id: data.orderId, 
+        description: `Upgrade to ${selectedPlan.label}`,
+        order_id: data.orderId,
         handler: async function (response: any) {
           // 3. Verify Payment on Backend
           const verifyRes = await fetch('/api/razorpay/verify', {
@@ -58,11 +60,10 @@ export function BillingTab() {
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_order_id: response.razorpay_order_id,
               razorpay_signature: response.razorpay_signature,
-              amount: 499,
-              planId: 'PRO_MONTHLY'
+              planId: selectedPlan.id
             })
           });
-          
+
           const verifyData = await verifyRes.json();
           if (verifyData.success) {
             alert('Payment successful! You are now on the Pro Plan.');
@@ -95,21 +96,23 @@ export function BillingTab() {
     return <div className="flex items-center justify-center p-12"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
   }
 
-  const isPro = profile?.plan_id === 'PRO_MONTHLY';
+  const isPro = isPremiumPlan(profile?.plan_id);
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
-      
+
       {/* Current Plan Overview */}
       <div className={`rounded-2xl shadow-xl p-8 text-white relative overflow-hidden ${isPro ? 'bg-primary' : 'bg-slate-800'}`}>
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500/20 rounded-full blur-3xl"></div>
-        
+
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <h3 className="text-2xl font-black">{isPro ? 'Pro Plan' : 'Free Plan'}</h3>
+              <h3 className="text-2xl font-black">
+                {isPro ? (profile?.plan_id === 'PRO_YEARLY' ? 'Pro Plan (Yearly)' : 'Pro Plan (Monthly)') : 'Free Plan'}
+              </h3>
               <span className="px-2.5 py-1 bg-white/20 text-white text-[10px] font-black rounded uppercase tracking-wider backdrop-blur-sm">
                 Active
               </span>
@@ -125,19 +128,36 @@ export function BillingTab() {
               </p>
             )}
           </div>
-          
-          <div className="flex items-center gap-4">
-            {!isPro && (
-              <Button 
+
+          {!isPro && (
+            <div className="flex flex-col items-start md:items-end gap-3">
+              {/* Monthly / Yearly toggle */}
+              <div className="flex items-center bg-white/10 rounded-xl p-1 text-[12px] font-bold">
+                <button
+                  onClick={() => setIsYearly(false)}
+                  className={cn("px-3 py-1.5 rounded-lg transition-colors", !isYearly ? "bg-white text-slate-900" : "text-white/80")}
+                >
+                  Monthly
+                </button>
+                <button
+                  onClick={() => setIsYearly(true)}
+                  className={cn("px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5", isYearly ? "bg-white text-slate-900" : "text-white/80")}
+                >
+                  Yearly
+                  <span className="bg-orange-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full">-20%</span>
+                </button>
+              </div>
+
+              <Button
                 onClick={handleUpgrade}
                 disabled={isProcessing}
                 className="h-11 px-6 text-[13px] font-bold rounded-xl bg-white text-slate-900 hover:bg-slate-50 shadow-sm"
               >
                 {isProcessing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Zap className="w-4 h-4 mr-2 text-amber-500" />}
-                Upgrade for ₹499/mo
+                Upgrade for ₹{selectedPlan.amountInr}/{isYearly ? 'yr' : 'mo'}
               </Button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
 

@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export function AITipBanner() {
   return (
-    <div className="bg-[#F0FDF4] rounded-xl border border-primary/20 shadow-sm p-4 flex items-center justify-between mt-6">
+    <div className="bg-[#F0FDF4] rounded-xl border border-primary/20 shadow-sm p-4 flex items-center justify-between">
       <div className="flex items-center gap-3">
         <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
           <Sparkles className="w-4 h-4 text-primary" strokeWidth={2.5} />

@@ -21,7 +21,9 @@ import { Button } from '@/components/ui/Button'
 import { ArrowRight, ArrowLeft, Loader2, Download } from 'lucide-react'
 import { TemplateSelector } from '@/components/create-resume/TemplateSelector'
 import { getTemplateById, DEFAULT_TEMPLATE_ID } from '@/components/create-resume/templates/registry'
+import { downloadResumeDocx } from '@/components/create-resume/exportDocx'
 import { createClient } from '@/utils/supabase/client'
+import { logUsageEvent } from '@/utils/logUsageEvent'
 import { toast } from 'react-hot-toast'
 
 export default function CreateResumePage() {
@@ -42,13 +44,34 @@ export default function CreateResumePage() {
   const [generatedResume, setGeneratedResume] = useState<any>(null)
   const [interviewPrep, setInterviewPrep] = useState<any>(null)
   const [atsData, setAtsData] = useState<any>(null)
-  
+  const [currentResumeId, setCurrentResumeId] = useState<string | null>(null)
+
   const resumeRef = useRef<HTMLDivElement>(null)
-  
+  const [isDownloadingDocx, setIsDownloadingDocx] = useState(false)
+
   const handlePrint = useReactToPrint({
     contentRef: resumeRef,
     documentTitle: 'My_Tailored_Resume',
+    onAfterPrint: () => logUsageEvent(currentResumeId, 'pdf_download'),
   })
+
+  const handleDownloadDocx = async () => {
+    if (!generatedResume) {
+      toast.error('No resume data to export yet.')
+      return
+    }
+    setIsDownloadingDocx(true)
+    try {
+      const fileName = `${(profileData?.full_name || 'Resume').replace(/\s+/g, '_')}_Resume.docx`
+      await downloadResumeDocx(generatedResume, profileData, fileName)
+      logUsageEvent(currentResumeId, 'docx_download')
+    } catch (error) {
+      console.error('DOCX export failed:', error)
+      toast.error('Failed to generate DOCX. Please try again.')
+    } finally {
+      setIsDownloadingDocx(false)
+    }
+  }
 
   useEffect(() => {
     // Fetch user profile on mount
@@ -82,7 +105,9 @@ export default function CreateResumePage() {
       const data = await orchestratorRes.json()
       
       if (!data.success) throw new Error(data.error)
-      
+
+      setCurrentResumeId(data.resume_id)
+
       // 2. Fetch the newly generated resume sections
       const supabase = createClient()
       const { data: sections } = await supabase.from('resume_sections').select('*').eq('resume_id', data.resume_id)
@@ -170,7 +195,8 @@ export default function CreateResumePage() {
       profile: profileData,
       localMode: true,
       onLocalSave: handleLocalSave,
-      onNext: () => setEditingTab(null) // just close form on "Save & Next" if they click it
+      onNext: () => setEditingTab(null), // just close form on "Save & Next" if they click it
+      onCancel: () => setEditingTab(null)
     }
 
     switch (editingTab) {
@@ -185,7 +211,7 @@ export default function CreateResumePage() {
   }
 
   return (
-    <div className="px-8 pb-8 max-w-[1600px] mx-auto min-h-screen bg-slate-50/50">
+    <div className="px-8 pt-8 pb-8 max-w-[1600px] mx-auto min-h-screen bg-slate-50/50">
       <CreateResumeHeader />
       
       <main className="mt-8">
@@ -323,8 +349,8 @@ export default function CreateResumePage() {
               
               <div className="w-full xl:w-[460px] 2xl:w-[500px] shrink-0 space-y-6">
                 {/* Interview Prep & Strategic Workspace Pane */}
-                <WorkspaceSection interviewPrep={interviewPrep} atsData={atsData} />
-                <DownloadSidebar onDownloadPdf={handlePrint} />
+                <WorkspaceSection interviewPrep={interviewPrep} atsData={atsData} resumeId={currentResumeId} candidateName={profileData?.full_name} />
+                <DownloadSidebar onDownloadPdf={handlePrint} onDownloadDocx={handleDownloadDocx} isDownloadingDocx={isDownloadingDocx} />
               </div>
             </div>
           </div>

@@ -1,20 +1,27 @@
 import { NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 import { createClient } from '@/utils/supabase/server';
+import { PRO_MONTHLY, PRO_YEARLY } from '@/utils/pricingPlans';
+
+const KNOWN_PLANS = { PRO_MONTHLY, PRO_YEARLY };
 
 export async function POST(req: Request) {
   try {
     const supabase = await createClient();
-    
+
     // 1. Verify User
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { planId, amountInr } = await req.json();
+    const { planId } = await req.json();
 
-    if (!planId || !amountInr) {
-      return NextResponse.json({ error: 'Missing required payload data' }, { status: 400 });
+    // The charged amount is derived server-side from the known plan, never trusted
+    // from the client - otherwise a request could set its own (lower) amountInr.
+    const plan = KNOWN_PLANS[planId as keyof typeof KNOWN_PLANS];
+    if (!plan) {
+      return NextResponse.json({ error: 'Unknown plan' }, { status: 400 });
     }
+    const amountInr = plan.amountInr;
 
     // 2. Initialize Razorpay
     if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {

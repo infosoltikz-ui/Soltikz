@@ -113,6 +113,13 @@ export async function POST(req: Request) {
     // Update Resume Status to Ready
     await supabase.from('resumes_v2').update({ status: 'Ready' }).eq('id', resume.resume_id);
 
+    // Log the generation event for real usage stats (replaces previously mocked "resumes generated" counts)
+    await supabase.from('usage_events').insert({
+      user_id: user.id,
+      resume_id: resume.resume_id,
+      event_type: 'resume_generated'
+    });
+
     // --- DEDUCT QUOTA ---
     if (profile?.plan_id === 'FREE') {
       await supabase.rpc('decrement_credits', { user_id: user.id });

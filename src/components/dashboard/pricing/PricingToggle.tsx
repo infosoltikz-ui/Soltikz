@@ -1,16 +1,18 @@
 'use client'
 
-import { useState } from 'react'
 import { cn } from '@/utils/cn'
 
-export function PricingToggle() {
-  const [isYearly, setIsYearly] = useState(true)
+interface PricingToggleProps {
+  isYearly: boolean
+  onChange: (isYearly: boolean) => void
+}
 
+export function PricingToggle({ isYearly, onChange }: PricingToggleProps) {
   return (
     <div className="flex flex-col items-center mb-12">
       <div className="relative flex items-center bg-white border border-slate-200 rounded-full p-1 shadow-sm">
         <button
-          onClick={() => setIsYearly(false)}
+          onClick={() => onChange(false)}
           className={cn(
             "relative w-32 py-2.5 text-[13px] font-bold rounded-full transition-all duration-300 z-10",
             !isYearly ? "text-white" : "text-slate-500 hover:text-slate-900"
@@ -19,7 +21,7 @@ export function PricingToggle() {
           Monthly
         </button>
         <button
-          onClick={() => setIsYearly(true)}
+          onClick={() => onChange(true)}
           className={cn(
             "relative w-32 py-2.5 text-[13px] font-bold rounded-full transition-all duration-300 z-10",
             isYearly ? "text-white" : "text-slate-500 hover:text-slate-900"
@@ -29,7 +31,7 @@ export function PricingToggle() {
         </button>
 
         {/* Sliding Background */}
-        <div 
+        <div
           className={cn(
             "absolute top-1 bottom-1 w-32 bg-slate-900 rounded-full transition-transform duration-300 ease-out shadow-sm",
             isYearly ? "translate-x-32" : "translate-x-0"

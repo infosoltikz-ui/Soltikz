@@ -1,14 +1,13 @@
-import { DashboardHeader } from '@/components/dashboard/Header'
+import { DashboardHeader } from '@/components/dashboard/DashboardHeader'
 import { StatCards } from '@/components/dashboard/StatCards'
-import { PlanDetails } from '@/components/dashboard/PlanDetails'
 import { RecentResumes } from '@/components/dashboard/RecentResumes'
 import { QuickActions } from '@/components/dashboard/QuickActions'
+import { CurrentPlanCard } from '@/components/dashboard/CurrentPlanCard'
 import { AITipBanner } from '@/components/dashboard/AITipBanner'
 import { LoginToast } from '@/components/dashboard/LoginToast'
 import { OnboardingSteps } from '@/components/dashboard/OnboardingSteps'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import { format } from 'date-fns'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,19 +33,8 @@ export default async function DashboardPage() {
     .eq('user_id', user.id)
     .order('updated_at', { ascending: false })
 
-  // Fetch Active Subscription (safe single query by limit 1)
-  const { data: subscription } = await supabase
-    .from('payments_and_subscriptions')
-    .select('*')
-    .eq('user_id', user.id)
-    .in('status', ['ACTIVE', 'SUCCESS'])
-    .limit(1)
-    .single()
-
   // Calculate stats
   const resumesCreated = profile?.resumes_generated || 0
-  const planName = profile?.plan_id || 'FREE'
-  const validUntil = subscription?.valid_until ? format(new Date(subscription.valid_until), 'dd MMM, yyyy') : null
 
   const atsScores = resumes?.map(r => r.ats_score).filter(Boolean) || []
   const avgAts = atsScores.length > 0 ? Math.round(atsScores.reduce((a, b) => a + b, 0) / atsScores.length) : 0
@@ -60,34 +48,25 @@ export default async function DashboardPage() {
   if (masterData.education) profileCompletion += 25
 
   return (
-    <div className="px-8 pb-8 max-w-[1600px] mx-auto">
+    <div className="px-8 pt-8 pb-8 max-w-[1600px] mx-auto">
       <LoginToast />
-      <DashboardHeader />
+      <DashboardHeader title="Dashboard" greeting />
 
-      <main>
+      <main className="space-y-8">
         <OnboardingSteps profileCompletion={profileCompletion} resumesCreated={resumesCreated} />
 
         <StatCards
           resumesCreated={resumesCreated}
-          planName={planName}
           avgAts={avgAts}
           profileCompletion={profileCompletion}
-          validUntil={validUntil}
         />
-
-        <div className="mb-6">
-          <PlanDetails
-            planName={planName}
-            resumesUsed={resumesCreated}
-            validUntil={validUntil}
-            features={planName === 'FREE' ? ['5 AI Resume Generations', 'Basic Templates', 'PDF Export'] : ['Unlimited AI Resumes', 'Premium Templates', 'Advanced ATS Matching', 'Cover Letter Generator']}
-          />
-        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <RecentResumes resumes={resumes || []} />
-          <QuickActions />
+          <CurrentPlanCard />
         </div>
+
+        <QuickActions />
 
         <AITipBanner />
       </main>

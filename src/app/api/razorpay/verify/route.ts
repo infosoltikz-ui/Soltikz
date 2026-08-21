@@ -1,25 +1,34 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { createClient } from '@/utils/supabase/server';
+import { PRO_MONTHLY, PRO_YEARLY } from '@/utils/pricingPlans';
+
+const KNOWN_PLANS = { PRO_MONTHLY, PRO_YEARLY };
 
 export async function POST(req: Request) {
   try {
     const supabase = await createClient();
-    
+
     // 1. Verify User
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { 
-      razorpay_order_id, 
-      razorpay_payment_id, 
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
       razorpay_signature,
-      amount, // We pass this from the frontend for logging
       planId
     } = await req.json();
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return NextResponse.json({ error: 'Missing payment details' }, { status: 400 });
+    }
+
+    // Derive the real amount/duration from the known plan server-side rather than
+    // trusting a client-supplied amount (which could otherwise be tampered with).
+    const plan = KNOWN_PLANS[planId as keyof typeof KNOWN_PLANS];
+    if (!plan) {
+      return NextResponse.json({ error: 'Unknown plan' }, { status: 400 });
     }
 
     const secret = process.env.RAZORPAY_KEY_SECRET;
@@ -39,14 +48,21 @@ export async function POST(req: Request) {
     }
 
     // 3. Update Database on Success
+    const validUntil = new Date();
+    if (plan.period === 'year') {
+      validUntil.setFullYear(validUntil.getFullYear() + 1);
+    } else {
+      validUntil.setMonth(validUntil.getMonth() + 1);
+    }
+
     // Log the payment
     await supabase.from('payments_and_subscriptions').insert({
       user_id: user.id,
       razorpay_payment_id: razorpay_payment_id,
       razorpay_order_id: razorpay_order_id,
-      amount_paid: amount,
+      amount_paid: plan.amountInr,
       status: 'Captured',
-      valid_until: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString() // Valid for 1 month
+      valid_until: validUntil.toISOString()
     });
 
     // Upgrade the user's profile
