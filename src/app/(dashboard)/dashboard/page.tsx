@@ -28,15 +28,15 @@ export default async function DashboardPage() {
 
   // Fetch Resumes
   const { data: resumes } = await supabase
-    .from('resumes')
-    .select('*')
+    .from('resumes_v2')
+    .select('id, title, updated_at, ats_analyses ( overall_score )')
     .eq('user_id', user.id)
     .order('updated_at', { ascending: false })
 
   // Calculate stats
   const resumesCreated = profile?.resumes_generated || 0
 
-  const atsScores = resumes?.map(r => r.ats_score).filter(Boolean) || []
+  const atsScores = resumes?.map(r => (r as any).ats_analyses?.[0]?.overall_score).filter(Boolean) || []
   const avgAts = atsScores.length > 0 ? Math.round(atsScores.reduce((a, b) => a + b, 0) / atsScores.length) : 0
 
   // Calculate profile completion based on master_resume_data fields

@@ -17,14 +17,14 @@ export function ResumeCharts() {
   useEffect(() => {
     async function fetchData() {
       // Fetch resumes from the last 7 days for the chart
-      const { data: resumes } = await supabase.from('resumes').select('created_at, target_job_description')
+      const { data: resumes } = await supabase.from('resumes_v2').select('created_at, parsed_jd_id')
       
       if (resumes) {
         // Calculate types
         let targeted = 0
         let general = 0
         resumes.forEach(r => {
-          if (r.target_job_description && r.target_job_description.trim().length > 0) targeted++
+          if (r.parsed_jd_id) targeted++
           else general++
         })
         setTypes({ targeted, general, total: resumes.length })

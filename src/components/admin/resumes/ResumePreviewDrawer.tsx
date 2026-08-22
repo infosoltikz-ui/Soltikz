@@ -19,8 +19,8 @@ export function ResumePreviewDrawer({ resumeId, onClose }: ResumePreviewDrawerPr
     async function fetchResume() {
       const supabase = createClient()
       const { data } = await supabase
-        .from('resumes')
-        .select('*, profiles(full_name)')
+        .from('resumes_v2')
+        .select('*, profiles(full_name), parsed_job_descriptions(company_name, job_title), ats_analyses(overall_score), resume_sections(section_type, content)')
         .eq('id', resumeId)
         .single()
       
@@ -57,12 +57,16 @@ export function ResumePreviewDrawer({ resumeId, onClose }: ResumePreviewDrawerPr
   if (!resume) return null
 
   const userName = resume.profiles?.full_name || 'Unknown User'
-  const resumeType = 'Full-Time' // Dummy since not in schema
-  const templateName = resume.content?.template || 'Default Template'
+  const resumeType = resume.resume_type || 'Full-Time'
+  const templateName = 'Classic ATS'
   const status = resume.status || 'draft'
-  const experienceEntries = resume.content?.experience?.length || 0
-  const educationEntries = resume.content?.education?.length || 0
-  const skillsCount = resume.content?.skills?.length || 0
+  const sections = resume.resume_sections || []
+  const experienceEntries = sections.find((s: any) => s.section_type === 'Experience')?.content?.length || 0
+  const educationEntries = sections.find((s: any) => s.section_type === 'Education')?.content?.length || 0
+  const skillsCount = sections.find((s: any) => s.section_type === 'Skills')?.content?.length || 0
+  const atsScore = (resume.ats_analyses as any)?.[0]?.overall_score || 0
+  const targetRole = (resume.parsed_job_descriptions as any)?.job_title || '-'
+  const targetCompany = (resume.parsed_job_descriptions as any)?.company_name || '-'
 
   return (
     <>
@@ -92,7 +96,7 @@ export function ResumePreviewDrawer({ resumeId, onClose }: ResumePreviewDrawerPr
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-[13px] font-medium text-slate-500 flex items-center gap-1.5"><User className="w-4 h-4" /> {userName}</span>
                 <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
-                <span className="text-[13px] font-bold text-primary flex items-center gap-1.5"><Target className="w-4 h-4" /> {resume.ats_score || 0} ATS</span>
+                <span className="text-[13px] font-bold text-primary flex items-center gap-1.5"><Target className="w-4 h-4" /> {atsScore} ATS</span>
               </div>
               <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider
                   ${status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}
@@ -118,12 +122,12 @@ export function ResumePreviewDrawer({ resumeId, onClose }: ResumePreviewDrawerPr
             <div className="grid grid-cols-2 gap-3">
               <div className="p-4 bg-[#FAFAF8] border border-slate-200 rounded-xl">
                 <Briefcase className="w-5 h-5 text-slate-400 mb-2" />
-                <div className="text-[14px] font-black text-slate-900">{resume.target_role || '-'}</div>
+                <div className="text-[14px] font-black text-slate-900">{targetRole}</div>
                 <div className="text-[11px] font-bold text-slate-500">Target Role</div>
               </div>
               <div className="p-4 bg-[#FAFAF8] border border-slate-200 rounded-xl">
                 <div className="w-5 h-5 bg-slate-200 rounded mb-2 flex items-center justify-center text-[10px] font-black text-slate-500">🏢</div>
-                <div className="text-[14px] font-black text-slate-900">{resume.target_company || '-'}</div>
+                <div className="text-[14px] font-black text-slate-900">{targetCompany}</div>
                 <div className="text-[11px] font-bold text-slate-500">Target Company</div>
               </div>
               <div className="p-4 bg-[#FAFAF8] border border-slate-200 rounded-xl">

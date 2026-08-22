@@ -18,8 +18,8 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
     async function fetchResumes() {
       const supabase = createClient()
       const { data } = await supabase
-        .from('resumes')
-        .select('*, profiles(full_name)')
+        .from('resumes_v2')
+        .select('*, profiles(full_name), parsed_job_descriptions(company_name, job_title), ats_analyses(overall_score)')
         .order('updated_at', { ascending: false })
       
       if (data) setResumes(data)
@@ -75,12 +75,12 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
                     <div className="text-[12px] font-medium text-slate-500">By {userName}</div>
                   </td>
                   <td className="px-5 py-3">
-                    <div className="text-[13px] font-bold text-slate-900 mb-0.5">{resume.target_company || '-'}</div>
-                    <div className="text-[11px] font-bold text-slate-400">{resume.target_role || '-'}</div>
+                    <div className="text-[13px] font-bold text-slate-900 mb-0.5">{(resume.parsed_job_descriptions as any)?.company_name || '-'}</div>
+                    <div className="text-[11px] font-bold text-slate-400">{(resume.parsed_job_descriptions as any)?.job_title || '-'}</div>
                   </td>
                   <td className="px-5 py-3">
                     <div className="text-[13px] font-black text-slate-900 flex items-center gap-1">
-                      ATS: <span className={resume.ats_score > 89 ? 'text-primary' : resume.ats_score > 69 ? 'text-orange-500' : 'text-red-500'}>{resume.ats_score || 0}%</span>
+                      ATS: <span className={(resume.ats_analyses as any)?.[0]?.overall_score > 89 ? 'text-primary' : (resume.ats_analyses as any)?.[0]?.overall_score > 69 ? 'text-orange-500' : 'text-red-500'}>{(resume.ats_analyses as any)?.[0]?.overall_score || 0}%</span>
                     </div>
                   </td>
                   <td className="px-5 py-3">

@@ -45,9 +45,9 @@ export function RecentResumes({ resumes }: { resumes: any[] }) {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 <h4 className="text-[13.5px] font-bold text-slate-800 truncate">{resume.title || 'Untitled Resume'}</h4>
-                {resume.ats_score && (
+                {(resume as any).ats_analyses?.[0]?.overall_score > 0 && (
                   <span className="bg-[#F0FDF4] text-primary text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">
-                    {resume.ats_score}% ATS Score
+                    {(resume as any).ats_analyses?.[0]?.overall_score}% ATS Score
                   </span>
                 )}
               </div>

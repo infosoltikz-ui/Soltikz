@@ -59,7 +59,7 @@ export function ProfileSidebar({ profile, onImport }: { profile?: any; onImport?
   if (email) completion += 20
   if (phone) completion += 10
   if (location) completion += 10
-  if (masterData?.experience?.length > 0) completion += 20
+  if (masterData?.employment?.length > 0) completion += 20
   if (masterData?.education?.length > 0) completion += 10
   if (masterData?.skills?.length > 0) completion += 10
 
@@ -74,7 +74,7 @@ export function ProfileSidebar({ profile, onImport }: { profile?: any; onImport?
   const tips = [
     { text: 'Add your full name', done: !!profile?.full_name },
     { text: 'Add email & phone number', done: !!(email && phone) },
-    { text: 'Add at least one work experience', done: masterData?.experience?.length > 0 },
+    { text: 'Add at least one work experience', done: masterData?.employment?.length > 0 },
     { text: 'Add education details', done: masterData?.education?.length > 0 },
     { text: 'Add skills relevant to your target role', done: masterData?.skills?.length > 0 },
     { text: 'Add certifications (if any)', done: masterData?.certifications?.length > 0 },

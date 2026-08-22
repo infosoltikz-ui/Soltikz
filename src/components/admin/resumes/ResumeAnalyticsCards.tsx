@@ -16,19 +16,19 @@ export function ResumeAnalyticsCards() {
 
   useEffect(() => {
     async function fetchStats() {
-      const { count: totalCount } = await supabase.from('resumes').select('*', { count: 'exact', head: true })
+      const { count: totalCount } = await supabase.from('resumes_v2').select('*', { count: 'exact', head: true })
       
       const today = new Date()
       today.setHours(0,0,0,0)
-      const { count: todayCount } = await supabase.from('resumes').select('*', { count: 'exact', head: true }).gte('created_at', today.toISOString())
+      const { count: todayCount } = await supabase.from('resumes_v2').select('*', { count: 'exact', head: true }).gte('created_at', today.toISOString())
       
-      // Calculate Average ATS
-      const { data: scores } = await supabase.from('resumes').select('ats_score')
+      // Calculate Average ATS from ats_analyses table (resumes_v2 stores scores there)
+      const { data: scores } = await supabase.from('ats_analyses').select('overall_score')
       let avg = 0
       if (scores && scores.length > 0) {
-        const validScores = scores.filter(s => s.ats_score !== null && s.ats_score !== undefined)
+        const validScores = scores.filter(s => s.overall_score !== null && s.overall_score !== undefined)
         if (validScores.length > 0) {
-          const sum = validScores.reduce((acc, curr) => acc + (curr.ats_score as number), 0)
+          const sum = validScores.reduce((acc, curr) => acc + (curr.overall_score as number), 0)
           avg = Math.round(sum / validScores.length)
         }
       }

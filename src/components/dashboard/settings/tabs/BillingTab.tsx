@@ -7,6 +7,7 @@ import { createClient } from '@/utils/supabase/client'
 import { getPlan, isPremiumPlan } from '@/utils/pricingPlans'
 import { cn } from '@/utils/cn'
 import Script from 'next/script'
+import { toast } from 'react-hot-toast'
 
 export function BillingTab({ initialYearly = false }: { initialYearly?: boolean }) {
   const [loading, setLoading] = useState(true)
@@ -66,10 +67,10 @@ export function BillingTab({ initialYearly = false }: { initialYearly?: boolean 
 
           const verifyData = await verifyRes.json();
           if (verifyData.success) {
-            alert('Payment successful! You are now on the Pro Plan.');
+            toast.success('Payment successful! You are now on the Pro Plan. 🎉');
             fetchProfile(); // Refresh UI
           } else {
-            alert('Payment verification failed.');
+            toast.error('Payment verification failed. Please contact support.');
           }
         },
         prefill: {
@@ -86,7 +87,7 @@ export function BillingTab({ initialYearly = false }: { initialYearly?: boolean 
 
     } catch (error) {
       console.error(error);
-      alert('Failed to initiate payment.');
+      toast.error('Failed to initiate payment. Please try again.');
     } finally {
       setIsProcessing(false);
     }

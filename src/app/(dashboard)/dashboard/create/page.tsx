@@ -146,7 +146,7 @@ export default function CreateResumePage() {
       setStep(3)
     } catch (error: any) {
       console.error('Generation failed:', error)
-      alert(`Failed to generate resume: ${error.message || error}`)
+      toast.error(`Failed to generate resume: ${error.message || error}`)
     } finally {
       setIsGenerating(false)
     }

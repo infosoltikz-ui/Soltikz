@@ -122,9 +122,6 @@ export async function POST(req: Request) {
 
     // --- DEDUCT QUOTA ---
     if (profile?.plan_id === 'FREE') {
-      await supabase.rpc('decrement_credits', { user_id: user.id });
-      // Note: If you don't have the RPC, we can do a standard update:
-      // await supabase.from('profiles').update({ credits_remaining: (profile.credits_remaining - 1) }).eq('id', user.id);
       await supabase.from('profiles').update({ credits_remaining: (profile.credits_remaining - 1) }).eq('id', user.id);
     }
     // --------------------

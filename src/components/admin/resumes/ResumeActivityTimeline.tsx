@@ -13,7 +13,7 @@ export function ResumeActivityTimeline() {
   useEffect(() => {
     async function fetchActivity() {
       const { data } = await supabase
-        .from('resumes')
+        .from('resumes_v2')
         .select(`
           title,
           created_at,
