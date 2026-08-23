@@ -28,8 +28,9 @@ const footerLinks = {
     { label: 'Privacy Policy', href: '/privacy' },
     { label: 'Terms of Service', href: '/terms' },
     { label: 'Refund Policy', href: '/refund' },
+    { label: 'Shipping & Delivery', href: '/shipping' },
+    { label: 'Cookie Policy', href: '/cookies' },
     { label: 'Affiliate Program', href: '/affiliates' },
-    { label: 'Press Kit', href: '/press' },
   ],
   support: [
     { label: 'Help Center', href: '/help' },
@@ -202,16 +203,18 @@ export function Footer() {
             © 2024 Resume Builder One. All rights reserved.
           </div>
 
-          <div className="flex items-center gap-4 lg:gap-8 text-[13px] font-medium relative z-10">
+          <div className="flex items-center gap-3 lg:gap-6 text-[13px] font-medium relative z-10 flex-wrap">
             <Link href="/privacy" className="hover:text-white/80 transition-colors">Privacy Policy</Link>
             <span className="text-white/30">|</span>
             <Link href="/terms" className="hover:text-white/80 transition-colors">Terms of Service</Link>
             <span className="text-white/30">|</span>
             <Link href="/refund" className="hover:text-white/80 transition-colors">Refund Policy</Link>
             <span className="text-white/30">|</span>
+            <Link href="/shipping" className="hover:text-white/80 transition-colors">Shipping &amp; Delivery</Link>
+            <span className="text-white/30">|</span>
             <Link href="/cookies" className="hover:text-white/80 transition-colors">Cookies Policy</Link>
             
-            <button className="flex items-center gap-2 border border-white/30 rounded-lg px-3 py-1.5 hover:bg-white/10 transition-colors ml-4">
+            <button className="flex items-center gap-2 border border-white/30 rounded-lg px-3 py-1.5 hover:bg-white/10 transition-colors ml-2">
               <Globe className="w-4 h-4" />
               English
               <ChevronDown className="w-3 h-3 ml-2" />
