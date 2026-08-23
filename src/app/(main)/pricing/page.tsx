@@ -6,8 +6,16 @@ import { PricingBanner } from '@/components/pricing/PricingBanner'
 import { PricingFAQ } from '@/components/pricing/PricingFAQ'
 
 export const metadata: Metadata = {
-  title: 'Pricing - Soltkiz IT AI Resume Builder',
-  description: 'Simple, Transparent Pricing. Affordable Plans for Every Career Stage.',
+  title: 'Affordable Pricing Plans - Free & Pro AI Resume Builder | Resume Builder One',
+  description: 'Simple, transparent pricing. Free forever tier and affordable Pro plans with unlimited AI resume exports, ATS checker, and cover letters.',
+  alternates: {
+    canonical: 'https://www.resumebuilderone.com/pricing',
+  },
+  openGraph: {
+    title: 'Affordable Pricing Plans - Free & Pro AI Resume Builder | Resume Builder One',
+    description: 'Simple, transparent pricing. Free forever tier and affordable Pro plans with unlimited AI resume exports and ATS score checking.',
+    url: 'https://www.resumebuilderone.com/pricing',
+  },
 }
 
 export default function PricingPage() {

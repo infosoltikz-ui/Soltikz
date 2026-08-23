@@ -7,8 +7,16 @@ import { FeaturesStats } from '@/components/features/FeaturesStats'
 import { CTASection } from '@/components/landing/CTASection'
 
 export const metadata: Metadata = {
-  title: 'Features - Soltkiz IT AI Resume Builder',
-  description: 'Everything you need to build a perfect ATS-optimized resume.',
+  title: 'Powerful AI Resume Features & ATS Scoring Tools | Resume Builder One',
+  description: 'Explore AI resume writing, real-time ATS compatibility scoring, cover letter generator, bullet point optimization, and job-tailored resume customization.',
+  alternates: {
+    canonical: 'https://www.resumebuilderone.com/features',
+  },
+  openGraph: {
+    title: 'Powerful AI Resume Features & ATS Scoring Tools | Resume Builder One',
+    description: 'Explore AI resume writing, real-time ATS compatibility scoring, cover letter generator, and job-tailored resume customization.',
+    url: 'https://www.resumebuilderone.com/features',
+  },
 }
 
 export default function FeaturesPage() {
