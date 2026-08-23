@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { zodResponseFormat } from 'openai/helpers/zod';
-import pdf from 'pdf-parse';
+import { PDFParse } from 'pdf-parse';
 import { generateAIResponse } from '@/utils/ai-gateway';
 import { createClient } from '@/utils/supabase/server';
 
@@ -71,7 +71,9 @@ export async function POST(req: Request) {
     }
 
     const arrayBuffer = await file.arrayBuffer();
-    const textResult = await pdf(Buffer.from(arrayBuffer));
+    const parser = new PDFParse({ data: Buffer.from(arrayBuffer) });
+    const textResult = await parser.getText();
+    await parser.destroy();
 
     const rawText = textResult.text?.trim();
     if (!rawText) {
