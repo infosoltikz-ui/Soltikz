@@ -17,6 +17,9 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.resumebuilderone.com'),
+  verification: {
+    google: 'U3ySGlGG2fC3L4rUpVCAkRHi-6a8myCH2Y26qQ8tpME',
+  },
   title: {
     default: 'Resume Builder One | Free AI Resume Builder & ATS Score Checker',
     template: '%s | Resume Builder One',
