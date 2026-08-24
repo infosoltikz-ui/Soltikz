@@ -49,7 +49,7 @@ export function BillingTab({ initialYearly = false }: { initialYearly?: boolean 
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: data.amount,
         currency: data.currency,
-        name: "Soltkiz Resume Builder",
+        name: "Resume Builder One",
         description: `Upgrade to ${selectedPlan.label}`,
         order_id: data.orderId,
         handler: async function (response: any) {
