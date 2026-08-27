@@ -1,14 +1,15 @@
 import React from 'react';
 import type { ResumeTemplateProps } from './types';
 
-const ACCENT = '#0f766e';
+export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({ resumeData, profileData, themeColor, fontFamily }, ref) => {
+  const ACCENT = themeColor || '#0f766e';
+  const selectedFont = fontFamily || 'Calibri, Arial, "Times New Roman", sans-serif';
 
-export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({ resumeData, profileData }, ref) => {
   return (
     <div
       ref={ref}
       className="bg-white w-full max-w-[850px] mx-auto min-h-[1100px] shadow-sm border border-slate-200 text-black"
-      style={{ fontFamily: 'Calibri, Arial, "Times New Roman", sans-serif', color: '#000000' }}
+      style={{ fontFamily: selectedFont, color: '#000000' }}
     >
       {/* Accent top bar */}
       <div style={{ backgroundColor: ACCENT, height: '10px' }} />

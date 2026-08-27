@@ -17,4 +17,6 @@ export interface ProfileData {
 export interface ResumeTemplateProps {
   resumeData: ResumeData;
   profileData: ProfileData;
+  themeColor?: string;
+  fontFamily?: string;
 }

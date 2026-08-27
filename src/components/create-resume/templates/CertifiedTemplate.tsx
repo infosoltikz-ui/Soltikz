@@ -1,16 +1,16 @@
 import React from 'react';
 import type { ResumeTemplateProps } from './types';
 
-const NAVY = '#1e3a5f';
-
-export const CertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({ resumeData, profileData }, ref) => {
+export const CertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({ resumeData, profileData, themeColor, fontFamily }, ref) => {
+  const NAVY = themeColor || '#1e3a5f';
+  const selectedFont = fontFamily || 'Calibri, Arial, "Times New Roman", sans-serif';
   const badgeCerts = (resumeData.certifications || []).slice(0, 4);
 
   return (
     <div
       ref={ref}
       className="bg-white w-full max-w-[850px] mx-auto min-h-[1100px] shadow-sm border border-slate-200 p-[40px] text-black"
-      style={{ fontFamily: 'Calibri, Arial, "Times New Roman", sans-serif', color: '#000000' }}
+      style={{ fontFamily: selectedFont, color: '#000000' }}
     >
       {/* Header with cert badges */}
       <div className="flex justify-between items-start mb-6 gap-4">

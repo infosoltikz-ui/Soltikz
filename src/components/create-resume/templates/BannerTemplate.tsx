@@ -1,14 +1,15 @@
 import React from 'react';
 import type { ResumeTemplateProps } from './types';
 
-const BANNER = '#8b7355';
+export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({ resumeData, profileData, themeColor, fontFamily }, ref) => {
+  const BANNER = themeColor || '#8b7355';
+  const selectedFont = fontFamily || 'Calibri, Arial, "Times New Roman", sans-serif';
 
-export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({ resumeData, profileData }, ref) => {
   return (
     <div
       ref={ref}
       className="bg-white w-full max-w-[850px] mx-auto min-h-[1100px] shadow-sm border border-slate-200 text-black"
-      style={{ fontFamily: 'Calibri, Arial, "Times New Roman", sans-serif', color: '#000000' }}
+      style={{ fontFamily: selectedFont, color: '#000000' }}
     >
       {/* Colored banner header */}
       <div className="text-center px-[40px] py-10" style={{ backgroundColor: BANNER }}>

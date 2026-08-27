@@ -2,14 +2,15 @@ import React from 'react';
 import type { ResumeTemplateProps } from './types';
 
 const SIDEBAR_BG = '#1f2937';
-const ACCENT = '#38bdf8';
+export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({ resumeData, profileData, themeColor, fontFamily }, ref) => {
+  const ACCENT = themeColor || '#38bdf8';
+  const selectedFont = fontFamily || 'Calibri, Arial, "Times New Roman", sans-serif';
 
-export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({ resumeData, profileData }, ref) => {
   return (
     <div
       ref={ref}
       className="bg-white w-full max-w-[850px] mx-auto min-h-[1100px] shadow-sm border border-slate-200 text-black flex"
-      style={{ fontFamily: 'Calibri, Arial, "Times New Roman", sans-serif', color: '#000000' }}
+      style={{ fontFamily: selectedFont, color: '#000000' }}
     >
       {/* Left sidebar */}
       <div className="w-[280px] shrink-0 p-6 text-white" style={{ backgroundColor: SIDEBAR_BG }}>
