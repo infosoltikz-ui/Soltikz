@@ -9,7 +9,7 @@ import { isPremiumPlan } from '@/utils/pricingPlans'
 
 export function CurrentPlanCard() {
   const [planId, setPlanId] = useState('FREE')
-  const [creditsRemaining, setCreditsRemaining] = useState(5)
+  const [creditsRemaining, setCreditsRemaining] = useState(3)
 
   useEffect(() => {
     async function loadData() {
@@ -25,14 +25,14 @@ export function CurrentPlanCard() {
 
       if (data) {
         setPlanId(data.plan_id || 'FREE')
-        setCreditsRemaining(data.credits_remaining ?? 5)
+        setCreditsRemaining(data.credits_remaining ?? 3)
       }
     }
     loadData()
   }, [])
 
   const isPremium = isPremiumPlan(planId)
-  const maxResumes = 5
+  const maxResumes = 3
   const resumesUsed = Math.max(0, maxResumes - creditsRemaining)
   const resumePercentage = isPremium ? 100 : (resumesUsed / maxResumes) * 100
 

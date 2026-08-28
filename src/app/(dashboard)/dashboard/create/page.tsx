@@ -25,6 +25,9 @@ import { downloadResumeDocx } from '@/components/create-resume/exportDocx'
 import { createClient } from '@/utils/supabase/client'
 import { logUsageEvent } from '@/utils/logUsageEvent'
 import { toast } from 'react-hot-toast'
+import { Modal } from '@/components/ui/Overlay'
+import { useUIStore } from '@/store/useUIStore'
+import Link from 'next/link'
 
 export default function CreateResumePage() {
   const [step, setStep] = useState(1)
@@ -45,6 +48,8 @@ export default function CreateResumePage() {
   const [interviewPrep, setInterviewPrep] = useState<any>(null)
   const [atsData, setAtsData] = useState<any>(null)
   const [currentResumeId, setCurrentResumeId] = useState<string | null>(null)
+  const openModal = useUIStore((s) => s.openModal)
+  const closeModal = useUIStore((s) => s.closeModal)
 
   const resumeRef = useRef<HTMLDivElement>(null)
   const [isDownloadingDocx, setIsDownloadingDocx] = useState(false)
@@ -146,7 +151,11 @@ export default function CreateResumePage() {
       setStep(3)
     } catch (error: any) {
       console.error('Generation failed:', error)
-      toast.error(`Failed to generate resume: ${error.message || error}`)
+      if (error.message === 'Paywall') {
+        openModal('paywall-modal')
+      } else {
+        toast.error(`Failed to generate resume: ${error.message || error}`)
+      }
     } finally {
       setIsGenerating(false)
     }
@@ -212,6 +221,28 @@ export default function CreateResumePage() {
 
   return (
     <div className="px-8 pt-8 pb-8 max-w-[1600px] mx-auto min-h-screen bg-slate-50/50">
+      <Modal id="paywall-modal" title="Upgrade to Pro" size="sm">
+        <div className="flex flex-col items-center text-center pt-2">
+          <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+            <span className="text-2xl">🚀</span>
+          </div>
+          <h3 className="text-xl font-bold text-slate-900 mb-2">You've reached your limit!</h3>
+          <p className="text-slate-500 mb-6 leading-relaxed">
+            You have used all 3 of your free AI resume generations. Upgrade to our Pro plan to unlock unlimited resumes, cover letters, and advanced ATS optimization.
+          </p>
+          <div className="flex gap-3 w-full">
+            <Button variant="outline" className="flex-1" onClick={() => closeModal('paywall-modal')}>
+              Cancel
+            </Button>
+            <Link href="/dashboard/pricing" className="flex-1">
+              <Button className="w-full">
+                Upgrade Now
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </Modal>
+
       <CreateResumeHeader />
       
       <main className="mt-8">

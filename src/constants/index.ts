@@ -259,7 +259,7 @@ export const FAQ_ITEMS = [
   },
   {
     q: 'Do you offer a free plan?',
-    a: 'Yes! Our free plan includes 1 resume, 5 templates, PDF export, and ATS checking. No credit card required.',
+    a: 'Yes! Our free plan includes 3 resumes, 5 templates, PDF export, and ATS checking. No credit card required.',
   },
   {
     q: 'Can I cancel my subscription anytime?',

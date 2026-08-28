@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     if (profile?.plan_id === 'FREE' && (profile?.credits_remaining || 0) <= 0) {
       return NextResponse.json({ 
         error: 'Paywall', 
-        message: 'You have used all 5 of your free AI generation credits. Please upgrade to Pro to continue generating unlimited resumes.' 
+        message: 'You have used all 3 of your free AI generation credits. Please upgrade to Pro to continue generating unlimited resumes.' 
       }, { status: 403 });
     }
     // -----------------------------
