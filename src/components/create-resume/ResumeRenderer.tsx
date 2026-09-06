@@ -1,7 +1,4 @@
 import React from 'react';
-import type { Database } from '@/types/supabase';
-
-type Json = Database['public']['Tables']['resumes']['Row']['content'];
 
 interface ResumeTemplateProps {
   resumeData: Record<string, any>;
