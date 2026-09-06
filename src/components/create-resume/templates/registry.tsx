@@ -23,7 +23,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
   {
     id: 'modern',
     name: 'Modern Accent',
-    description: 'Left-aligned header with a teal accent, two-column skills layout.',
+    description: 'Centered teal header, single-paragraph summary, two-column skills, and bold text support.',
     component: ModernTemplate,
   },
   {
@@ -40,8 +40,8 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
   },
   {
     id: 'sidebar',
-    name: 'Sidebar Profile',
-    description: 'Dark sidebar with contact, skills and education; experience on the main panel.',
+    name: 'Left-Aligned Accent',
+    description: 'Thick top color bar, left-aligned section headers, and indented content.',
     component: SidebarTemplate,
   },
 ];
