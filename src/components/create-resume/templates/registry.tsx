@@ -17,7 +17,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
   {
     id: 'classic',
     name: 'Classic ATS',
-    description: 'Centered header, black & white, plain section dividers. Maximum ATS compatibility.',
+    description: 'Strictly black & white, highly readable standard layout optimized for Applicant Tracking Systems.',
     component: ResumeRenderer,
   },
   {
@@ -28,14 +28,14 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
   },
   {
     id: 'banner',
-    name: 'Banner Header',
-    description: 'Bold color block header with centered name, clean single-column body.',
+    name: 'Professional Banner',
+    description: 'Large colored header block, serif typography, and clean unlined section headers.',
     component: BannerTemplate,
   },
   {
     id: 'certified',
     name: 'Certified Professional',
-    description: 'Certification badges in the header, skills shown in a bordered table.',
+    description: '2-column header with highlighted certifications, heavily structured borders, and grid-based skills.',
     component: CertifiedTemplate,
   },
   {

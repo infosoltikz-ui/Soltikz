@@ -1,145 +1,169 @@
 import React from 'react';
 import type { ResumeTemplateProps } from './types';
 
-export const CertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({ resumeData, profileData, themeColor, fontFamily }, ref) => {
-  const NAVY = themeColor || '#1e3a5f';
-  const selectedFont = fontFamily || 'Calibri, Arial, "Times New Roman", sans-serif';
-  const badgeCerts = (resumeData.certifications || []).slice(0, 4);
+// Helper to parse **bold** text in bullets
+const parseBoldText = (text: string) => {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={index}>{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+};
 
-  return (
-    <div
-      ref={ref}
-      className="bg-white w-full max-w-[850px] mx-auto min-h-[1100px] shadow-sm border border-slate-200 p-[40px] text-black"
-      style={{ fontFamily: selectedFont, color: '#000000' }}
-    >
-      {/* Header with cert badges */}
-      <div className="flex justify-between items-start mb-6 gap-4">
-        <div>
-          <h1 className="font-bold" style={{ fontSize: '20pt', color: NAVY }}>
-            {profileData.full_name || 'JOHN DOE'}
-          </h1>
-          <div className="mt-1 space-y-0.5" style={{ fontSize: '11pt' }}>
-            {profileData.email && <div>{profileData.email}</div>}
-            {profileData.phone && <div>{profileData.phone}</div>}
-          </div>
-        </div>
-        {badgeCerts.length > 0 && (
-          <div className="flex flex-wrap gap-2 justify-end shrink-0 max-w-[260px]">
-            {badgeCerts.map((cert, i) => (
-              <span
-                key={i}
-                className="font-bold rounded-full px-3 py-1 whitespace-nowrap"
-                style={{ fontSize: '9pt', backgroundColor: NAVY, color: '#ffffff' }}
-              >
-                {cert.name}
-              </span>
-            ))}
-          </div>
-        )}
+export const CertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(
+  ({ resumeData, profileData, themeColor, fontFamily }, ref) => {
+    const ACCENT = themeColor || '#005580'; // Default to a professional dark blue
+    const selectedFont = fontFamily || 'Calibri, Arial, "Times New Roman", sans-serif';
+
+    // Highlighted Section Header with Left Border
+    const SectionHeader = ({ title }: { title: string }) => (
+      <div className="flex items-center mb-3 mt-5 w-full">
+        <div style={{ width: '6px', height: '24px', backgroundColor: ACCENT }} className="mr-3"></div>
+        <h2 className="font-bold uppercase tracking-wider" style={{ fontSize: '13pt', color: ACCENT }}>
+          {title}
+        </h2>
+        <div className="flex-1 ml-4 h-[1px] bg-slate-200"></div>
       </div>
+    );
 
-      {resumeData.summary && resumeData.summary.length > 0 && (
-        <div className="mb-5">
-          <h2 className="uppercase font-bold border-b-2 pb-1 mb-2 mt-0" style={{ fontSize: '12pt', color: NAVY, borderColor: NAVY }}>
-            Professional Summary
-          </h2>
-          <ul className="list-disc pl-5 space-y-1" style={{ fontSize: '11pt' }}>
-            {resumeData.summary.map((point, i) => (
-              <li key={i} className="pl-1 leading-snug" title={point}>{point}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+    return (
+      <div
+        ref={ref}
+        className="bg-white w-full max-w-[850px] mx-auto min-h-[1100px] shadow-sm border border-slate-200 text-black flex flex-col"
+        style={{ fontFamily: selectedFont, color: '#1a1a1a' }}
+      >
+        <div className="px-[45px] py-[40px] flex-1">
+          {/* Top 2-Column Header Box */}
+          <div className="flex flex-row justify-between items-stretch border border-slate-200 rounded-sm mb-6 bg-slate-50 overflow-hidden">
+            
+            {/* Left side: Contact Info */}
+            <div className="p-5 flex-1 bg-white">
+              <h1 className="uppercase font-extrabold mb-1" style={{ fontSize: '24pt', color: ACCENT, letterSpacing: '-0.5px' }}>
+                {profileData.full_name || 'JOHN DOE'}
+              </h1>
+              <div className="flex flex-col gap-1 mt-2" style={{ fontSize: '10.5pt', color: '#4a4a4a' }}>
+                {profileData.location && <div className="flex items-center gap-2"><span className="font-bold opacity-60">📍</span> {profileData.location}</div>}
+                {profileData.phone && <div className="flex items-center gap-2"><span className="font-bold opacity-60">📞</span> {profileData.phone}</div>}
+                {profileData.email && <div className="flex items-center gap-2"><span className="font-bold opacity-60">✉️</span> {profileData.email}</div>}
+                {profileData.linkedin && <div className="flex items-center gap-2"><span className="font-bold opacity-60">🔗</span> {profileData.linkedin}</div>}
+              </div>
+            </div>
 
-      {/* Skills as a bordered table */}
-      {resumeData.skills && resumeData.skills.length > 0 && (
-        <div className="mb-5">
-          <h2 className="uppercase font-bold border-b-2 pb-1 mb-2 mt-0" style={{ fontSize: '12pt', color: NAVY, borderColor: NAVY }}>
-            Technical Skills
-          </h2>
-          <table className="w-full border-collapse" style={{ fontSize: '11pt' }}>
-            <tbody>
-              {resumeData.skills.map((skillGroup, i) => (
-                <tr key={i} className={i % 2 === 0 ? 'bg-slate-50' : ''}>
-                  <td className="border border-slate-300 font-bold px-3 py-1.5 align-top w-1/3">{skillGroup.category}</td>
-                  <td className="border border-slate-300 px-3 py-1.5 align-top">{skillGroup.items.join(', ')}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {resumeData.experience && resumeData.experience.length > 0 && (
-        <div className="mb-5">
-          <h2 className="uppercase font-bold border-b-2 pb-1 mb-3 mt-0" style={{ fontSize: '12pt', color: NAVY, borderColor: NAVY }}>
-            Professional Experience
-          </h2>
-          <div className="space-y-4">
-            {resumeData.experience.map((exp, i) => (
-              <div key={i}>
-                <div className="flex justify-between items-start mb-1" style={{ fontSize: '11pt' }}>
-                  <div>
-                    <span className="font-bold">{exp.role}</span>
-                    <span className="mx-2">-</span>
-                    <span className="font-bold">{exp.company}</span>
-                  </div>
-                  <div className="font-bold whitespace-nowrap ml-4">{exp.duration}</div>
-                </div>
-
-                {exp.environment && exp.environment.length > 0 && (
-                  <div className="mb-2 italic" style={{ fontSize: '11pt' }}>
-                    <span className="font-bold not-italic">Environment: </span>
-                    {exp.environment.join(', ')}
-                  </div>
-                )}
-
-                <ul className="list-disc pl-5 space-y-1" style={{ fontSize: '11pt' }}>
-                  {exp.bullets.map((bullet, j) => (
-                    <li key={j} className="pl-1 leading-snug" title={bullet}>{bullet}</li>
+            {/* Right side: Highlighted Certifications Block */}
+            {resumeData.certifications && resumeData.certifications.length > 0 && (
+              <div className="w-[40%] p-4 border-l border-slate-200 bg-slate-50 flex flex-col justify-center">
+                <h3 className="font-bold uppercase mb-2 text-slate-500 text-xs tracking-widest">Key Certifications</h3>
+                <ul className="space-y-1" style={{ fontSize: '9.5pt' }}>
+                  {resumeData.certifications.slice(0, 4).map((cert: any, i: number) => (
+                    <li key={i} className="flex items-start">
+                      <span className="text-green-600 mr-2">✓</span>
+                      <span className="leading-tight font-medium text-slate-700">{cert.name}</span>
+                    </li>
                   ))}
+                  {resumeData.certifications.length > 4 && (
+                    <li className="text-slate-400 italic text-xs mt-1">+ {resumeData.certifications.length - 4} more</li>
+                  )}
                 </ul>
               </div>
-            ))}
+            )}
           </div>
-        </div>
-      )}
 
-      {resumeData.education && resumeData.education.length > 0 && (
-        <div className="mb-5">
-          <h2 className="uppercase font-bold border-b-2 pb-1 mb-2 mt-0" style={{ fontSize: '12pt', color: NAVY, borderColor: NAVY }}>
-            Education
-          </h2>
-          <div className="space-y-2" style={{ fontSize: '11pt' }}>
-            {resumeData.education.map((edu, i) => (
-              <div key={i} className="flex justify-between items-start">
-                <div>
-                  <div className="font-bold">{edu.degree}</div>
-                  <div>{edu.institution}</div>
-                </div>
-                <div className="font-bold">{edu.year}</div>
+          {/* Professional Summary */}
+          {resumeData.summary && resumeData.summary.length > 0 && (
+            <div className="mb-4">
+              <SectionHeader title="Professional Summary" />
+              <ul className="list-disc pl-5 space-y-1.5 m-0" style={{ fontSize: '10.5pt' }}>
+                {resumeData.summary.map((point: string, i: number) => (
+                  <li key={i} className="pl-1 leading-snug text-justify">
+                    {parseBoldText(point)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Technical Skills - Bordered Grid/Table Layout */}
+          {resumeData.skills && resumeData.skills.length > 0 && (
+            <div className="mb-4">
+              <SectionHeader title="Technical Competencies" />
+              <div className="border border-slate-200 rounded-sm overflow-hidden text-sm" style={{ fontSize: '10pt' }}>
+                {resumeData.skills.map((skillGroup: any, i: number) => (
+                  <div key={i} className={`flex flex-row border-b border-slate-200 last:border-b-0`}>
+                    <div className="w-[30%] bg-slate-50 p-2 border-r border-slate-200 font-bold text-slate-700 flex items-center">
+                      {skillGroup.category}
+                    </div>
+                    <div className="w-[70%] p-2 bg-white flex items-center leading-snug">
+                      {skillGroup.items.join(', ')}
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            </div>
+          )}
 
-      {resumeData.certifications && resumeData.certifications.length > 0 && (
-        <div>
-          <h2 className="uppercase font-bold border-b-2 pb-1 mb-2 mt-0" style={{ fontSize: '12pt', color: NAVY, borderColor: NAVY }}>
-            Certifications
-          </h2>
-          <ul className="list-disc pl-5 space-y-1" style={{ fontSize: '11pt' }}>
-            {resumeData.certifications.map((cert, i) => (
-              <li key={i} className="pl-1 leading-snug">
-                <span className="font-bold">{cert.name}</span> - {cert.issuer} ({cert.year})
-              </li>
-            ))}
-          </ul>
+          {/* Professional Experience */}
+          {resumeData.experience && resumeData.experience.length > 0 && (
+            <div className="mb-4">
+              <SectionHeader title="Career Experience" />
+              <div className="space-y-5">
+                {resumeData.experience.map((exp: any, i: number) => (
+                  <div key={i}>
+                    {/* Header line */}
+                    <div className="flex justify-between items-center bg-slate-50 p-2 border border-slate-200 rounded-sm mb-2">
+                      <div>
+                        <div className="font-extrabold" style={{ fontSize: '11pt', color: ACCENT }}>{exp.role}</div>
+                        <div className="font-bold text-slate-700" style={{ fontSize: '10pt' }}>{exp.company}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-bold text-slate-700" style={{ fontSize: '10pt' }}>{exp.duration}</div>
+                      </div>
+                    </div>
+
+                    {/* Environment */}
+                    {exp.environment && exp.environment.length > 0 && (
+                      <div className="mb-2 px-2 leading-snug" style={{ fontSize: '9.5pt' }}>
+                        <span className="font-bold bg-slate-100 px-1 py-0.5 rounded text-slate-600 mr-1 border border-slate-200">Tech Stack:</span>
+                        <span className="text-slate-600 italic">{exp.environment.join(', ')}</span>
+                      </div>
+                    )}
+
+                    {/* Bullets */}
+                    <ul className="list-square pl-[22px] pr-2 space-y-1.5 m-0" style={{ fontSize: '10pt' }}>
+                      {exp.bullets.map((bullet: string, j: number) => (
+                        <li key={j} className="pl-1 leading-snug text-justify text-slate-800">
+                          {parseBoldText(bullet)}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Education */}
+          {resumeData.education && resumeData.education.length > 0 && (
+            <div className="mb-4">
+              <SectionHeader title="Education" />
+              <div className="space-y-3">
+                {resumeData.education.map((edu: any, i: number) => (
+                  <div key={i} className="flex flex-row justify-between items-start">
+                    <div>
+                      <div className="font-bold" style={{ fontSize: '10.5pt', color: ACCENT }}>{edu.degree}</div>
+                      <div style={{ fontSize: '10pt' }} className="text-slate-700">{edu.institution}</div>
+                    </div>
+                    <div className="font-bold text-slate-500" style={{ fontSize: '10pt' }}>{edu.year}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      )}
-    </div>
-  );
-});
+      </div>
+    );
+  }
+);
 
 CertifiedTemplate.displayName = 'CertifiedTemplate';
