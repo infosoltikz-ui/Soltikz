@@ -11,6 +11,8 @@ import { CreateResumeSidebar } from '@/components/create-resume/CreateResumeSide
 import { HowItWorks } from '@/components/create-resume/HowItWorks'
 import { WorkspaceSection } from '@/components/create-resume/WorkspaceSection'
 import { DownloadSidebar } from '@/components/create-resume/DownloadSidebar'
+import { RegenerateSummaryModal } from '@/components/create-resume/RegenerateSummaryModal'
+import { ManualEditModal } from '@/components/create-resume/ManualEditModal'
 import { PersonalInfoForm } from '@/components/profile/PersonalInfoForm'
 import { EmploymentForm } from '@/components/profile/EmploymentForm'
 import { EducationForm } from '@/components/profile/EducationForm'
@@ -48,6 +50,10 @@ export default function CreateResumePage() {
   const [interviewPrep, setInterviewPrep] = useState<any>(null)
   const [atsData, setAtsData] = useState<any>(null)
   const [currentResumeId, setCurrentResumeId] = useState<string | null>(null)
+  
+  const [isRegenerateSummaryModalOpen, setIsRegenerateSummaryModalOpen] = useState(false)
+  const [isManualEditModalOpen, setIsManualEditModalOpen] = useState(false)
+
   const openModal = useUIStore((s) => s.openModal)
   const closeModal = useUIStore((s) => s.closeModal)
 
@@ -192,6 +198,40 @@ export default function CreateResumePage() {
     newResume.experience = [...aiProjects, ...baseProjects];
     setGeneratedResume(newResume);
     toast.success('Restored older roles to original base data');
+  };
+
+  const handleRegenerateSummary = async (firstPoint: string) => {
+    try {
+      const res = await fetch('/api/ai/regenerate-summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          masterProfile: profileData,
+          resumeType: resumeType === 'c2c' ? 'C2C (Contract to Hire)' : 'Full Time',
+          firstPoint,
+          resumeId: currentResumeId
+        })
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error);
+
+      setGeneratedResume({
+        ...generatedResume,
+        summary: data.summary
+      });
+      toast.success('Summary regenerated successfully!');
+    } catch (error: any) {
+      console.error(error);
+      toast.error('Failed to regenerate summary');
+    }
+  };
+
+  const handleManualEditSave = (newSkills: any[]) => {
+    setGeneratedResume({
+      ...generatedResume,
+      skills: newSkills
+    });
+    toast.success('Skills updated successfully!');
   };
 
   const handleLocalSave = (updatedProfile: any) => {
@@ -347,9 +387,19 @@ export default function CreateResumePage() {
                 Final Step: Review & Download
               </div>
               <div className="flex items-center gap-3">
+                <Button onClick={() => setIsRegenerateSummaryModalOpen(true)} variant="outline" className="h-10 px-4 rounded-lg border-slate-300 text-slate-700 bg-white shadow-sm hover:bg-slate-50">
+                  <div className="flex items-center gap-2">
+                    Refine Summary
+                  </div>
+                </Button>
+                <Button onClick={() => setIsManualEditModalOpen(true)} variant="outline" className="h-10 px-4 rounded-lg border-slate-300 text-slate-700 bg-white shadow-sm hover:bg-slate-50">
+                  <div className="flex items-center gap-2">
+                    Edit Skills
+                  </div>
+                </Button>
                 <Button onClick={applyBaseResumeFallback} variant="outline" className="h-10 px-4 rounded-lg border-slate-300 text-slate-700 bg-white shadow-sm hover:bg-slate-50">
                   <div className="flex items-center gap-2">
-                    Fallback: Base Data for Older Roles
+                    Fallback: Older Roles
                   </div>
                 </Button>
                 <Button onClick={handlePrint} className="h-10 px-6 rounded-lg bg-green-600 hover:bg-green-700 text-white shadow-md">
@@ -386,6 +436,19 @@ export default function CreateResumePage() {
             </div>
           </div>
         )}
+
+        {/* Modals for Step 3 fallbacks */}
+        <RegenerateSummaryModal 
+          isOpen={isRegenerateSummaryModalOpen}
+          onClose={() => setIsRegenerateSummaryModalOpen(false)}
+          onRegenerate={handleRegenerateSummary}
+        />
+        <ManualEditModal 
+          isOpen={isManualEditModalOpen}
+          onClose={() => setIsManualEditModalOpen(false)}
+          onSave={handleManualEditSave}
+          initialSkills={generatedResume?.skills || []}
+        />
       </main>
     </div>
   )
