@@ -39,6 +39,7 @@ export default function CreateResumePage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [step])
   const [isGenerating, setIsGenerating] = useState(false)
+  const [orchestratorState, setOrchestratorState] = useState<string>('')
   const [resumeType, setResumeType] = useState<'fulltime' | 'c2c'>('fulltime')
   const [selectedTemplateId, setSelectedTemplateId] = useState(DEFAULT_TEMPLATE_ID)
   const [profileData, setProfileData] = useState<any>({})
@@ -99,60 +100,79 @@ export default function CreateResumePage() {
 
   const handleGenerate = async (companyName: string, jobRole: string, jobDescription: string) => {
     setIsGenerating(true)
+    setOrchestratorState('Parsing Job Description...')
     try {
-      // 1. Call Orchestrator
-      const orchestratorRes = await fetch('/api/ai/orchestrator', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      // 1. Parse JD
+      const parseRes = await fetch('/api/ai/parse-jd', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ companyName, jobRole, jobDescription })
+      })
+      const parseData = await parseRes.json()
+      if (!parseData.success) throw new Error(parseData.error || 'Failed to parse JD')
+
+      setOrchestratorState('Building Resume Strategy...')
+      // 2. Generate Strategy
+      const strategyRes = await fetch('/api/ai/generate-strategy', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ parsedJdData: parseData.parsed_jd, masterProfile: profileData })
+      })
+      const strategyData = await strategyRes.json()
+      if (!strategyData.success) throw new Error(strategyData.error || 'Failed to generate strategy')
+
+      setOrchestratorState('Generating Resume Content...')
+      // 3. Generate Resume
+      const rType = resumeType === 'c2c' ? 'C2C (Contract to Hire)' : 'Full Time'
+      const resumeRes = await fetch('/api/ai/generate-resume', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           masterProfile: profileData,
-          companyName,
-          jobRole,
-          jobDescription,
-          resumeType: resumeType === 'c2c' ? 'C2C (Contract to Hire)' : 'Full Time'
+          parsedJdData: parseData.parsed_jd,
+          strategyData: strategyData.strategy,
+          resumeType: rType,
+          parsedJdId: parseData.record_id,
+          strategyId: strategyData.record_id,
+          title: `${rType} Resume - ${companyName}`
         })
       })
+      const resumeGenData = await resumeRes.json()
       
-      const data = await orchestratorRes.json()
-      
-      if (!data.success) throw new Error(data.error)
+      // Handle Paywall or generation error
+      if (!resumeGenData.success) {
+        if (resumeGenData.error === 'Paywall') {
+          throw new Error('Paywall');
+        }
+        throw new Error(resumeGenData.message || resumeGenData.error || 'Failed to generate resume')
+      }
 
-      setCurrentResumeId(data.resume_id)
+      setCurrentResumeId(resumeGenData.resume_id)
+      setGeneratedResume(resumeGenData.generated_resume)
 
-      // 2. Fetch the newly generated resume sections
-      const supabase = createClient()
-      const { data: sections } = await supabase.from('resume_sections').select('*').eq('resume_id', data.resume_id)
-      
-      if (sections) {
-        // Construct the expected structure for ResumeRenderer
-        const resume: any = {}
-        sections.forEach((sec: any) => {
-          resume[sec.section_type.toLowerCase()] = sec.content
+      setOrchestratorState('Finalizing ATS Analysis & Prep...')
+      // 4. Generate ATS & Prep concurrently
+      const [atsRes, prepRes] = await Promise.all([
+        fetch('/api/ai/analyze-ats', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            parsedJdData: parseData.parsed_jd, 
+            generatedResume: resumeGenData.generated_resume,
+            resumeId: resumeGenData.resume_id
+          })
+        }),
+        fetch('/api/ai/generate-prep', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            parsedJdData: parseData.parsed_jd,
+            generatedResume: resumeGenData.generated_resume,
+            resumeId: resumeGenData.resume_id
+          })
         })
-        setGeneratedResume(resume)
-      }
+      ])
 
-      // 3. Fetch interview prep materials
-      const { data: prep } = await supabase
-        .from('interview_preparations')
-        .select('*')
-        .eq('resume_id', data.resume_id)
-        .maybeSingle()
-      
-      if (prep) {
-        setInterviewPrep(prep)
-      }
+      const atsDataRes = await atsRes.json()
+      const prepDataRes = await prepRes.json()
 
-      // 4. Fetch ATS analysis
-      const { data: ats } = await supabase
-        .from('ats_analyses')
-        .select('*')
-        .eq('resume_id', data.resume_id)
-        .maybeSingle()
-
-      if (ats) {
-        setAtsData(ats)
-      }
+      if (atsDataRes.success) setAtsData(atsDataRes.analysis)
+      if (prepDataRes.success) setInterviewPrep(prepDataRes.prep)
       
       setStep(3)
     } catch (error: any) {
@@ -164,6 +184,7 @@ export default function CreateResumePage() {
       }
     } finally {
       setIsGenerating(false)
+      setOrchestratorState('')
     }
   }
 
@@ -356,8 +377,8 @@ export default function CreateResumePage() {
                 {isGenerating && (
                   <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center rounded-2xl border border-primary/20">
                     <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-                    <h3 className="text-xl font-bold text-slate-900">AI Orchestrator is Running...</h3>
-                    <p className="text-slate-500 font-medium mt-2">Parsing JD • Strategizing • Generating</p>
+                    <h3 className="text-xl font-bold text-slate-900">AI is Building Your Resume</h3>
+                    <p className="text-slate-500 font-medium mt-2 animate-pulse">{orchestratorState}</p>
                   </div>
                 )}
                 {/* Note: In a real app we would capture form inputs here and pass to handleGenerate */}

@@ -80,6 +80,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required payload data' }, { status: 400 });
     }
 
+    // --- PAYWALL / QUOTA CHECK ---
+    const { data: profile } = await supabase.from('profiles').select('plan_id, credits_remaining').eq('id', user.id).single();
+    
+    if (profile?.plan_id === 'FREE' && (profile?.credits_remaining || 0) <= 0) {
+      return NextResponse.json({ 
+        error: 'Paywall', 
+        message: 'You have used all 3 of your free AI generation credits. Please upgrade to Pro to continue generating unlimited resumes.' 
+      }, { status: 403 });
+    }
+    // -----------------------------
+
     // Call the AI Gateway
     const aiResponse = await generateAIResponse<any>({
       systemPrompt: SYSTEM_PROMPT,
@@ -102,7 +113,7 @@ export async function POST(req: Request) {
         strategy_id: strategyId,
         resume_type: resumeType,
         title: title || `${resumeType} Resume - ${parsedJdData.companyName || 'Draft'}`,
-        status: 'Generating' // Next step will be validation
+        status: 'Ready'
       })
       .select()
       .single();
@@ -133,6 +144,19 @@ export async function POST(req: Request) {
       duration_ms: aiResponse.durationMs,
       status: 'success'
     });
+
+    // Log the usage event for real stats
+    await supabase.from('usage_events').insert({
+      user_id: user.id,
+      resume_id: resumeRecord.id,
+      event_type: 'resume_generated'
+    });
+
+    // --- DEDUCT QUOTA ---
+    if (profile?.plan_id === 'FREE') {
+      await supabase.from('profiles').update({ credits_remaining: (profile.credits_remaining - 1) }).eq('id', user.id);
+    }
+    // --------------------
 
     return NextResponse.json({ 
       success: true, 

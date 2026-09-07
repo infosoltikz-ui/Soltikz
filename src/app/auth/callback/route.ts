@@ -16,20 +16,13 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     
     if (!error) {
-      const forwardedHost = request.headers.get('x-forwarded-host')
-      const forwardedProto = request.headers.get('x-forwarded-proto') || 'https'
-      const isLocalEnv = process.env.NODE_ENV === 'development'
-
+      // Create a clean redirect URL using the original request URL as the base.
+      // This works reliably in Vercel and local environments.
       const destination = next.startsWith('/') ? next : `/${next}`
-      const targetQuery = destination.includes('?') ? '&login=success' : '?login=success'
+      const targetUrl = new URL(destination, request.url)
+      targetUrl.searchParams.set('login', 'success')
 
-      if (isLocalEnv) {
-        return NextResponse.redirect(`${origin}${destination}${targetQuery}`)
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`${forwardedProto}://${forwardedHost}${destination}${targetQuery}`)
-      } else {
-        return NextResponse.redirect(`${origin}${destination}${targetQuery}`)
-      }
+      return NextResponse.redirect(targetUrl)
     } else {
       console.error('OAuth Exchange Error:', error.message)
       return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(error.message)}`)
