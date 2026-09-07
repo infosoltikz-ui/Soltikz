@@ -114,7 +114,7 @@ export default function CreateResumePage() {
       // 2. Generate Strategy
       const strategyRes = await fetch('/api/ai/generate-strategy', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ parsedJdData: parseData.parsed_jd, masterProfile: profileData })
+        body: JSON.stringify({ parsedJdData: parseData.parsed_data, masterProfile: profileData, parsedJdId: parseData.parsed_jd_id })
       })
       const strategyData = await strategyRes.json()
       if (!strategyData.success) throw new Error(strategyData.error || 'Failed to generate strategy')
@@ -126,11 +126,11 @@ export default function CreateResumePage() {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           masterProfile: profileData,
-          parsedJdData: parseData.parsed_jd,
-          strategyData: strategyData.strategy,
+          parsedJdData: parseData.parsed_data,
+          strategyData: strategyData.strategy_data,
           resumeType: rType,
-          parsedJdId: parseData.record_id,
-          strategyId: strategyData.record_id,
+          parsedJdId: parseData.parsed_jd_id,
+          strategyId: strategyData.strategy_id,
           title: `${rType} Resume - ${companyName}`
         })
       })
@@ -153,7 +153,7 @@ export default function CreateResumePage() {
         fetch('/api/ai/analyze-ats', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
-            parsedJdData: parseData.parsed_jd, 
+            parsedJdData: parseData.parsed_data, 
             generatedResume: resumeGenData.generated_resume,
             resumeId: resumeGenData.resume_id
           })
@@ -161,7 +161,7 @@ export default function CreateResumePage() {
         fetch('/api/ai/generate-prep', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            parsedJdData: parseData.parsed_jd,
+            parsedJdData: parseData.parsed_data,
             generatedResume: resumeGenData.generated_resume,
             resumeId: resumeGenData.resume_id
           })
