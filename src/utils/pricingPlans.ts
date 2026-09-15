@@ -5,6 +5,8 @@ export interface PricingPlan {
   period: 'month' | 'year'
 }
 
+export const FREE_TIER_CREDITS = 20
+
 export const PRO_MONTHLY: PricingPlan = {
   id: 'PRO_MONTHLY',
   label: 'Pro Monthly',

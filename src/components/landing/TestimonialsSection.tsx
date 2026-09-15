@@ -32,7 +32,7 @@ export function TestimonialsSection() {
   const displayItems = [...marqueeItems, ...marqueeItems];
 
   return (
-    <section className="py-20 bg-slate-50 border-t border-slate-100">
+    <section className="py-20 bg-white border-t border-slate-100">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
@@ -42,8 +42,8 @@ export function TestimonialsSection() {
 
         <div className="overflow-hidden relative w-full -mx-4 px-4 sm:mx-0 sm:px-0 py-4">
           {/* Gradient fade on edges for better effect */}
-          <div className="hidden sm:block absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" />
-          <div className="hidden sm:block absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" />
+          <div className="hidden sm:block absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+          <div className="hidden sm:block absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
           
           <div className="flex gap-6 w-max animate-marquee hover:[animation-play-state:paused]">
             {displayItems.map((testimonial, idx) => (

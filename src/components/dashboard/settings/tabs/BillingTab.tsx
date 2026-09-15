@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Zap, Loader2, AlertTriangle } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { createClient } from '@/utils/supabase/client'
-import { getPlan, isPremiumPlan } from '@/utils/pricingPlans'
+import { getPlan, isPremiumPlan, FREE_TIER_CREDITS } from '@/utils/pricingPlans'
 import { cn } from '@/utils/cn'
 import Script from 'next/script'
 import { toast } from 'react-hot-toast'
@@ -125,7 +125,7 @@ export function BillingTab({ initialYearly = false }: { initialYearly?: boolean 
             ) : (
               <p className="text-[14px] text-slate-300 font-medium flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-amber-400" />
-                You have {20 - Math.max(0, 3 - (profile?.credits_remaining || 0))} free AI credits remaining.
+                You have {profile?.credits_remaining ?? FREE_TIER_CREDITS} free AI credits remaining.
               </p>
             )}
           </div>

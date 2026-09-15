@@ -24,10 +24,12 @@ export function DashboardHeader({ title, subtitle, greeting }: DashboardHeaderPr
           .eq('id', user.id)
           .single()
         
-        if (profile) {
-          setFullName(profile.full_name || user.user_metadata?.full_name || 'User')
-        } else {
-          setFullName(user.user_metadata?.full_name || 'User')
+        if (profile?.full_name) {
+          setFullName(profile.full_name)
+        } else if (user.user_metadata?.full_name) {
+          setFullName(user.user_metadata.full_name)
+        } else if (user.email) {
+          setFullName(user.email.split('@')[0])
         }
       }
     }
@@ -35,15 +37,19 @@ export function DashboardHeader({ title, subtitle, greeting }: DashboardHeaderPr
   }, [])
 
   return (
-    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pl-12 md:pl-0 pb-6 border-b border-slate-200">
+    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pl-12 md:pl-0 pb-5 border-b border-slate-200">
       <div>
-        <h1 className="text-[26px] font-black text-slate-900 tracking-tight leading-tight">{title}</h1>
+        <h1 className="text-[22px] sm:text-[24px] font-bold text-slate-900 tracking-tight leading-tight">
+          {title}
+        </h1>
         {greeting && (
-          <p className="text-[14px] font-medium text-slate-500 mt-1.5">
-            Welcome back, <span className="font-bold text-slate-700">{fullName}</span> <span className="inline-block animate-wave">👋</span>
+          <p className="text-[13px] font-medium text-slate-500 mt-1">
+            Welcome back, <span className="font-semibold text-slate-800">{fullName}</span>
           </p>
         )}
-        {!greeting && subtitle && <p className="text-[14px] font-medium text-slate-500 mt-1.5">{subtitle}</p>}
+        {!greeting && subtitle && (
+          <p className="text-[13px] font-medium text-slate-500 mt-1">{subtitle}</p>
+        )}
       </div>
 
       <UserMenu />

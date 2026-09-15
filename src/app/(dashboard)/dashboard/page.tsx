@@ -8,6 +8,7 @@ import { LoginToast } from '@/components/dashboard/LoginToast'
 import { OnboardingSteps } from '@/components/dashboard/OnboardingSteps'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
+import { FREE_TIER_CREDITS } from '@/utils/pricingPlans'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,44 +27,76 @@ export default async function DashboardPage() {
     .eq('id', user.id)
     .single()
 
-  // Fetch Resumes
+  // Fetch Resumes with complete info
   const { data: resumes } = await supabase
     .from('resumes_v2')
-    .select('id, title, updated_at, ats_analyses ( overall_score )')
+    .select('id, title, resume_type, updated_at, created_at, ats_analyses ( overall_score )')
     .eq('user_id', user.id)
     .order('updated_at', { ascending: false })
 
-  // Calculate stats
-  const resumesCreated = profile?.resumes_generated || 0
+  // Calculate accurate live stats
+  const totalResumes = resumes?.length || profile?.resumes_generated || 0
 
-  const atsScores = resumes?.map(r => (r as any).ats_analyses?.[0]?.overall_score).filter(Boolean) || []
-  const avgAts = atsScores.length > 0 ? Math.round(atsScores.reduce((a, b) => a + b, 0) / atsScores.length) : 0
+  const scoredResumes = resumes?.filter((r: any) => {
+    const score = r.ats_analyses?.[0]?.overall_score
+    return typeof score === 'number' && score > 0
+  }) || []
 
-  // Calculate profile completion based on master_resume_data fields
+  const avgAts = scoredResumes.length > 0
+    ? Math.round(scoredResumes.reduce((sum: number, r: any) => sum + (r.ats_analyses?.[0]?.overall_score || 0), 0) / scoredResumes.length)
+    : null
+
+  // Calculate profile completion accurately based on master_resume_data & profile
   const masterData = profile?.master_resume_data || {}
-  let profileCompletion = 0
-  if (profile?.full_name) profileCompletion += 25
-  if (profile?.phone) profileCompletion += 25
-  if (masterData.experience) profileCompletion += 25
-  if (masterData.education) profileCompletion += 25
+  const personalInfo = masterData.personal_info || {}
+  let completedSections = 0
+  const totalSections = 5
+
+  if ((profile?.full_name || personalInfo.firstName) && (profile?.phone || personalInfo.phone || personalInfo.email)) {
+    completedSections++
+  }
+  if (personalInfo.summary || personalInfo.targetRole) {
+    completedSections++
+  }
+  if ((masterData.employment && masterData.employment.length > 0) || (masterData.experience && masterData.experience.length > 0)) {
+    completedSections++
+  }
+  if (masterData.education && masterData.education.length > 0) {
+    completedSections++
+  }
+  if (masterData.skills && masterData.skills.length > 0) {
+    completedSections++
+  }
+
+  const profileCompletion = Math.round((completedSections / totalSections) * 100)
+  const planId = profile?.plan_id || 'FREE'
+  const creditsRemaining = profile?.credits_remaining ?? FREE_TIER_CREDITS
 
   return (
-    <div className="px-8 pt-8 pb-8 max-w-[1600px] mx-auto">
+    <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-12 max-w-[1600px] mx-auto bg-slate-50/50 min-h-screen">
       <LoginToast />
       <DashboardHeader title="Dashboard" greeting />
 
-      <main className="space-y-8">
-        <OnboardingSteps profileCompletion={profileCompletion} resumesCreated={resumesCreated} />
+      <main className="space-y-6">
+        <OnboardingSteps
+          profileCompletion={profileCompletion}
+          resumesCreated={totalResumes}
+        />
 
         <StatCards
-          resumesCreated={resumesCreated}
+          resumesCreated={totalResumes}
           avgAts={avgAts}
+          scoredCount={scoredResumes.length}
           profileCompletion={profileCompletion}
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
           <RecentResumes resumes={resumes || []} />
-          <CurrentPlanCard />
+          <CurrentPlanCard
+            initialPlanId={planId}
+            initialCreditsRemaining={creditsRemaining}
+            totalResumes={totalResumes}
+          />
         </div>
 
         <QuickActions />

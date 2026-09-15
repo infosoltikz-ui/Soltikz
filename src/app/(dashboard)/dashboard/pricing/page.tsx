@@ -1,16 +1,13 @@
 'use client'
 
-import { useState } from 'react'
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader'
-import { PricingToggle } from '@/components/dashboard/pricing/PricingToggle'
-import { PricingTiers } from '@/components/dashboard/pricing/PricingTiers'
+import { PricingSection } from '@/components/landing/PricingSection'
 import { PricingTable } from '@/components/dashboard/pricing/PricingTable'
 import { WhyUpgrade } from '@/components/dashboard/pricing/WhyUpgrade'
 import { PricingFAQ } from '@/components/dashboard/pricing/PricingFAQ'
 import { PricingCTA } from '@/components/dashboard/pricing/PricingCTA'
 
 export default function PricingPage() {
-  const [isYearly, setIsYearly] = useState(true)
 
   return (
     <div className="p-8 max-w-[1600px] mx-auto min-h-screen">
@@ -24,9 +21,10 @@ export default function PricingPage() {
       {/* Main Content */}
       <div className="max-w-5xl mx-auto w-full">
 
-        {/* Pricing Toggle & Tiers */}
-        <PricingToggle isYearly={isYearly} onChange={setIsYearly} />
-        <PricingTiers isYearly={isYearly} />
+        {/* Pricing Section (Shared with Landing Page) */}
+        <div className="-mx-8">
+          <PricingSection />
+        </div>
 
         {/* Feature Comparison Table */}
         <PricingTable />

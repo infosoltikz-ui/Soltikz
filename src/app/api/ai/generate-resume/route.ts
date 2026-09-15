@@ -83,7 +83,8 @@ export async function POST(req: Request) {
     // --- PAYWALL / QUOTA CHECK ---
     const { data: profile } = await supabase.from('profiles').select('plan_id, credits_remaining').eq('id', user.id).single();
     
-    if (profile?.plan_id === 'FREE' && (profile?.credits_remaining || 0) <= -17) {
+    const availableCredits = profile?.credits_remaining ?? 20;
+    if (profile?.plan_id === 'FREE' && availableCredits <= 0) {
       return NextResponse.json({ 
         error: 'Paywall', 
         message: 'You have used all 20 of your free AI generation credits. Please upgrade to Pro to continue generating unlimited resumes.' 
@@ -154,7 +155,8 @@ export async function POST(req: Request) {
 
     // --- DEDUCT QUOTA ---
     if (profile?.plan_id === 'FREE') {
-      await supabase.from('profiles').update({ credits_remaining: (profile.credits_remaining - 1) }).eq('id', user.id);
+      const remaining = profile?.credits_remaining ?? 20;
+      await supabase.from('profiles').update({ credits_remaining: Math.max(0, remaining - 1) }).eq('id', user.id);
     }
     // --------------------
 

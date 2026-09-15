@@ -1,77 +1,96 @@
-import { FileText, TrendingUp } from 'lucide-react'
+import { FileText, TrendingUp, CheckCircle2 } from 'lucide-react'
 
 function completionMessage(profileCompletion: number) {
-  if (profileCompletion === 100) return "Profile complete!"
-  if (profileCompletion >= 50) return "Almost there"
-  if (profileCompletion > 0) return "Keep going"
-  return "Let's get started"
+  if (profileCompletion === 100) return "Master Profile complete"
+  if (profileCompletion >= 80) return "Almost complete"
+  if (profileCompletion >= 40) return "Partially completed"
+  if (profileCompletion > 0) return "In progress"
+  return "Profile not started"
 }
 
 export function StatCards({
   resumesCreated,
   avgAts,
+  scoredCount = 0,
   profileCompletion,
 }: {
   resumesCreated: number
-  avgAts: number
+  avgAts: number | null
+  scoredCount?: number
   profileCompletion: number
 }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
 
       {/* Resumes Created */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-        <div className="flex justify-between items-start mb-4">
+      <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:border-slate-300 transition-colors">
+        <div className="flex justify-between items-start mb-3">
           <div>
-            <div className="text-[12px] font-bold text-slate-500 mb-1">Resumes Created</div>
-            <div className="text-4xl font-black text-slate-900">{resumesCreated}</div>
+            <div className="text-[12px] font-semibold uppercase tracking-wider text-slate-500 mb-1">
+              Resumes Created
+            </div>
+            <div className="text-3xl font-extrabold text-slate-900 tracking-tight">
+              {resumesCreated}
+            </div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-            <FileText className="w-5 h-5 text-primary" strokeWidth={2.5} />
+          <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center">
+            <FileText className="w-4 h-4 text-slate-600" strokeWidth={2} />
           </div>
         </div>
-        <div className="text-[11px] font-bold text-slate-400">
-          {resumesCreated > 0 ? `${resumesCreated} tailored to real job descriptions` : 'None yet — create your first one'}
+        <div className="text-[12px] font-medium text-slate-500">
+          {resumesCreated > 0
+            ? `${resumesCreated} tailored resume${resumesCreated === 1 ? '' : 's'} in library`
+            : 'No resumes created yet'}
         </div>
       </div>
 
       {/* ATS Score */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-        <div className="flex justify-between items-start mb-4">
+      <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:border-slate-300 transition-colors">
+        <div className="flex justify-between items-start mb-3">
           <div>
-            <div className="text-[12px] font-bold text-slate-500 mb-1">ATS Score (Avg)</div>
-            <div className="text-4xl font-black text-slate-900">{avgAts}%</div>
+            <div className="text-[12px] font-semibold uppercase tracking-wider text-slate-500 mb-1">
+              ATS Score (Avg)
+            </div>
+            <div className="text-3xl font-extrabold text-slate-900 tracking-tight">
+              {avgAts !== null && avgAts > 0 ? `${avgAts}%` : '—'}
+            </div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center">
-            <TrendingUp className="w-5 h-5 text-orange-500" strokeWidth={2.5} />
+          <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+            <TrendingUp className="w-4 h-4 text-emerald-600" strokeWidth={2} />
           </div>
         </div>
-        <div className="text-[11px] font-bold text-slate-400">
-          {resumesCreated > 0 ? `Based on ${resumesCreated} resume${resumesCreated === 1 ? '' : 's'}` : 'No resumes scored yet'}
+        <div className="text-[12px] font-medium text-slate-500">
+          {avgAts !== null && avgAts > 0
+            ? `Calculated across ${scoredCount} scored resume${scoredCount === 1 ? '' : 's'}`
+            : 'Run ATS check to generate score'}
         </div>
       </div>
 
       {/* Profile Completion */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center justify-between">
+      <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:border-slate-300 transition-colors flex items-center justify-between">
         <div>
-          <div className="text-[12px] font-bold text-slate-500 mb-1">Profile Completion</div>
-          <div className="text-4xl font-black text-slate-900 mb-2">{profileCompletion}%</div>
-          <div className="text-[11px] font-bold text-slate-400">
+          <div className="text-[12px] font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            Profile Completion
+          </div>
+          <div className="text-3xl font-extrabold text-slate-900 tracking-tight mb-1">
+            {profileCompletion}%
+          </div>
+          <div className="text-[12px] font-medium text-slate-500">
             {completionMessage(profileCompletion)}
           </div>
         </div>
-        <div className="relative w-14 h-14 shrink-0">
+        <div className="relative w-12 h-12 shrink-0">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
             <path
               className="text-slate-100"
-              strokeWidth="4"
+              strokeWidth="3.5"
               stroke="currentColor"
               fill="none"
               d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
             />
             <path
-              className="text-primary"
-              strokeWidth="4"
+              className={profileCompletion === 100 ? "text-emerald-600" : "text-primary"}
+              strokeWidth="3.5"
               strokeDasharray={`${profileCompletion}, 100`}
               strokeLinecap="round"
               stroke="currentColor"

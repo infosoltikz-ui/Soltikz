@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { HeroSection } from '@/components/landing/HeroSection'
-import { PricingCards } from '@/components/pricing/PricingCards'
+import { PricingSection } from '@/components/landing/PricingSection'
 import { PricingCompare } from '@/components/pricing/PricingCompare'
 import { PricingBanner } from '@/components/pricing/PricingBanner'
 import { PricingFAQ } from '@/components/pricing/PricingFAQ'
@@ -21,8 +21,7 @@ export const metadata: Metadata = {
 export default function PricingPage() {
   return (
     <main className="min-h-screen bg-slate-50 pb-16">
-      <HeroSection />
-      <PricingCards />
+      <PricingSection />
       <PricingCompare />
       <PricingBanner />
       <PricingFAQ />

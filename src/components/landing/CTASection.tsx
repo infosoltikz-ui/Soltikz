@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/Button'
 
 export function CTASection() {
   return (
-    <section className="py-8 bg-white px-4">
-      <div className="container mx-auto max-w-[1200px] relative overflow-hidden rounded-[32px] bg-[#F6FBF7] border border-primary/10">
+    <section className="py-8 bg-slate-50 px-4">
+      <div className="container mx-auto max-w-[1200px] relative overflow-hidden rounded-[32px] bg-white border border-slate-200">
         
         <div className="relative p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
           
