@@ -1,13 +1,13 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Target, CheckCircle, Plus, Sparkles, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'react-hot-toast'
 import { createClient } from '@/utils/supabase/client'
 
 interface SkillsGapWidgetProps {
-  userSkills?: string[]
+  userSkills?: any
   targetRole?: string
 }
 
@@ -26,15 +26,44 @@ const DEFAULT_HIGH_DEMAND_SKILLS = [
   'Microservices',
 ]
 
+function extractSkillStrings(raw: any): string[] {
+  if (!raw) return []
+  if (!Array.isArray(raw)) return []
+
+  const results: string[] = []
+  for (const item of raw) {
+    if (typeof item === 'string' && item.trim()) {
+      results.push(item.trim())
+    } else if (item && typeof item === 'object') {
+      if (Array.isArray(item.items)) {
+        for (const sub of item.items) {
+          if (typeof sub === 'string' && sub.trim()) {
+            results.push(sub.trim())
+          }
+        }
+      } else if (typeof item.name === 'string' && item.name.trim()) {
+        results.push(item.name.trim())
+      } else if (typeof item.skill === 'string' && item.skill.trim()) {
+        results.push(item.skill.trim())
+      }
+    }
+  }
+  return Array.from(new Set(results))
+}
+
 export function SkillsGapWidget({
   userSkills = [],
   targetRole = 'Software Engineer'
 }: SkillsGapWidgetProps) {
-  const [skillsList, setSkillsList] = useState<string[]>(userSkills)
+  const [skillsList, setSkillsList] = useState<string[]>(() => extractSkillStrings(userSkills))
   const [addingSkill, setAddingSkill] = useState<string | null>(null)
 
-  // Normalize user skills
-  const normalizedUserSkills = skillsList.map(s => s.trim().toLowerCase())
+  useEffect(() => {
+    setSkillsList(extractSkillStrings(userSkills))
+  }, [userSkills])
+
+  // Normalize user skills safely
+  const normalizedUserSkills = skillsList.map(s => String(s).trim().toLowerCase())
 
   // Matched vs missing
   const matchedSkills = DEFAULT_HIGH_DEMAND_SKILLS.filter(s =>
@@ -64,22 +93,41 @@ export function SkillsGapWidget({
         .single()
 
       const currentMaster = profile?.master_resume_data || {}
-      const existingSkills: string[] = currentMaster.skills || []
-      const updatedSkills = Array.from(new Set([...existingSkills, skill]))
+      const existingRawSkills = currentMaster.skills || []
+
+      let updatedRawSkills: any
+
+      if (Array.isArray(existingRawSkills) && existingRawSkills.length > 0 && typeof existingRawSkills[0] === 'object' && Array.isArray(existingRawSkills[0].items)) {
+        // Structured category format
+        updatedRawSkills = existingRawSkills.map((cat: any, idx: number) => {
+          if (idx === 0) {
+            return {
+              ...cat,
+              items: Array.from(new Set([...cat.items, skill]))
+            }
+          }
+          return cat
+        })
+      } else if (Array.isArray(existingRawSkills)) {
+        // Flat array
+        updatedRawSkills = Array.from(new Set([...existingRawSkills, skill]))
+      } else {
+        updatedRawSkills = [skill]
+      }
 
       const { error } = await supabase
         .from('profiles')
         .update({
           master_resume_data: {
             ...currentMaster,
-            skills: updatedSkills
+            skills: updatedRawSkills
           }
         })
         .eq('id', user.id)
 
       if (error) throw error
 
-      setSkillsList(updatedSkills)
+      setSkillsList(prev => Array.from(new Set([...prev, skill])))
       toast.success(`Added "${skill}" to Master Profile!`)
     } catch (e: any) {
       console.error(e)
