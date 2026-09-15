@@ -24,6 +24,7 @@ import { ArrowRight, ArrowLeft, Loader2, Download } from 'lucide-react'
 import { TemplateSelector } from '@/components/create-resume/TemplateSelector'
 import { getTemplateById, DEFAULT_TEMPLATE_ID } from '@/components/create-resume/templates/registry'
 import { downloadResumeDocx } from '@/components/create-resume/exportDocx'
+import { isPremiumPlan } from '@/utils/pricingPlans'
 import { createClient } from '@/utils/supabase/client'
 import { logUsageEvent } from '@/utils/logUsageEvent'
 import { toast } from 'react-hot-toast'
@@ -266,7 +267,8 @@ export default function CreateResumePage() {
       localMode: true,
       onLocalSave: handleLocalSave,
       onNext: () => setEditingTab(null), // just close form on "Save & Next" if they click it
-      onCancel: () => setEditingTab(null)
+      onCancel: () => setEditingTab(null),
+      resumeType: resumeType
     }
 
     switch (editingTab) {
@@ -288,8 +290,8 @@ export default function CreateResumePage() {
             <span className="text-2xl">🚀</span>
           </div>
           <h3 className="text-xl font-bold text-slate-900 mb-2">You've reached your limit!</h3>
-          <p className="text-slate-500 mb-6 leading-relaxed">
-            You have used all 3 of your free AI resume generations. Upgrade to our Pro plan to unlock unlimited resumes, cover letters, and advanced ATS optimization.
+          <p className="text-[13px] text-slate-500 mb-6 leading-relaxed">
+            You have used all 20 of your free AI resume generations. Upgrade to our Pro plan to unlock unlimited resumes, cover letters, and advanced ATS optimization.
           </p>
           <div className="flex gap-3 w-full">
             <Button variant="outline" className="flex-1" onClick={() => closeModal('paywall-modal')}>
@@ -312,8 +314,19 @@ export default function CreateResumePage() {
             <HowItWorks />
             
             <div className="flex flex-col gap-6">
-              <TemplateSelector selectedId={selectedTemplateId} onChange={setSelectedTemplateId} />
-              <ResumeTypeSelector selectedType={resumeType} onChange={setResumeType} />
+              <TemplateSelector 
+                selectedId={selectedTemplateId} 
+                onChange={setSelectedTemplateId} 
+                isSubscribed={isPremiumPlan(profileData?.plan_id)}
+                onRequiresUpgrade={() => openModal('paywall-modal')}
+                resumeType={resumeType}
+              />
+              <ResumeTypeSelector selectedType={resumeType} onChange={(type) => {
+                setResumeType(type)
+                // Automatically switch to the correct default template for the mode
+                if (type === 'c2c') setSelectedTemplateId('c2c')
+                else if (selectedTemplateId === 'c2c') setSelectedTemplateId('modern')
+              }} />
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
                 <div className="mb-8 flex justify-between items-center">
                   <div>

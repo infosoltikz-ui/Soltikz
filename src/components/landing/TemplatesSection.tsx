@@ -1,6 +1,8 @@
 "use client";
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
+import { RESUME_TEMPLATES } from '@/components/create-resume/templates/registry'
+import { sampleResumeData, sampleProfileData, c2cSampleData } from '@/components/create-resume/templates/sampleData'
 
 export function TemplatesSection() {
   return (
@@ -20,42 +22,32 @@ export function TemplatesSection() {
 
         {/* Templates Display */}
         <div className="flex items-center gap-6 overflow-x-auto pb-8 snap-x no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="shrink-0 w-[240px] sm:w-[280px] snap-center">
-              <div className="relative rounded-2xl bg-white shadow-sm border border-slate-200 overflow-hidden aspect-[1/1.4] hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group">
-                {/* Dummy Template Visualization */}
-                <div className="w-full h-full flex flex-col p-4 opacity-50 group-hover:opacity-100 transition-opacity">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 rounded-full bg-slate-200 shrink-0" />
-                    <div>
-                      <div className="w-20 h-2 bg-slate-800 rounded-full mb-1.5" />
-                      <div className="w-12 h-1.5 bg-slate-400 rounded-full" />
+          {RESUME_TEMPLATES.filter(t => t.id !== 'c2c').map((template) => {
+            const TemplateComponent = template.component
+            return (
+              <div key={template.id} className="shrink-0 w-[240px] sm:w-[280px] snap-center">
+                <Link href="/templates">
+                  <div className="relative rounded-2xl bg-white shadow-sm border border-slate-200 overflow-hidden aspect-[1/1.4] hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group flex justify-center">
+                    <div
+                      className="absolute top-0 origin-top pointer-events-none"
+                      style={{ width: '850px', transform: 'scale(0.32)' }}
+                    >
+                      <TemplateComponent
+                        resumeData={template.id === 'c2c' ? c2cSampleData : sampleResumeData}
+                        profileData={sampleProfileData}
+                      />
                     </div>
-                  </div>
-                  <div className="w-full h-1.5 bg-primary/20 rounded-full mb-4" />
-                  <div className="flex gap-4 flex-1">
-                    <div className="w-1/3 space-y-2">
-                      <div className="w-full h-1.5 bg-slate-200 rounded-full" />
-                      <div className="w-5/6 h-1.5 bg-slate-200 rounded-full" />
-                      <div className="w-full h-1.5 bg-slate-200 rounded-full" />
-                    </div>
-                    <div className="w-2/3 space-y-3">
-                      <div>
-                        <div className="w-1/2 h-2 bg-slate-800 rounded-full mb-1" />
-                        <div className="w-full h-1.5 bg-slate-200 rounded-full mb-0.5" />
-                        <div className="w-4/5 h-1.5 bg-slate-200 rounded-full" />
-                      </div>
-                      <div>
-                        <div className="w-1/2 h-2 bg-slate-800 rounded-full mb-1" />
-                        <div className="w-full h-1.5 bg-slate-200 rounded-full mb-0.5" />
-                        <div className="w-3/4 h-1.5 bg-slate-200 rounded-full" />
+
+                    <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/5 transition-colors flex items-center justify-center">
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-slate-900 text-sm font-bold px-4 py-2 rounded-full shadow-sm backdrop-blur-sm transform translate-y-2 group-hover:translate-y-0 duration-200">
+                        Use Template
                       </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* Carousel Indicators */}

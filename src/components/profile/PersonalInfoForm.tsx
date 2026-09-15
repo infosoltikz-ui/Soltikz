@@ -10,14 +10,16 @@ export function PersonalInfoForm({
   onNext,
   localMode,
   onLocalSave,
-  onCancel
+  onCancel,
+  resumeType
 }: {
   profile: any,
   setProfile?: (p: any) => void,
   onNext?: () => void,
   localMode?: boolean,
   onLocalSave?: (profile: any) => void,
-  onCancel?: () => void
+  onCancel?: () => void,
+  resumeType?: 'c2c' | 'fulltime'
 }) {
   const supabase = createClient()
   const [isLoading, setIsLoading] = useState(false)
@@ -33,6 +35,9 @@ export function PersonalInfoForm({
     linkedin: personalInfo.linkedin || '',
     location: personalInfo.location || '',
     summary: personalInfo.summary || '',
+    workAuthorization: profile?.work_authorization || '',
+    relocation: profile?.relocation || '',
+    availability: profile?.availability || '',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,6 +62,9 @@ export function PersonalInfoForm({
       const updates = {
         full_name: `${formData.firstName} ${formData.lastName}`.trim(),
         phone: formData.phone,
+        work_authorization: formData.workAuthorization,
+        relocation: formData.relocation,
+        availability: formData.availability,
         master_resume_data: newMasterData
       }
       
@@ -98,6 +106,64 @@ export function PersonalInfoForm({
       {/* Form Body */}
       <div className="px-8 py-8">
         <div className="space-y-8">
+          {resumeType === 'c2c' && (
+            <>
+              <div>
+                <h3 className="text-[14px] font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[11px]">C</span>
+                  C2C Requirements
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div>
+                    <label className="block text-[12px] font-bold text-slate-700 mb-2">Work Authorization</label>
+                    <select
+                      name="workAuthorization"
+                      value={formData.workAuthorization}
+                      onChange={handleChange as any}
+                      className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                    >
+                      <option value="">Select status...</option>
+                      <option value="US Citizen">US Citizen</option>
+                      <option value="Green Card">Green Card</option>
+                      <option value="H1B">H1B</option>
+                      <option value="H4 EAD">H4 EAD</option>
+                      <option value="OPT EAD">OPT EAD</option>
+                      <option value="CPT">CPT</option>
+                      <option value="TN Visa">TN Visa</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[12px] font-bold text-slate-700 mb-2">Relocation</label>
+                    <select
+                      name="relocation"
+                      value={formData.relocation}
+                      onChange={handleChange as any}
+                      className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                    >
+                      <option value="">Select option...</option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                      <option value="Open to Relocate">Open to Relocate</option>
+                      <option value="Remote Only">Remote Only</option>
+                      <option value="Hybrid Only">Hybrid Only</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[12px] font-bold text-slate-700 mb-2">Availability</label>
+                    <input 
+                      type="text" 
+                      name="availability"
+                      value={formData.availability} 
+                      onChange={handleChange}
+                      placeholder="e.g. Immediate, 2 Weeks"
+                      className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="h-px bg-slate-100" />
+            </>
+          )}
 
           {/* Name Row */}
           <div>
@@ -220,19 +286,38 @@ export function PersonalInfoForm({
           {/* Professional Summary */}
           <div>
             <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4">Professional Summary</p>
-            <div>
-              <label className="block text-[13px] font-semibold text-slate-700 mb-2">
-                Summary
-              </label>
-              <textarea
-                name="summary"
-                value={formData.summary}
-                onChange={handleChange as any}
-                rows={5}
-                placeholder="A brief summary of your professional background and career goals..."
-                className="w-full p-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-[14px] font-medium text-slate-900 transition-all placeholder:text-slate-300 resize-y"
-              ></textarea>
-            </div>
+            
+            {resumeType === 'c2c' ? (
+              <div className="space-y-3">
+                <label className="block text-[13px] font-semibold text-slate-700">
+                  Capability Bullets (8-10 recommended)
+                </label>
+                <p className="text-[12px] text-slate-500 mb-2">Each bullet must be exactly two lines long on the final resume. Do not use first-person pronouns.</p>
+                <textarea
+                  name="summary"
+                  value={formData.summary}
+                  onChange={handleChange as any}
+                  rows={8}
+                  placeholder="• [ACTION VERB] + [what you did] + [tool] + [scope] + [outcome]&#10;• [ACTION VERB] + [what you did] + [tool] + [scope] + [outcome]&#10;..."
+                  className="w-full p-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-[14px] font-medium text-slate-900 transition-all placeholder:text-slate-300 resize-y leading-relaxed"
+                ></textarea>
+              </div>
+            ) : (
+              <div>
+                <label className="block text-[13px] font-semibold text-slate-700 mb-1">
+                  Prose Summary
+                </label>
+                <p className="text-[12px] text-slate-500 mb-2">Write a single paragraph of 5–6 lines. Do not use bullets or first-person pronouns.</p>
+                <textarea
+                  name="summary"
+                  value={formData.summary}
+                  onChange={handleChange as any}
+                  rows={5}
+                  placeholder="[Title] with [N]+ years in [domain / environment type], focused on [your core function]."
+                  className="w-full p-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-[14px] font-medium text-slate-900 transition-all placeholder:text-slate-300 resize-y leading-relaxed"
+                ></textarea>
+              </div>
+            )}
           </div>
 
         </div>

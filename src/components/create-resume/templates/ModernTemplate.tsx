@@ -30,8 +30,17 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
   return (
     <div
       ref={ref}
-      className="bg-white w-full max-w-[850px] mx-auto min-h-[1100px] shadow-sm border border-slate-200 text-black"
-      style={{ fontFamily: selectedFont, color: '#000000', padding: '40px' }}
+      className="bg-white w-[794px] mx-auto shadow-sm border border-slate-200 text-black"
+      style={{
+        boxSizing: 'border-box',
+        height: '1123px',
+        padding: '57px 68px',
+        columnWidth: '658px',
+        columnGap: '136px',
+        columnFill: 'auto',
+        fontFamily: selectedFont,
+        color: '#1a1a1a'
+      }}
     >
       {/* Header */}
       <div className="mb-5 text-center">

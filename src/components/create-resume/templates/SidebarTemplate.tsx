@@ -36,13 +36,22 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
   return (
     <div
       ref={ref}
-      className="bg-white w-full max-w-[850px] mx-auto min-h-[1100px] shadow-sm border border-slate-200 text-black flex flex-col"
-      style={{ fontFamily: selectedFont, color: '#000000' }}
+      className="bg-white w-[794px] mx-auto shadow-sm border border-slate-200 text-black"
+      style={{
+        boxSizing: 'border-box',
+        height: '1123px',
+        padding: '57px 68px',
+        columnWidth: '658px',
+        columnGap: '136px',
+        columnFill: 'auto',
+        fontFamily: selectedFont,
+        color: '#000000'
+      }}
     >
       {/* Top Accent Bar */}
-      <div style={{ backgroundColor: TOP_BAR_COLOR, height: '16px', width: '100%' }} />
+      <div style={{ backgroundColor: TOP_BAR_COLOR, height: '16px', margin: '-57px -68px 0 -68px', width: 'calc(100% + 136px)' }} />
 
-      <div className="px-[40px] pt-[30px] pb-[40px] flex-1">
+      <div>
         {/* Header */}
         <div className="mb-6 text-center">
           <h1 className="uppercase tracking-wider mb-2" style={{ fontSize: '26pt', fontWeight: 600 }}>

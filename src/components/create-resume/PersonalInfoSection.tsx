@@ -1,7 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { User, Edit2 } from 'lucide-react'
+import { AutocompleteInput } from '@/components/ui/AutocompleteInput'
+import { COUNTRIES, fetchLocations } from '@/utils/locationApi'
 
 export function PersonalInfoSection({ profileData }: { profileData?: any }) {
   const [isEditingPersonal, setIsEditingPersonal] = useState(false)
@@ -16,6 +18,36 @@ export function PersonalInfoSection({ profileData }: { profileData?: any }) {
   const email = personalInfo.email || profileData?.email || 'Email not set'
   const phone = personalInfo.phone || profileData?.phone || 'Phone not set'
   const location = personalInfo.location || profileData?.location || 'Location not set'
+  const country = personalInfo.country || profileData?.country || ''
+
+  const workAuthorization = personalInfo.work_authorization || profileData?.work_authorization || ''
+  const relocation = personalInfo.relocation || profileData?.relocation || ''
+  const availability = personalInfo.availability || profileData?.availability || ''
+
+  const [formData, setFormData] = useState({
+    fullName: fullName !== 'Name not set' ? fullName : '',
+    email: email !== 'Email not set' ? email : '',
+    phone: phone !== 'Phone not set' ? phone : '',
+    location: location !== 'Location not set' ? location : '',
+    country: country,
+    workAuthorization: workAuthorization,
+    relocation: relocation,
+    availability: availability
+  })
+
+  // Sync state if profileData changes
+  useEffect(() => {
+    setFormData({
+      fullName: fullName !== 'Name not set' ? fullName : '',
+      email: email !== 'Email not set' ? email : '',
+      phone: phone !== 'Phone not set' ? phone : '',
+      location: location !== 'Location not set' ? location : '',
+      country: country,
+      workAuthorization: workAuthorization,
+      relocation: relocation,
+      availability: availability
+    })
+  }, [fullName, email, phone, location, country, workAuthorization, relocation, availability])
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
@@ -49,7 +81,8 @@ export function PersonalInfoSection({ profileData }: { profileData?: any }) {
             <label className="block text-[12px] font-bold text-slate-700 mb-2">Full Name</label>
             <input 
               type="text" 
-              defaultValue={fullName !== 'Name not set' ? fullName : ''} 
+              value={formData.fullName} 
+              onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
               className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </div>
@@ -58,7 +91,8 @@ export function PersonalInfoSection({ profileData }: { profileData?: any }) {
             <label className="block text-[12px] font-bold text-slate-700 mb-2">Email Address</label>
             <input 
               type="email" 
-              defaultValue={email !== 'Email not set' ? email : ''} 
+              value={formData.email} 
+              onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
               className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </div>
@@ -67,35 +101,118 @@ export function PersonalInfoSection({ profileData }: { profileData?: any }) {
             <label className="block text-[12px] font-bold text-slate-700 mb-2">Phone Number</label>
             <input 
               type="text" 
-              defaultValue={phone !== 'Phone not set' ? phone : ''} 
+              value={formData.phone} 
+              onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
               className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </div>
 
           <div>
+            <label className="block text-[12px] font-bold text-slate-700 mb-2">Country</label>
+            <AutocompleteInput
+              name="country"
+              value={formData.country}
+              onChange={(val) => setFormData(prev => ({ ...prev, country: val }))}
+              staticOptions={COUNTRIES}
+              placeholder="e.g. United States"
+            />
+          </div>
+
+          <div>
             <label className="block text-[12px] font-bold text-slate-700 mb-2">Location</label>
+            <AutocompleteInput
+              name="location"
+              value={formData.location}
+              onChange={(val) => setFormData(prev => ({ ...prev, location: val }))}
+              fetchOptions={fetchLocations}
+              placeholder="e.g. Dallas, Texas"
+            />
+          </div>
+
+          {/* C2C Specific Fields */}
+          <div>
+            <label className="block text-[12px] font-bold text-slate-700 mb-2">Work Authorization</label>
+            <select
+              value={formData.workAuthorization}
+              onChange={(e) => setFormData(prev => ({ ...prev, workAuthorization: e.target.value }))}
+              className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+            >
+              <option value="">Select status...</option>
+              <option value="US Citizen">US Citizen</option>
+              <option value="Green Card">Green Card</option>
+              <option value="H1B">H1B</option>
+              <option value="H4 EAD">H4 EAD</option>
+              <option value="OPT EAD">OPT EAD</option>
+              <option value="CPT">CPT</option>
+              <option value="TN Visa">TN Visa</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[12px] font-bold text-slate-700 mb-2">Relocation</label>
+            <select
+              value={formData.relocation}
+              onChange={(e) => setFormData(prev => ({ ...prev, relocation: e.target.value }))}
+              className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+            >
+              <option value="">Select option...</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+              <option value="Open to Relocate">Open to Relocate</option>
+              <option value="Remote Only">Remote Only</option>
+              <option value="Hybrid Only">Hybrid Only</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[12px] font-bold text-slate-700 mb-2">Availability</label>
             <input 
               type="text" 
-              defaultValue={location !== 'Location not set' ? location : ''} 
+              value={formData.availability} 
+              onChange={(e) => setFormData(prev => ({ ...prev, availability: e.target.value }))}
+              placeholder="e.g. Immediate, 2 Weeks"
               className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </div>
         </div>
       ) : (
         <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 space-y-2">
-          <div className="text-[16px] font-black text-slate-900">{fullName}</div>
+          <div className="text-[16px] font-black text-slate-900">{formData.fullName || 'Name not set'}</div>
           <div className="text-[14px] font-medium text-slate-600 flex items-center gap-2">
             <span className="w-4 h-4 text-slate-400 flex items-center justify-center">@</span>
-            {email}
+            {formData.email || 'Email not set'}
           </div>
           <div className="text-[14px] font-medium text-slate-600 flex items-center gap-2">
             <span className="w-4 h-4 text-slate-400 flex items-center justify-center">#</span>
-            {phone}
+            {formData.phone || 'Phone not set'}
           </div>
           <div className="text-[14px] font-medium text-slate-600 flex items-center gap-2">
             <span className="w-4 h-4 text-slate-400 flex items-center justify-center">📍</span>
-            {location}
+            {[formData.location, formData.country].filter(Boolean).join(', ') || 'Location not set'}
           </div>
+          
+          {(formData.workAuthorization || formData.relocation || formData.availability) && (
+            <div className="pt-3 mt-3 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-3 gap-2">
+              {formData.workAuthorization && (
+                <div className="flex flex-col">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Visa Status</span>
+                  <span className="text-[13px] font-bold text-slate-700">{formData.workAuthorization}</span>
+                </div>
+              )}
+              {formData.relocation && (
+                <div className="flex flex-col">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Relocation</span>
+                  <span className="text-[13px] font-bold text-slate-700">{formData.relocation}</span>
+                </div>
+              )}
+              {formData.availability && (
+                <div className="flex flex-col">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Availability</span>
+                  <span className="text-[13px] font-bold text-slate-700">{formData.availability}</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

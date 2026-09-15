@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { Plus, Trash2, Briefcase, Building2, MapPin, Loader2 } from 'lucide-react'
+import { Plus, Trash2, Briefcase, Building2, MapPin, Loader2, Globe } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'react-hot-toast'
 import { formatMonthYear } from '@/utils/dateFormatter'
+import { AutocompleteInput } from '@/components/ui/AutocompleteInput'
+import { COUNTRIES, fetchLocations } from '@/utils/locationApi'
 
 export function EmploymentForm({
   profile,
@@ -11,14 +13,16 @@ export function EmploymentForm({
   onNext,
   localMode,
   onLocalSave,
-  onCancel
+  onCancel,
+  resumeType
 }: {
   profile?: any,
   setProfile?: (p: any) => void,
   onNext?: () => void,
   localMode?: boolean,
   onLocalSave?: (profile: any) => void,
-  onCancel?: () => void
+  onCancel?: () => void,
+  resumeType?: 'c2c' | 'fulltime'
 }) {
   const supabase = createClient()
   const [isLoading, setIsLoading] = useState(false)
@@ -33,8 +37,11 @@ export function EmploymentForm({
       startDate: '',
       endDate: '',
       current: false,
+      country: '',
       location: '',
-      responsibilities: ''
+      responsibilities: '',
+      client: '',
+      environment: ''
     }])
   }
 
@@ -133,7 +140,37 @@ export function EmploymentForm({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {resumeType === 'c2c' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="block text-[13px] font-bold text-slate-700 mb-2">End Client <span className="text-slate-400 font-normal">(Optional)</span></label>
+                  <div className="relative">
+                    <Building2 className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input 
+                      type="text" 
+                      value={job.client || ''}
+                      onChange={(e) => handleChange(index, 'client', e.target.value)}
+                      placeholder="e.g. Apple, JP Morgan"
+                      className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[13px] font-bold text-slate-700 mb-2">Environment <span className="text-slate-400 font-normal">(Comma separated)</span></label>
+                  <div className="relative">
+                    <input 
+                      type="text" 
+                      value={job.environment || ''}
+                      onChange={(e) => handleChange(index, 'environment', e.target.value)}
+                      placeholder="e.g. React, Node.js, AWS, PostgreSQL"
+                      className="w-full h-11 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="block text-[13px] font-bold text-slate-700 mb-2">Start Date</label>
                 <input 
@@ -166,16 +203,26 @@ export function EmploymentForm({
                 </div>
               </div>
               <div>
+                <label className="block text-[13px] font-bold text-slate-700 mb-2">Country</label>
+                <AutocompleteInput
+                  name={`country-${index}`}
+                  value={job.country || ''}
+                  onChange={(val) => handleChange(index, 'country', val)}
+                  staticOptions={COUNTRIES}
+                  placeholder="e.g. United States"
+                  icon={<Globe className="w-4 h-4 text-slate-400" />}
+                />
+              </div>
+              <div>
                 <label className="block text-[13px] font-bold text-slate-700 mb-2">Location</label>
-                <div className="relative">
-                  <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <input 
-                    type="text" 
-                    value={job.location}
-                    onChange={(e) => handleChange(index, 'location', e.target.value)}
-                    className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[14px] font-medium text-slate-900 transition-colors bg-white"
-                  />
-                </div>
+                <AutocompleteInput
+                  name={`location-${index}`}
+                  value={job.location || ''}
+                  onChange={(val) => handleChange(index, 'location', val)}
+                  fetchOptions={fetchLocations}
+                  placeholder="e.g. Dallas, Texas"
+                  icon={<MapPin className="w-4 h-4 text-slate-400" />}
+                />
               </div>
             </div>
 

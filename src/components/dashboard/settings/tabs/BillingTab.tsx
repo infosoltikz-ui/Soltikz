@@ -125,7 +125,7 @@ export function BillingTab({ initialYearly = false }: { initialYearly?: boolean 
             ) : (
               <p className="text-[14px] text-slate-300 font-medium flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-amber-400" />
-                You have {profile?.credits_remaining || 0} free AI credits remaining.
+                You have {20 - Math.max(0, 3 - (profile?.credits_remaining || 0))} free AI credits remaining.
               </p>
             )}
           </div>

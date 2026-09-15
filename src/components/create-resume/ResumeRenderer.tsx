@@ -35,8 +35,19 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeTemplatePro
     return (
       <div
         ref={ref}
-        className="bg-white w-full max-w-[850px] mx-auto min-h-[1100px] shadow-sm border border-slate-200 text-black px-[45px] py-[40px] flex flex-col"
-        style={{ fontFamily: selectedFont, color: '#000000' }}
+        className="bg-white w-[794px] mx-auto shadow-sm border border-slate-200 text-black"
+        style={{
+          boxSizing: 'border-box',
+          height: '1123px',
+          padding: '57px 68px',
+          columnWidth: '658px',
+          columnGap: '136px',
+          columnFill: 'auto',
+          fontFamily: selectedFont,
+          color: '#000000',
+          fontSize: '11pt',
+          lineHeight: '1.5'
+        }}
       >
         {/* Header - Classic ATS Center */}
         <div className="mb-4 text-center">
@@ -107,7 +118,11 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeTemplatePro
                     <div className="whitespace-nowrap ml-4 font-bold">{exp.duration}</div>
                   </div>
                   <div className="leading-tight mb-1" style={{ fontSize: '10pt' }}>
-                    <span className="font-bold">{exp.company}</span>
+                    <span className="font-bold">
+                      {exp.company}
+                      {exp.client && ` (Client: ${exp.client})`}
+                    </span>
+                    {exp.location && <span> | {exp.location}</span>}
                   </div>
 
                   {exp.environment && exp.environment.length > 0 && (

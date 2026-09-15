@@ -31,10 +31,19 @@ export const CertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
     return (
       <div
         ref={ref}
-        className="bg-white w-full max-w-[850px] mx-auto min-h-[1100px] shadow-sm border border-slate-200 text-black flex flex-col"
-        style={{ fontFamily: selectedFont, color: '#1a1a1a' }}
+        className="bg-white w-[794px] mx-auto shadow-sm border border-slate-200 text-black"
+        style={{
+          boxSizing: 'border-box',
+          height: '1123px',
+          padding: '57px 68px',
+          columnWidth: '658px',
+          columnGap: '136px',
+          columnFill: 'auto',
+          fontFamily: selectedFont,
+          color: '#1a1a1a'
+        }}
       >
-        <div className="px-[45px] py-[40px] flex-1">
+        <div>
           {/* Top 2-Column Header Box */}
           <div className="flex flex-row justify-between items-stretch border border-slate-200 rounded-sm mb-6 bg-slate-50 overflow-hidden">
             

@@ -3,6 +3,7 @@ import { ModernTemplate } from './ModernTemplate';
 import { BannerTemplate } from './BannerTemplate';
 import { CertifiedTemplate } from './CertifiedTemplate';
 import { SidebarTemplate } from './SidebarTemplate';
+import { C2CTemplate } from './C2CTemplate';
 import type { ResumeTemplateProps } from './types';
 import React from 'react';
 
@@ -43,6 +44,12 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     name: 'Left-Aligned Accent',
     description: 'Thick top color bar, left-aligned section headers, and indented content.',
     component: SidebarTemplate,
+  },
+  {
+    id: 'c2c',
+    name: 'C2C Contractor',
+    description: 'ATS-optimized, highly structured layout explicitly designed for IT contracting and vendor submissions.',
+    component: C2CTemplate,
   },
 ];
 

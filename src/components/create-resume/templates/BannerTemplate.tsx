@@ -29,16 +29,22 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
   return (
     <div
       ref={ref}
-      className="bg-white w-full max-w-[850px] mx-auto min-h-[1100px] shadow-sm border border-slate-200 text-black flex flex-col"
-      style={{ fontFamily: selectedFont, color: '#2b2b2b' }}
+      className="bg-white w-[794px] mx-auto shadow-sm border border-slate-200 text-black"
+      style={{
+        boxSizing: 'border-box',
+        height: '1123px',
+        padding: '57px 68px',
+        columnWidth: '658px',
+        columnGap: '136px',
+        columnFill: 'auto',
+        fontFamily: selectedFont,
+        color: '#2b2b2b'
+      }}
     >
       {/* Colored Banner Header */}
-      <div className="text-center px-[40px] pt-[40px] pb-[30px]" style={{ backgroundColor: BANNER }}>
+      <div className="text-center" style={{ backgroundColor: BANNER, margin: '-57px -68px 30px -68px', padding: '57px 68px 30px 68px' }}>
         
-        {/* Decorative thin line */}
-        <hr className="w-12 mx-auto mb-6 border-t-[1.5px] border-white opacity-80" />
-
-        <h1 className="uppercase tracking-widest mb-3" style={{ fontSize: '32pt', color: '#ffffff', fontWeight: 700, fontFamily: selectedFont }}>
+        <h1 className="uppercase tracking-widest mb-3" style={{ fontSize: '26pt', color: '#ffffff', fontWeight: 700, fontFamily: selectedFont }}>
           {profileData.full_name || 'JOHN DOE'}
         </h1>
 
@@ -67,7 +73,7 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
       </div>
 
       {/* Main Content Body */}
-      <div className="px-[50px] py-[30px] flex-1">
+      <div>
         
         {/* Personal Summary */}
         {resumeData.summary && resumeData.summary.length > 0 && (

@@ -24,10 +24,10 @@ export default function Home() {
   return (
     <>
       <HeroSection />
+      <StatsSection />
       <FeaturesSection />
       <HowItWorksSection />
       <TemplatesSection />
-      <StatsSection />
       <TestimonialsSection />
       <CTASection />
     </>

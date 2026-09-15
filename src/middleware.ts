@@ -20,10 +20,10 @@ export async function middleware(request: NextRequest) {
   const userEmail = user?.email || ''
   const isAdmin = ADMIN_EMAILS.includes(userEmail)
 
-  // 1. If user is logged in and visits an auth route
+  // 1. If user is logged in and visits an auth route or the home page
   if (user) {
-    if (isAuthRoute) {
-      // Normal auth route -> dashboard
+    if (isAuthRoute || pathname === '/') {
+      // Normal auth route or home page -> dashboard
       const url = request.nextUrl.clone()
       url.pathname = isAdmin ? '/admin' : '/dashboard'
       return Response.redirect(url)

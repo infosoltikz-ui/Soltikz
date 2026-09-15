@@ -32,8 +32,8 @@ export function CurrentPlanCard() {
   }, [])
 
   const isPremium = isPremiumPlan(planId)
-  const maxResumes = 3
-  const resumesUsed = Math.max(0, maxResumes - creditsRemaining)
+  const maxResumes = 20
+  const resumesUsed = Math.max(0, 3 - creditsRemaining) // DB default is 3
   const resumePercentage = isPremium ? 100 : (resumesUsed / maxResumes) * 100
 
   return (
@@ -63,7 +63,7 @@ export function CurrentPlanCard() {
 
         {/* AI Credits */}
         <div className="text-[12px] font-bold text-slate-500">
-          <strong className="text-slate-900">{creditsRemaining}</strong> AI credits remaining
+          <strong className="text-slate-900">{maxResumes - resumesUsed}</strong> AI credits remaining
         </div>
       </div>
 

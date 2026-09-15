@@ -1,70 +1,108 @@
-"use client";
-import { UserPlus, FileEdit, BrainCircuit, Activity, Download } from 'lucide-react'
-
-const steps = [
-  {
-    icon: <UserPlus className="w-6 h-6 text-primary" />,
-    title: 'Create Account',
-    description: 'Sign up for free and create your account'
-  },
-  {
-    icon: <FileEdit className="w-6 h-6 text-primary" />,
-    title: 'Fill Your Details',
-    description: 'Add your information in our easy forms'
-  },
-  {
-    icon: <BrainCircuit className="w-6 h-6 text-primary" />,
-    title: 'AI Optimization',
-    description: 'Get AI suggestions to optimize your content'
-  },
-  {
-    icon: <Activity className="w-6 h-6 text-primary" />,
-    title: 'ATS Score Check',
-    description: 'Check your ATS score and improve your match'
-  },
-  {
-    icon: <Download className="w-6 h-6 text-primary" />,
-    title: 'Download & Apply',
-    description: 'Download your resume and start applying'
-  }
-]
-
 export function HowItWorksSection() {
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-4 max-w-6xl">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
-            How It <span className="text-primary">Works</span>
+    <section className="py-24 bg-[#1A2227]">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="max-w-3xl mb-20">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">
+            Three steps, about two minutes.
           </h2>
-          <p className="text-slate-500 font-medium">Build your perfect resume in 5 simple steps</p>
+          <p className="text-xl text-slate-400 leading-relaxed">
+            You write your career history once. After that, every application is a paste and a click.
+          </p>
         </div>
 
-        <div className="relative">
-          {/* Connecting Line (Desktop) */}
-          <div className="hidden md:block absolute top-12 left-[10%] right-[10%] border-t-2 border-dashed border-slate-200 -z-10" />
-
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-            {steps.map((step, idx) => (
-              <div key={idx} className="relative flex flex-col items-center text-center group">
-                {/* Step Number Badge */}
-                <div className="absolute -top-3 z-10 w-6 h-6 rounded-full bg-accent text-white text-xs font-bold flex items-center justify-center shadow-sm">
-                  {idx + 1}
-                </div>
-                
-                {/* Icon Circle */}
-                <div className="w-24 h-24 rounded-full bg-white border-2 border-slate-100 flex items-center justify-center mb-6 shadow-sm group-hover:border-primary transition-colors relative z-0">
-                  <div className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center">
-                    {step.icon}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <h3 className="text-base font-bold text-slate-900 mb-2">{step.title}</h3>
-                <p className="text-xs text-slate-500 max-w-[150px]">{step.description}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
+          {/* Step 1 */}
+          <div className="flex flex-col">
+            <div className="w-8 h-8 rounded-full bg-[#53B88A] text-[#1A2227] font-bold flex items-center justify-center mb-6">
+              1
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-4">Write your profile once</h3>
+            <p className="text-slate-400 mb-8 leading-relaxed flex-1">
+              Jobs, education, projects, certifications, skills. Import it from LinkedIn or type it in. You never re-enter it again.
+            </p>
+            
+            {/* Mockup 1 */}
+            <div className="bg-[#242E35] border border-[#303B42] rounded-xl p-4 flex flex-col gap-3 shadow-lg">
+              <div className="bg-[#2B353C] border border-[#3A454C] rounded-lg p-3.5 text-sm text-slate-400 font-medium">
+                Information Security Analyst — 2026 to now
               </div>
-            ))}
+              <div className="bg-[#2B353C] border border-[#3A454C] rounded-lg p-3.5 text-sm text-slate-400 font-medium">
+                Cyber Security Analyst — 2023
+              </div>
+              <div className="bg-[#2B353C] border border-[#3A454C] rounded-lg p-3.5 text-sm text-slate-400 font-medium opacity-50">
+                M.S. Cybersecurity — 2021 to 2023
+              </div>
+            </div>
           </div>
+
+          {/* Step 2 */}
+          <div className="flex flex-col">
+            <div className="w-8 h-8 rounded-full bg-[#53B88A] text-[#1A2227] font-bold flex items-center justify-center mb-6">
+              2
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-4">Paste the job posting</h3>
+            <p className="text-slate-400 mb-8 leading-relaxed flex-1">
+              The whole thing — responsibilities, requirements, the lot. We pull out the terms and priorities the employer actually wrote down.
+            </p>
+            
+            {/* Mockup 2 */}
+            <div className="bg-[#242E35] border border-[#303B42] rounded-xl p-5 flex flex-col gap-5 shadow-lg">
+              <div className="bg-[#2B353C] border border-[#3A454C] rounded-lg p-3.5 text-sm text-slate-400 leading-relaxed">
+                We're hiring a Security Investigator to own end-to-end investigations across Sentinel and Defender XDR...
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {['incident response', 'Sentinel', 'KQL', 'SOC'].map(tag => (
+                  <div key={tag} className="bg-[#213F35] text-[#70C6A0] px-3 py-1.5 rounded-full text-xs font-medium">
+                    {tag}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Step 3 */}
+          <div className="flex flex-col">
+            <div className="w-8 h-8 rounded-full bg-[#53B88A] text-[#1A2227] font-bold flex items-center justify-center mb-6">
+              3
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-4">Get the résumé and the report</h3>
+            <p className="text-slate-400 mb-8 leading-relaxed flex-1">
+              A finished page in your chosen template, and a breakdown of what matched, what's missing, and which bullets to strengthen.
+            </p>
+            
+            {/* Mockup 3 */}
+            <div className="bg-[#242E35] border border-[#303B42] rounded-xl p-6 flex flex-col gap-6 shadow-lg">
+              <div>
+                <div className="flex justify-between text-xs font-medium text-slate-300 mb-2">
+                  <span>Keywords</span>
+                  <span>88%</span>
+                </div>
+                <div className="h-1.5 w-full bg-[#303B42] rounded-full overflow-hidden">
+                  <div className="h-full bg-[#53B88A] rounded-full w-[88%]" />
+                </div>
+              </div>
+              <div>
+                <div className="flex justify-between text-xs font-medium text-slate-300 mb-2">
+                  <span>Title fit</span>
+                  <span>95%</span>
+                </div>
+                <div className="h-1.5 w-full bg-[#303B42] rounded-full overflow-hidden">
+                  <div className="h-full bg-[#53B88A] rounded-full w-[95%]" />
+                </div>
+              </div>
+              <div>
+                <div className="flex justify-between text-xs font-medium text-slate-300 mb-2">
+                  <span>Quantified results</span>
+                  <span>72%</span>
+                </div>
+                <div className="h-1.5 w-full bg-[#303B42] rounded-full overflow-hidden">
+                  <div className="h-full bg-[#53B88A] rounded-full w-[72%]" />
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>

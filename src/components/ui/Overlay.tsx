@@ -70,7 +70,7 @@ export function Modal({
             initial="hidden" animate="visible" exit="exit"
             className={cn(
               'relative w-full rounded-2xl shadow-card-hover overflow-hidden',
-              'bg-surface-card dark:bg-dark-card',
+              'bg-white dark:bg-dark-card',
               'border border-surface-border dark:border-dark-border',
               sizeMap[size],
             )}
