@@ -1,11 +1,13 @@
 import { Metadata } from 'next'
 import { HeroSection } from '@/components/landing/HeroSection'
+import { StatsSection } from '@/components/landing/StatsSection'
+import { ATSCompatibilitySection } from '@/components/landing/ATSCompatibilitySection'
 import { FeaturesSection } from '@/components/landing/FeaturesSection'
 import { BeforeAfterSection } from '@/components/landing/BeforeAfterSection'
 import { ResumeTypesSection } from '@/components/landing/ResumeTypesSection'
-import { StatsSection } from '@/components/landing/StatsSection'
 import { PricingSection } from '@/components/landing/PricingSection'
 import { TestimonialsSection } from '@/components/landing/TestimonialsSection'
+import { FAQSection } from '@/components/landing/FAQSection'
 import { CTASection } from '@/components/landing/CTASection'
 
 export const metadata: Metadata = {
@@ -26,11 +28,13 @@ export default function Home() {
     <>
       <HeroSection />
       <StatsSection />
+      <ATSCompatibilitySection />
       <FeaturesSection />
       <BeforeAfterSection />
       <ResumeTypesSection />
       <PricingSection />
       <TestimonialsSection />
+      <FAQSection />
       <CTASection />
     </>
   )
