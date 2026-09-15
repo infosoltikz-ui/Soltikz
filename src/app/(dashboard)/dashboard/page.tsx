@@ -3,6 +3,8 @@ import { StatCards } from '@/components/dashboard/StatCards'
 import { RecentResumes } from '@/components/dashboard/RecentResumes'
 import { QuickActions } from '@/components/dashboard/QuickActions'
 import { CurrentPlanCard } from '@/components/dashboard/CurrentPlanCard'
+import { ApplicationTrackerWidget } from '@/components/dashboard/ApplicationTrackerWidget'
+import { SkillsGapWidget } from '@/components/dashboard/SkillsGapWidget'
 import { AITipBanner } from '@/components/dashboard/AITipBanner'
 import { LoginToast } from '@/components/dashboard/LoginToast'
 import { OnboardingSteps } from '@/components/dashboard/OnboardingSteps'
@@ -27,10 +29,18 @@ export default async function DashboardPage() {
     .eq('id', user.id)
     .single()
 
-  // Fetch Resumes with complete info
+  // Fetch Resumes with complete info including parsed JD data
   const { data: resumes } = await supabase
     .from('resumes_v2')
-    .select('id, title, resume_type, updated_at, created_at, ats_analyses ( overall_score )')
+    .select(`
+      id,
+      title,
+      resume_type,
+      updated_at,
+      created_at,
+      parsed_job_descriptions ( company_name, job_title ),
+      ats_analyses ( overall_score )
+    `)
     .eq('user_id', user.id)
     .order('updated_at', { ascending: false })
 
@@ -71,6 +81,8 @@ export default async function DashboardPage() {
   const profileCompletion = Math.round((completedSections / totalSections) * 100)
   const planId = profile?.plan_id || 'FREE'
   const creditsRemaining = profile?.credits_remaining ?? FREE_TIER_CREDITS
+  const userSkills = Array.isArray(masterData?.skills) ? masterData.skills : []
+  const targetRole = personalInfo?.targetRole || 'Software Engineer'
 
   return (
     <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-12 max-w-[1600px] mx-auto bg-slate-50/50 min-h-screen">
@@ -78,11 +90,13 @@ export default async function DashboardPage() {
       <DashboardHeader title="Dashboard" greeting />
 
       <main className="space-y-6">
+        {/* Onboarding Steps */}
         <OnboardingSteps
           profileCompletion={profileCompletion}
           resumesCreated={totalResumes}
         />
 
+        {/* Primary Metric Stats */}
         <StatCards
           resumesCreated={totalResumes}
           avgAts={avgAts}
@@ -90,6 +104,7 @@ export default async function DashboardPage() {
           profileCompletion={profileCompletion}
         />
 
+        {/* Row 1: Recent Resumes & Current Plan (2-Bar) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
           <RecentResumes resumes={resumes || []} />
           <CurrentPlanCard
@@ -99,8 +114,16 @@ export default async function DashboardPage() {
           />
         </div>
 
+        {/* Row 2: Application Tracker & Skills Gap Health Check */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+          <ApplicationTrackerWidget resumes={resumes || []} />
+          <SkillsGapWidget userSkills={userSkills} targetRole={targetRole} />
+        </div>
+
+        {/* Row 3: Quick Navigation */}
         <QuickActions />
 
+        {/* Bottom AI Tip */}
         <AITipBanner />
       </main>
     </div>
