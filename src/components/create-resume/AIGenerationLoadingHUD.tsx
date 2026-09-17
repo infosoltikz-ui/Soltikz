@@ -1,12 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Cpu, Sparkles, ShieldCheck, Zap, Terminal, Activity, Layers } from 'lucide-react'
+import { Sparkles, ShieldCheck, CheckCircle2, Loader2, FileText, Target, Award } from 'lucide-react'
 import { cn } from '@/utils/cn'
 
 export function AIGenerationLoadingHUD({ currentState }: { currentState: string }) {
   const [dots, setDots] = useState('')
-  const [progress, setProgress] = useState(15)
+  const [progress, setProgress] = useState(20)
 
   useEffect(() => {
     const dotInterval = setInterval(() => {
@@ -17,114 +17,142 @@ export function AIGenerationLoadingHUD({ currentState }: { currentState: string 
 
   // Smoothly increment simulated progress based on orchestrator state
   useEffect(() => {
-    if (currentState.includes('Parsing')) {
-      setProgress(28)
-    } else if (currentState.includes('Strategy')) {
-      setProgress(55)
-    } else if (currentState.includes('Generating') || currentState.includes('Resume')) {
-      setProgress(82)
-    } else if (currentState.includes('Finalizing') || currentState.includes('ATS')) {
+    if (currentState.includes('Parsing') || currentState.includes('Extracting')) {
+      setProgress(30)
+    } else if (currentState.includes('Strategy') || currentState.includes('Aligning')) {
+      setProgress(58)
+    } else if (currentState.includes('Generating') || currentState.includes('Resume') || currentState.includes('Synthesis')) {
+      setProgress(84)
+    } else if (currentState.includes('Finalizing') || currentState.includes('ATS') || currentState.includes('Scoring')) {
       setProgress(96)
     }
   }, [currentState])
 
   const stages = [
-    { label: 'Deep JD Keyword Extraction', active: currentState.includes('Parsing') || progress >= 25 },
-    { label: 'Strategic Alignment & Positioning', active: currentState.includes('Strategy') || progress >= 50 },
-    { label: '2-Line Bullet Point Synthesis', active: currentState.includes('Generating') || progress >= 75 },
-    { label: '90+ ATS Scoring & Formatting', active: currentState.includes('Finalizing') || progress >= 95 },
+    { 
+      label: 'Job Description Parsing', 
+      desc: 'Extracting required technical keywords & qualifications',
+      completed: progress >= 50,
+      active: progress < 50
+    },
+    { 
+      label: 'Strategic Alignment', 
+      desc: 'Positioning candidate profile to match role expectations',
+      completed: progress >= 75,
+      active: progress >= 50 && progress < 75
+    },
+    { 
+      label: '2-Line Bullet Point Synthesis', 
+      desc: 'Generating 10–12 action bullets per company with metrics',
+      completed: progress >= 90,
+      active: progress >= 75 && progress < 90
+    },
+    { 
+      label: '90+ ATS Score Verification', 
+      desc: 'Ensuring formatting compliance for Workday, Taleo & Greenhouse',
+      completed: progress >= 98,
+      active: progress >= 90
+    },
   ]
 
   return (
-    <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-6 sm:p-8 rounded-2xl border border-emerald-500/40 shadow-2xl overflow-hidden animate-in fade-in duration-300">
+    <div className="absolute inset-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl z-50 flex flex-col items-center justify-center p-6 sm:p-10 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-2xl overflow-hidden animate-in fade-in duration-300">
       
-      {/* Background Cyber Grid & Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(#059669_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none" />
-      <div className="absolute w-72 h-72 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl translate-x-24 -translate-y-24 pointer-events-none" />
+      {/* Background Ambient Mesh Glow */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -translate-y-24 translate-x-24 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl translate-y-24 -translate-x-24 pointer-events-none" />
 
-      {/* Main Holographic Centerpiece */}
+      {/* Main Centerpiece: Elegant Executive AI Orb */}
       <div className="relative flex items-center justify-center mb-6">
         
-        {/* Outer Pulsing Glow */}
-        <div className="absolute w-36 h-36 rounded-full bg-emerald-500/20 blur-xl animate-pulse" />
+        {/* Outer Gentle Pulse Ring */}
+        <div className="absolute w-28 h-28 rounded-full bg-emerald-500/10 animate-ping opacity-30 pointer-events-none" />
+        
+        {/* Smooth Spinning Gradient Ring */}
+        <div className="w-24 h-24 rounded-full border-2 border-slate-200 dark:border-slate-700 border-t-emerald-600 dark:border-t-emerald-400 border-r-teal-500 animate-[spin_2s_linear_infinite]" />
 
-        {/* Outer Rotating Cyber Ring (Clockwise) */}
-        <div className="w-32 h-32 rounded-full border-2 border-dashed border-emerald-400/60 animate-[spin_8s_linear_infinite]" />
-
-        {/* Middle Rotating Cyan Ring (Counter-Clockwise) */}
-        <div className="absolute w-24 h-24 rounded-full border-2 border-cyan-400/70 border-t-transparent border-b-transparent animate-[spin_4s_linear_infinite_reverse]" />
-
-        {/* Inner Glowing Core */}
-        <div className="absolute w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-emerald-500/50 animate-pulse">
-          <Cpu className="w-8 h-8 text-white animate-bounce" />
-        </div>
-
-        {/* Floating Cyber Particle Badges */}
-        <div className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/60 text-[10px] font-mono font-bold text-emerald-300 backdrop-blur-xs flex items-center gap-1 shadow-xs">
-          <Activity className="w-3 h-3 animate-spin" />
-          <span>AI ACTIVE</span>
+        {/* Center Glowing Icon */}
+        <div className="absolute w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-600/25">
+          <Sparkles className="w-8 h-8 text-white animate-pulse" />
         </div>
       </div>
 
-      {/* Terminal Cyber Text */}
-      <div className="text-center relative z-10 max-w-md w-full space-y-3">
+      {/* Text Header */}
+      <div className="text-center relative z-10 max-w-lg w-full space-y-4">
         
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[11px] font-mono font-bold text-emerald-400 mb-2 shadow-inner">
-            <Sparkles className="w-3.5 h-3.5 animate-spin" />
-            <span>NEURAL ATS GENERATOR v4.0</span>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800 text-[11.5px] font-bold text-emerald-800 dark:text-emerald-300 mb-2.5 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>AI Resume Intelligence Engine</span>
           </div>
 
-          <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center justify-center gap-2">
-            <span>Synthesizing Tailored Resume</span>
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+            Crafting Your Tailored Resume
           </h3>
 
-          <p className="text-[13px] font-mono font-semibold text-cyan-300 mt-1 h-6">
-            {currentState || 'Optimizing ATS Keywords'}
-            <span className="text-emerald-400">{dots}</span>
+          <p className="text-[13.5px] font-medium text-slate-600 dark:text-slate-300 mt-1.5 h-6">
+            {currentState || 'Optimizing ATS Keywords & Bullet Points'}
+            <span className="text-emerald-600 font-bold">{dots}</span>
           </p>
         </div>
 
         {/* Dynamic Progress Bar */}
-        <div className="w-full bg-slate-900 rounded-full h-2.5 p-0.5 border border-slate-700 shadow-inner overflow-hidden relative">
+        <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 p-0.5 border border-slate-200/80 dark:border-slate-700 overflow-hidden shadow-inner">
           <div 
-            className="h-full bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-400 rounded-full transition-all duration-500 ease-out relative shadow-[0_0_12px_rgba(16,185,129,0.8)]"
+            className="h-full bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 rounded-full transition-all duration-700 ease-out"
             style={{ width: `${progress}%` }}
-          >
-            <div className="absolute right-0 top-0 bottom-0 w-2 bg-white rounded-full animate-ping" />
-          </div>
+          />
         </div>
 
-        {/* Live Multi-Stage Matrix */}
-        <div className="grid grid-cols-2 gap-2 pt-2 text-left">
+        {/* Professional Multi-Stage Pipeline Checklist */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 text-left">
           {stages.map((st, i) => (
             <div 
               key={i} 
               className={cn(
-                "px-2.5 py-1.5 rounded-lg border text-[11px] font-mono flex items-center gap-2 transition-all",
-                st.active 
-                  ? "bg-emerald-950/60 border-emerald-500/60 text-emerald-300 shadow-xs" 
-                  : "bg-slate-900/40 border-slate-800 text-slate-500"
+                "p-3 rounded-xl border text-[12px] transition-all flex items-start gap-2.5",
+                st.completed
+                  ? "bg-emerald-50/80 dark:bg-emerald-950/40 border-emerald-200/90 dark:border-emerald-800/80 text-emerald-900 dark:text-emerald-200 shadow-2xs" 
+                  : st.active
+                  ? "bg-white dark:bg-slate-800 border-emerald-500/80 text-slate-900 dark:text-slate-100 shadow-xs ring-1 ring-emerald-500/20"
+                  : "bg-slate-50/60 dark:bg-slate-900/40 border-slate-200/60 dark:border-slate-800 text-slate-400"
               )}
             >
-              <div className={cn(
-                "w-1.5 h-1.5 rounded-full shrink-0",
-                st.active ? "bg-emerald-400 animate-ping" : "bg-slate-600"
-              )} />
-              <span className="truncate">{st.label}</span>
+              <div className="mt-0.5 shrink-0">
+                {st.completed ? (
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                ) : st.active ? (
+                  <Loader2 className="w-4 h-4 text-emerald-600 animate-spin" />
+                ) : (
+                  <div className="w-4 h-4 rounded-full border border-slate-300 dark:border-slate-600 flex items-center justify-center text-[9px] font-bold text-slate-400">
+                    {i + 1}
+                  </div>
+                )}
+              </div>
+              <div className="min-w-0">
+                <div className="font-bold text-[12.5px] leading-tight truncate">
+                  {st.label}
+                </div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5 truncate">
+                  {st.desc}
+                </div>
+              </div>
             </div>
           ))}
         </div>
 
-        {/* Footer Badge */}
-        <div className="pt-2 flex items-center justify-center gap-4 text-[10.5px] font-mono text-slate-400 border-t border-slate-800/80">
-          <span className="flex items-center gap-1">
-            <Zap className="w-3 h-3 text-amber-400" /> GPT-4o ENGINE
+        {/* Executive Trust Badges Footer */}
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-4 text-[11.5px] font-semibold text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800">
+          <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
+            <Target className="w-3.5 h-3.5 text-emerald-600" /> 90+ ATS Score Target
           </span>
-          <span className="text-slate-600">•</span>
-          <span className="flex items-center gap-1 text-emerald-400">
-            <ShieldCheck className="w-3 h-3" /> ATS 90+ TARGET
+          <span className="text-slate-300 dark:text-slate-700">•</span>
+          <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
+            <FileText className="w-3.5 h-3.5 text-teal-600" /> Strict 2-Line Bullets
+          </span>
+          <span className="text-slate-300 dark:text-slate-700">•</span>
+          <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
+            <ShieldCheck className="w-3.5 h-3.5 text-blue-600" /> Enterprise Privacy
           </span>
         </div>
 
