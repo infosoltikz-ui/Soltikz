@@ -438,51 +438,68 @@ export default function CreateResumePage() {
             ) : (
               <div className="space-y-6">
                 {/* Step 2 Top Action & Navigation Bar */}
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm">
-                  <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm overflow-x-auto scrollbar-none whitespace-nowrap">
+                  <div className="flex items-center gap-2.5 shrink-0 whitespace-nowrap">
                     <Button
                       onClick={() => setGeneratedResume(null)}
-                      className="h-9 px-4 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 bg-transparent border border-slate-200 cursor-pointer"
+                      className="h-9 px-3.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 bg-white border border-slate-200 cursor-pointer whitespace-nowrap shrink-0 shadow-2xs text-[12.5px] font-semibold"
                     >
-                      <div className="flex items-center gap-1.5 text-[13px] font-semibold">
+                      <div className="flex items-center gap-1.5 whitespace-nowrap">
                         <ArrowLeft className="w-3.5 h-3.5" />
-                        Edit Job Details
+                        <span>Edit Job Details</span>
                       </div>
                     </Button>
 
                     {/* Real-time ATS Score Meter Pill */}
-                    <ATSScoreMeter atsData={atsData} variant="compact" />
+                    <div className="shrink-0 whitespace-nowrap">
+                      <ATSScoreMeter atsData={atsData} variant="compact" />
+                    </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2.5">
-                    <Button onClick={() => setIsRegenerateSummaryModalOpen(true)} variant="outline" className="h-9 px-3.5 rounded-lg border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12.5px] font-semibold cursor-pointer">
+                  <div className="flex items-center gap-2 shrink-0 whitespace-nowrap">
+                    <Button 
+                      onClick={() => setIsRegenerateSummaryModalOpen(true)} 
+                      variant="outline" 
+                      className="h-9 px-3 rounded-xl border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12px] font-semibold cursor-pointer whitespace-nowrap shrink-0"
+                    >
                       Refine Summary
                     </Button>
-                    <Button onClick={() => setIsManualEditModalOpen(true)} variant="outline" className="h-9 px-3.5 rounded-lg border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12.5px] font-semibold cursor-pointer">
+                    <Button 
+                      onClick={() => setIsManualEditModalOpen(true)} 
+                      variant="outline" 
+                      className="h-9 px-3 rounded-xl border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12px] font-semibold cursor-pointer whitespace-nowrap shrink-0"
+                    >
                       Edit Skills
                     </Button>
-                    <Button onClick={applyBaseResumeFallback} variant="outline" className="h-9 px-3.5 rounded-lg border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12.5px] font-semibold cursor-pointer">
+                    <Button 
+                      onClick={applyBaseResumeFallback} 
+                      variant="outline" 
+                      className="h-9 px-3 rounded-xl border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12px] font-semibold cursor-pointer whitespace-nowrap shrink-0"
+                    >
                       Fallback: Older Roles
                     </Button>
                     <Button 
                       onClick={handleDownloadDocx} 
                       disabled={isDownloadingDocx}
                       variant="outline" 
-                      className="h-9 px-3.5 rounded-lg border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12.5px] font-semibold cursor-pointer flex items-center gap-1.5"
+                      className="h-9 px-3 rounded-xl border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12px] font-semibold cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0"
                     >
                       {isDownloadingDocx ? <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" /> : <FileText className="w-3.5 h-3.5 text-slate-500" />}
-                      Word (DOCX)
+                      <span>Word (DOCX)</span>
                     </Button>
-                    <Button onClick={handlePrint} className="h-9 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm text-[13px] font-semibold cursor-pointer flex items-center gap-1.5">
+                    <Button 
+                      onClick={handlePrint} 
+                      className="h-9 px-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs text-[12px] font-bold cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0"
+                    >
                       <Download className="w-3.5 h-3.5" />
-                      Download PDF
+                      <span>Download PDF</span>
                     </Button>
                     <Button 
                       onClick={() => setStep(3)} 
-                      className="h-9 px-5 rounded-lg bg-primary hover:bg-primary/90 text-white shadow-md shadow-primary/20 text-[13px] font-bold cursor-pointer flex items-center gap-1.5"
+                      className="h-9 px-4 rounded-xl bg-primary hover:bg-primary/90 text-white shadow-sm shadow-primary/20 text-[12px] font-bold cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0"
                     >
                       <span>Next: Interview Strategy</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </Button>
                   </div>
                 </div>
