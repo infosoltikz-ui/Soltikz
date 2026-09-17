@@ -422,15 +422,15 @@ export default function CreateResumePage() {
                   <div className="w-[130px]"></div>
                 </div>
 
-                <div className="flex flex-col xl:flex-row gap-6">
-                  <div className="flex-1 min-w-0 space-y-6 relative">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                  <div className="w-full min-w-0 space-y-6 relative">
                     {isGenerating && (
                       <AIGenerationLoadingHUD currentState={orchestratorState} />
                     )}
                     <CompanyDetailsSection onGenerate={(company, role, jd) => handleGenerate(company, role, jd)} />
                   </div>
 
-                  <div className="w-full xl:w-[400px] shrink-0 space-y-6">
+                  <div className="w-full min-w-0 space-y-6">
                     <CreateResumeSidebar />
                   </div>
                 </div>
