@@ -10,7 +10,8 @@ import {
   Circle,
   Link2,
   Loader2,
-  UploadCloud
+  UploadCloud,
+  ShieldCheck
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
@@ -36,7 +37,7 @@ export function ProfileSidebar({ profile, onImport }: { profile?: any; onImport?
       if (!data.success) throw new Error(data.error || 'Failed to parse LinkedIn PDF')
 
       onImport?.(data.parsed_data)
-      toast.success('LinkedIn profile imported — review and save each section')
+      toast.success('LinkedIn profile imported — please review and save each section')
     } catch (error: any) {
       toast.error(error.message || 'Failed to import LinkedIn profile')
     } finally {
@@ -51,46 +52,49 @@ export function ProfileSidebar({ profile, onImport }: { profile?: any; onImport?
   const email = profile?.email || personalInfo?.email || null
   const location = personalInfo?.location || profile?.location || null
   const linkedin = personalInfo?.linkedin || profile?.linkedin_url || null
-  const phone = profile?.phone || null
+  const phone = profile?.phone || personalInfo?.phone || null
 
-  // Calculate real profile completion
-  let completion = 0
-  if (profile?.full_name) completion += 20
-  if (email) completion += 20
-  if (phone) completion += 10
-  if (location) completion += 10
-  if (masterData?.employment?.length > 0) completion += 20
-  if (masterData?.education?.length > 0) completion += 10
-  if (masterData?.skills?.length > 0) completion += 10
+  // Calculate real profile completion accurately
+  let completedPoints = 0
+  const totalPoints = 5
+
+  if (profile?.full_name || personalInfo?.firstName) completedPoints++
+  if (email && phone) completedPoints++
+  if (personalInfo?.summary || personalInfo?.targetRole) completedPoints++
+  if ((masterData?.employment && masterData.employment.length > 0) || (masterData?.experience && masterData.experience.length > 0)) completedPoints++
+  if (masterData?.education?.length > 0 && masterData?.skills?.length > 0) completedPoints++
+
+  const completion = Math.round((completedPoints / totalPoints) * 100)
 
   const summaryItems = [
-    { label: 'Name', value: profile?.full_name || null, icon: User },
+    { label: 'Full Name', value: profile?.full_name || (personalInfo.firstName ? `${personalInfo.firstName} ${personalInfo.lastName || ''}`.trim() : null), icon: User },
     { label: 'Email', value: email, icon: Mail },
+    { label: 'Phone', value: phone, icon: null },
     { label: 'Location', value: location, icon: MapPin },
-    { label: 'LinkedIn', value: linkedin, isSvg: true, svgPath: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z' },
+    { label: 'LinkedIn', value: linkedin ? 'Connected' : null, isLink: true, href: linkedin },
   ]
 
-  // Dynamic tips based on real data
   const tips = [
-    { text: 'Add your full name', done: !!profile?.full_name },
-    { text: 'Add email & phone number', done: !!(email && phone) },
-    { text: 'Add at least one work experience', done: masterData?.employment?.length > 0 },
-    { text: 'Add education details', done: masterData?.education?.length > 0 },
-    { text: 'Add skills relevant to your target role', done: masterData?.skills?.length > 0 },
-    { text: 'Add certifications (if any)', done: masterData?.certifications?.length > 0 },
+    { text: 'Add full name & contact info', done: !!(profile?.full_name && email && phone) },
+    { text: 'Write a professional executive summary', done: !!personalInfo?.summary },
+    { text: 'Add at least one work experience with metrics', done: (masterData?.employment?.length > 0 || masterData?.experience?.length > 0) },
+    { text: 'List verified education & degrees', done: masterData?.education?.length > 0 },
+    { text: 'Include technical tools & core competencies', done: masterData?.skills?.length > 0 },
   ]
 
   return (
     <div className="space-y-4">
 
-      {/* LinkedIn Import Card */}
-      <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <Link2 className="w-4 h-4 text-[#0A66C2]" strokeWidth={2.5} />
-          <h3 className="text-[13px] font-black text-slate-900">Import from LinkedIn</h3>
+      {/* LinkedIn Import Box */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 hover:border-slate-300 transition-colors">
+        <div className="flex items-center gap-2 mb-1.5">
+          <div className="w-6 h-6 rounded bg-[#0A66C2]/10 text-[#0A66C2] flex items-center justify-center shrink-0">
+            <Link2 className="w-3.5 h-3.5" strokeWidth={2.5} />
+          </div>
+          <h3 className="text-[13px] font-bold text-slate-900">Import from LinkedIn</h3>
         </div>
-        <p className="text-[11px] font-medium text-slate-500 mb-3 leading-relaxed">
-          Upload your LinkedIn "Save to PDF" export and we'll pre-fill these forms for you to review.
+        <p className="text-[11px] font-normal text-slate-500 mb-3 leading-relaxed">
+          Upload your LinkedIn &quot;Save to PDF&quot; export to auto-populate career history and skills.
         </p>
         <input
           ref={fileInputRef}
@@ -102,73 +106,80 @@ export function ProfileSidebar({ profile, onImport }: { profile?: any; onImport?
         <button
           onClick={() => fileInputRef.current?.click()}
           disabled={isImporting}
-          className="w-full h-9 text-[12px] font-bold border border-slate-200 text-slate-700 hover:border-primary/40 hover:text-primary rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-60"
+          className="w-full h-8 text-[12px] font-semibold border border-slate-200 hover:border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-60 cursor-pointer"
         >
           {isImporting ? (
             <>
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              Parsing PDF...
+              Parsing LinkedIn PDF...
             </>
           ) : (
             <>
-              <UploadCloud className="w-3.5 h-3.5" />
-              Upload PDF
+              <UploadCloud className="w-3.5 h-3.5 text-slate-500" />
+              Upload LinkedIn PDF
             </>
           )}
         </button>
       </div>
 
-      {/* Profile Summary Card */}
-      <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-4">
-        <h3 className="text-[14px] font-black text-slate-900 mb-3">Profile Summary</h3>
-        
-        <div className={`rounded-lg p-3 flex items-start gap-2.5 border mb-4 ${completion >= 80 ? 'bg-[#F0FDF4] border-primary/20' : completion >= 20 ? 'bg-amber-50 border-amber-200' : 'bg-slate-50 border-slate-200'}`}>
-          <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 shadow-sm ${completion >= 80 ? 'bg-primary' : completion >= 20 ? 'bg-amber-500' : 'bg-slate-400'}`}>
-            <CheckCircle2 className="w-3 h-3 text-white" strokeWidth={3} />
-          </div>
-          <div>
-            <div className="text-[12px] font-black text-slate-900">{completion >= 80 ? 'Great job!' : completion >= 20 ? 'Keep going!' : 'Just getting started!'}</div>
-            <div className="text-[11px] font-medium text-slate-600 mt-0.5">Your profile is {completion}% complete.</div>
-          </div>
+      {/* Profile Health Meter */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 hover:border-slate-300 transition-colors">
+        <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
+          <h3 className="text-[13px] font-bold text-slate-900">Profile Health</h3>
+          <span className={`text-[11px] font-bold px-2 py-0.5 rounded border ${
+            completion >= 80 
+              ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+              : completion >= 40
+              ? 'bg-amber-50 text-amber-700 border-amber-200'
+              : 'bg-slate-50 text-slate-600 border-slate-200'
+          }`}>
+            {completion}% Complete
+          </span>
         </div>
 
-        <div className="space-y-3 mb-4">
-          {summaryItems.map((item, idx) => {
-            return (
-              <div key={idx} className="flex items-center gap-2.5">
-                {item.isSvg ? (
-                  <svg className="w-[15px] h-[15px] text-primary shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                    <path d={item.svgPath} />
-                  </svg>
-                ) : (
-                  item.icon && <item.icon className="w-[15px] h-[15px] text-primary shrink-0" strokeWidth={2} />
-                )}
-                <div className="w-16 text-[11.5px] font-bold text-slate-700">{item.label}</div>
-                <div className={`flex-1 text-[11.5px] truncate ${item.value ? 'font-medium text-slate-700' : 'font-medium text-slate-300 italic'}`}>
-                  {item.value || 'Not provided'}
-                </div>
-              </div>
-            )
-          })}
+        {/* Progress Bar */}
+        <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden mb-3">
+          <div 
+            className={`h-full rounded-full transition-all duration-300 ${
+              completion >= 80 ? 'bg-emerald-600' : completion >= 40 ? 'bg-amber-500' : 'bg-primary'
+            }`}
+            style={{ width: `${completion}%` }}
+          />
+        </div>
+
+        {/* Key Attributes List */}
+        <div className="divide-y divide-slate-100 text-[11.5px]">
+          {summaryItems.map((item, idx) => (
+            <div key={idx} className="py-2 flex items-center justify-between gap-2">
+              <span className="text-slate-500 font-medium">{item.label}</span>
+              <span className={`font-semibold truncate max-w-[140px] text-right ${
+                item.value ? 'text-slate-900' : 'text-slate-400 italic font-normal'
+              }`}>
+                {item.value || 'Not provided'}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Tips Card */}
-      <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <Lightbulb className="w-4 h-4 text-yellow-500" strokeWidth={2.5} />
-          <h3 className="text-[13px] font-black text-slate-900">Tips for Better Profile</h3>
+      {/* Profile Optimization Checklist */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 hover:border-slate-300 transition-colors">
+        <div className="flex items-center gap-1.5 pb-2 mb-3 border-b border-slate-100">
+          <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
+          <h3 className="text-[13px] font-bold text-slate-900">Optimization Checklist</h3>
         </div>
         
         <div className="space-y-2.5">
           {tips.map((tip, idx) => (
-            <div key={idx} className="flex items-start gap-2.5">
+            <div key={idx} className="flex items-start gap-2">
               {tip.done ? (
-                <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" strokeWidth={3} />
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" strokeWidth={2.5} />
               ) : (
-                <Circle className="w-3.5 h-3.5 text-slate-300 shrink-0 mt-0.5" strokeWidth={2.5} />
+                <Circle className="w-3.5 h-3.5 text-slate-300 shrink-0 mt-0.5" strokeWidth={2} />
               )}
-              <span className={`text-[11.5px] leading-snug ${tip.done ? 'font-medium text-slate-600' : 'font-medium text-slate-400'}`}>
+              <span className={`text-[11.5px] leading-snug ${
+                tip.done ? 'text-slate-700 font-medium' : 'text-slate-400 font-normal'
+              }`}>
                 {tip.text}
               </span>
             </div>

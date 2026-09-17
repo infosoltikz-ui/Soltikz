@@ -1,4 +1,6 @@
-import { MapPin, Globe, Loader2 } from 'lucide-react'
+'use client'
+
+import { MapPin, Globe, Loader2, User, Mail, Phone, Link2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
@@ -40,7 +42,7 @@ export function PersonalInfoForm({
     availability: profile?.availability || '',
   })
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
@@ -96,244 +98,241 @@ export function PersonalInfoForm({
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
       {/* Card Header */}
-      <div className="px-8 py-6 border-b border-slate-100 bg-slate-50/50">
-        <h2 className="text-[18px] font-black text-slate-900 mb-1">Personal Information</h2>
-        <p className="text-[13px] font-medium text-slate-500">Add your basic contact details. These will appear at the top of your resume.</p>
+      <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+        <div>
+          <h2 className="text-[15px] font-bold text-slate-900">Personal &amp; Contact Details</h2>
+          <p className="text-[12px] text-slate-500 font-medium">Basic contact information positioned at the top of your tailored resumes.</p>
+        </div>
       </div>
 
       {/* Form Body */}
-      <div className="px-8 py-8">
-        <div className="space-y-8">
-          {resumeType === 'c2c' && (
-            <>
+      <div className="px-6 py-6 space-y-6">
+        {resumeType === 'c2c' && (
+          <div className="p-4 rounded-lg border border-slate-200 bg-slate-50/60">
+            <h3 className="text-[12px] font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+              <span className="w-4 h-4 rounded bg-primary text-white text-[10px] font-bold flex items-center justify-center">C</span>
+              C2C / Contract Work Clearance
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <h3 className="text-[14px] font-bold text-slate-900 mb-4 flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[11px]">C</span>
-                  C2C Requirements
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div>
-                    <label className="block text-[12px] font-bold text-slate-700 mb-2">Work Authorization</label>
-                    <select
-                      name="workAuthorization"
-                      value={formData.workAuthorization}
-                      onChange={handleChange as any}
-                      className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                    >
-                      <option value="">Select status...</option>
-                      <option value="US Citizen">US Citizen</option>
-                      <option value="Green Card">Green Card</option>
-                      <option value="H1B">H1B</option>
-                      <option value="H4 EAD">H4 EAD</option>
-                      <option value="OPT EAD">OPT EAD</option>
-                      <option value="CPT">CPT</option>
-                      <option value="TN Visa">TN Visa</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-[12px] font-bold text-slate-700 mb-2">Relocation</label>
-                    <select
-                      name="relocation"
-                      value={formData.relocation}
-                      onChange={handleChange as any}
-                      className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                    >
-                      <option value="">Select option...</option>
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
-                      <option value="Open to Relocate">Open to Relocate</option>
-                      <option value="Remote Only">Remote Only</option>
-                      <option value="Hybrid Only">Hybrid Only</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-[12px] font-bold text-slate-700 mb-2">Availability</label>
-                    <input 
-                      type="text" 
-                      name="availability"
-                      value={formData.availability} 
-                      onChange={handleChange}
-                      placeholder="e.g. Immediate, 2 Weeks"
-                      className="w-full h-11 px-4 rounded-xl border border-slate-200 text-[14px] font-medium text-slate-900 transition-colors bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                    />
-                  </div>
-                </div>
+                <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Work Authorization</label>
+                <select
+                  name="workAuthorization"
+                  value={formData.workAuthorization}
+                  onChange={handleChange}
+                  className="w-full h-10 px-3 rounded-lg border border-slate-200 text-[13px] font-medium text-slate-900 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                >
+                  <option value="">Select status...</option>
+                  <option value="US Citizen">US Citizen</option>
+                  <option value="Green Card">Green Card</option>
+                  <option value="H1B">H1B</option>
+                  <option value="H4 EAD">H4 EAD</option>
+                  <option value="OPT EAD">OPT EAD</option>
+                  <option value="CPT">CPT</option>
+                  <option value="TN Visa">TN Visa</option>
+                </select>
               </div>
-              <div className="h-px bg-slate-100" />
-            </>
+              <div>
+                <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Relocation Status</label>
+                <select
+                  name="relocation"
+                  value={formData.relocation}
+                  onChange={handleChange}
+                  className="w-full h-10 px-3 rounded-lg border border-slate-200 text-[13px] font-medium text-slate-900 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                >
+                  <option value="">Select option...</option>
+                  <option value="Yes">Open to Relocate</option>
+                  <option value="No">No Relocation</option>
+                  <option value="Remote Only">Remote Only</option>
+                  <option value="Hybrid Only">Hybrid Only</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Availability / Notice</label>
+                <input 
+                  type="text" 
+                  name="availability"
+                  value={formData.availability} 
+                  onChange={handleChange}
+                  placeholder="e.g. Immediate, 2 Weeks"
+                  className="w-full h-10 px-3 rounded-lg border border-slate-200 text-[13px] font-medium text-slate-900 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-slate-400"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Name Row */}
+        <div>
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Candidate Name</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
+                First Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                type="text"
+                placeholder="e.g. John"
+                className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors"
+              />
+            </div>
+            <div>
+              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
+                Middle Name
+              </label>
+              <input
+                name="middleName"
+                value={formData.middleName}
+                onChange={handleChange}
+                type="text"
+                placeholder="Optional"
+                className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors"
+              />
+            </div>
+            <div>
+              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
+                Last Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                type="text"
+                placeholder="e.g. Doe"
+                className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Contact Row */}
+        <div>
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Contact Channels</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
+                Email Address <span className="text-red-500">*</span>
+              </label>
+              <input
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                type="email"
+                placeholder="you@example.com"
+                className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors"
+              />
+            </div>
+            <div>
+              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
+                Phone Number
+              </label>
+              <input
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                type="tel"
+                placeholder="+1 (555) 000-0000"
+                className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Online Presence */}
+        <div>
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Location &amp; Online Links</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
+                Current Location <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                <input
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  type="text"
+                  placeholder="City, State, Country"
+                  className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
+                LinkedIn Profile URL
+              </label>
+              <div className="relative">
+                <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                <input
+                  name="linkedin"
+                  value={formData.linkedin}
+                  onChange={handleChange}
+                  type="text"
+                  placeholder="linkedin.com/in/username"
+                  className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Executive Summary */}
+        <div>
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Professional Executive Summary</span>
+          {resumeType === 'c2c' ? (
+            <div>
+              <label className="block text-[12px] font-semibold text-slate-700 mb-1">
+                Capability Bullets (8–10 items)
+              </label>
+              <p className="text-[11px] text-slate-500 mb-2">Each bullet should follow: [ACTION VERB] + [technical action] + [tools] + [outcome].</p>
+              <textarea
+                name="summary"
+                value={formData.summary}
+                onChange={handleChange}
+                rows={7}
+                placeholder="• Architected scalable microservices using Node.js and AWS, reducing latency by 35%&#10;• Spearheaded CI/CD pipeline automation with Docker and GitHub Actions..."
+                className="w-full p-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors leading-relaxed"
+              ></textarea>
+            </div>
+          ) : (
+            <div>
+              <label className="block text-[12px] font-semibold text-slate-700 mb-1">
+                Executive Paragraph (4–5 lines)
+              </label>
+              <p className="text-[11px] text-slate-500 mb-2">Concise summary highlighting years of experience, core technical stack, and specialized focus.</p>
+              <textarea
+                name="summary"
+                value={formData.summary}
+                onChange={handleChange}
+                rows={4}
+                placeholder="Results-driven Senior Software Engineer with 6+ years specializing in modern cloud architectures, React ecosystem, and enterprise scalability."
+                className="w-full p-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors leading-relaxed"
+              ></textarea>
+            </div>
           )}
-
-          {/* Name Row */}
-          <div>
-            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4">Full Name</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              <div>
-                <label className="block text-[13px] font-semibold text-slate-700 mb-2">
-                  First name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="e.g. John"
-                  className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-[14px] font-medium text-slate-900 transition-all placeholder:text-slate-300"
-                />
-              </div>
-              <div>
-                <label className="block text-[13px] font-semibold text-slate-700 mb-2">
-                  Middle name
-                </label>
-                <input
-                  name="middleName"
-                  value={formData.middleName}
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Optional"
-                  className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-[14px] font-medium text-slate-900 transition-all placeholder:text-slate-300"
-                />
-              </div>
-              <div>
-                <label className="block text-[13px] font-semibold text-slate-700 mb-2">
-                  Last name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="e.g. Doe"
-                  className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-[14px] font-medium text-slate-900 transition-all placeholder:text-slate-300"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Row */}
-          <div>
-            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4">Contact Details</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div>
-                <label className="block text-[13px] font-semibold text-slate-700 mb-2">
-                  Email address <span className="text-red-500">*</span>
-                </label>
-                <input
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  type="email"
-                  placeholder="you@example.com"
-                  className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-[14px] font-medium text-slate-900 transition-all placeholder:text-slate-300"
-                />
-              </div>
-              <div>
-                <label className="block text-[13px] font-semibold text-slate-700 mb-2">
-                  Phone Number
-                </label>
-                <input
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  type="tel"
-                  placeholder="+1 (555) 000-0000"
-                  className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-[14px] font-medium text-slate-900 transition-all placeholder:text-slate-300"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Online Presence */}
-          <div>
-            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4">Online Presence</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div>
-                <label className="block text-[13px] font-semibold text-slate-700 mb-2">
-                  Location <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <input
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    type="text"
-                    placeholder="City, State, Country"
-                    className="w-full h-12 pl-11 pr-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-[14px] font-medium text-slate-900 transition-all placeholder:text-slate-300"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-[13px] font-semibold text-slate-700 mb-2">
-                  LinkedIn Profile
-                </label>
-                <div className="relative">
-                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0A66C2]" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                  <input
-                    name="linkedin"
-                    value={formData.linkedin}
-                    onChange={handleChange}
-                    type="text"
-                    placeholder="linkedin.com/in/yourname"
-                    className="w-full h-12 pl-11 pr-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-[14px] font-medium text-slate-900 transition-all placeholder:text-slate-300"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Professional Summary */}
-          <div>
-            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4">Professional Summary</p>
-            
-            {resumeType === 'c2c' ? (
-              <div className="space-y-3">
-                <label className="block text-[13px] font-semibold text-slate-700">
-                  Capability Bullets (8-10 recommended)
-                </label>
-                <p className="text-[12px] text-slate-500 mb-2">Each bullet must be exactly two lines long on the final resume. Do not use first-person pronouns.</p>
-                <textarea
-                  name="summary"
-                  value={formData.summary}
-                  onChange={handleChange as any}
-                  rows={8}
-                  placeholder="• [ACTION VERB] + [what you did] + [tool] + [scope] + [outcome]&#10;• [ACTION VERB] + [what you did] + [tool] + [scope] + [outcome]&#10;..."
-                  className="w-full p-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-[14px] font-medium text-slate-900 transition-all placeholder:text-slate-300 resize-y leading-relaxed"
-                ></textarea>
-              </div>
-            ) : (
-              <div>
-                <label className="block text-[13px] font-semibold text-slate-700 mb-1">
-                  Prose Summary
-                </label>
-                <p className="text-[12px] text-slate-500 mb-2">Write a single paragraph of 5–6 lines. Do not use bullets or first-person pronouns.</p>
-                <textarea
-                  name="summary"
-                  value={formData.summary}
-                  onChange={handleChange as any}
-                  rows={5}
-                  placeholder="[Title] with [N]+ years in [domain / environment type], focused on [your core function]."
-                  className="w-full p-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-[14px] font-medium text-slate-900 transition-all placeholder:text-slate-300 resize-y leading-relaxed"
-                ></textarea>
-              </div>
-            )}
-          </div>
-
         </div>
       </div>
 
       {/* Card Footer */}
-      <div className="px-8 py-5 border-t border-slate-100 bg-slate-50/50 flex items-center gap-3">
-        <Button
+      <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex items-center gap-3">
+        <button
           onClick={handleSave}
           disabled={isLoading}
-          className="h-11 px-8 rounded-xl font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 min-w-[160px]"
+          className="h-9 px-6 rounded-lg font-semibold text-[13px] bg-primary text-white hover:bg-primary-dark shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
         >
-          {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Save & Next'}
-        </Button>
+          {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save & Continue'}
+        </button>
         {onCancel && (
-          <button onClick={onCancel} className="h-11 px-6 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+          <button 
+            onClick={onCancel} 
+            className="h-9 px-4 rounded-lg font-semibold text-[13px] text-slate-600 hover:text-slate-900 border border-slate-200 hover:bg-slate-100 bg-white transition-colors cursor-pointer"
+          >
             Cancel
           </button>
         )}

@@ -10,7 +10,7 @@ export default async function ProfilePage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/auth/login')
+    redirect('/login')
   }
 
   // Fetch Profile
@@ -25,7 +25,7 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className="px-10 py-10 max-w-[1600px] mx-auto">
+    <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-14 max-w-[1600px] mx-auto bg-slate-50/50 min-h-screen">
       <ProfileContent initialProfile={profile} />
     </div>
   )

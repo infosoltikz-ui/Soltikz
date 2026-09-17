@@ -20,32 +20,33 @@ export function ProfileTabs({
   onPreview?: () => void
 }) {
   const tabs = [
-    { id: 'personal', label: 'Personal Info', icon: User },
+    { id: 'personal', label: 'Personal & Contact', icon: User },
+    { id: 'employment', label: 'Work Experience', icon: Briefcase },
     { id: 'education', label: 'Education', icon: GraduationCap },
-    { id: 'employment', label: 'Employment Details', icon: Briefcase },
-    { id: 'projects', label: 'Projects', icon: FolderOpen },
+    { id: 'skills', label: 'Skills & Tools', icon: Wrench },
+    { id: 'projects', label: 'Key Projects', icon: FolderOpen },
     { id: 'certifications', label: 'Certifications', icon: Award },
-    { id: 'skills', label: 'Skills', icon: Wrench },
   ]
 
   return (
-    <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-8">
+    <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-6">
       {/* Tabs container */}
-      <div className="bg-slate-100/80 rounded-2xl p-1.5 flex overflow-x-auto hide-scrollbar gap-1">
+      <div className="bg-white border border-slate-200 rounded-xl p-1 flex overflow-x-auto hide-scrollbar gap-1 shadow-2xs">
         {tabs.map((tab) => {
           const Icon = tab.icon
+          const isActive = activeTab === tab.id
           return (
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
               className={cn(
-                "flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-[13px] whitespace-nowrap transition-all duration-200",
-                activeTab === tab.id
-                  ? "bg-white text-primary shadow-sm border border-slate-200/60"
-                  : "text-slate-500 hover:text-slate-900 hover:bg-white/60"
+                "flex items-center gap-2 px-3.5 py-2 rounded-lg font-semibold text-[13px] whitespace-nowrap transition-all duration-150 cursor-pointer",
+                isActive
+                  ? "bg-slate-900 text-white shadow-2xs"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
               )}
             >
-              <Icon className="w-4 h-4" strokeWidth={2.5} />
+              <Icon className={cn("w-3.5 h-3.5", isActive ? "text-white" : "text-slate-500")} strokeWidth={2} />
               {tab.label}
             </button>
           )
@@ -54,13 +55,13 @@ export function ProfileTabs({
 
       {/* Action Button */}
       <div className="shrink-0">
-        <Button
+        <button
           onClick={onPreview}
-          className="h-11 px-6 text-[13px] font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 rounded-xl"
-          leftIcon={<Eye className="w-4 h-4" />}
+          className="h-10 px-4 text-[13px] font-semibold bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-slate-200 rounded-xl shadow-2xs inline-flex items-center gap-2 transition-colors cursor-pointer"
         >
-          Preview Full Profile
-        </Button>
+          <Eye className="w-4 h-4 text-slate-500" />
+          Preview Complete Profile
+        </button>
       </div>
     </div>
   )
