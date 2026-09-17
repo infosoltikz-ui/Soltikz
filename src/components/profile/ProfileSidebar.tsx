@@ -11,11 +11,22 @@ import {
   Link2,
   Loader2,
   UploadCloud,
-  ShieldCheck
+  ShieldCheck,
+  Sparkles,
+  ArrowRight
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { cn } from '@/utils/cn'
 
-export function ProfileSidebar({ profile, onImport }: { profile?: any; onImport?: (parsedData: any) => void }) {
+export function ProfileSidebar({ 
+  profile, 
+  onImport,
+  onNavigateTab
+}: { 
+  profile?: any; 
+  onImport?: (parsedData: any) => void;
+  onNavigateTab?: (tab: string) => void;
+}) {
   const [isImporting, setIsImporting] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -66,36 +77,129 @@ export function ProfileSidebar({ profile, onImport }: { profile?: any; onImport?
 
   const completion = Math.round((completedPoints / totalPoints) * 100)
 
-  const summaryItems = [
-    { label: 'Full Name', value: profile?.full_name || (personalInfo.firstName ? `${personalInfo.firstName} ${personalInfo.lastName || ''}`.trim() : null), icon: User },
-    { label: 'Email', value: email, icon: Mail },
-    { label: 'Phone', value: phone, icon: null },
-    { label: 'Location', value: location, icon: MapPin },
-    { label: 'LinkedIn', value: linkedin ? 'Connected' : null, isLink: true, href: linkedin },
-  ]
+  // SVG Gauge calculations
+  const radius = 32
+  const circumference = 2 * Math.PI * radius
+  const strokeDashoffset = circumference - (completion / 100) * circumference
+  const strokeColor = completion >= 80 ? '#059669' : completion >= 40 ? '#d97706' : '#2563eb'
 
-  const tips = [
-    { text: 'Add full name & contact info', done: !!(profile?.full_name && email && phone) },
-    { text: 'Write a professional executive summary', done: !!personalInfo?.summary },
-    { text: 'Add at least one work experience with metrics', done: (masterData?.employment?.length > 0 || masterData?.experience?.length > 0) },
-    { text: 'List verified education & degrees', done: masterData?.education?.length > 0 },
-    { text: 'Include technical tools & core competencies', done: masterData?.skills?.length > 0 },
+  const checklist = [
+    { text: 'Full Name & Verified Contact Channels', done: !!(profile?.full_name && email && phone), tab: 'personal' },
+    { text: 'Executive Career Summary', done: !!personalInfo?.summary, tab: 'personal' },
+    { text: 'Employment History with Quantified Metrics', done: (masterData?.employment?.length > 0 || masterData?.experience?.length > 0), tab: 'employment' },
+    { text: 'Academic Degrees & Institutions', done: masterData?.education?.length > 0, tab: 'education' },
+    { text: 'Categorized Technical Skills & Tools', done: masterData?.skills?.length > 0, tab: 'skills' },
   ]
 
   return (
     <div className="space-y-4">
 
-      {/* LinkedIn Import Box */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 hover:border-slate-300 transition-colors">
-        <div className="flex items-center gap-2 mb-1.5">
+      {/* Profile Strength Gauge Card */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 hover:border-slate-300 transition-colors">
+        <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-primary" />
+            <h3 className="text-[13px] font-bold text-slate-900">Profile Health</h3>
+          </div>
+          <span className={cn(
+            "text-[11px] font-bold px-2 py-0.5 rounded-full border",
+            completion >= 80 
+              ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+              : completion >= 40
+              ? 'bg-amber-50 text-amber-700 border-amber-200'
+              : 'bg-slate-50 text-slate-600 border-slate-200'
+          )}>
+            {completion}% Ready
+          </span>
+        </div>
+
+        {/* Circular SVG Meter & Status */}
+        <div className="flex items-center gap-4 mb-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
+          <div className="relative w-16 h-16 shrink-0 flex items-center justify-center">
+            <svg className="w-16 h-16 -rotate-90 transform" viewBox="0 0 80 80">
+              <circle
+                cx="40"
+                cy="40"
+                r={radius}
+                className="stroke-slate-200"
+                strokeWidth="6"
+                fill="transparent"
+              />
+              <circle
+                cx="40"
+                cy="40"
+                r={radius}
+                stroke={strokeColor}
+                strokeWidth="6"
+                strokeDasharray={circumference}
+                strokeDashoffset={strokeDashoffset}
+                strokeLinecap="round"
+                fill="transparent"
+                className="transition-all duration-700 ease-out"
+              />
+            </svg>
+            <span className="absolute text-[13px] font-black text-slate-900">
+              {completion}%
+            </span>
+          </div>
+
+          <div>
+            <h4 className="text-[12.5px] font-bold text-slate-900 leading-tight">
+              {completion >= 80 ? 'Master Record Complete' : 'Incomplete Sections'}
+            </h4>
+            <p className="text-[11px] text-slate-500 font-normal mt-0.5">
+              {completion >= 80 ? 'Optimal for 90+ ATS AI resume generation.' : 'Complete checklist below to maximize ATS match score.'}
+            </p>
+          </div>
+        </div>
+
+        {/* Optimization Checklist */}
+        <div className="space-y-2">
+          {checklist.map((item, idx) => (
+            <div 
+              key={idx} 
+              onClick={() => onNavigateTab?.(item.tab)}
+              className={cn(
+                "flex items-center justify-between p-2 rounded-lg text-[11.5px] transition-colors",
+                onNavigateTab ? "cursor-pointer hover:bg-slate-50" : ""
+              )}
+            >
+              <div className="flex items-center gap-2 min-w-0 pr-2">
+                {item.done ? (
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" strokeWidth={2.5} />
+                ) : (
+                  <Circle className="w-3.5 h-3.5 text-slate-300 shrink-0" strokeWidth={2} />
+                )}
+                <span className={cn(
+                  "truncate",
+                  item.done ? "text-slate-700 font-medium" : "text-slate-400 font-normal"
+                )}>
+                  {item.text}
+                </span>
+              </div>
+              {!item.done && onNavigateTab && (
+                <span className="text-[10px] font-bold text-primary shrink-0 uppercase tracking-wider">
+                  Add
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* LinkedIn 1-Click Fast Import Card */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 hover:border-slate-300 transition-colors">
+        <div className="flex items-center gap-2 mb-2">
           <div className="w-6 h-6 rounded bg-[#0A66C2]/10 text-[#0A66C2] flex items-center justify-center shrink-0">
             <Link2 className="w-3.5 h-3.5" strokeWidth={2.5} />
           </div>
-          <h3 className="text-[13px] font-bold text-slate-900">Import from LinkedIn</h3>
+          <h3 className="text-[13px] font-bold text-slate-900">LinkedIn Fast Import</h3>
         </div>
-        <p className="text-[11px] font-normal text-slate-500 mb-3 leading-relaxed">
-          Upload your LinkedIn &quot;Save to PDF&quot; export to auto-populate career history and skills.
+        
+        <p className="text-[11.5px] font-normal text-slate-500 mb-3 leading-relaxed">
+          Export your LinkedIn profile as PDF (&quot;More &gt; Save to PDF&quot;) and upload here to auto-populate your master record.
         </p>
+
         <input
           ref={fileInputRef}
           type="file"
@@ -103,88 +207,24 @@ export function ProfileSidebar({ profile, onImport }: { profile?: any; onImport?
           className="hidden"
           onChange={handleFileSelected}
         />
+        
         <button
           onClick={() => fileInputRef.current?.click()}
           disabled={isImporting}
-          className="w-full h-8 text-[12px] font-semibold border border-slate-200 hover:border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-60 cursor-pointer"
+          className="w-full h-9 text-[12.5px] font-semibold border border-slate-200 hover:border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-800 rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-60 cursor-pointer shadow-2xs"
         >
           {isImporting ? (
             <>
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              Parsing LinkedIn PDF...
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-primary" />
+              <span>Parsing LinkedIn Data...</span>
             </>
           ) : (
             <>
               <UploadCloud className="w-3.5 h-3.5 text-slate-500" />
-              Upload LinkedIn PDF
+              <span>Upload LinkedIn PDF</span>
             </>
           )}
         </button>
-      </div>
-
-      {/* Profile Health Meter */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 hover:border-slate-300 transition-colors">
-        <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
-          <h3 className="text-[13px] font-bold text-slate-900">Profile Health</h3>
-          <span className={`text-[11px] font-bold px-2 py-0.5 rounded border ${
-            completion >= 80 
-              ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
-              : completion >= 40
-              ? 'bg-amber-50 text-amber-700 border-amber-200'
-              : 'bg-slate-50 text-slate-600 border-slate-200'
-          }`}>
-            {completion}% Complete
-          </span>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden mb-3">
-          <div 
-            className={`h-full rounded-full transition-all duration-300 ${
-              completion >= 80 ? 'bg-emerald-600' : completion >= 40 ? 'bg-amber-500' : 'bg-primary'
-            }`}
-            style={{ width: `${completion}%` }}
-          />
-        </div>
-
-        {/* Key Attributes List */}
-        <div className="divide-y divide-slate-100 text-[11.5px]">
-          {summaryItems.map((item, idx) => (
-            <div key={idx} className="py-2 flex items-center justify-between gap-2">
-              <span className="text-slate-500 font-medium">{item.label}</span>
-              <span className={`font-semibold truncate max-w-[140px] text-right ${
-                item.value ? 'text-slate-900' : 'text-slate-400 italic font-normal'
-              }`}>
-                {item.value || 'Not provided'}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Profile Optimization Checklist */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 hover:border-slate-300 transition-colors">
-        <div className="flex items-center gap-1.5 pb-2 mb-3 border-b border-slate-100">
-          <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
-          <h3 className="text-[13px] font-bold text-slate-900">Optimization Checklist</h3>
-        </div>
-        
-        <div className="space-y-2.5">
-          {tips.map((tip, idx) => (
-            <div key={idx} className="flex items-start gap-2">
-              {tip.done ? (
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" strokeWidth={2.5} />
-              ) : (
-                <Circle className="w-3.5 h-3.5 text-slate-300 shrink-0 mt-0.5" strokeWidth={2} />
-              )}
-              <span className={`text-[11.5px] leading-snug ${
-                tip.done ? 'text-slate-700 font-medium' : 'text-slate-400 font-normal'
-              }`}>
-                {tip.text}
-              </span>
-            </div>
-          ))}
-        </div>
       </div>
 
     </div>
