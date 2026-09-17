@@ -6,18 +6,18 @@ import { createClient } from '@/utils/supabase/server';
 
 // 1. Define the exact structure of the generated resume
 const GeneratedResumeFormat = z.object({
-  summary: z.array(z.string()).describe("High-impact bullet points for the Professional Summary. Must be exactly 9 points if C2C, or exactly 5 points if Full-Time. Each bullet point MUST be substantive and span approximately 2 lines (25-35 words) with rich JD keywords."),
+  summary: z.array(z.string()).describe("High-impact bullet points for the Professional Summary. Must be exactly 9 points if C2C, or 5-7 points if Full-Time. Each bullet point MUST be substantive and span strictly 2 lines (approx. 25-35 words) with bolded JD keywords like **React.js**, **Node.js**, **AWS**."),
   skills: z.array(z.object({
     category: z.string(),
     items: z.array(z.string())
-  })).describe("Skills grouped by category. EXACTLY up to 6 categories, each with exactly 7-8 skills. The most critical skills matching the JD MUST come first."),
+  })).describe("Skills grouped by category. EXACTLY up to 6 categories, each with 7-8 skills. The most critical skills matching the JD MUST come first."),
   experience: z.array(z.object({
     id: z.string().describe("Original project/experience ID from master profile"),
     role: z.string(),
     company: z.string(),
     duration: z.string(),
-    environment: z.array(z.string()).nullable().describe("List of tools/tech used. ONLY provide this for the first 2 most recent projects if C2C."),
-    bullets: z.array(z.string()).describe("High-impact, 2-line action-driven bullet points for this role. Exactly 9 bullets per role if C2C, or 7 bullets per role if Full-Time.")
+    environment: z.array(z.string()).nullable().describe("List of tools/tech used. Provide this for recent roles."),
+    bullets: z.array(z.string()).describe("High-impact action-driven bullet points for this company role. EXACTLY 10 to 12 bullets per company/role. Every single bullet MUST strictly span 2 lines (approx. 25-35 words) with bolded target JD keywords and quantified achievements.")
   })),
   education: z.array(z.object({
     degree: z.string(),
@@ -44,39 +44,42 @@ You will receive:
 MANDATORY ATS 90+ SCORE & CONTENT RULES (NON-NEGOTIABLE):
 ══════════════════════════════════════════════════════════════════
 
-1. ATS SCORE 90+ KEYWORD MAXIMIZATION:
-   - Deeply analyze the provided Job Description (JD). Extract every core technical skill, framework, cloud service, methodology (Agile/Scrum, CI/CD, TDD), and industry terminology.
-   - Weave the JD's exact keywords verbatim throughout the Professional Summary, the Skills Categories, and into EVERY Experience bullet point.
-   - Achieve 90%+ ATS match density naturally by embedding keywords in context-rich achievement statements (no keyword stuffing or isolated keyword lists).
+1. 10 TO 12 BULLET POINTS PER COMPANY EXPERIENCE:
+   - For EVERY company/role in the experience section, you MUST generate EXACTLY 10 to 12 rich, comprehensive bullet points.
+   - Do NOT stop at 4 or 5 bullets. Deeply detail all facets of development: architecture, frontend/backend engineering, API integration, database indexing, caching, testing, CI/CD automation, cloud deployment, and cross-functional leadership.
 
-2. 2-LINE BULLET POINT DISCIPLINE (STRICT LENGTH RULE):
-   - EVERY SINGLE BULLET POINT (in Professional Summary and Experience) MUST be approximately 2 lines long in standard resume typography (approx. 25 to 35 words per bullet).
-   - NEVER generate short, weak 1-line fragments (e.g. "Worked with React and Node").
-   - NEVER generate dense, unreadable 4+ line paragraphs.
-   - Bullet Formula: [Power Action Verb] + [Specific Technical Scope/Architecture] + [Exact Tools & Methodologies from JD] + [Measurable Business Outcome / Quantified Metric].
+2. STRICT 2-LINE LENGTH DISCIPLINE (25-35 WORDS PER BULLET):
+   - EVERY SINGLE BULLET POINT (in Professional Summary and Experience) MUST be approximately 2 lines long in standard typography (strictly 25 to 35 words / ~160-220 characters per bullet).
+   - NEVER generate short 1-line fragments (e.g., "Worked on React and Node.js").
+   - NEVER generate oversized 4+ line paragraphs.
+   - Strict 2-Line Formula: [Power Action Verb] + [Specific Technical Scope/Architecture] + [Exact Tools & Methodologies from JD] + [Measurable Business Outcome / Quantified Metric].
 
-3. QUANTIFIED IMPACT & ACTION VERBS:
-   - At least 50% of experience bullets MUST include quantified metrics (e.g., "reducing latency by 38%", "scaling to 2.5M daily active users", "accelerating CI/CD deployment cycles by 45%").
-   - Start each bullet with strong, diverse action verbs: Architected, Spearheaded, Engineered, Automated, Deployed, Optimized, Streamlined, Scaled, Orchestrated, Modernized.
+3. DEEP KEYWORD ALIGNMENT & BOLD SYNTAX (**keyword**):
+   - Thoroughly extract every key technology, tool, library, database, cloud service, and architectural pattern from the Job Description (JD).
+   - Weave those exact keywords verbatim throughout the Professional Summary, Skills Matrix, and inside EVERY single experience bullet point.
+   - Use simple markdown bold syntax (e.g., **React.js**, **Next.js**, **TypeScript**, **AWS Lambda**, **PostgreSQL**, **Redis**, **Docker**, **Kubernetes**, **GraphQL**, **CI/CD**) around major technical terms to maximize visual clarity and ATS match density.
+
+4. QUANTIFIED IMPACT & ACTION VERBS:
+   - At least 60% of experience bullets MUST include quantified metrics (e.g., "reducing API response times by 38%", "scaling to 1.2M monthly transactions", "cutting release turnaround from 4 hours to under 25 minutes", "lowering cloud compute overhead by 28%").
+   - Start each bullet with strong, diverse action verbs: Architected, Engineered, Spearheaded, Automated, Deployed, Optimized, Scaled, Orchestrated, Modernized, Refactored.
    - BANNED PHRASES: "Responsible for", "Helped with", "Assisted in", "Worked on", "Handled tasks".
 
-4. TENSE & RECENCY:
-   - Current/Present roles: Use present tense action verbs (e.g., "Architects", "Engineers", "Leads").
-   - Past roles: Use past tense action verbs (e.g., "Architected", "Engineered", "Led").
-   - Front-load high-impact technical depth onto the most recent 1–2 roles.
+5. TENSE & RECENCY:
+   - Current/Present roles: Use present tense action verbs (e.g., "Architects", "Engineers", "Leads", "Deploys").
+   - Past roles: Use past tense action verbs (e.g., "Architected", "Engineered", "Led", "Deployed").
 
-5. RESUME TYPE STRUCTURE SPECIFICATIONS:
+6. RESUME TYPE SPECIFICATIONS:
 
    ★ IF C2C (Corp-to-Corp / Contract):
-   - Professional Summary: EXACTLY 9 bullet points (each strictly 2 lines long, packed with JD keywords and career achievements).
+   - Professional Summary: EXACTLY 9 bullet points (each strictly 2 lines long, packed with JD keywords and bolded technologies).
    - Skills Matrix: EXACTLY up to 6 categories, each with 7-8 skills, prioritized with highest-match JD technologies first.
-   - Experience History: EXACTLY 9 bullet points per project/role (each strictly 2 lines long).
-   - Environment Section: Provide an "environment" tech stack array for the 2 most recent roles.
+   - Experience History: EXACTLY 10 to 12 bullet points per project/role (each strictly 2 lines long).
+   - Environment Section: Provide an "environment" tech stack array for recent roles.
 
    ★ IF FULL-TIME:
-   - Professional Summary: EXACTLY 5 bullet points (each strictly 2 lines long, highly targeted to the JD).
+   - Professional Summary: EXACTLY 5 to 7 bullet points (each strictly 2 lines long, highly targeted to the JD).
    - Skills Matrix: EXACTLY up to 6 categories, each with 7-8 skills, prioritized by JD relevance.
-   - Experience History: EXACTLY 7 bullet points per role (each strictly 2 lines long).
+   - Experience History: EXACTLY 10 to 12 bullet points per company/role (each strictly 2 lines long).
 
 Return a valid, complete JSON object matching the exact schema. Ensure all fields are fully populated without shortcuts or truncation.
 `;

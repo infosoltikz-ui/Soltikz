@@ -22,8 +22,8 @@ You will receive:
 CRITICAL RULES YOU MUST OBEY (NON-NEGOTIABLE):
 1. You MUST use the user's provided "First Bullet Point" EXACTLY as the very first point in your generated array. Do not alter it.
 2. You will generate the remaining points based on the style, tone, and technical scope of that first bullet point, heavily incorporating keywords from the Job Description to ensure an ATS match score of 90%+.
-3. Every bullet point MUST span approximately 2 lines (approx. 25-35 words), packed with action verbs, tools, and quantified outcomes.
-4. Formula: [Power Action Verb] + [Specific Technical Scope/Architecture] + [Exact Tools & Methodologies from JD] + [Measurable Business Outcome / Quantified Metric].
+3. Every bullet point MUST span strictly 2 lines (approx. 25-35 words), packed with action verbs, tools, bolded technical terms (**React.js**, **AWS**, **PostgreSQL**), and quantified outcomes.
+4. Formula: [Power Action Verb] + [Specific Technical Scope/Architecture] + [Exact Tools & Methodologies from JD with **bold**] + [Measurable Business Outcome / Quantified Metric].
 5. At least 50% of bullets MUST carry a quantified result or metric. NEVER fabricate numbers.
 
 RESUME TYPE RULES:
@@ -31,7 +31,7 @@ If C2C:
 - The returned summary MUST have EXACTLY 9 bullet points in total (including the user's first point). Each point must be 2 lines long.
 
 If Full-Time:
-- The returned summary MUST have EXACTLY 5 bullet points in total (including the user's first point). Each point must be 2 lines long.
+- The returned summary MUST have EXACTLY 5 to 7 bullet points in total (including the user's first point). Each point must be 2 lines long.
 
 Return a perfect JSON object mapping exactly to the schema.
 `;
