@@ -32,7 +32,10 @@ export async function POST(req: Request) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { resumeId, parsedJdData, resumeContent } = await req.json();
+    const body = await req.json();
+    const resumeId = body.resumeId;
+    const parsedJdData = body.parsedJdData;
+    const resumeContent = body.resumeContent || body.generatedResume;
     if (!resumeId || !parsedJdData || !resumeContent) return NextResponse.json({ error: 'Missing payload data' }, { status: 400 });
 
     const aiResponse = await generateAIResponse<any>({

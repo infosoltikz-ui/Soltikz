@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn'
 export interface ResumeData {
   id: string;
   name: string;
-  type: 'Full-Time' | 'C2C';
+  type: 'Full-Time' | 'C2C' | string;
   company: string;
   role: string;
   template: string;
@@ -26,7 +26,7 @@ interface ResumeCardProps {
 }
 
 export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggleShare, isTogglingShare }: ResumeCardProps) {
-  const isFullTime = data.type === 'Full-Time'
+  const isFullTime = !String(data.type || '').toLowerCase().includes('c2c')
 
   return (
     <div className="group bg-[#FAFAF8] rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col">

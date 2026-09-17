@@ -21,24 +21,72 @@ export function ResumesPageContent() {
   const fetchResumes = async () => {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
-
-    const { data, error } = await supabase
-      .from('resumes_v2')
-      .select(`
-        *,
-        ats_analyses ( overall_score ),
-        parsed_job_descriptions ( company_name, job_title )
-      `)
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-
-    if (error) {
-      console.error(error)
-    } else {
-      setResumes(data || [])
+    if (!user) {
+      setLoading(false)
+      return
     }
-    setLoading(false)
+
+    try {
+      // First attempt: full relational query
+      const { data, error } = await supabase
+        .from('resumes_v2')
+        .select(`
+          *,
+          ats_analyses ( overall_score ),
+          parsed_job_descriptions ( company_name, job_title )
+        `)
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+
+      if (!error && data) {
+        setResumes(data as any[])
+      } else {
+        console.warn('Resumes join query returned error, falling back to direct query:', error)
+        // Fallback: fetch resumes directly
+        const { data: rawResumes, error: rawError } = await supabase
+          .from('resumes_v2')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+
+        if (rawError || !rawResumes) {
+          console.error('Failed to fetch resumes even on fallback:', rawError)
+          setResumes([])
+        } else {
+          // Attempt to enrich with ats_analyses and parsed_job_descriptions
+          const resumeIds = rawResumes.map((r: any) => r.id)
+          const [atsResult, jdResult] = await Promise.all([
+            supabase.from('ats_analyses').select('resume_id, overall_score').in('resume_id', resumeIds),
+            supabase.from('parsed_job_descriptions').select('id, company_name, job_title').eq('user_id', user.id)
+          ])
+
+          const atsMap: Record<string, number> = {}
+          atsResult.data?.forEach((a: any) => {
+            if (!atsMap[a.resume_id] || a.overall_score > atsMap[a.resume_id]) {
+              atsMap[a.resume_id] = a.overall_score
+            }
+          })
+
+          const jdMap: Record<string, { company_name?: string; job_title?: string }> = {}
+          jdResult.data?.forEach((jd: any) => {
+            jdMap[jd.id] = { company_name: jd.company_name, job_title: jd.job_title }
+          })
+
+          const enriched = rawResumes.map((r: any) => ({
+            ...r,
+            ats_analyses: atsMap[r.id] != null ? [{ overall_score: atsMap[r.id] }] : [],
+            parsed_job_descriptions: r.parsed_jd_id ? jdMap[r.parsed_jd_id] || null : null
+          }))
+
+          setResumes(enriched as any[])
+        }
+      }
+    } catch (err) {
+      console.error('Error in fetchResumes:', err)
+      setResumes([])
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -154,13 +202,17 @@ export function ResumesPageContent() {
     let result = [...resumes]
 
     if (filterType !== 'all') {
-      result = result.filter((r) => r.resume_type === filterType)
+      const isFilterC2C = filterType.toLowerCase().includes('c2c')
+      result = result.filter((r) => {
+        const isC2C = String(r.resume_type || '').toLowerCase().includes('c2c')
+        return isFilterC2C ? isC2C : !isC2C
+      })
     }
 
     if (searchQuery.trim()) {
       const q = searchQuery.trim().toLowerCase()
       result = result.filter((r) => {
-        const jd = r.parsed_job_descriptions
+        const jd = Array.isArray(r.parsed_job_descriptions) ? r.parsed_job_descriptions[0] : r.parsed_job_descriptions
         return (
           r.title?.toLowerCase().includes(q) ||
           jd?.company_name?.toLowerCase().includes(q) ||
@@ -170,16 +222,21 @@ export function ResumesPageContent() {
     }
 
     result.sort((a, b) => {
+      const aScore = Array.isArray(a.ats_analyses) ? a.ats_analyses[0]?.overall_score || 0 : (a.ats_analyses as any)?.overall_score || 0
+      const bScore = Array.isArray(b.ats_analyses) ? b.ats_analyses[0]?.overall_score || 0 : (b.ats_analyses as any)?.overall_score || 0
+      const aDate = new Date(a.updated_at || a.created_at || 0).getTime()
+      const bDate = new Date(b.updated_at || b.created_at || 0).getTime()
+
       switch (sortBy) {
         case 'oldest':
-          return new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime()
+          return aDate - bDate
         case 'ats-desc':
-          return (b.ats_analyses?.[0]?.overall_score || 0) - (a.ats_analyses?.[0]?.overall_score || 0)
+          return bScore - aScore
         case 'ats-asc':
-          return (a.ats_analyses?.[0]?.overall_score || 0) - (b.ats_analyses?.[0]?.overall_score || 0)
+          return aScore - bScore
         case 'newest':
         default:
-          return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+          return bDate - aDate
       }
     })
 

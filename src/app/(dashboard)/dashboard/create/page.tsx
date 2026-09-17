@@ -5,7 +5,7 @@ import { useReactToPrint } from 'react-to-print'
 import { CreateResumeHeader } from '@/components/create-resume/CreateResumeHeader'
 import { ResumeTypeSelector } from '@/components/create-resume/ResumeTypeSelector'
 import { ProfileView } from '@/components/profile/ProfileView'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { CompanyDetailsSection } from '@/components/create-resume/CompanyDetailsSection'
 import { CreateResumeSidebar } from '@/components/create-resume/CreateResumeSidebar'
 import { HowItWorks } from '@/components/create-resume/HowItWorks'
@@ -126,6 +126,9 @@ export default function CreateResumePage() {
     }
   }
 
+  const searchParams = useSearchParams()
+  const resumeIdParam = searchParams?.get('id')
+
   useEffect(() => {
     // Fetch user profile on mount
     const fetchProfile = async () => {
@@ -138,6 +141,95 @@ export default function CreateResumePage() {
     }
     fetchProfile()
   }, [])
+
+  useEffect(() => {
+    if (!resumeIdParam) return
+
+    const loadExistingResume = async () => {
+      try {
+        const supabase = createClient()
+        const { data: resume, error: resumeErr } = await supabase
+          .from('resumes_v2')
+          .select('*')
+          .eq('id', resumeIdParam)
+          .single()
+
+        if (resumeErr || !resume) {
+          console.error('Failed to load resume:', resumeErr)
+          return
+        }
+
+        setCurrentResumeId(resume.id)
+        const isC2C = String(resume.resume_type || '').toLowerCase().includes('c2c')
+        setResumeType(isC2C ? 'c2c' : 'fulltime')
+        setSelectedTemplateId(isC2C ? 'c2c' : 'modern')
+
+        // Fetch resume sections
+        const { data: sections } = await supabase
+          .from('resume_sections')
+          .select('section_type, content')
+          .eq('resume_id', resume.id)
+
+        if (sections && sections.length > 0) {
+          const reconstructed: any = {
+            summary: [],
+            skills: [],
+            experience: [],
+            education: [],
+            certifications: []
+          }
+          sections.forEach((sec: any) => {
+            const key = sec.section_type.toLowerCase()
+            reconstructed[key] = sec.content
+          })
+          setGeneratedResume(reconstructed)
+        }
+
+        // Fetch ATS analysis
+        const { data: ats } = await supabase
+          .from('ats_analyses')
+          .select('*')
+          .eq('resume_id', resume.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+
+        if (ats) {
+          setAtsData({
+            overallScore: ats.overall_score,
+            categoryScores: ats.category_scores,
+            missingKeywords: ats.missing_keywords,
+            improvementSuggestions: ats.improvement_suggestions
+          })
+        }
+
+        // Fetch Interview Prep
+        const { data: prep } = await supabase
+          .from('interview_preparations')
+          .select('*')
+          .eq('resume_id', resume.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+
+        if (prep) {
+          setInterviewPrep({
+            hrQuestions: prep.hr_questions,
+            techQuestions: prep.tech_questions,
+            starAnswers: prep.star_answers,
+            selfIntroduction: prep.self_introduction,
+            companyNotes: prep.company_notes
+          })
+        }
+
+        setStep(2)
+      } catch (err) {
+        console.error('Error loading resume:', err)
+      }
+    }
+
+    loadExistingResume()
+  }, [resumeIdParam])
 
   const handleGenerate = async (companyName: string, jobRole: string, jobDescription: string) => {
     setIsGenerating(true)

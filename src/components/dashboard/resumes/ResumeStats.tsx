@@ -19,45 +19,84 @@ export function ResumeStats() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
 
-      const { data: resumes } = await supabase
-        .from('resumes_v2')
-        .select('id, resume_type, ats_analyses ( overall_score )')
-        .eq('user_id', user.id)
+      try {
+        let resumes: any[] = []
+        const { data, error } = await supabase
+          .from('resumes_v2')
+          .select('id, resume_type, ats_analyses ( overall_score )')
+          .eq('user_id', user.id)
 
-      let totalAts = 0
-      let atsCount = 0
-      let c2cCount = 0
-      let fullTimeCount = 0
+        if (!error && data) {
+          resumes = data
+        } else {
+          // Fallback query
+          const { data: rawResumes } = await supabase
+            .from('resumes_v2')
+            .select('id, resume_type')
+            .eq('user_id', user.id)
 
-      resumes?.forEach((r: any) => {
-        if (r.resume_type === 'C2C') c2cCount++
-        else fullTimeCount++
+          if (rawResumes && rawResumes.length > 0) {
+            const resumeIds = rawResumes.map(r => r.id)
+            const { data: atsList } = await supabase
+              .from('ats_analyses')
+              .select('resume_id, overall_score')
+              .in('resume_id', resumeIds)
 
-        const score = r.ats_analyses?.[0]?.overall_score
-        if (score != null && score > 0) {
-          totalAts += score
-          atsCount++
+            const atsMap: Record<string, number> = {}
+            atsList?.forEach(a => {
+              if (!atsMap[a.resume_id] || a.overall_score > atsMap[a.resume_id]) {
+                atsMap[a.resume_id] = a.overall_score
+              }
+            })
+
+            resumes = rawResumes.map(r => ({
+              ...r,
+              ats_analyses: atsMap[r.id] != null ? [{ overall_score: atsMap[r.id] }] : []
+            }))
+          }
         }
-      })
 
-      const resumeIds = (resumes || []).map((r: any) => r.id)
-      let totalDownloads = 0
-      if (resumeIds.length > 0) {
-        const { count } = await supabase
-          .from('usage_events')
-          .select('id', { count: 'exact', head: true })
-          .in('event_type', ['pdf_download', 'docx_download'])
-          .in('resume_id', resumeIds)
-        totalDownloads = count || 0
+        let totalAts = 0
+        let atsCount = 0
+        let c2cCount = 0
+        let fullTimeCount = 0
+
+        resumes.forEach((r: any) => {
+          const isC2C = String(r.resume_type || '').toLowerCase().includes('c2c')
+          if (isC2C) c2cCount++
+          else fullTimeCount++
+
+          const score = Array.isArray(r.ats_analyses)
+            ? r.ats_analyses[0]?.overall_score
+            : r.ats_analyses?.overall_score
+
+          if (score != null && score > 0) {
+            totalAts += score
+            atsCount++
+          }
+        })
+
+        const resumeIds = resumes.map((r: any) => r.id)
+        let totalDownloads = 0
+        if (resumeIds.length > 0) {
+          const { count } = await supabase
+            .from('usage_events')
+            .select('id', { count: 'exact', head: true })
+            .in('event_type', ['pdf_download', 'docx_download'])
+            .in('resume_id', resumeIds)
+          totalDownloads = count || 0
+        }
+
+        setStats({
+          totalResumes: resumes.length,
+          fullTimeCount,
+          c2cCount,
+          avgAtsScore: atsCount > 0 ? Math.round(totalAts / atsCount) : 0,
+          totalDownloads,
+        })
+      } catch (err) {
+        console.error('Error fetching resume stats:', err)
       }
-
-      setStats({
-        totalResumes: resumes?.length || 0,
-        fullTimeCount,
-        c2cCount,
-        avgAtsScore: atsCount > 0 ? Math.round(totalAts / atsCount) : 0,
-        totalDownloads,
-      })
     }
     fetchStats()
   }, [])

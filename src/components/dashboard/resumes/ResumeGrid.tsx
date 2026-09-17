@@ -7,14 +7,15 @@ import { ResumeCard } from './ResumeCard'
 export interface ResumeRow {
   id: string
   title: string
-  resume_type: 'Full-Time' | 'C2C'
+  resume_type: string
   status: string
   updated_at: string
+  created_at?: string
   version_number?: number
   is_public?: boolean
   share_slug?: string | null
-  ats_analyses?: { overall_score: number }[]
-  parsed_job_descriptions?: { company_name?: string; job_title?: string } | null
+  ats_analyses?: { overall_score: number }[] | { overall_score: number } | null
+  parsed_job_descriptions?: { company_name?: string; job_title?: string }[] | { company_name?: string; job_title?: string } | null
 }
 
 interface ResumeGridProps {
@@ -72,22 +73,45 @@ export function ResumeGrid({ resumes, loading, hasAnyResumes, onDelete, onDuplic
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
       {resumes.map(resume => {
-        const atsScore = resume.ats_analyses?.[0]?.overall_score || 0
-        const jd = resume.parsed_job_descriptions
+        const atsScore = Array.isArray(resume.ats_analyses)
+          ? resume.ats_analyses[0]?.overall_score || 0
+          : (resume.ats_analyses as any)?.overall_score || 0
+
+        const jd = Array.isArray(resume.parsed_job_descriptions)
+          ? resume.parsed_job_descriptions[0]
+          : resume.parsed_job_descriptions
+
+        // Extract company and role from JD or fall back to parsing title
+        let company = jd?.company_name || ''
+        let role = jd?.job_title || ''
+
+        if (!company && resume.title) {
+          const parts = resume.title.split('-').map(s => s.trim())
+          if (parts.length > 1) {
+            company = parts.slice(1).join(' - ')
+          }
+        }
+        if (!company) company = 'Target Employer'
+        if (!role) role = 'Software Engineer'
+
+        const isC2C = String(resume.resume_type || '').toLowerCase().includes('c2c')
+        const normalizedType = isC2C ? 'C2C' : 'Full-Time'
+        const templateName = isC2C ? 'Executive C2C Template' : 'Modern ATS Template'
+        const dateString = resume.updated_at || resume.created_at || new Date().toISOString()
 
         return (
           <ResumeCard
             key={resume.id}
             data={{
               id: resume.id,
-              name: resume.title,
-              type: resume.resume_type,
-              company: jd?.company_name || 'N/A',
-              role: jd?.job_title || 'N/A',
-              template: 'Modern ATS Template',
+              name: resume.title || 'Tailored Resume',
+              type: normalizedType as 'Full-Time' | 'C2C',
+              company,
+              role,
+              template: templateName,
               atsScore,
-              lastUpdated: lastUpdatedLabel(resume.updated_at),
-              status: resume.status as 'Completed' | 'Draft',
+              lastUpdated: lastUpdatedLabel(dateString),
+              status: (resume.status || 'Ready') as 'Completed' | 'Draft',
               versionNumber: resume.version_number,
               isPublic: resume.is_public,
             }}
