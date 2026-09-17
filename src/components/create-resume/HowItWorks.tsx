@@ -27,15 +27,15 @@ export function HowItWorks({ currentStep = 1, onStepClick }: HowItWorksProps) {
     },
     { 
       step: 2, 
-      label: 'Target Job & JD', 
-      desc: 'Company, role & requirements',
+      label: 'Target Job & Resume', 
+      desc: 'AI tailoring & live preview',
       icon: Sparkles,
       badge: 'Step 2'
     },
     { 
       step: 3, 
-      label: 'ATS Review & Export', 
-      desc: '90+ score & PDF download',
+      label: 'Interview & Strategy', 
+      desc: 'Cover letter & Q&A prep',
       icon: ShieldCheck,
       badge: 'Step 3'
     },
