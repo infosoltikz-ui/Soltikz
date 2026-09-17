@@ -24,6 +24,7 @@ import { toast } from 'react-hot-toast'
 import { cn } from '@/utils/cn'
 import { Button } from '@/components/ui/Button'
 import { CoverLetterViewer } from './CoverLetterViewer'
+import { ATSScoreMeter } from './ATSScoreMeter'
 import type { CoverLetterData } from './coverLetterTypes'
 
 export interface InterviewPrepData {
@@ -515,86 +516,8 @@ export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateNa
 
       {/* TAB 5: ATS Analysis & Keyword Insights */}
       {activeTab === 'ats' && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6 animate-in fade-in duration-300">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-[17px] font-black text-slate-900">ATS Match Analysis</h3>
-                <p className="text-[12px] font-medium text-slate-500">Applicant Tracking System compatibility score</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 bg-emerald-50 px-3.5 py-1.5 rounded-xl border border-emerald-200/60">
-              <span className="text-[18px] font-black text-emerald-700">{atsData?.overall_score || 92}%</span>
-              <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider">Match</span>
-            </div>
-          </div>
-
-          {/* Category Scores */}
-          {atsData?.category_scores && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {Object.entries(atsData.category_scores).map(([key, val]) => (
-                <div key={key} className="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                  <div className="text-[11px] font-bold text-slate-500 capitalize mb-1">
-                    {key.replace(/([A-Z])/g, ' $1').trim()}
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="text-[15px] font-black text-slate-800">{val || 85}%</div>
-                    <div className="w-12 h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                      <div 
-                        className={cn(
-                          "h-full rounded-full",
-                          (val || 0) >= 80 ? "bg-emerald-500" : (val || 0) >= 60 ? "bg-amber-500" : "bg-red-500"
-                        )}
-                        style={{ width: `${val || 85}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Missing Keywords */}
-          {atsData?.missing_keywords && atsData.missing_keywords.length > 0 && (
-            <div className="space-y-2">
-              <h4 className="text-[13px] font-bold text-slate-800 flex items-center gap-1.5">
-                <AlertCircle className="w-4 h-4 text-amber-500" />
-                <span>Keywords to Highlight in Interview</span>
-              </h4>
-              <p className="text-[12px] text-slate-500">
-                These keywords were present in the JD. Mention your familiarity with them during discussions:
-              </p>
-              <div className="flex flex-wrap gap-2 pt-1">
-                {atsData.missing_keywords.map((kw, i) => (
-                  <span key={i} className="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-[12px] font-bold">
-                    + {kw}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Improvement Suggestions */}
-          {atsData?.improvement_suggestions && atsData.improvement_suggestions.length > 0 && (
-            <div className="space-y-2 pt-2 border-t border-slate-100">
-              <h4 className="text-[13px] font-bold text-slate-800 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-primary" />
-                <span>Optimization Advice</span>
-              </h4>
-              <ul className="space-y-1.5">
-                {atsData.improvement_suggestions.map((sug, i) => (
-                  <li key={i} className="text-[13px] text-slate-600 font-medium flex items-start gap-2">
-                    <span className="text-primary font-bold">•</span>
-                    <span>{sug}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+        <div className="animate-in fade-in duration-300">
+          <ATSScoreMeter atsData={atsData} />
         </div>
       )}
 

@@ -22,6 +22,7 @@ import { CertificationsForm } from '@/components/profile/CertificationsForm'
 import { Button } from '@/components/ui/Button'
 import { ArrowRight, ArrowLeft, Loader2, Download } from 'lucide-react'
 import { TemplateSelector } from '@/components/create-resume/TemplateSelector'
+import { ATSScoreMeter } from '@/components/create-resume/ATSScoreMeter'
 import { getTemplateById, DEFAULT_TEMPLATE_ID } from '@/components/create-resume/templates/registry'
 import { downloadResumeDocx } from '@/components/create-resume/exportDocx'
 import { isPremiumPlan } from '@/utils/pricingPlans'
@@ -407,39 +408,36 @@ export default function CreateResumePage() {
 
         {step === 3 && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-              <Button 
-                onClick={() => setStep(2)}
-                className="h-10 px-6 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 bg-transparent"
-              >
-                <div className="flex items-center gap-2">
-                  <ArrowLeft className="w-4 h-4" />
-                  Back to Details
-                </div>
-              </Button>
-              <div className="text-[14px] font-bold text-slate-800">
-                Final Step: Review & Download
-              </div>
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm">
               <div className="flex items-center gap-3">
-                <Button onClick={() => setIsRegenerateSummaryModalOpen(true)} variant="outline" className="h-10 px-4 rounded-lg border-slate-300 text-slate-700 bg-white shadow-sm hover:bg-slate-50">
-                  <div className="flex items-center gap-2">
-                    Refine Summary
+                <Button 
+                  onClick={() => setStep(2)}
+                  className="h-9 px-4 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 bg-transparent border border-slate-200 cursor-pointer"
+                >
+                  <div className="flex items-center gap-1.5 text-[13px] font-semibold">
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    Back to Details
                   </div>
                 </Button>
-                <Button onClick={() => setIsManualEditModalOpen(true)} variant="outline" className="h-10 px-4 rounded-lg border-slate-300 text-slate-700 bg-white shadow-sm hover:bg-slate-50">
-                  <div className="flex items-center gap-2">
-                    Edit Skills
-                  </div>
+                
+                {/* Real-time ATS Score Meter Pill */}
+                <ATSScoreMeter atsData={atsData} variant="compact" />
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5">
+                <Button onClick={() => setIsRegenerateSummaryModalOpen(true)} variant="outline" className="h-9 px-3.5 rounded-lg border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12.5px] font-semibold cursor-pointer">
+                  Refine Summary
                 </Button>
-                <Button onClick={applyBaseResumeFallback} variant="outline" className="h-10 px-4 rounded-lg border-slate-300 text-slate-700 bg-white shadow-sm hover:bg-slate-50">
-                  <div className="flex items-center gap-2">
-                    Fallback: Older Roles
-                  </div>
+                <Button onClick={() => setIsManualEditModalOpen(true)} variant="outline" className="h-9 px-3.5 rounded-lg border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12.5px] font-semibold cursor-pointer">
+                  Edit Skills
                 </Button>
-                <Button onClick={handlePrint} className="h-10 px-6 rounded-lg bg-green-600 hover:bg-green-700 text-white shadow-md">
-                  <div className="flex items-center gap-2">
-                    <Download className="w-4 h-4" />
-                    Export to PDF
+                <Button onClick={applyBaseResumeFallback} variant="outline" className="h-9 px-3.5 rounded-lg border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12.5px] font-semibold cursor-pointer">
+                  Fallback: Older Roles
+                </Button>
+                <Button onClick={handlePrint} className="h-9 px-5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm text-[13px] font-semibold cursor-pointer">
+                  <div className="flex items-center gap-1.5">
+                    <Download className="w-3.5 h-3.5" />
+                    Export PDF
                   </div>
                 </Button>
               </div>
