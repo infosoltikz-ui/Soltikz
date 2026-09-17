@@ -16,132 +16,208 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
   };
 
   const SectionHeader = ({ title }: { title: string }) => (
-    <h2 className="font-bold text-black mt-4 mb-2 border-b border-black pb-0.5" style={{ fontSize: '11pt' }}>
+    <h2 className="font-bold text-black mt-3 mb-1.5 border-b border-black pb-0.5" style={{ fontSize: '10.5pt' }}>
       {title}
     </h2>
   );
 
   let globalBulletCount = 1;
 
+  const experiences = resumeData.experience || [];
+  const firstExp = experiences.slice(0, 1);
+  const secondExp = experiences.slice(1);
+  const hasPage2 = secondExp.length > 0 || (resumeData.education && resumeData.education.length > 0) || (resumeData.certifications && resumeData.certifications.length > 0);
+
   return (
-    <div
-      ref={ref}
-      className="resume-document bg-white w-full max-w-[794px] min-h-[1123px] mx-auto shadow-sm border border-slate-200 text-black transition-all"
-      style={{
-        boxSizing: 'border-box',
-        fontFamily: selectedFont,
-        color: '#000000',
-        fontSize: '10pt',
-        lineHeight: '1.45',
-        padding: '48px 56px',
-      }}
-    >
-      {/* Header */}
-      <div className="text-center mb-5 break-inside-avoid">
-        <h1 className="font-bold text-black m-0" style={{ fontSize: '16pt' }}>
-          {profileData.full_name || 'JOHN DOE'}
-        </h1>
-        <div className="mt-1">
-          {[profileData.location, profileData.phone, profileData.email, profileData.linkedin].filter(Boolean).join('  •  ')}
+    <div ref={ref} className="space-y-8 print:space-y-0 text-black">
+      {/* ─── PAGE 1 ─── */}
+      <div
+        className="resume-page bg-white w-[794px] min-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between"
+        style={{
+          boxSizing: 'border-box',
+          fontFamily: selectedFont,
+          color: '#000000',
+          fontSize: '9.5pt',
+          lineHeight: '1.4',
+          padding: '44px 50px',
+        }}
+      >
+        <div>
+          {/* Header */}
+          <div className="text-center mb-3.5 break-inside-avoid">
+            <h1 className="font-bold text-black m-0" style={{ fontSize: '15pt' }}>
+              {profileData.full_name || 'JOHN DOE'}
+            </h1>
+            <div className="mt-0.5">
+              {[profileData.location, profileData.phone, profileData.email, profileData.linkedin].filter(Boolean).join('  •  ')}
+            </div>
+            {(profileData.work_authorization || profileData.relocation || profileData.availability) && (
+              <div className="mt-0.5 text-slate-700">
+                {[
+                  profileData.work_authorization && `Work Authorization: ${profileData.work_authorization}`,
+                  profileData.relocation && `Relocation: ${profileData.relocation}`,
+                  profileData.availability && `Availability: ${profileData.availability}`
+                ].filter(Boolean).join('   |   ')}
+              </div>
+            )}
+          </div>
+
+          {/* Professional Summary */}
+          {resumeData.summary && resumeData.summary.length > 0 && (
+            <div className="mb-3">
+              <SectionHeader title="Professional Summary" />
+              <ul className="list-none m-0 space-y-1">
+                {resumeData.summary.map((point, i) => (
+                  <li key={i} className="flex gap-2">
+                    <span className="shrink-0 font-semibold">▪ {i + 1}.</span>
+                    <span className="text-justify">{renderWithBold(point)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Technical Skills */}
+          {resumeData.skills && resumeData.skills.length > 0 && (
+            <div className="mb-3">
+              <SectionHeader title="Technical Skills" />
+              <div className="space-y-0.5">
+                {resumeData.skills.map((skillGroup, i) => (
+                  <div key={i} className="leading-snug">
+                    <span className="font-bold">{skillGroup.category}: </span>
+                    <span>{skillGroup.items.join(', ')}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Experience (Project 1) */}
+          {firstExp.length > 0 && (
+            <div className="mb-2">
+              <SectionHeader title="Professional Experience" />
+              {firstExp.map((exp, i) => (
+                <div key={i} className="mb-2">
+                  <div className="font-bold">
+                    {exp.company} {exp.location ? `| ${exp.location}` : ''} | {exp.duration}
+                  </div>
+                  <div className="mb-1 font-semibold text-slate-800">{exp.role}</div>
+
+                  <ul className="list-none mt-0.5 mb-1 m-0 space-y-1">
+                    {exp.bullets.map((bullet, j) => (
+                      <li key={j} className="flex gap-2">
+                        <span className="shrink-0 font-medium">{globalBulletCount++}.</span>
+                        <span className="text-justify">{renderWithBold(bullet)}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {exp.environment && exp.environment.length > 0 && (
+                    <div className="mt-1">
+                      <span className="font-bold">Environment: </span>
+                      <span>{exp.environment.join(', ')}</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-        {(profileData.work_authorization || profileData.relocation || profileData.availability) && (
-          <div className="mt-1 text-slate-700">
-            {[
-              profileData.work_authorization && `Work Authorization: ${profileData.work_authorization}`,
-              profileData.relocation && `Relocation: ${profileData.relocation}`,
-              profileData.availability && `Availability: ${profileData.availability}`
-            ].filter(Boolean).join('   |   ')}
+
+        {/* Page 1 Footer */}
+        {hasPage2 && (
+          <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200/60 mt-auto">
+            <span>{profileData.full_name || 'Candidate'} — Confidential Resume</span>
+            <span>Page 1 of 2</span>
           </div>
         )}
       </div>
 
-      {/* Professional Summary */}
-      {resumeData.summary && resumeData.summary.length > 0 && (
-        <div className="mb-4 break-inside-avoid">
-          <SectionHeader title="Professional Summary" />
-          <ul className="list-none m-0 space-y-1">
-            {resumeData.summary.map((point, i) => (
-              <li key={i} className="flex gap-2">
-                <span className="shrink-0 font-semibold">▪ {i + 1}.</span>
-                <span className="text-justify">{renderWithBold(point)}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {/* ─── PAGE 2 ─── */}
+      {hasPage2 && (
+        <div
+          className="resume-page bg-white w-[794px] min-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between"
+          style={{
+            boxSizing: 'border-box',
+            fontFamily: selectedFont,
+            color: '#000000',
+            fontSize: '9.5pt',
+            lineHeight: '1.4',
+            padding: '44px 50px',
+          }}
+        >
+          <div>
+            {/* Continuation Header */}
+            <div className="flex justify-between items-center pb-2 mb-3 border-b border-black">
+              <span className="font-bold uppercase tracking-wider" style={{ fontSize: '10.5pt' }}>
+                {profileData.full_name || 'JOHN DOE'} — Professional Experience (Cont.)
+              </span>
+              <span className="text-slate-400 text-[9pt] font-medium">Page 2</span>
+            </div>
 
-      {/* Technical Skills */}
-      {resumeData.skills && resumeData.skills.length > 0 && (
-        <div className="mb-4 break-inside-avoid">
-          <SectionHeader title="Technical Skills" />
-          <div className="space-y-1">
-            {resumeData.skills.map((skillGroup, i) => (
-              <div key={i} className="leading-snug">
-                <span className="font-bold">{skillGroup.category}: </span>
-                <span>{skillGroup.items.join(', ')}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+            {/* Remaining Experience */}
+            {secondExp.length > 0 && (
+              <div className="space-y-3 mb-4">
+                {secondExp.map((exp, i) => (
+                  <div key={i} className="mb-3">
+                    <div className="font-bold">
+                      {exp.company} {exp.location ? `| ${exp.location}` : ''} | {exp.duration}
+                    </div>
+                    <div className="mb-1 font-semibold text-slate-800">{exp.role}</div>
 
-      {/* Professional Experience */}
-      {resumeData.experience && resumeData.experience.length > 0 && (
-        <div className="mb-4">
-          <SectionHeader title="Professional Experience" />
-          <div className="space-y-4">
-            {resumeData.experience.map((exp, i) => (
-              <div key={i} className="break-inside-avoid mb-4">
-                <div className="font-bold">
-                  {exp.company} {exp.location ? `| ${exp.location}` : ''} | {exp.duration}
-                </div>
-                <div className="mb-1 font-semibold text-slate-800">{exp.role}</div>
+                    <ul className="list-none mt-0.5 mb-1 m-0 space-y-1">
+                      {exp.bullets.map((bullet, j) => (
+                        <li key={j} className="flex gap-2">
+                          <span className="shrink-0 font-medium">{globalBulletCount++}.</span>
+                          <span className="text-justify">{renderWithBold(bullet)}</span>
+                        </li>
+                      ))}
+                    </ul>
 
-                <ul className="list-none mt-1 mb-1 m-0 space-y-1">
-                  {exp.bullets.map((bullet, j) => (
-                    <li key={j} className="flex gap-2">
-                      <span className="shrink-0 font-medium">{globalBulletCount++}.</span>
-                      <span className="text-justify">{renderWithBold(bullet)}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {exp.environment && exp.environment.length > 0 && (
-                  <div className="mt-1">
-                    <span className="font-bold">Environment: </span>
-                    <span>{exp.environment.join(', ')}</span>
+                    {exp.environment && exp.environment.length > 0 && (
+                      <div className="mt-1">
+                        <span className="font-bold">Environment: </span>
+                        <span>{exp.environment.join(', ')}</span>
+                      </div>
+                    )}
                   </div>
-                )}
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            )}
 
-      {/* Education */}
-      {resumeData.education && resumeData.education.length > 0 && (
-        <div className="mb-4 break-inside-avoid">
-          <SectionHeader title="Education" />
-          <div className="space-y-1.5">
-            {resumeData.education.map((edu, i) => (
-              <div key={i}>
-                <span className="font-bold">{edu.degree}</span> | {edu.institution} | {edu.year}
+            {/* Education */}
+            {resumeData.education && resumeData.education.length > 0 && (
+              <div className="mb-4">
+                <SectionHeader title="Education" />
+                <div className="space-y-1">
+                  {resumeData.education.map((edu, i) => (
+                    <div key={i}>
+                      <span className="font-bold">{edu.degree}</span> | {edu.institution} | {edu.year}
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            )}
 
-      {/* Certifications */}
-      {resumeData.certifications && resumeData.certifications.length > 0 && (
-        <div className="mb-4 break-inside-avoid">
-          <SectionHeader title="Certifications" />
-          <div className="space-y-1">
-            {resumeData.certifications.map((cert, i) => (
-              <div key={i}>
-                <span className="font-bold">{cert.name}</span> | {cert.issuer} | Earned {cert.year}
+            {/* Certifications */}
+            {resumeData.certifications && resumeData.certifications.length > 0 && (
+              <div className="mb-4">
+                <SectionHeader title="Certifications" />
+                <div className="space-y-1">
+                  {resumeData.certifications.map((cert, i) => (
+                    <div key={i}>
+                      <span className="font-bold">{cert.name}</span> | {cert.issuer} | Earned {cert.year}
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
+            )}
+          </div>
+
+          {/* Page 2 Footer */}
+          <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200/60 mt-auto">
+            <span>{profileData.full_name || 'Candidate'} — Confidential Resume</span>
+            <span>Page 2 of 2</span>
           </div>
         </div>
       )}

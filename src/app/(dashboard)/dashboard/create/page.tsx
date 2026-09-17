@@ -491,12 +491,12 @@ export default function CreateResumePage() {
                     </div>
 
                     {/* Document Canvas */}
-                    <div className="bg-slate-100/90 dark:bg-slate-900/60 p-4 sm:p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 flex flex-col items-center justify-start overflow-y-auto max-h-[85vh] shadow-inner">
+                    <div className="bg-slate-200/80 dark:bg-slate-950/80 p-4 sm:p-8 rounded-3xl border border-slate-300/80 dark:border-slate-800 flex flex-col items-center justify-start overflow-y-auto max-h-[88vh] shadow-inner">
                       <div 
                         className="w-full flex justify-center transition-transform duration-200"
                         style={{ transform: `scale(${resumeZoom})`, transformOrigin: 'top center' }}
                       >
-                        <div className="shadow-2xl rounded-sm border border-slate-300/80 bg-white w-full max-w-[794px]">
+                        <div className="w-full max-w-[794px]">
                           {(() => {
                             const SelectedTemplate = getTemplateById(selectedTemplateId).component
                             return <SelectedTemplate ref={resumeRef} resumeData={generatedResume} profileData={profileData} />
