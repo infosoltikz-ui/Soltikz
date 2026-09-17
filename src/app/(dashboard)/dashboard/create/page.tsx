@@ -310,10 +310,11 @@ export default function CreateResumePage() {
       <CreateResumeHeader />
       
       <main className="mt-8">
+        {/* Dynamic AI Generation Pipeline Stepper */}
+        <HowItWorks currentStep={step} onStepClick={(s) => setStep(s)} />
+
         {step === 1 && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <HowItWorks />
-            
             <div className="flex flex-col gap-6">
               <TemplateSelector 
                 selectedId={selectedTemplateId} 

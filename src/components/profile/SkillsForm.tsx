@@ -197,11 +197,6 @@ export function SkillsForm({
                   rows={2}
                   className="w-full p-2.5 rounded-md border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-800 resize-y leading-relaxed placeholder:text-slate-400"
                 />
-                {cat.items.length > 8 && (
-                  <p className="text-amber-600 text-[11px] font-medium mt-1">
-                    Note: Over 8 items in one group may reduce recruiter readability. Consider splitting into two categories.
-                  </p>
-                )}
               </div>
             </div>
           </div>
