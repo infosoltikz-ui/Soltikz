@@ -22,8 +22,17 @@ export function ApplicationTrackerWidget({ resumes }: ApplicationTrackerWidgetPr
   // Filter resumes that have job description targets or titles
   const applications = resumes.slice(0, 4).map(r => {
     const jd = Array.isArray(r.parsed_job_descriptions) ? r.parsed_job_descriptions[0] : r.parsed_job_descriptions
-    const company = jd?.company_name || 'Direct Employer'
-    const role = jd?.job_title || r.title?.replace(/Resume/i, '').replace(/Full Time/i, '').replace(/Contract/i, '').replace(/[-–@]/g, '').trim() || 'Software Engineer'
+    let company = jd?.company_name || ''
+    if (!company || company.toLowerCase().includes('unknown') || company === 'N/A' || company === 'Draft') {
+      if (r.title) {
+        const parts = r.title.split('-').map((s: string) => s.trim())
+        if (parts.length > 1) {
+          company = parts.slice(1).join(' - ').trim()
+        }
+      }
+    }
+    if (!company || company.toLowerCase().includes('unknown')) company = 'Direct Employer'
+    const role = jd?.job_title || r.title?.replace(/Resume/i, '').replace(/Full Time/i, '').replace(/Contract/i, '').replace(/[-–@]/g, '').trim() || 'Senior Software Engineer'
     const atsScore = r.ats_analyses?.[0]?.overall_score || null
     const currentStatus: AppStatus = statuses[r.id] || (atsScore && atsScore >= 85 ? 'Ready to Apply' : 'Tailored') as AppStatus
 
