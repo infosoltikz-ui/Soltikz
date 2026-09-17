@@ -25,8 +25,8 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeTemplatePro
     // Helper for Section Headers (Strict ATS)
     const SectionHeader = ({ title }: { title: string }) => (
       <h2 
-        className="font-bold uppercase pb-1 mb-2 mt-4 border-b border-black w-full" 
-        style={{ fontSize: '12pt', color: '#000000', fontFamily: selectedFont }}
+        className="font-bold uppercase pb-0.5 mb-2 mt-3.5 border-b border-black w-full break-inside-avoid" 
+        style={{ fontSize: '11.5pt', color: '#000000', fontFamily: selectedFont }}
       >
         {title}
       </h2>
@@ -35,23 +35,19 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeTemplatePro
     return (
       <div
         ref={ref}
-        className="bg-white w-[794px] mx-auto shadow-sm border border-slate-200 text-black"
+        className="resume-document bg-white w-full max-w-[794px] min-h-[1123px] mx-auto shadow-sm border border-slate-200 text-black transition-all"
         style={{
           boxSizing: 'border-box',
-          height: '1123px',
-          padding: '57px 68px',
-          columnWidth: '658px',
-          columnGap: '136px',
-          columnFill: 'auto',
+          padding: '48px 56px',
           fontFamily: selectedFont,
           color: '#000000',
-          fontSize: '11pt',
-          lineHeight: '1.5'
+          fontSize: '10pt',
+          lineHeight: '1.45'
         }}
       >
         {/* Header - Classic ATS Center */}
-        <div className="mb-4 text-center">
-          <h1 className="uppercase font-bold mb-1" style={{ fontSize: '22pt' }}>
+        <div className="mb-4 text-center break-inside-avoid">
+          <h1 className="uppercase font-bold mb-1" style={{ fontSize: '20pt' }}>
             {profileData.full_name || 'JOHN DOE'}
           </h1>
           <div className="flex flex-wrap items-center justify-center gap-2" style={{ fontSize: '10pt' }}>
@@ -79,11 +75,11 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 
         {/* Professional Summary */}
         {resumeData.summary && resumeData.summary.length > 0 && (
-          <div className="mb-3">
+          <div className="mb-3.5 break-inside-avoid">
             <SectionHeader title="Professional Summary" />
             <ul className="list-disc pl-5 space-y-1 m-0" style={{ fontSize: '10pt' }}>
               {resumeData.summary.map((point: string, i: number) => (
-                <li key={i} className="pl-1 leading-snug">
+                <li key={i} className="pl-1 leading-snug text-justify">
                   {parseBoldText(point)}
                 </li>
               ))}
@@ -93,7 +89,7 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 
         {/* Technical Skills - Flat ATS format */}
         {resumeData.skills && resumeData.skills.length > 0 && (
-          <div className="mb-3">
+          <div className="mb-3.5 break-inside-avoid">
             <SectionHeader title="Technical Skills" />
             <div className="space-y-1" style={{ fontSize: '10pt' }}>
               {resumeData.skills.map((skillGroup: any, i: number) => (
@@ -108,17 +104,17 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 
         {/* Professional Experience */}
         {resumeData.experience && resumeData.experience.length > 0 && (
-          <div className="mb-3">
+          <div className="mb-3.5">
             <SectionHeader title="Professional Experience" />
-            <div className="space-y-3">
+            <div className="space-y-4">
               {resumeData.experience.map((exp: any, i: number) => (
-                <div key={i}>
+                <div key={i} className="break-inside-avoid mb-3.5">
                   <div className="flex justify-between items-start leading-tight mb-0.5" style={{ fontSize: '10.5pt' }}>
                     <div className="font-bold">{exp.role}</div>
                     <div className="whitespace-nowrap ml-4 font-bold">{exp.duration}</div>
                   </div>
                   <div className="leading-tight mb-1" style={{ fontSize: '10pt' }}>
-                    <span className="font-bold">
+                    <span className="font-semibold text-slate-800">
                       {exp.company}
                       {exp.client && ` (Client: ${exp.client})`}
                     </span>
@@ -126,15 +122,15 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeTemplatePro
                   </div>
 
                   {exp.environment && exp.environment.length > 0 && (
-                    <div className="mb-1 leading-snug" style={{ fontSize: '10pt' }}>
-                      <span className="font-bold">Environment: </span>
+                    <div className="mb-1 leading-snug text-slate-600" style={{ fontSize: '9.5pt' }}>
+                      <span className="font-bold text-black">Environment: </span>
                       {exp.environment.join(', ')}
                     </div>
                   )}
 
                   <ul className="list-disc pl-5 space-y-1 mt-1 m-0" style={{ fontSize: '10pt' }}>
                     {exp.bullets.map((bullet: string, j: number) => (
-                      <li key={j} className="pl-1 leading-snug">
+                      <li key={j} className="pl-1 leading-snug text-justify">
                         {parseBoldText(bullet)}
                       </li>
                     ))}
@@ -147,7 +143,7 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 
         {/* Education */}
         {resumeData.education && resumeData.education.length > 0 && (
-          <div className="mb-3">
+          <div className="mb-3.5 break-inside-avoid">
             <SectionHeader title="Education" />
             <div className="space-y-2">
               {resumeData.education.map((edu: any, i: number) => (
@@ -156,7 +152,7 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeTemplatePro
                     <div className="font-bold">{edu.degree}</div>
                     <div className="whitespace-nowrap ml-4">{edu.year}</div>
                   </div>
-                  <div style={{ fontSize: '10pt' }}>
+                  <div style={{ fontSize: '10pt' }} className="text-slate-600">
                     {edu.institution}
                   </div>
                 </div>
@@ -167,7 +163,7 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 
         {/* Certifications */}
         {resumeData.certifications && resumeData.certifications.length > 0 && (
-          <div className="mb-3">
+          <div className="mb-3.5 break-inside-avoid">
             <SectionHeader title="Certifications" />
             <ul className="list-disc pl-5 m-0 space-y-1" style={{ fontSize: '10pt' }}>
               {resumeData.certifications.map((cert: any, i: number) => (

@@ -16,7 +16,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
   };
 
   const SectionHeader = ({ title }: { title: string }) => (
-    <h2 className="font-bold text-black mt-4 mb-2" style={{ fontSize: '11pt' }}>
+    <h2 className="font-bold text-black mt-4 mb-2 border-b border-black pb-0.5" style={{ fontSize: '11pt' }}>
       {title}
     </h2>
   );
@@ -26,24 +26,18 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
   return (
     <div
       ref={ref}
-      className="bg-white w-[794px] mx-auto shadow-sm border border-slate-200 text-black"
+      className="resume-document bg-white w-full max-w-[794px] min-h-[1123px] mx-auto shadow-sm border border-slate-200 text-black transition-all"
       style={{
         boxSizing: 'border-box',
         fontFamily: selectedFont,
         color: '#000000',
-        fontSize: '10.5pt',
-        lineHeight: '1.5',
-        // Exact A4 Size: 210x297mm -> 794x1123px (at 96dpi)
-        height: '1123px',
-        // Exact Margins: Top/Bottom 15mm (57px), Left/Right 18mm (68px)
-        padding: '57px 68px',
-        columnWidth: '658px', // Content width: 794 - (68 * 2)
-        columnGap: '136px',   // Gap equals Right Margin + Left Margin
-        columnFill: 'auto',
+        fontSize: '10pt',
+        lineHeight: '1.45',
+        padding: '48px 56px',
       }}
     >
       {/* Header */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-5 break-inside-avoid">
         <h1 className="font-bold text-black m-0" style={{ fontSize: '16pt' }}>
           {profileData.full_name || 'JOHN DOE'}
         </h1>
@@ -51,7 +45,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
           {[profileData.location, profileData.phone, profileData.email, profileData.linkedin].filter(Boolean).join('  •  ')}
         </div>
         {(profileData.work_authorization || profileData.relocation || profileData.availability) && (
-          <div className="mt-1">
+          <div className="mt-1 text-slate-700">
             {[
               profileData.work_authorization && `Work Authorization: ${profileData.work_authorization}`,
               profileData.relocation && `Relocation: ${profileData.relocation}`,
@@ -63,12 +57,12 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 
       {/* Professional Summary */}
       {resumeData.summary && resumeData.summary.length > 0 && (
-        <div className="mb-5">
+        <div className="mb-4 break-inside-avoid">
           <SectionHeader title="Professional Summary" />
           <ul className="list-none m-0 space-y-1">
             {resumeData.summary.map((point, i) => (
               <li key={i} className="flex gap-2">
-                <span className="shrink-0">▪ {i + 1}.</span>
+                <span className="shrink-0 font-semibold">▪ {i + 1}.</span>
                 <span className="text-justify">{renderWithBold(point)}</span>
               </li>
             ))}
@@ -78,11 +72,11 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 
       {/* Technical Skills */}
       {resumeData.skills && resumeData.skills.length > 0 && (
-        <div className="mb-5">
+        <div className="mb-4 break-inside-avoid">
           <SectionHeader title="Technical Skills" />
           <div className="space-y-1">
             {resumeData.skills.map((skillGroup, i) => (
-              <div key={i}>
+              <div key={i} className="leading-snug">
                 <span className="font-bold">{skillGroup.category}: </span>
                 <span>{skillGroup.items.join(', ')}</span>
               </div>
@@ -93,20 +87,20 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 
       {/* Professional Experience */}
       {resumeData.experience && resumeData.experience.length > 0 && (
-        <div className="mb-5">
+        <div className="mb-4">
           <SectionHeader title="Professional Experience" />
-          <div className="space-y-5">
+          <div className="space-y-4">
             {resumeData.experience.map((exp, i) => (
-              <div key={i}>
+              <div key={i} className="break-inside-avoid mb-4">
                 <div className="font-bold">
                   {exp.company} {exp.location ? `| ${exp.location}` : ''} | {exp.duration}
                 </div>
-                <div className="mb-1">{exp.role}</div>
+                <div className="mb-1 font-semibold text-slate-800">{exp.role}</div>
 
                 <ul className="list-none mt-1 mb-1 m-0 space-y-1">
                   {exp.bullets.map((bullet, j) => (
                     <li key={j} className="flex gap-2">
-                      <span className="shrink-0">{globalBulletCount++}.</span>
+                      <span className="shrink-0 font-medium">{globalBulletCount++}.</span>
                       <span className="text-justify">{renderWithBold(bullet)}</span>
                     </li>
                   ))}
@@ -126,9 +120,9 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 
       {/* Education */}
       {resumeData.education && resumeData.education.length > 0 && (
-        <div className="mb-5">
+        <div className="mb-4 break-inside-avoid">
           <SectionHeader title="Education" />
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             {resumeData.education.map((edu, i) => (
               <div key={i}>
                 <span className="font-bold">{edu.degree}</span> | {edu.institution} | {edu.year}
@@ -140,7 +134,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 
       {/* Certifications */}
       {resumeData.certifications && resumeData.certifications.length > 0 && (
-        <div className="mb-5">
+        <div className="mb-4 break-inside-avoid">
           <SectionHeader title="Certifications" />
           <div className="space-y-1">
             {resumeData.certifications.map((cert, i) => (

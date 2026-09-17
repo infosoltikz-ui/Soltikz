@@ -20,9 +20,10 @@ import { SkillsForm } from '@/components/profile/SkillsForm'
 import { ProjectsForm } from '@/components/profile/ProjectsForm'
 import { CertificationsForm } from '@/components/profile/CertificationsForm'
 import { Button } from '@/components/ui/Button'
-import { ArrowRight, ArrowLeft, Loader2, Download } from 'lucide-react'
+import { ArrowRight, ArrowLeft, Loader2, Download, ZoomIn, ZoomOut, FileText } from 'lucide-react'
 import { TemplateSelector } from '@/components/create-resume/TemplateSelector'
 import { ATSScoreMeter } from '@/components/create-resume/ATSScoreMeter'
+import { AIGenerationLoadingHUD } from '@/components/create-resume/AIGenerationLoadingHUD'
 import { getTemplateById, DEFAULT_TEMPLATE_ID } from '@/components/create-resume/templates/registry'
 import { downloadResumeDocx } from '@/components/create-resume/exportDocx'
 import { isPremiumPlan } from '@/utils/pricingPlans'
@@ -42,6 +43,8 @@ export default function CreateResumePage() {
   }, [step])
   const [isGenerating, setIsGenerating] = useState(false)
   const [orchestratorState, setOrchestratorState] = useState<string>('')
+  const [resumeZoom, setResumeZoom] = useState(1)
+
   const [resumeType, setResumeType] = useState<'fulltime' | 'c2c'>('fulltime')
   const [selectedTemplateId, setSelectedTemplateId] = useState(DEFAULT_TEMPLATE_ID)
   const [profileData, setProfileData] = useState<any>({})
@@ -390,11 +393,7 @@ export default function CreateResumePage() {
             <div className="flex flex-col xl:flex-row gap-6">
               <div className="flex-1 min-w-0 space-y-6 relative">
                 {isGenerating && (
-                  <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center rounded-2xl border border-primary/20">
-                    <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-                    <h3 className="text-xl font-bold text-slate-900">AI is Building Your Resume</h3>
-                    <p className="text-slate-500 font-medium mt-2 animate-pulse">{orchestratorState}</p>
-                  </div>
+                  <AIGenerationLoadingHUD currentState={orchestratorState} />
                 )}
                 {/* Note: In a real app we would capture form inputs here and pass to handleGenerate */}
                 <CompanyDetailsSection onGenerate={(company, role, jd) => handleGenerate(company, role, jd)} />
@@ -445,14 +444,66 @@ export default function CreateResumePage() {
             </div>
 
             <div className="flex flex-col xl:flex-row gap-6">
-              <div className="flex-1 min-w-0 space-y-6">
+              <div className="flex-1 min-w-0 space-y-4">
                 {/* Visual rendering of the actual resume, using the template chosen in Step 1 */}
                 {generatedResume ? (
-                  <div className="overflow-x-auto pb-4">
-                    {(() => {
-                      const SelectedTemplate = getTemplateById(selectedTemplateId).component
-                      return <SelectedTemplate ref={resumeRef} resumeData={generatedResume} profileData={profileData} />
-                    })()}
+                  <div className="space-y-3">
+                    {/* Document Workbench Topbar */}
+                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 flex items-center justify-between shadow-2xs">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-[13px] font-bold text-slate-800 dark:text-slate-200">
+                          A4 Vertical Page Flow
+                        </span>
+                        <span className="text-slate-300 dark:text-slate-700 text-[12px]">•</span>
+                        <span className="text-[12px] font-semibold text-emerald-600 dark:text-emerald-400">
+                          {getTemplateById(selectedTemplateId).name}
+                        </span>
+                        <span className="text-slate-300 dark:text-slate-700 text-[12px] hidden sm:inline">•</span>
+                        <span className="text-[11.5px] font-medium text-slate-500 hidden sm:inline">
+                          Print & ATS Ready Margins
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700">
+                        <button
+                          onClick={() => setResumeZoom(z => Math.max(Number((z - 0.1).toFixed(1)), 0.6))}
+                          className="p-1 hover:bg-white dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-300 hover:text-slate-900 transition-all cursor-pointer"
+                          title="Zoom Out"
+                        >
+                          <ZoomOut className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => setResumeZoom(1)}
+                          className="px-2 py-0.5 text-[11.5px] font-bold text-slate-700 dark:text-slate-300 hover:text-slate-900 transition-colors cursor-pointer"
+                          title="Reset to 100%"
+                        >
+                          {Math.round(resumeZoom * 100)}%
+                        </button>
+                        <button
+                          onClick={() => setResumeZoom(z => Math.min(Number((z + 0.1).toFixed(1)), 1.4))}
+                          className="p-1 hover:bg-white dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-300 hover:text-slate-900 transition-all cursor-pointer"
+                          title="Zoom In"
+                        >
+                          <ZoomIn className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Document Canvas */}
+                    <div className="bg-slate-100/90 dark:bg-slate-900/60 p-4 sm:p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 flex flex-col items-center justify-start overflow-y-auto max-h-[85vh] shadow-inner">
+                      <div 
+                        className="w-full flex justify-center transition-transform duration-200"
+                        style={{ transform: `scale(${resumeZoom})`, transformOrigin: 'top center' }}
+                      >
+                        <div className="shadow-2xl rounded-sm border border-slate-300/80 bg-white w-full max-w-[794px]">
+                          {(() => {
+                            const SelectedTemplate = getTemplateById(selectedTemplateId).component
+                            return <SelectedTemplate ref={resumeRef} resumeData={generatedResume} profileData={profileData} />
+                          })()}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ) : (
                   <div className="bg-white p-8 text-center rounded-2xl border border-slate-200">
