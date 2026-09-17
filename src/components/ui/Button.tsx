@@ -103,15 +103,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {loading ? (
           <Loader2 className="w-4 h-4 animate-spin shrink-0" aria-hidden />
         ) : leftIcon ? (
-          <span className="shrink-0">{leftIcon}</span>
+          <span className="shrink-0 flex items-center justify-center">{leftIcon}</span>
         ) : null}
 
         {children && (
-          <span className={cn(loading && 'opacity-0 absolute')}>{children}</span>
+          <span className={cn('whitespace-nowrap inline-flex items-center gap-1.5', loading && 'opacity-0 absolute')}>{children}</span>
         )}
 
         {!loading && rightIcon && (
-          <span className="shrink-0">{rightIcon}</span>
+          <span className="shrink-0 flex items-center justify-center">{rightIcon}</span>
         )}
       </Component>
     )

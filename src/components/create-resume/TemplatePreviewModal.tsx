@@ -30,24 +30,26 @@ export function TemplatePreviewModal({ templateId, onClose, onSelect }: Template
       <div className="bg-slate-100 w-full max-w-5xl h-full max-h-[92vh] rounded-3xl overflow-hidden flex flex-col shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
         
         {/* Header Options */}
-        <div className="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200 z-10 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+        <div className="flex items-center justify-between gap-4 px-6 py-4 bg-white border-b border-slate-200 z-10 shrink-0">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
               <FileText className="w-5 h-5" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <h2 className="text-[17px] font-black text-slate-900">{template.name}</h2>
-                <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">
+                <h2 className="text-[17px] font-black text-slate-900 whitespace-nowrap">{template.name}</h2>
+                <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 shrink-0 whitespace-nowrap">
                   ATS Verified
                 </span>
               </div>
-              <p className="text-[12.5px] font-medium text-slate-500 hidden sm:block">{template.description}</p>
+              <p className="text-[12.5px] font-medium text-slate-500 truncate whitespace-nowrap block">
+                {template.description}
+              </p>
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center bg-slate-100 rounded-xl p-1 mr-2 border border-slate-200">
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="hidden sm:flex items-center bg-slate-100 rounded-xl p-1 mr-1 border border-slate-200 shrink-0">
               <button 
                 onClick={handleZoomOut} 
                 className="p-1.5 hover:bg-white rounded-lg text-slate-600 hover:text-slate-900 transition-all cursor-pointer" 
@@ -57,7 +59,7 @@ export function TemplatePreviewModal({ templateId, onClose, onSelect }: Template
               </button>
               <button 
                 onClick={handleZoomReset} 
-                className="px-2.5 py-1 text-[12px] font-bold text-slate-700 hover:text-slate-900 transition-colors cursor-pointer" 
+                className="px-2.5 py-1 text-[12px] font-bold text-slate-700 hover:text-slate-900 transition-colors cursor-pointer whitespace-nowrap" 
                 title="Reset Zoom"
               >
                 {Math.round(zoom * 100)}%
@@ -73,15 +75,15 @@ export function TemplatePreviewModal({ templateId, onClose, onSelect }: Template
 
             <Button 
               onClick={() => onSelect(template.id)} 
-              className="h-10 px-5 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-lg transition-all cursor-pointer"
+              leftIcon={<Check className="w-4 h-4 shrink-0" />}
+              className="h-10 px-5 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-lg transition-all cursor-pointer whitespace-nowrap shrink-0 inline-flex items-center justify-center gap-2"
             >
-              <Check className="w-4 h-4 mr-1.5" />
               Use This Template
             </Button>
             
             <button 
               onClick={onClose} 
-              className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors ml-1 cursor-pointer"
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors shrink-0 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
