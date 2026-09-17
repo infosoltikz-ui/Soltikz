@@ -33,13 +33,13 @@ export function PersonalInfoForm({
     middleName: personalInfo.middleName || '',
     lastName: personalInfo.lastName || profile?.full_name?.split(' ').slice(1).join(' ') || '',
     email: profile?.email || '',
-    phone: profile?.phone || '',
+    phone: profile?.phone || personalInfo.phone || '',
     linkedin: personalInfo.linkedin || '',
-    location: personalInfo.location || '',
+    location: personalInfo.location || profile?.location || '',
     summary: personalInfo.summary || '',
-    workAuthorization: profile?.work_authorization || '',
-    relocation: profile?.relocation || '',
-    availability: profile?.availability || '',
+    workAuthorization: personalInfo.workAuthorization || profile?.work_authorization || '',
+    relocation: personalInfo.relocation || profile?.relocation || '',
+    availability: personalInfo.availability || profile?.availability || '',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -55,22 +55,29 @@ export function PersonalInfoForm({
           firstName: formData.firstName,
           middleName: formData.middleName,
           lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
           linkedin: formData.linkedin,
           location: formData.location,
-          summary: formData.summary
+          summary: formData.summary,
+          workAuthorization: formData.workAuthorization,
+          relocation: formData.relocation,
+          availability: formData.availability
         }
       }
 
       const updates = {
         full_name: `${formData.firstName} ${formData.lastName}`.trim(),
         phone: formData.phone,
-        work_authorization: formData.workAuthorization,
-        relocation: formData.relocation,
-        availability: formData.availability,
+        location: formData.location,
         master_resume_data: newMasterData
       }
       
-      const updatedProfile = { ...profile, ...updates }
+      const updatedProfile = { 
+        ...profile, 
+        ...updates,
+        email: formData.email || profile.email
+      }
 
       if (localMode && onLocalSave) {
         onLocalSave(updatedProfile)
