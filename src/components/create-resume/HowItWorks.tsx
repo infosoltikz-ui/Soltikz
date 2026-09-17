@@ -1,14 +1,6 @@
 'use client'
 
-import { 
-  FileText, 
-  Sparkles, 
-  ShieldCheck, 
-  Download, 
-  Check, 
-  ChevronRight,
-  ArrowRight
-} from 'lucide-react'
+import { Check, ChevronRight } from 'lucide-react'
 import { cn } from '@/utils/cn'
 
 interface HowItWorksProps {
@@ -22,67 +14,26 @@ export function HowItWorks({ currentStep = 1, onStepClick }: HowItWorksProps) {
       step: 1, 
       label: 'Profile & Template', 
       desc: 'Master record & layout',
-      icon: FileText,
-      badge: 'Step 1'
+      stepNum: '01'
     },
     { 
       step: 2, 
       label: 'Target Job & Resume', 
       desc: 'AI tailoring & live preview',
-      icon: Sparkles,
-      badge: 'Step 2'
+      stepNum: '02'
     },
     { 
       step: 3, 
-      label: 'Interview & Strategy', 
+      label: 'Interview Strategy', 
       desc: 'Cover letter & Q&A prep',
-      icon: ShieldCheck,
-      badge: 'Step 3'
+      stepNum: '03'
     },
   ]
 
-  // Calculate dynamic progress bar percentage
-  const progressPercent = currentStep === 1 ? 25 : currentStep === 2 ? 65 : 100
-
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 mb-6 overflow-hidden relative">
-      
-      {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 mb-4 border-b border-slate-100">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-            <h3 className="text-[14px] font-bold text-slate-900 tracking-tight">
-              AI Resume Generation Pipeline
-            </h3>
-          </div>
-          <p className="text-[12px] text-slate-500 font-medium mt-0.5">
-            Real-time multi-stage tailoring for enterprise ATS match standards.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2 self-start sm:self-auto">
-          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-            Progress:
-          </span>
-          <span className="text-[12px] font-black text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200/80">
-            Stage {currentStep} of 3 ({progressPercent}%)
-          </span>
-        </div>
-      </div>
-
-      {/* Progress Line Track */}
-      <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden mb-5">
-        <div 
-          className="h-full bg-gradient-to-r from-emerald-500 via-primary to-emerald-600 transition-all duration-500 ease-out rounded-full"
-          style={{ width: `${progressPercent}%` }}
-        />
-      </div>
-
-      {/* Interactive Step Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-        {steps.map((item) => {
-          const Icon = item.icon
+    <div className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs p-2 sm:p-2.5 mb-5">
+      <nav aria-label="Progress" className="grid grid-cols-1 md:grid-cols-3 gap-2">
+        {steps.map((item, index) => {
           const isCompleted = currentStep > item.step
           const isCurrent = currentStep === item.step
           const isUpcoming = currentStep < item.step
@@ -93,68 +44,68 @@ export function HowItWorks({ currentStep = 1, onStepClick }: HowItWorksProps) {
               key={item.step}
               onClick={() => isClickable && onStepClick(item.step)}
               className={cn(
-                "p-4 rounded-xl border-2 transition-all relative flex items-center justify-between gap-3",
-                isCurrent && "bg-emerald-50/90 border-emerald-600 shadow-sm shadow-emerald-500/10 ring-1 ring-emerald-500/20",
-                isCompleted && "bg-slate-50/80 border-slate-200 hover:bg-slate-100/80 text-slate-800",
-                isUpcoming && "bg-white border-slate-200/80 text-slate-400",
-                isClickable && "cursor-pointer hover:border-slate-300"
+                "relative rounded-xl px-4 py-2.5 transition-all duration-200 flex items-center justify-between",
+                isCurrent && "bg-emerald-50/70 border border-emerald-500/80 shadow-2xs ring-1 ring-emerald-500/20",
+                isCompleted && "bg-slate-50/70 border border-slate-200/80 text-slate-900",
+                isUpcoming && "bg-white border border-transparent text-slate-400",
+                isClickable && "cursor-pointer hover:bg-slate-100/90 hover:border-slate-300"
               )}
             >
-              <div className="flex items-center gap-3.5 min-w-0">
-                {/* Step Circle */}
+              <div className="flex items-center gap-3 min-w-0">
+                {/* Step Icon / Number Indicator */}
                 <div className={cn(
-                  "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-bold text-[13px] transition-all",
-                  isCurrent && "bg-emerald-600 text-white shadow-sm ring-2 ring-emerald-200",
-                  isCompleted && "bg-slate-900 text-white shadow-xs",
-                  isUpcoming && "bg-slate-50 border border-slate-200 text-slate-400"
+                  "w-7 h-7 rounded-lg flex items-center justify-center shrink-0 font-bold text-[12px] transition-all",
+                  isCurrent && "bg-emerald-600 text-white shadow-xs ring-3 ring-emerald-100",
+                  isCompleted && "bg-slate-900 text-white",
+                  isUpcoming && "bg-slate-100 text-slate-400 border border-slate-200/70"
                 )}>
                   {isCompleted ? (
-                    <Check className="w-4 h-4 stroke-[3]" />
+                    <Check className="w-3.5 h-3.5 stroke-[3]" />
                   ) : (
-                    <Icon className="w-4 h-4" />
+                    <span>{item.step}</span>
                   )}
                 </div>
 
-                {/* Text Content */}
+                {/* Step Information */}
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
                     <span className={cn(
-                      "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md",
-                      isCurrent && "bg-emerald-600 text-white shadow-2xs",
-                      isCompleted && "bg-slate-200 text-slate-700",
-                      isUpcoming && "bg-slate-100 text-slate-500"
+                      "text-[10px] font-extrabold uppercase tracking-wider",
+                      isCurrent ? "text-emerald-700" : isCompleted ? "text-slate-500" : "text-slate-400"
                     )}>
-                      {isCompleted ? '✓ Completed' : isCurrent ? 'Active Stage' : item.badge}
+                      {isCompleted ? 'Completed' : isCurrent ? 'Active Step' : `Step ${item.stepNum}`}
                     </span>
                   </div>
-
                   <h4 className={cn(
-                    "text-[13.5px] font-bold truncate mt-1",
-                    isCurrent ? "text-slate-950" : isCompleted ? "text-slate-900" : "text-slate-600"
+                    "text-[13px] font-bold leading-tight truncate",
+                    isCurrent ? "text-slate-950 font-black" : isCompleted ? "text-slate-800" : "text-slate-400"
                   )}>
                     {item.label}
                   </h4>
-
                   <p className={cn(
-                    "text-[11.5px] truncate",
-                    isCurrent ? "text-emerald-900/80 font-medium" : isCompleted ? "text-slate-500 font-normal" : "text-slate-400 font-normal"
+                    "text-[11px] truncate leading-tight mt-0.5",
+                    isCurrent ? "text-emerald-900/80 font-medium" : "text-slate-400 font-normal"
                   )}>
                     {item.desc}
                   </p>
                 </div>
               </div>
 
-              {/* Right Indicator / Jump trigger */}
-              {isClickable && (
-                <span className="text-[11px] font-semibold text-slate-600 hover:text-slate-900 bg-white px-2 py-1 rounded border border-slate-200 shrink-0 hidden sm:inline-block shadow-2xs">
-                  Edit ↗
-                </span>
-              )}
+              {/* Trailing Indicator or Edit Action */}
+              <div className="flex items-center gap-2 shrink-0 ml-2">
+                {isClickable && (
+                  <span className="text-[10px] font-bold text-slate-600 hover:text-slate-900 bg-white px-2 py-0.5 rounded-md border border-slate-200/80 shadow-2xs">
+                    Edit ↗
+                  </span>
+                )}
+                {index < steps.length - 1 && (
+                  <ChevronRight className="w-4 h-4 text-slate-300 hidden md:block" />
+                )}
+              </div>
             </div>
           )
         })}
-      </div>
-
+      </nav>
     </div>
   )
 }

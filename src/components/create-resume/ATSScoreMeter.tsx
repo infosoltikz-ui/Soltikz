@@ -180,10 +180,10 @@ export function ATSScoreMeter({
   // --- COMPACT PILL VARIANT (For Headers & Action Bars) ---
   if (variant === 'compact') {
     return (
-      <div className={cn("inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border shadow-2xs transition-all bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800", className)}>
+      <div className={cn("inline-flex items-center gap-2 px-2.5 py-1 rounded-full border shadow-2xs transition-all bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800", className)}>
         {/* Animated mini radial ring */}
-        <div className="relative w-6 h-6 flex items-center justify-center shrink-0">
-          <svg className="w-6 h-6 -rotate-90 transform" viewBox="0 0 24 24">
+        <div className="relative w-5 h-5 flex items-center justify-center shrink-0">
+          <svg className="w-5 h-5 -rotate-90 transform" viewBox="0 0 24 24">
             <circle
               cx="12"
               cy="12"
@@ -205,15 +205,15 @@ export function ATSScoreMeter({
               className="transition-all duration-1000 ease-out"
             />
           </svg>
-          <span className="absolute w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="absolute w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
         </div>
 
         <div className="flex items-center gap-1.5 whitespace-nowrap">
-          <span className="text-[11.5px] font-bold uppercase tracking-wider text-slate-500">ATS Match:</span>
-          <span className="text-[13.5px] font-black text-emerald-600 dark:text-emerald-400">{targetScore}/100</span>
+          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">ATS Match:</span>
+          <span className="text-[12.5px] font-black text-emerald-600 dark:text-emerald-400">{targetScore}/100</span>
         </div>
 
-        <span className="text-[10.5px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/50 whitespace-nowrap">
+        <span className="text-[10px] font-extrabold px-2 py-0.2 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/50 whitespace-nowrap">
           90+ Verified
         </span>
       </div>
