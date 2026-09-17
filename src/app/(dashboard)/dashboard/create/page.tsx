@@ -494,13 +494,6 @@ export default function CreateResumePage() {
                       <Download className="w-3.5 h-3.5" />
                       <span>Download PDF</span>
                     </Button>
-                    <Button 
-                      onClick={() => setStep(3)} 
-                      className="h-9 px-4 rounded-xl bg-primary hover:bg-primary/90 text-white shadow-sm shadow-primary/20 text-[12px] font-bold cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0"
-                    >
-                      <span>Next: Interview Strategy</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Button>
                   </div>
                 </div>
 
