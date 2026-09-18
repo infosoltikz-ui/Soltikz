@@ -1,8 +1,7 @@
 "use client";
-import { forwardRef } from 'react'
+import { forwardRef, useState, useId } from 'react'
 import { AlertCircle, Eye, EyeOff, Search, X } from 'lucide-react'
 import { cn } from '@/utils/cn'
-import { useState } from 'react'
 
 // ============================================================
 // INPUT
@@ -39,7 +38,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const [showPwd, setShowPwd] = useState(false)
     const isPassword = type === 'password'
-    const inputId = id ?? `input-${Math.random().toString(36).slice(2, 7)}`
+    const generatedId = useId()
+    const inputId = id ?? generatedId
 
     return (
       <div className={cn('flex flex-col gap-1.5', fullWidth && 'w-full')}>
@@ -119,7 +119,8 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ label, error, hint, fullWidth = true, className, id, ...props }, ref) => {
-    const textareaId = id ?? `ta-${Math.random().toString(36).slice(2, 7)}`
+    const generatedId = useId()
+    const textareaId = id ?? generatedId
     return (
       <div className={cn('flex flex-col gap-1.5', fullWidth && 'w-full')}>
         {label && (
@@ -166,7 +167,8 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   ({ label, error, hint, options, fullWidth = true, placeholder, className, id, ...props }, ref) => {
-    const selectId = id ?? `sel-${Math.random().toString(36).slice(2, 7)}`
+    const generatedId = useId()
+    const selectId = id ?? generatedId
     return (
       <div className={cn('flex flex-col gap-1.5', fullWidth && 'w-full')}>
         {label && (
@@ -210,7 +212,8 @@ interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ({ label, description, error, className, id, ...props }, ref) => {
-    const cbId = id ?? `cb-${Math.random().toString(36).slice(2, 7)}`
+    const generatedId = useId()
+    const cbId = id ?? generatedId
     return (
       <div className="flex flex-col gap-1">
         <div className="flex items-start gap-3">
