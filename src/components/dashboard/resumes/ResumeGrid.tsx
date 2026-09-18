@@ -16,6 +16,12 @@ export interface ResumeRow {
   share_slug?: string | null
   ats_analyses?: { overall_score: number }[] | { overall_score: number } | null
   parsed_job_descriptions?: { company_name?: string; job_title?: string }[] | { company_name?: string; job_title?: string } | null
+  candidate_name?: string
+  summary_text?: string
+  experience_role?: string
+  experience_company?: string
+  experience_bullet?: string
+  skills_list?: string[]
 }
 
 interface ResumeGridProps {
@@ -27,12 +33,14 @@ interface ResumeGridProps {
   duplicatingId: string | null
   onToggleShare: (resume: ResumeRow) => void
   togglingShareId: string | null
+  onDownload?: (resume: ResumeRow) => void
+  downloadingId?: string | null
   lastUpdatedLabel: (isoDate: string) => string
   onPreview?: (resume: ResumeRow) => void
   onEdit?: (resume: ResumeRow) => void
 }
 
-export function ResumeGrid({ resumes, loading, hasAnyResumes, onDelete, onDuplicate, duplicatingId, onToggleShare, togglingShareId, lastUpdatedLabel, onPreview, onEdit }: ResumeGridProps) {
+export function ResumeGrid({ resumes, loading, hasAnyResumes, onDelete, onDuplicate, duplicatingId, onToggleShare, togglingShareId, onDownload, downloadingId, lastUpdatedLabel, onPreview, onEdit }: ResumeGridProps) {
   if (loading) {
     return (
       <div className="flex justify-center p-24">
@@ -73,7 +81,7 @@ export function ResumeGrid({ resumes, loading, hasAnyResumes, onDelete, onDuplic
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
       {resumes.map(resume => {
         const rawAts = Array.isArray(resume.ats_analyses)
           ? resume.ats_analyses[0]?.overall_score
@@ -90,8 +98,8 @@ export function ResumeGrid({ resumes, loading, hasAnyResumes, onDelete, onDuplic
           : resume.parsed_job_descriptions
 
         // Extract company and role from JD or fall back to parsing title
-        let company = jd?.company_name || ''
-        let role = jd?.job_title || ''
+        let company = jd?.company_name || resume.experience_company || ''
+        let role = jd?.job_title || resume.experience_role || ''
 
         if (!company || company.toLowerCase().includes('unknown') || company === 'N/A' || company === 'Draft') {
           if (resume.title) {
@@ -124,12 +132,20 @@ export function ResumeGrid({ resumes, loading, hasAnyResumes, onDelete, onDuplic
               status: (resume.status || 'Ready') as 'Completed' | 'Draft',
               versionNumber: resume.version_number,
               isPublic: resume.is_public,
+              candidateName: resume.candidate_name,
+              summaryText: resume.summary_text,
+              experienceRole: resume.experience_role,
+              experienceCompany: resume.experience_company,
+              experienceBullet: resume.experience_bullet,
+              skillsList: resume.skills_list,
             }}
             onDelete={() => onDelete(resume.id)}
             onDuplicate={() => onDuplicate(resume)}
             isDuplicating={duplicatingId === resume.id}
             onToggleShare={() => onToggleShare(resume)}
             isTogglingShare={togglingShareId === resume.id}
+            onDownload={() => onDownload?.(resume)}
+            isDownloading={downloadingId === resume.id}
             onPreview={() => onPreview?.(resume)}
             onEdit={() => onEdit?.(resume)}
           />

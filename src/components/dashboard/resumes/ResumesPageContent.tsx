@@ -9,6 +9,7 @@ import { ResumeToolbar, ResumeFilterType, ResumeSortBy } from './ResumeToolbar'
 import { ResumeGrid, ResumeRow } from './ResumeGrid'
 import { ResumePreviewModal } from './ResumePreviewModal'
 import { ResumeEditorModal } from './ResumeEditorModal'
+import { downloadResumeDocx } from '@/components/create-resume/exportDocx'
 
 function getRealisticAtsScore(id: string): number {
   let hash = 0
@@ -35,6 +36,7 @@ export function ResumesPageContent() {
   const [loading, setLoading] = useState(true)
   const [duplicatingId, setDuplicatingId] = useState<string | null>(null)
   const [togglingShareId, setTogglingShareId] = useState<string | null>(null)
+  const [downloadingId, setDownloadingId] = useState<string | null>(null)
 
   const [searchQuery, setSearchQuery] = useState('')
   const [filterType, setFilterType] = useState<ResumeFilterType>('all')
@@ -101,7 +103,42 @@ export function ResumesPageContent() {
         }
       }
 
-      // Ensure every resume has a valid ATS score and clean company/role metadata
+      // Batch fetch sections and profile data for all resumes
+      const resumeIds = resumesList.map((r: any) => r.id)
+      let sectionsByResumeId: Record<string, Record<string, any>> = {}
+      let candidateName = 'Candidate'
+
+      if (resumeIds.length > 0) {
+        const [sectionsResult, profileResult] = await Promise.all([
+          supabase
+            .from('resume_sections')
+            .select('resume_id, section_type, content')
+            .in('resume_id', resumeIds),
+          supabase
+            .from('profiles')
+            .select('full_name, master_resume_data')
+            .eq('id', user.id)
+            .single()
+        ])
+
+        if (sectionsResult.data) {
+          sectionsResult.data.forEach((sec: any) => {
+            if (!sectionsByResumeId[sec.resume_id]) {
+              sectionsByResumeId[sec.resume_id] = {}
+            }
+            const key = (sec.section_type || '').toLowerCase()
+            sectionsByResumeId[sec.resume_id][key] = sec.content
+          })
+        }
+
+        if (profileResult.data) {
+          const prof = profileResult.data
+          const pInfo = prof.master_resume_data?.personal_info || {}
+          candidateName = prof.full_name || `${pInfo.firstName || ''} ${pInfo.lastName || ''}`.trim() || pInfo.fullName || 'Candidate'
+        }
+      }
+
+      // Ensure every resume has a valid ATS score, clean company/role metadata, and real content
       const missingAtsInserts: any[] = []
       const processedResumes = resumesList.map((r: any) => {
         const rawScore = Array.isArray(r.ats_analyses)
@@ -133,12 +170,60 @@ export function ResumesPageContent() {
           compName = extractCompanyFromTitle(r.title)
         }
 
+        // Extract real section data
+        const sec = sectionsByResumeId[r.id] || {}
+
+        // 1. Summary
+        let summaryText = ''
+        if (Array.isArray(sec.summary) && sec.summary.length > 0) {
+          const raw = typeof sec.summary[0] === 'string' ? sec.summary[0] : ''
+          summaryText = raw.replace(/\*\*/g, '').trim()
+        } else if (typeof sec.summary === 'string') {
+          summaryText = sec.summary.replace(/\*\*/g, '').trim()
+        }
+
+        // 2. Experience
+        let experienceRole = ''
+        let experienceCompany = ''
+        let experienceBullet = ''
+        if (Array.isArray(sec.experience) && sec.experience.length > 0) {
+          const firstExp = sec.experience[0]
+          if (firstExp) {
+            experienceRole = firstExp.role || ''
+            experienceCompany = firstExp.company || ''
+            if (Array.isArray(firstExp.bullets) && firstExp.bullets.length > 0) {
+              const rawB = typeof firstExp.bullets[0] === 'string' ? firstExp.bullets[0] : ''
+              experienceBullet = rawB.replace(/\*\*/g, '').trim()
+            }
+          }
+        }
+
+        // 3. Skills
+        let skillsList: string[] = []
+        if (Array.isArray(sec.skills)) {
+          sec.skills.forEach((item: any) => {
+            if (typeof item === 'string') {
+              skillsList.push(item)
+            } else if (item && Array.isArray(item.items)) {
+              skillsList.push(...item.items)
+            }
+          })
+        }
+        // Deduplicate and filter empty
+        skillsList = Array.from(new Set(skillsList.filter(Boolean))).slice(0, 6)
+
         return {
           ...r,
+          candidate_name: candidateName,
+          summary_text: summaryText,
+          experience_role: experienceRole,
+          experience_company: experienceCompany,
+          experience_bullet: experienceBullet,
+          skills_list: skillsList,
           ats_analyses: [{ overall_score: finalScore }],
           parsed_job_descriptions: {
             company_name: compName,
-            job_title: jdObj?.job_title || 'Senior Software Engineer'
+            job_title: jdObj?.job_title || experienceRole || 'Senior Software Engineer'
           }
         }
       })
@@ -272,6 +357,58 @@ export function ResumesPageContent() {
     }
   }
 
+  const handleDownload = async (resume: ResumeRow) => {
+    setDownloadingId(resume.id)
+    const supabase = createClient()
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not signed in')
+
+      // 1. Fetch user profile
+      const { data: prof } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+      const pInfo = prof?.master_resume_data?.personal_info || {}
+      const fullName = prof?.full_name || `${pInfo.firstName || ''} ${pInfo.lastName || ''}`.trim() || pInfo.fullName || 'Resume'
+      const userProfile = {
+        ...prof,
+        full_name: fullName,
+        email: prof?.email || pInfo.email || '',
+        phone: prof?.phone || pInfo.phone || '',
+        location: pInfo.location || prof?.location || '',
+        linkedin: pInfo.linkedin || prof?.linkedin || ''
+      }
+
+      // 2. Fetch sections
+      const { data: sections } = await supabase
+        .from('resume_sections')
+        .select('section_type, content')
+        .eq('resume_id', resume.id)
+
+      const reconstructed: any = {
+        summary: [],
+        skills: [],
+        experience: [],
+        education: [],
+        certifications: []
+      }
+
+      if (sections && sections.length > 0) {
+        sections.forEach((sec: any) => {
+          const key = (sec.section_type || '').toLowerCase()
+          reconstructed[key] = sec.content
+        })
+      }
+
+      const fileName = `${fullName.replace(/\s+/g, '_')}_${(resume.title || 'Resume').replace(/[^a-zA-Z0-9_-]/g, '_')}.docx`
+      await downloadResumeDocx(reconstructed, userProfile, fileName)
+      toast.success('Resume DOCX downloaded successfully!')
+    } catch (err: any) {
+      console.error('Download failed:', err)
+      toast.error(err.message || 'Failed to download resume')
+    } finally {
+      setDownloadingId(null)
+    }
+  }
+
   const filteredResumes = useMemo(() => {
     let result = [...resumes]
 
@@ -339,6 +476,8 @@ export function ResumesPageContent() {
           duplicatingId={duplicatingId}
           onToggleShare={handleToggleShare}
           togglingShareId={togglingShareId}
+          onDownload={handleDownload}
+          downloadingId={downloadingId}
           onPreview={(resume) => setPreviewResume(resume)}
           onEdit={(resume) => setEditingResume(resume)}
           lastUpdatedLabel={(iso) => formatDistanceToNow(new Date(iso), { addSuffix: true })}
