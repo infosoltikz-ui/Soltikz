@@ -28,9 +28,11 @@ interface ResumeGridProps {
   onToggleShare: (resume: ResumeRow) => void
   togglingShareId: string | null
   lastUpdatedLabel: (isoDate: string) => string
+  onPreview?: (resume: ResumeRow) => void
+  onEdit?: (resume: ResumeRow) => void
 }
 
-export function ResumeGrid({ resumes, loading, hasAnyResumes, onDelete, onDuplicate, duplicatingId, onToggleShare, togglingShareId, lastUpdatedLabel }: ResumeGridProps) {
+export function ResumeGrid({ resumes, loading, hasAnyResumes, onDelete, onDuplicate, duplicatingId, onToggleShare, togglingShareId, lastUpdatedLabel, onPreview, onEdit }: ResumeGridProps) {
   if (loading) {
     return (
       <div className="flex justify-center p-24">
@@ -128,6 +130,8 @@ export function ResumeGrid({ resumes, loading, hasAnyResumes, onDelete, onDuplic
             isDuplicating={duplicatingId === resume.id}
             onToggleShare={() => onToggleShare(resume)}
             isTogglingShare={togglingShareId === resume.id}
+            onPreview={() => onPreview?.(resume)}
+            onEdit={() => onEdit?.(resume)}
           />
         )
       })}

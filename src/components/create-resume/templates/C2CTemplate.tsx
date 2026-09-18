@@ -1,8 +1,9 @@
 import React from 'react';
 import type { ResumeTemplateProps } from './types';
 
-export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({ resumeData, profileData, fontFamily }, ref) => {
+export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({ resumeData, profileData, themeColor, fontFamily }, ref) => {
   const selectedFont = fontFamily || 'Arial, Calibri, sans-serif';
+  const accentColor = themeColor || '#000000';
 
   // Helper function to render bold text parsed from simple markdown **bold**
   const renderWithBold = (text: string) => {
@@ -16,7 +17,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
   };
 
   const SectionHeader = ({ title }: { title: string }) => (
-    <h2 className="font-bold text-black mt-3 mb-1.5 border-b border-black pb-0.5" style={{ fontSize: '10.5pt' }}>
+    <h2 className="font-bold mt-3 mb-1.5 border-b pb-0.5" style={{ fontSize: '10.5pt', color: accentColor, borderColor: accentColor }}>
       {title}
     </h2>
   );

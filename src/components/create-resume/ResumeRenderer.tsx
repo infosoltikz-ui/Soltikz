@@ -19,13 +19,14 @@ const parseBoldText = (text: string) => {
 };
 
 export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(
-  ({ resumeData, profileData, fontFamily }, ref) => {
+  ({ resumeData, profileData, themeColor, fontFamily }, ref) => {
     const selectedFont = fontFamily || 'Arial, Helvetica, sans-serif';
+    const accentColor = themeColor || '#000000';
 
     const SectionHeader = ({ title }: { title: string }) => (
       <h2 
-        className="font-bold uppercase pb-0.5 mb-1.5 mt-3 border-b border-black w-full break-inside-avoid" 
-        style={{ fontSize: '10.5pt', color: '#000000', fontFamily: selectedFont }}
+        className="font-bold uppercase pb-0.5 mb-1.5 mt-3 border-b w-full break-inside-avoid" 
+        style={{ fontSize: '10.5pt', color: accentColor, fontFamily: selectedFont, borderColor: accentColor }}
       >
         {title}
       </h2>

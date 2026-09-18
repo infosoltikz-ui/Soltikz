@@ -7,6 +7,8 @@ import { formatDistanceToNow } from 'date-fns'
 import { ResumeStats } from './ResumeStats'
 import { ResumeToolbar, ResumeFilterType, ResumeSortBy } from './ResumeToolbar'
 import { ResumeGrid, ResumeRow } from './ResumeGrid'
+import { ResumePreviewModal } from './ResumePreviewModal'
+import { ResumeEditorModal } from './ResumeEditorModal'
 
 function getRealisticAtsScore(id: string): number {
   let hash = 0
@@ -37,6 +39,8 @@ export function ResumesPageContent() {
   const [searchQuery, setSearchQuery] = useState('')
   const [filterType, setFilterType] = useState<ResumeFilterType>('all')
   const [sortBy, setSortBy] = useState<ResumeSortBy>('newest')
+  const [previewResume, setPreviewResume] = useState<ResumeRow | null>(null)
+  const [editingResume, setEditingResume] = useState<ResumeRow | null>(null)
 
   const fetchResumes = async () => {
     const supabase = createClient()
@@ -335,9 +339,31 @@ export function ResumesPageContent() {
           duplicatingId={duplicatingId}
           onToggleShare={handleToggleShare}
           togglingShareId={togglingShareId}
+          onPreview={(resume) => setPreviewResume(resume)}
+          onEdit={(resume) => setEditingResume(resume)}
           lastUpdatedLabel={(iso) => formatDistanceToNow(new Date(iso), { addSuffix: true })}
         />
       </div>
+
+      {previewResume && (
+        <ResumePreviewModal
+          resume={previewResume}
+          onClose={() => setPreviewResume(null)}
+          onEdit={() => {
+            const target = previewResume
+            setPreviewResume(null)
+            setEditingResume(target)
+          }}
+        />
+      )}
+
+      {editingResume && (
+        <ResumeEditorModal
+          resume={editingResume}
+          onClose={() => setEditingResume(null)}
+          onSaved={() => fetchResumes()}
+        />
+      )}
     </>
   )
 }

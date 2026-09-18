@@ -23,15 +23,20 @@ interface ResumeCardProps {
   isDuplicating?: boolean
   onToggleShare?: () => void
   isTogglingShare?: boolean
+  onPreview?: () => void
+  onEdit?: () => void
 }
 
-export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggleShare, isTogglingShare }: ResumeCardProps) {
+export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggleShare, isTogglingShare, onPreview, onEdit }: ResumeCardProps) {
   const isFullTime = !String(data.type || '').toLowerCase().includes('c2c')
 
   return (
     <div className="group bg-[#FAFAF8] rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col">
       {/* Top Header / High-Fidelity Miniature Resume Document */}
-      <div className="relative h-44 bg-gradient-to-b from-slate-100 to-slate-200/80 flex items-center justify-center border-b border-slate-200 p-3 overflow-hidden">
+      <div 
+        onClick={() => onPreview?.()}
+        className="relative h-44 bg-gradient-to-b from-slate-100 to-slate-200/80 flex items-center justify-center border-b border-slate-200 p-3 overflow-hidden cursor-pointer"
+      >
         {/* Realistic Miniature A4 Resume Sheet */}
         <div className="w-[155px] h-[150px] bg-white rounded-md shadow-md border border-slate-200/90 p-2.5 flex flex-col justify-between overflow-hidden group-hover:scale-105 transition-transform duration-300 select-none">
           {/* Miniature Header */}
@@ -83,12 +88,28 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
 
         {/* Action Overlay on Hover */}
         <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 backdrop-blur-[2px] z-20">
-          <Link href={`/dashboard/create?id=${data.id}`} className="w-10 h-10 bg-white text-slate-900 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm" title="Preview Resume">
+          <button 
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              onPreview?.()
+            }} 
+            className="w-10 h-10 bg-white text-slate-900 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm cursor-pointer" 
+            title="Preview Resume"
+          >
             <Eye className="w-4 h-4" strokeWidth={2.5} />
-          </Link>
-          <Link href={`/dashboard/create?id=${data.id}`} className="w-10 h-10 bg-emerald-600 text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm" title="Edit Resume">
+          </button>
+          <button 
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              onEdit?.()
+            }}
+            className="w-10 h-10 bg-emerald-600 text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm cursor-pointer" 
+            title="Edit Resume (Same Tab)"
+          >
             <Edit3 className="w-4 h-4" strokeWidth={2.5} />
-          </Link>
+          </button>
         </div>
       </div>
 
@@ -147,9 +168,17 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
           </div>
           
           <div className="flex items-center gap-3">
-            <Link href={`/dashboard/create?id=${data.id}`} className="text-slate-400 hover:text-slate-900 transition-colors" title="Edit">
+            <button 
+              type="button"
+              onClick={(e) => {
+                e.preventDefault()
+                onEdit?.()
+              }} 
+              className="text-slate-400 hover:text-emerald-600 transition-colors cursor-pointer" 
+              title="Edit in same tab"
+            >
               <Edit3 className="w-4 h-4" />
-            </Link>
+            </button>
             <button onClick={onDuplicate} disabled={isDuplicating} className="text-slate-400 hover:text-slate-900 transition-colors disabled:opacity-50" title="Duplicate">
               {isDuplicating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Copy className="w-4 h-4" />}
             </button>
