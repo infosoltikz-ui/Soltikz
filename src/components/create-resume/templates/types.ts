@@ -58,9 +58,24 @@ export interface ProfileData {
   availability?: string; // e.g., 2 weeks, Immediate
 }
 
+export interface SectionStyleConfig {
+  fontFamily?: string;
+  fontSize?: string;
+  color?: string;
+  fontWeight?: string;
+  fontStyle?: string;
+  textDecoration?: string;
+  textTransform?: string;
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
+  lineHeight?: string;
+}
+
 export interface ResumeTemplateProps {
   resumeData: ResumeData;
   profileData: ProfileData;
   themeColor?: string;
   fontFamily?: string;
+  sectionStyles?: Record<string, SectionStyleConfig>;
+  activeSectionKey?: string | null;
+  onSelectSection?: (sectionKey: string) => void;
 }

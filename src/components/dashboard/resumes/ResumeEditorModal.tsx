@@ -26,13 +26,24 @@ import {
   Eye,
   Sliders,
   AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
+  Bold,
+  Italic,
+  Underline,
+  CaseSensitive,
   Mail,
   Phone,
   MapPin,
   Globe,
   Layers,
   CheckCircle2,
-  Copy
+  Copy,
+  Edit3,
+  RotateCcw,
+  Sparkle,
+  HelpCircle
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { createClient } from '@/utils/supabase/client'
@@ -40,6 +51,7 @@ import { useReactToPrint } from 'react-to-print'
 import { getTemplateById, RESUME_TEMPLATES } from '@/components/create-resume/templates/registry'
 import { downloadResumeDocx } from '@/components/create-resume/exportDocx'
 import { ResumeRow } from './ResumeGrid'
+import { SectionStyleConfig } from '@/components/create-resume/templates/types'
 import { toast } from 'react-hot-toast'
 import { cn } from '@/utils/cn'
 
@@ -77,6 +89,17 @@ const COLOR_PALETTES = [
   { name: 'Pure ATS Black', hex: '#000000', description: 'Strict ATS Standard' },
 ]
 
+const FONT_SIZES = ['8pt', '8.5pt', '9pt', '9.5pt', '10pt', '10.5pt', '11pt', '12pt', '14pt', '18pt', '22pt']
+
+const SECTION_LABELS: Record<string, { title: string; tab: EditorTab; icon: any }> = {
+  header: { title: 'Header & Contact Information', tab: 'personal', icon: User },
+  summary: { title: 'Professional Summary', tab: 'summary', icon: AlignLeft },
+  skills: { title: 'Technical Skills Matrix', tab: 'skills', icon: Sparkles },
+  experience: { title: 'Work Experience & Roles', tab: 'experience', icon: Briefcase },
+  education: { title: 'Education & Academics', tab: 'education', icon: GraduationCap },
+  certifications: { title: 'Certifications & Credentials', tab: 'certifications', icon: Award },
+}
+
 export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModalProps) {
   const [activeTab, setActiveTab] = useState<EditorTab>('style')
   const [loading, setLoading] = useState(true)
@@ -88,6 +111,10 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
   const [selectedFontFamily, setSelectedFontFamily] = useState('Calibri, Arial, sans-serif')
   const [themeColor, setThemeColor] = useState('#2E8B57')
   const [customColor, setCustomColor] = useState('#2E8B57')
+
+  // Section-specific style customization
+  const [selectedSectionKey, setSelectedSectionKey] = useState<string | null>(null)
+  const [sectionStyles, setSectionStyles] = useState<Record<string, SectionStyleConfig>>({})
 
   // Resume Content state
   const [profileData, setProfileData] = useState<any>({
@@ -126,11 +153,17 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
   // Close on Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') {
+        if (selectedSectionKey) {
+          setSelectedSectionKey(null)
+        } else {
+          onClose()
+        }
+      }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [onClose])
+  }, [onClose, selectedSectionKey])
 
   // Fetch initial data
   useEffect(() => {
@@ -303,6 +336,47 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
     }
   }
 
+  // Floating Section Style Helpers
+  const currentSectionStyle: SectionStyleConfig = selectedSectionKey
+    ? sectionStyles[selectedSectionKey] || {}
+    : {}
+
+  const updateSelectedSectionStyle = (patch: Partial<SectionStyleConfig>) => {
+    if (!selectedSectionKey) return
+    setSectionStyles(prev => ({
+      ...prev,
+      [selectedSectionKey]: {
+        ...(prev[selectedSectionKey] || {}),
+        ...patch
+      }
+    }))
+  }
+
+  const handleApplyStyleToAll = () => {
+    if (!selectedSectionKey) return
+    const current = sectionStyles[selectedSectionKey] || {}
+    if (current.fontFamily) setSelectedFontFamily(current.fontFamily)
+    if (current.color) setThemeColor(current.color)
+
+    const allKeys = ['header', 'summary', 'skills', 'experience', 'education', 'certifications']
+    const updated: Record<string, SectionStyleConfig> = {}
+    allKeys.forEach(k => {
+      updated[k] = { ...current }
+    })
+    setSectionStyles(updated)
+    toast.success('Applied typography and color style across all sections!')
+  }
+
+  const handleResetSectionStyle = () => {
+    if (!selectedSectionKey) return
+    setSectionStyles(prev => {
+      const copy = { ...prev }
+      delete copy[selectedSectionKey]
+      return copy
+    })
+    toast.success('Reset section style to template default')
+  }
+
   if (!resume) return null
 
   const template = getTemplateById(selectedTemplateId)
@@ -470,9 +544,9 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-900/70 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-900/75 backdrop-blur-sm animate-in fade-in duration-200">
       <div 
-        className="relative w-full max-w-[1550px] h-[95vh] max-h-[1000px] bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-[1580px] h-[95vh] max-h-[1020px] bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header / Action Toolbar */}
@@ -554,7 +628,7 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
         {/* Main Split Layout: Left Controls + Right Live Canvas */}
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
           {/* LEFT PANEL: Navigation Tabs + Interactive Section Editors */}
-          <div className="w-full lg:w-[48%] xl:w-[45%] flex flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
+          <div className="w-full lg:w-[46%] xl:w-[42%] flex flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
             {/* Tab Navigation Pill Bar */}
             <div className="px-4 py-2.5 bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 overflow-x-auto scrollbar-none flex items-center gap-1.5 shrink-0">
               <button
@@ -1211,16 +1285,19 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
             </div>
           </div>
 
-          {/* RIGHT PANEL: Live Interactive Document Canvas */}
-          <div className="w-full lg:w-[52%] xl:w-[55%] bg-slate-200/80 dark:bg-slate-950 flex flex-col overflow-hidden">
-            {/* Live Canvas Toolbar */}
-            <div className="px-4 py-2 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xs border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
+          {/* RIGHT PANEL: Live Interactive Document Canvas with Contextual Section Inspector */}
+          <div className="w-full lg:w-[54%] xl:w-[58%] bg-slate-200/90 dark:bg-slate-950 flex flex-col overflow-hidden relative">
+            {/* Live Canvas Top Bar */}
+            <div className="px-4 py-2.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0 z-10 shadow-2xs">
               <div className="flex items-center gap-2">
-                <span className="text-[11.5px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                <span className="text-[11.5px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
                   <Eye className="w-3.5 h-3.5 text-emerald-600" />
                   Live Preview
                 </span>
-                <span className="text-[10.5px] text-slate-400">A4 Real-Time Render</span>
+                <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200/80">
+                  <Sparkle className="w-3 h-3 text-emerald-500" />
+                  Click any section on resume to customize font & color
+                </span>
               </div>
 
               {/* Zoom Controls */}
@@ -1249,6 +1326,209 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
               </div>
             </div>
 
+            {/* FLOATING CONTEXTUAL SECTION FORMATTING POPUP / INSPECTOR */}
+            {selectedSectionKey && (
+              <div className="absolute top-12 left-4 right-4 z-30 animate-in slide-in-from-top-3 fade-in duration-200">
+                <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl border-2 border-emerald-500 shadow-2xl p-3.5 space-y-3 ring-4 ring-emerald-500/10">
+                  {/* Top Bar of Floating Popup */}
+                  <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800 pb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                      <span className="text-[12px] font-black text-slate-900 dark:text-slate-100 uppercase tracking-wide">
+                        Formatting Section: {SECTION_LABELS[selectedSectionKey]?.title || selectedSectionKey}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {/* Jump to Edit Text in Tab */}
+                      {SECTION_LABELS[selectedSectionKey]?.tab && (
+                        <button
+                          onClick={() => {
+                            setActiveTab(SECTION_LABELS[selectedSectionKey].tab)
+                            toast.success(`Switched tab to edit ${SECTION_LABELS[selectedSectionKey].title}`)
+                          }}
+                          className="px-2.5 py-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg flex items-center gap-1 cursor-pointer transition-colors"
+                        >
+                          <Edit3 className="w-3 h-3" />
+                          <span>Edit Text Content</span>
+                        </button>
+                      )}
+
+                      <button
+                        onClick={handleApplyStyleToAll}
+                        className="px-2 py-1 text-[11px] font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-lg cursor-pointer transition-colors"
+                        title="Apply this section's font and color to all sections"
+                      >
+                        Apply to All
+                      </button>
+
+                      <button
+                        onClick={handleResetSectionStyle}
+                        className="p-1 text-slate-400 hover:text-slate-700 rounded-md transition-colors cursor-pointer"
+                        title="Reset to Template Default"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                      </button>
+
+                      <button
+                        onClick={() => setSelectedSectionKey(null)}
+                        className="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-900 flex items-center justify-center cursor-pointer ml-1"
+                        title="Close Popup (Esc)"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Formatting Controls Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 items-center">
+                    {/* 1. Font Model / Family */}
+                    <div>
+                      <label className="block text-[10.5px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                        Font Model
+                      </label>
+                      <select
+                        value={currentSectionStyle.fontFamily || selectedFontFamily}
+                        onChange={(e) => updateSelectedSectionStyle({ fontFamily: e.target.value })}
+                        className="w-full text-[12px] font-semibold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 focus:border-emerald-500 focus:outline-hidden cursor-pointer"
+                      >
+                        {FONT_MODELS.map(f => (
+                          <option key={f.id} value={f.family}>
+                            {f.name} ({f.category})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* 2. Font Size */}
+                    <div>
+                      <label className="block text-[10.5px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                        Font Size
+                      </label>
+                      <div className="flex items-center gap-1">
+                        <select
+                          value={currentSectionStyle.fontSize || '9.5pt'}
+                          onChange={(e) => updateSelectedSectionStyle({ fontSize: e.target.value })}
+                          className="w-full text-[12px] font-semibold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 focus:border-emerald-500 focus:outline-hidden cursor-pointer"
+                        >
+                          {FONT_SIZES.map(s => (
+                            <option key={s} value={s}>{s}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* 3. Font Style Toggles (Bold, Italic, Underline, Uppercase) */}
+                    <div>
+                      <label className="block text-[10.5px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                        Font Style
+                      </label>
+                      <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700">
+                        <button
+                          type="button"
+                          onClick={() => updateSelectedSectionStyle({
+                            fontWeight: currentSectionStyle.fontWeight === 'bold' ? 'normal' : 'bold'
+                          })}
+                          className={cn(
+                            "flex-1 py-1 rounded text-[11px] font-black flex items-center justify-center transition-colors cursor-pointer",
+                            currentSectionStyle.fontWeight === 'bold'
+                              ? "bg-emerald-600 text-white shadow-2xs"
+                              : "text-slate-700 hover:bg-white dark:hover:bg-slate-700"
+                          )}
+                          title="Toggle Bold"
+                        >
+                          <Bold className="w-3.5 h-3.5" />
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => updateSelectedSectionStyle({
+                            fontStyle: currentSectionStyle.fontStyle === 'italic' ? 'normal' : 'italic'
+                          })}
+                          className={cn(
+                            "flex-1 py-1 rounded text-[11px] font-black flex items-center justify-center transition-colors cursor-pointer",
+                            currentSectionStyle.fontStyle === 'italic'
+                              ? "bg-emerald-600 text-white shadow-2xs"
+                              : "text-slate-700 hover:bg-white dark:hover:bg-slate-700"
+                          )}
+                          title="Toggle Italic"
+                        >
+                          <Italic className="w-3.5 h-3.5" />
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => updateSelectedSectionStyle({
+                            textDecoration: currentSectionStyle.textDecoration === 'underline' ? 'none' : 'underline'
+                          })}
+                          className={cn(
+                            "flex-1 py-1 rounded text-[11px] font-black flex items-center justify-center transition-colors cursor-pointer",
+                            currentSectionStyle.textDecoration === 'underline'
+                              ? "bg-emerald-600 text-white shadow-2xs"
+                              : "text-slate-700 hover:bg-white dark:hover:bg-slate-700"
+                          )}
+                          title="Toggle Underline"
+                        >
+                          <Underline className="w-3.5 h-3.5" />
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => updateSelectedSectionStyle({
+                            textTransform: currentSectionStyle.textTransform === 'uppercase' ? 'none' : 'uppercase'
+                          })}
+                          className={cn(
+                            "flex-1 py-1 rounded text-[11px] font-black flex items-center justify-center transition-colors cursor-pointer",
+                            currentSectionStyle.textTransform === 'uppercase'
+                              ? "bg-emerald-600 text-white shadow-2xs"
+                              : "text-slate-700 hover:bg-white dark:hover:bg-slate-700"
+                          )}
+                          title="Toggle Uppercase"
+                        >
+                          <CaseSensitive className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* 4. Font / Accent Color */}
+                    <div>
+                      <label className="block text-[10.5px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                        Section Color
+                      </label>
+                      <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1 overflow-x-auto pb-0.5">
+                          {COLOR_PALETTES.slice(0, 5).map(c => (
+                            <button
+                              key={c.hex}
+                              type="button"
+                              onClick={() => updateSelectedSectionStyle({ color: c.hex })}
+                              className={cn(
+                                "w-6 h-6 rounded-full shrink-0 transition-transform cursor-pointer border border-white shadow-xs",
+                                (currentSectionStyle.color || themeColor).toLowerCase() === c.hex.toLowerCase()
+                                  ? "ring-2 ring-emerald-500 scale-110"
+                                  : "hover:scale-105 opacity-90 hover:opacity-100"
+                              )}
+                              style={{ backgroundColor: c.hex }}
+                              title={c.name}
+                            />
+                          ))}
+                        </div>
+
+                        {/* Custom Color Input */}
+                        <input
+                          type="color"
+                          value={currentSectionStyle.color || themeColor}
+                          onChange={(e) => updateSelectedSectionStyle({ color: e.target.value })}
+                          className="w-7 h-7 rounded-lg border-0 cursor-pointer bg-transparent shrink-0"
+                          title="Pick custom color"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Canvas Scroll Area */}
             <div
               ref={previewContainerRef}
@@ -1275,6 +1555,9 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
                       profileData={profileData}
                       themeColor={themeColor}
                       fontFamily={selectedFontFamily}
+                      sectionStyles={sectionStyles}
+                      activeSectionKey={selectedSectionKey}
+                      onSelectSection={(key) => setSelectedSectionKey(key)}
                     />
                   </div>
                 </div>
@@ -1301,6 +1584,7 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
                     profileData={profileData}
                     themeColor={themeColor}
                     fontFamily={selectedFontFamily}
+                    sectionStyles={sectionStyles}
                   />
                 </div>
               </div>
