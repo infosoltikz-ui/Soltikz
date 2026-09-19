@@ -105,6 +105,7 @@ export default function CreateResumePage() {
       toast.error('No resume data available to export.')
       return
     }
+    toast.success('Opening PDF download dialog...')
     reactToPrintFn()
   }
 
@@ -136,7 +137,18 @@ export default function CreateResumePage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
         const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
-        if (data) setProfileData(data)
+        if (data) {
+          const pInfo = data.master_resume_data?.personal_info || {}
+          const fullName = data.full_name || `${pInfo.firstName || ''} ${pInfo.lastName || ''}`.trim() || pInfo.fullName || 'Candidate'
+          setProfileData({
+            ...data,
+            full_name: fullName,
+            email: data.email || pInfo.email || '',
+            phone: data.phone || pInfo.phone || '',
+            location: pInfo.location || data.location || '',
+            linkedin: pInfo.linkedin || data.linkedin || '',
+          })
+        }
       }
     }
     fetchProfile()
@@ -625,20 +637,20 @@ export default function CreateResumePage() {
                     </div>
 
                     <Button 
+                      onClick={handlePrint} 
+                      className="h-8.5 px-3.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs text-[12px] font-bold cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>Download PDF</span>
+                    </Button>
+                    <Button 
                       onClick={handleDownloadDocx} 
                       disabled={isDownloadingDocx}
                       variant="outline" 
-                      className="h-8 px-2.5 rounded-lg border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[11.5px] font-semibold cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0"
+                      className="h-8.5 px-2.5 rounded-lg border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[11.5px] font-semibold cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0"
                     >
                       {isDownloadingDocx ? <Loader2 className="w-3 h-3 animate-spin text-emerald-600" /> : <FileText className="w-3 h-3 text-slate-500" />}
                       <span>Word (DOCX)</span>
-                    </Button>
-                    <Button 
-                      onClick={handlePrint} 
-                      className="h-8 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs text-[11.5px] font-bold cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0"
-                    >
-                      <Download className="w-3 h-3" />
-                      <span>Download PDF</span>
                     </Button>
                   </div>
                 </div>
@@ -733,6 +745,10 @@ export default function CreateResumePage() {
               </div>
 
               <div className="flex items-center gap-2.5">
+                <Button onClick={handlePrint} className="h-9 px-5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm text-[13px] font-bold cursor-pointer flex items-center gap-1.5">
+                  <Download className="w-4 h-4" />
+                  Download PDF
+                </Button>
                 <Button 
                   onClick={handleDownloadDocx} 
                   disabled={isDownloadingDocx}
@@ -741,10 +757,6 @@ export default function CreateResumePage() {
                 >
                   {isDownloadingDocx ? <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" /> : <FileText className="w-3.5 h-3.5 text-slate-500" />}
                   Word (DOCX)
-                </Button>
-                <Button onClick={handlePrint} className="h-9 px-5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm text-[13px] font-semibold cursor-pointer flex items-center gap-1.5">
-                  <Download className="w-3.5 h-3.5" />
-                  Download PDF
                 </Button>
               </div>
             </div>

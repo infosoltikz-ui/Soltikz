@@ -3,7 +3,7 @@ import { ResumesPageContent } from '@/components/dashboard/resumes/ResumesPageCo
 
 export default function MyResumesPage() {
   return (
-    <div className="p-8 max-w-[1600px] mx-auto min-h-screen">
+    <div className="p-6 md:p-8 max-w-[1800px] mx-auto min-h-screen">
 
       {/* Top Header */}
       <DashboardHeader
