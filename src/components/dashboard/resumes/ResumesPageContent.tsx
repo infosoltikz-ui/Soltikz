@@ -1,15 +1,16 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useRef } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'react-hot-toast'
 import { formatDistanceToNow } from 'date-fns'
+import { useReactToPrint } from 'react-to-print'
+import { getTemplateById } from '@/components/create-resume/templates/registry'
 import { ResumeStats } from './ResumeStats'
 import { ResumeToolbar, ResumeFilterType, ResumeSortBy } from './ResumeToolbar'
 import { ResumeGrid, ResumeRow } from './ResumeGrid'
 import { ResumePreviewModal } from './ResumePreviewModal'
 import { ResumeEditorModal } from './ResumeEditorModal'
-import { downloadResumeDocx } from '@/components/create-resume/exportDocx'
 
 function getRealisticAtsScore(id: string): number {
   let hash = 0
@@ -43,6 +44,20 @@ export function ResumesPageContent() {
   const [sortBy, setSortBy] = useState<ResumeSortBy>('newest')
   const [previewResume, setPreviewResume] = useState<ResumeRow | null>(null)
   const [editingResume, setEditingResume] = useState<ResumeRow | null>(null)
+
+  const [printableResume, setPrintableResume] = useState<{
+    resumeData: any
+    profileData: any
+    templateId: string
+    title: string
+  } | null>(null)
+
+  const printRef = useRef<HTMLDivElement>(null)
+
+  const reactToPrintFn = useReactToPrint({
+    contentRef: printRef,
+    documentTitle: printableResume?.title || 'Tailored_Resume',
+  })
 
   const fetchResumes = async () => {
     const supabase = createClient()
@@ -398,13 +413,32 @@ export function ResumesPageContent() {
         })
       }
 
-      const fileName = `${fullName.replace(/\s+/g, '_')}_${(resume.title || 'Resume').replace(/[^a-zA-Z0-9_-]/g, '_')}.docx`
-      await downloadResumeDocx(reconstructed, userProfile, fileName)
-      toast.success('Resume DOCX downloaded successfully!')
+      const isC2C = String(resume.resume_type || '').toLowerCase().includes('c2c')
+      const templateId = isC2C ? 'c2c' : 'modern'
+      const docTitle = `${fullName.replace(/\s+/g, '_')}_${(resume.title || 'Resume').replace(/[^a-zA-Z0-9_-]/g, '_')}`
+
+      setPrintableResume({
+        resumeData: reconstructed,
+        profileData: userProfile,
+        templateId,
+        title: docTitle
+      })
+
+      // Give React a tick to mount the template into printRef, then trigger PDF print dialog
+      setTimeout(() => {
+        try {
+          reactToPrintFn()
+          toast.success('Opening PDF download dialog...')
+        } catch (err) {
+          console.error('Print trigger error:', err)
+          toast.error('Failed to open PDF download dialog')
+        } finally {
+          setDownloadingId(null)
+        }
+      }, 150)
     } catch (err: any) {
       console.error('Download failed:', err)
       toast.error(err.message || 'Failed to download resume')
-    } finally {
       setDownloadingId(null)
     }
   }
@@ -502,6 +536,35 @@ export function ResumesPageContent() {
           onClose={() => setEditingResume(null)}
           onSaved={() => fetchResumes()}
         />
+      )}
+
+      {/* Hidden Print Container for High-Fidelity Exact Template PDF Export */}
+      {printableResume && (
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            left: '-99999px',
+            top: 0,
+            width: '794px',
+            opacity: 0,
+            pointerEvents: 'none',
+            zIndex: -9999
+          }}
+        >
+          <div ref={printRef}>
+            {(() => {
+              const template = getTemplateById(printableResume.templateId)
+              const TemplateComponent = template.component
+              return (
+                <TemplateComponent
+                  resumeData={printableResume.resumeData}
+                  profileData={printableResume.profileData}
+                />
+              )
+            })()}
+          </div>
+        </div>
       )}
     </>
   )
