@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import type { ResumeTemplateProps } from './types';
 
@@ -308,3 +309,4 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 });
 
 C2CTemplate.displayName = 'C2CTemplate';
+

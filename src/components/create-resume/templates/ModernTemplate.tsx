@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import type { ResumeTemplateProps } from './types';
 
@@ -328,3 +329,4 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 });
 
 ModernTemplate.displayName = 'ModernTemplate';
+

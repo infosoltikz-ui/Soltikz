@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import type { ResumeTemplateProps } from './types';
 
@@ -330,3 +331,4 @@ export const CertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
 );
 
 CertifiedTemplate.displayName = 'CertifiedTemplate';
+

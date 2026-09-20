@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import type { ResumeTemplateProps } from './types';
 
@@ -341,3 +342,4 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 });
 
 BannerTemplate.displayName = 'BannerTemplate';
+

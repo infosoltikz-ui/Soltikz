@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import type { ResumeTemplateProps } from './types';
 
@@ -368,3 +369,4 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
 });
 
 SidebarTemplate.displayName = 'SidebarTemplate';
+
