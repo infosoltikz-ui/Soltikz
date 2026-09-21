@@ -22,6 +22,12 @@ export interface ResumeRow {
   experience_company?: string
   experience_bullet?: string
   skills_list?: string[]
+  template_id?: string
+  theme_color?: string
+  font_family?: string
+  section_styles?: Record<string, any> | null
+  full_resume_data?: any
+  profile_data?: any
 }
 
 interface ResumeGridProps {
@@ -87,11 +93,7 @@ export function ResumeGrid({ resumes, loading, hasAnyResumes, onDelete, onDuplic
           ? resume.ats_analyses[0]?.overall_score
           : (resume.ats_analyses as any)?.overall_score
 
-        let hash = 0
-        for (let i = 0; i < (resume.id || '').length; i++) {
-          hash = (hash * 31 + (resume.id || '').charCodeAt(i)) % 1000
-        }
-        const atsScore = (rawAts != null && rawAts > 0) ? rawAts : (92 + (Math.abs(hash) % 5))
+        const atsScore = rawAts != null ? rawAts : 0
 
         const jd = Array.isArray(resume.parsed_job_descriptions)
           ? resume.parsed_job_descriptions[0]
@@ -127,6 +129,7 @@ export function ResumeGrid({ resumes, loading, hasAnyResumes, onDelete, onDuplic
               company,
               role,
               template: templateName,
+              templateId: resume.template_id || (isC2C ? 'c2c-modern' : 'modern'),
               atsScore,
               lastUpdated: lastUpdatedLabel(dateString),
               status: (resume.status || 'Ready') as 'Completed' | 'Draft',
@@ -138,6 +141,8 @@ export function ResumeGrid({ resumes, loading, hasAnyResumes, onDelete, onDuplic
               experienceCompany: resume.experience_company,
               experienceBullet: resume.experience_bullet,
               skillsList: resume.skills_list,
+              fullResumeData: resume.full_resume_data,
+              profileData: resume.profile_data,
             }}
             onDelete={() => onDelete(resume.id)}
             onDuplicate={() => onDuplicate(resume)}

@@ -19,9 +19,22 @@ const ATSAnalysisFormat = z.object({
 });
 
 const SYSTEM_PROMPT = `
-You are a strict Enterprise ATS (Applicant Tracking System) Scanner (e.g. Workday, Taleo).
+You are an ultra-strict, enterprise-grade ATS (Applicant Tracking System) Scanner (e.g., Workday, Taleo, Greenhouse).
 Analyze the provided Resume against the provided Job Description.
-Score the resume out of 100 based on keyword density, action verbs, readable format, and relevance.
+
+Scoring Rules (MATHEMATICALLY STRICT - NO EXCEPTIONS):
+- Score ONLY based on what is literally present in the resume text provided.
+- Do NOT inflate scores. Do NOT be generous. Do NOT assume implied skills.
+- KEYWORD MATCH (40% weight): Count how many exact or near-exact keywords from the JD appear verbatim in the resume. Score = (matched / total_jd_keywords) * 100.
+- FORMATTING (15% weight): Score 100 if the resume has clear section headers (Summary, Skills, Experience, Education). Deduct 20 per missing section.
+- READABILITY (15% weight): Score based on bullet point quality - deduct for vague verbs ("helped", "worked on"), missing metrics/numbers, or overly long paragraphs.
+- GRAMMAR (10% weight): Deduct per grammar issue found. Default 85 if no obvious errors.
+- SKILLS COVERAGE (10% weight): What % of required skills/tools from JD appear in the Skills section.
+- EXPERIENCE RELEVANCE (10% weight): How closely the candidate's past roles match the target role.
+- Overall Score = weighted average of all 6 categories.
+- Most good resumes score between 75-88. Only mathematically perfect keyword coverage justifies 90+.
+- Return ONLY what the resume actually shows — do not guess or assume.
+
 Return a perfect JSON object mapping to the exact requested schema.
 `;
 
@@ -41,8 +54,8 @@ export async function POST(req: Request) {
     const aiResponse = await generateAIResponse<any>({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt: `Job Description:\n${JSON.stringify(parsedJdData)}\n\nResume Content:\n${JSON.stringify(resumeContent)}`,
-      model: 'gpt-4o-mini', // Faster model is fine for scoring
-      temperature: 0.1, // Highly deterministic scoring
+      model: 'gpt-4o-mini',
+      temperature: 0, // FULLY deterministic — same resume + same JD must always produce same score
       responseFormat: zodResponseFormat(ATSAnalysisFormat, 'ats_analysis'),
     });
 

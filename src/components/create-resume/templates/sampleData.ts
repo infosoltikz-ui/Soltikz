@@ -163,6 +163,20 @@ export const c2cSampleData: ResumeData = {
         'Implemented strict role-based access controls across all Google Cloud Platform resources, achieving full HIPAA compliance within three months.',
         'Configured automated backup and restoration procedures for all MongoDB databases, ensuring critical patient data was never compromised.'
       ]
+    },
+    {
+      role: 'Systems Administrator',
+      company: 'DataTech Enterprise',
+      location: 'Austin, TX',
+      duration: 'Jun 2015 – Feb 2018',
+      environment: ['Linux', 'VMware', 'Bash', 'Nagios', 'Apache', 'MySQL'],
+      bullets: [
+        'Managed and maintained a fleet of 500+ Linux servers (CentOS/Ubuntu) across three regional data centers, ensuring 99.9% availability.',
+        'Scripted daily backup and disaster recovery validation tasks using Bash, significantly reducing manual overhead and risk of human error.',
+        'Spearheaded the migration of legacy physical servers to VMware ESXi virtual environments, reducing hardware footprint and power consumption by 45%.',
+        'Configured comprehensive system monitoring and alerting rules using Nagios, proactively addressing hardware degradation before service impact.',
+        'Collaborated closely with software development teams to troubleshoot complex application deployment and networking issues in staging environments.'
+      ]
     }
   ],
   education: [

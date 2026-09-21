@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { useReactToPrint } from 'react-to-print'
+import { exportToPdf } from '@/utils/exportPdf'
 import { CreateResumeHeader } from '@/components/create-resume/CreateResumeHeader'
 import { ResumeTypeSelector } from '@/components/create-resume/ResumeTypeSelector'
 import { ProfileView } from '@/components/profile/ProfileView'
@@ -94,19 +94,26 @@ export default function CreateResumePage() {
     }
   }, [step, generatedResume])
 
-  const reactToPrintFn = useReactToPrint({
-    contentRef: resumeRef,
-    documentTitle: `${(profileData?.full_name || 'Resume').replace(/\s+/g, '_')}_Tailored_Resume`,
-    onAfterPrint: () => logUsageEvent(currentResumeId, 'pdf_download'),
-  })
+  const [isExportingPdf, setIsExportingPdf] = useState(false)
 
-  const handlePrint = () => {
+  const handlePrint = async () => {
     if (!generatedResume || !resumeRef.current) {
       toast.error('No resume data available to export.')
       return
     }
-    toast.success('Opening PDF download dialog...')
-    reactToPrintFn()
+    setIsExportingPdf(true)
+    const toastId = toast.loading('Generating PDF...')
+    try {
+      const fileName = `${(profileData?.full_name || 'Resume').replace(/\s+/g, '_')}_Tailored_Resume.pdf`
+      await exportToPdf(resumeRef.current, fileName)
+      logUsageEvent(currentResumeId, 'pdf_download')
+      toast.success('PDF downloaded successfully!', { id: toastId })
+    } catch (error) {
+      console.error('PDF export failed:', error)
+      toast.error('Failed to generate PDF. Please try again.', { id: toastId })
+    } finally {
+      setIsExportingPdf(false)
+    }
   }
 
   const handleDownloadDocx = async () => {
@@ -295,7 +302,8 @@ export default function CreateResumePage() {
           resumeType: rType,
           parsedJdId: parseData.parsed_jd_id,
           strategyId: strategyData.strategy_id,
-          title: `${rType} Resume - ${companyName}`
+          title: `${rType} Resume - ${companyName}`,
+          templateId: selectedTemplateId
         })
       })
       const resumeGenData = await resumeRes.json()
@@ -490,8 +498,8 @@ export default function CreateResumePage() {
               <ResumeTypeSelector selectedType={resumeType} onChange={(type) => {
                 setResumeType(type)
                 // Automatically switch to the correct default template for the mode
-                if (type === 'c2c') setSelectedTemplateId('c2c')
-                else if (selectedTemplateId === 'c2c') setSelectedTemplateId('modern')
+                if (type === 'c2c' && !selectedTemplateId.startsWith('c2c')) setSelectedTemplateId('c2c')
+                else if (type === 'fulltime' && selectedTemplateId.startsWith('c2c')) setSelectedTemplateId('modern')
               }} />
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
                 <div className="mb-8 flex justify-between items-center">

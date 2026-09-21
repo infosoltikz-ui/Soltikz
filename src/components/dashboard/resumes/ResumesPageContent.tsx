@@ -4,21 +4,13 @@ import { useEffect, useMemo, useState, useRef } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'react-hot-toast'
 import { formatDistanceToNow } from 'date-fns'
-import { useReactToPrint } from 'react-to-print'
+import { exportToPdf } from '@/utils/exportPdf'
 import { getTemplateById } from '@/components/create-resume/templates/registry'
 import { ResumeStats } from './ResumeStats'
 import { ResumeToolbar, ResumeFilterType, ResumeSortBy } from './ResumeToolbar'
 import { ResumeGrid, ResumeRow } from './ResumeGrid'
 import { ResumePreviewModal } from './ResumePreviewModal'
 import { ResumeEditorModal } from './ResumeEditorModal'
-
-function getRealisticAtsScore(id: string): number {
-  let hash = 0
-  for (let i = 0; i < id.length; i++) {
-    hash = (hash * 31 + id.charCodeAt(i)) % 1000
-  }
-  return 92 + (Math.abs(hash) % 5) // Always returns 92, 93, 94, 95, or 96
-}
 
 function extractCompanyFromTitle(title?: string): string {
   if (!title) return 'Target Employer'
@@ -49,15 +41,16 @@ export function ResumesPageContent() {
     resumeData: any
     profileData: any
     templateId: string
+    themeColor?: string
+    fontFamily?: string
+    sectionStyles?: Record<string, any>
     title: string
   } | null>(null)
 
   const printRef = useRef<HTMLDivElement>(null)
 
-  const reactToPrintFn = useReactToPrint({
-    contentRef: printRef,
-    documentTitle: printableResume?.title || 'Tailored_Resume',
-  })
+  // Print state is no longer needed for html2pdf in the same way,
+  // but we still need a ref for the off-screen template.
 
   const fetchResumes = async () => {
     const supabase = createClient()
@@ -122,6 +115,7 @@ export function ResumesPageContent() {
       const resumeIds = resumesList.map((r: any) => r.id)
       let sectionsByResumeId: Record<string, Record<string, any>> = {}
       let candidateName = 'Candidate'
+      let profileInfo: any = {}
 
       if (resumeIds.length > 0) {
         const [sectionsResult, profileResult] = await Promise.all([
@@ -149,36 +143,19 @@ export function ResumesPageContent() {
         if (profileResult.data) {
           const prof = profileResult.data
           const pInfo = prof.master_resume_data?.personal_info || {}
+          profileInfo = pInfo
           candidateName = prof.full_name || `${pInfo.firstName || ''} ${pInfo.lastName || ''}`.trim() || pInfo.fullName || 'Candidate'
         }
       }
 
       // Ensure every resume has a valid ATS score, clean company/role metadata, and real content
-      const missingAtsInserts: any[] = []
       const processedResumes = resumesList.map((r: any) => {
         const rawScore = Array.isArray(r.ats_analyses)
           ? r.ats_analyses[0]?.overall_score
           : r.ats_analyses?.overall_score
 
-        let finalScore = rawScore
-        if (!finalScore || finalScore <= 0) {
-          finalScore = getRealisticAtsScore(r.id)
-          missingAtsInserts.push({
-            resume_id: r.id,
-            overall_score: finalScore,
-            category_scores: {
-              keywordMatch: finalScore,
-              formatting: 95,
-              readability: 96,
-              grammar: 98,
-              skillsCoverage: finalScore,
-              experienceRelevance: finalScore - 1
-            },
-            missing_keywords: [],
-            improvement_suggestions: ['Optimize action verbs for maximum impact']
-          })
-        }
-
+        // Use only the real ATS score from DB - never fake it
+        let finalScore = rawScore || 0
         let jdObj = Array.isArray(r.parsed_job_descriptions) ? r.parsed_job_descriptions[0] : r.parsed_job_descriptions
         let compName = jdObj?.company_name
         if (!compName || compName.toLowerCase().includes('unknown') || compName === 'N/A' || compName === 'Draft') {
@@ -235,6 +212,8 @@ export function ResumesPageContent() {
           experience_company: experienceCompany,
           experience_bullet: experienceBullet,
           skills_list: skillsList,
+          full_resume_data: sec,
+          profile_data: profileInfo,
           ats_analyses: [{ overall_score: finalScore }],
           parsed_job_descriptions: {
             company_name: compName,
@@ -244,17 +223,6 @@ export function ResumesPageContent() {
       })
 
       setResumes(processedResumes)
-
-      // Asynchronously backfill missing ATS rows to Supabase
-      if (missingAtsInserts.length > 0) {
-        Promise.resolve(supabase.from('ats_analyses').insert(missingAtsInserts))
-          .then(() => {
-            console.log(`Backfilled ${missingAtsInserts.length} missing ATS score records.`)
-          })
-          .catch((err: any) => {
-            console.warn('ATS backfill notice:', err)
-          })
-      }
     } catch (err) {
       console.error('Error in fetchResumes:', err)
       setResumes([])
@@ -414,26 +382,43 @@ export function ResumesPageContent() {
       }
 
       const isC2C = String(resume.resume_type || '').toLowerCase().includes('c2c')
-      const templateId = isC2C ? 'c2c' : 'modern'
+      // Use the exact saved template_id — never fall back to a generic one
+      const resolvedTemplateId =
+        resume.template_id ||
+        (isC2C ? 'c2c-modern' : 'modern')
+
+      const savedThemeColor = resume.theme_color || undefined
+      const savedFontFamily = resume.font_family || undefined
+      const savedSectionStyles = resume.section_styles || undefined
       const docTitle = `${fullName.replace(/\s+/g, '_')}_${(resume.title || 'Resume').replace(/[^a-zA-Z0-9_-]/g, '_')}`
 
       setPrintableResume({
         resumeData: reconstructed,
         profileData: userProfile,
-        templateId,
+        templateId: resolvedTemplateId,
+        themeColor: savedThemeColor,
+        fontFamily: savedFontFamily,
+        sectionStyles: savedSectionStyles,
         title: docTitle
       })
 
       // Give React a tick to mount the template into printRef, then trigger PDF print dialog
-      setTimeout(() => {
+      // Give React a tick to mount the template into printRef, then trigger PDF generation
+      setTimeout(async () => {
         try {
-          reactToPrintFn()
-          toast.success('Opening PDF download dialog...')
+          if (printRef.current) {
+            toast.loading('Generating PDF...', { id: 'pdf-gen' })
+            await exportToPdf(printRef.current, docTitle + '.pdf')
+            toast.success('PDF downloaded successfully!', { id: 'pdf-gen' })
+          } else {
+            toast.error('Failed to locate resume layout for export')
+          }
         } catch (err) {
           console.error('Print trigger error:', err)
-          toast.error('Failed to open PDF download dialog')
+          toast.error('Failed to generate PDF', { id: 'pdf-gen' })
         } finally {
           setDownloadingId(null)
+          setPrintableResume(null) // Clean up
         }
       }, 150)
     } catch (err: any) {
@@ -560,6 +545,9 @@ export function ResumesPageContent() {
                 <TemplateComponent
                   resumeData={printableResume.resumeData}
                   profileData={printableResume.profileData}
+                  themeColor={printableResume.themeColor}
+                  fontFamily={printableResume.fontFamily}
+                  sectionStyles={printableResume.sectionStyles}
                 />
               )
             })()}

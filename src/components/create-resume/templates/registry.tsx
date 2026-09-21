@@ -4,6 +4,10 @@ import { BannerTemplate } from './BannerTemplate';
 import { CertifiedTemplate } from './CertifiedTemplate';
 import { SidebarTemplate } from './SidebarTemplate';
 import { C2CTemplate } from './C2CTemplate';
+import { C2CBannerTemplate } from './C2CBannerTemplate';
+import { C2CModernTemplate } from './C2CModernTemplate';
+import { C2CCertifiedTemplate } from './C2CCertifiedTemplate';
+import { C2CSidebarTemplate } from './C2CSidebarTemplate';
 import type { ResumeTemplateProps } from './types';
 import React from 'react';
 
@@ -47,9 +51,33 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
   },
   {
     id: 'c2c',
-    name: 'C2C Contractor',
+    name: 'C2C Classic Contractor',
     description: 'ATS-optimized, highly structured layout explicitly designed for IT contracting and vendor submissions.',
     component: C2CTemplate,
+  },
+  {
+    id: 'c2c-banner',
+    name: 'C2C Professional Banner',
+    description: 'Vendor-ready layout featuring a large colored banner header with strict C2C data mapping.',
+    component: C2CBannerTemplate,
+  },
+  {
+    id: 'c2c-modern',
+    name: 'C2C Modern Accent',
+    description: 'Clean centered header and distinct lines optimized for C2C strict formatting.',
+    component: C2CModernTemplate,
+  },
+  {
+    id: 'c2c-certified',
+    name: 'C2C Certified',
+    description: 'Grid-based structured C2C template perfect for highlighting certifications and dense tech stacks.',
+    component: C2CCertifiedTemplate,
+  },
+  {
+    id: 'c2c-sidebar',
+    name: 'C2C Left-Aligned',
+    description: 'Bold top bar and indented left-aligned C2C structure for high readability.',
+    component: C2CSidebarTemplate,
   },
 ];
 

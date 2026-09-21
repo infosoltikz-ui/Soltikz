@@ -60,15 +60,11 @@ export const CertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
     };
 
     const experiences = resumeData.experience || [];
-    const firstExp = experiences.slice(0, 1);
-    const secondExp = experiences.slice(1);
-    const hasPage2 = secondExp.length > 0 || (resumeData.education && resumeData.education.length > 0) || (resumeData.certifications && resumeData.certifications.length > 0);
 
     return (
       <div ref={ref} className="space-y-8 print:space-y-0 text-black">
-        {/* ─── PAGE 1 ─── */}
         <div 
-          className="resume-page bg-white w-[794px] min-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between"
+          className="resume-page bg-white w-[794px] mx-auto shadow-xl border border-slate-200 text-black relative"
           style={{
             boxSizing: 'border-box',
             padding: '44px 50px',
@@ -159,16 +155,16 @@ export const CertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
               </div>
             )}
 
-            {/* Primary Experience (Role 1) */}
-            {firstExp.length > 0 && (
+            {/* Professional Experience */}
+            {experiences.length > 0 && (
               <div 
                 onClick={() => onSelectSection?.('experience')}
                 className={getSectionWrapperClass('experience')}
                 style={getSectionStyle('experience')}
               >
                 <div className="mb-2">
-                  <SectionHeader title="Career Experience" sectionKey="experience" />
-                  {firstExp.map((exp: any, i: number) => (
+                  <SectionHeader title="Professional Experience" sectionKey="experience" />
+                  {experiences.map((exp: any, i: number) => (
                     <div key={i} className="mb-2">
                       <div className="flex justify-between items-center bg-slate-50 p-1.5 border border-slate-200 rounded-sm mb-1">
                         <div>
@@ -199,132 +195,57 @@ export const CertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
                 </div>
               </div>
             )}
-          </div>
 
-          {/* Page 1 Footer */}
-          {hasPage2 && (
-            <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200/60 mt-auto">
-              <span>{profileData.full_name || 'Candidate'} — Confidential Resume</span>
-              <span>Page 1 of 2</span>
-            </div>
-          )}
-        </div>
-
-        {/* ─── PAGE 2 ─── */}
-        {hasPage2 && (
-          <div 
-            className="resume-page bg-white w-[794px] min-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between"
-            style={{
-              boxSizing: 'border-box',
-              padding: '44px 50px',
-              fontFamily: selectedFont,
-              color: '#1a1a1a',
-              fontSize: '9.5pt',
-              lineHeight: '1.4'
-            }}
-          >
-            <div>
-              {/* Continuation Header */}
-              <div className="flex justify-between items-center pb-2 mb-3 border-b border-slate-200">
-                <span className="font-bold uppercase tracking-wider" style={{ fontSize: '11pt', color: ACCENT }}>
-                  {profileData.full_name || 'JOHN DOE'} — Career Experience (Cont.)
-                </span>
-                <span className="text-slate-400 text-[9pt] font-medium">Page 2</span>
-              </div>
-
-              {/* Remaining Experiences */}
-              {secondExp.length > 0 && (
-                <div 
-                  onClick={() => onSelectSection?.('experience')}
-                  className={getSectionWrapperClass('experience')}
-                  style={getSectionStyle('experience')}
-                >
-                  <div className="space-y-3 mb-4">
-                    {secondExp.map((exp: any, i: number) => (
-                      <div key={i} className="mb-3">
-                        <div className="flex justify-between items-center bg-slate-50 p-1.5 border border-slate-200 rounded-sm mb-1">
-                          <div>
-                            <div className="font-extrabold" style={{ fontSize: '10pt', color: ACCENT }}>{exp.role}</div>
-                            <div className="font-bold text-slate-700" style={{ fontSize: '9pt' }}>{exp.company}</div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-bold text-slate-700" style={{ fontSize: '9pt' }}>{exp.duration}</div>
-                          </div>
+            {/* Education */}
+            {resumeData.education && resumeData.education.length > 0 && (
+              <div 
+                onClick={() => onSelectSection?.('education')}
+                className={getSectionWrapperClass('education')}
+                style={getSectionStyle('education')}
+              >
+                <div className="mb-4">
+                  <SectionHeader title="Education" sectionKey="education" />
+                  <div className="space-y-2" style={{ fontSize: '9.5pt' }}>
+                    {resumeData.education.map((edu: any, i: number) => (
+                      <div key={i} className="flex justify-between items-start">
+                        <div>
+                          <div className="font-bold text-slate-800">{edu.degree}</div>
+                          <div className="text-slate-600 font-medium">{edu.institution}</div>
                         </div>
-
-                        {exp.environment && exp.environment.length > 0 && (
-                          <div className="mb-1 px-1.5 leading-snug" style={{ fontSize: '8.5pt' }}>
-                            <span className="font-bold bg-slate-100 px-1 py-0.2 rounded text-slate-600 mr-1 border border-slate-200">Tech Stack:</span>
-                            <span className="text-slate-600 italic">{exp.environment.join(', ')}</span>
-                          </div>
-                        )}
-
-                        <ul className="list-square pl-[18px] pr-1 space-y-1 m-0" style={{ fontSize: '9pt' }}>
-                          {exp.bullets.map((bullet: string, j: number) => (
-                            <li key={j} className="pl-1 leading-snug text-justify text-slate-800">
-                              {parseBoldText(bullet)}
-                            </li>
-                          ))}
-                        </ul>
+                        <div className="font-semibold whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
                       </div>
                     ))}
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* Education */}
-              {resumeData.education && resumeData.education.length > 0 && (
-                <div 
-                  onClick={() => onSelectSection?.('education')}
-                  className={getSectionWrapperClass('education')}
-                  style={getSectionStyle('education')}
-                >
-                  <div className="mb-4">
-                    <SectionHeader title="Education" sectionKey="education" />
-                    <div className="space-y-1.5">
-                      {resumeData.education.map((edu: any, i: number) => (
-                        <div key={i} className="flex flex-row justify-between items-start">
-                          <div>
-                            <div className="font-bold" style={{ fontSize: '9.5pt', color: ACCENT }}>{edu.degree}</div>
-                            <div style={{ fontSize: '9pt' }} className="text-slate-700">{edu.institution}</div>
-                          </div>
-                          <div className="font-bold text-slate-500" style={{ fontSize: '9pt' }}>{edu.year}</div>
+            {/* Certifications */}
+            {resumeData.certifications && resumeData.certifications.length > 0 && (
+              <div 
+                onClick={() => onSelectSection?.('certifications')}
+                className={getSectionWrapperClass('certifications')}
+                style={getSectionStyle('certifications')}
+              >
+                <div className="mb-4">
+                  <SectionHeader title="Certifications & Awards" sectionKey="certifications" />
+                  <div className="grid grid-cols-1 gap-2" style={{ fontSize: '9pt' }}>
+                    {resumeData.certifications.map((cert: any, i: number) => (
+                      <div key={i} className="flex justify-between items-start">
+                        <div>
+                          <span className="font-bold text-slate-800">{cert.name}</span>
+                          <span className="text-slate-500 mx-1">|</span>
+                          <span className="text-slate-600">{cert.issuer}</span>
                         </div>
-                      ))}
-                    </div>
+                        <div className="whitespace-nowrap ml-4 text-slate-500">{cert.year}</div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              )}
-
-              {/* Certifications (Full) */}
-              {resumeData.certifications && resumeData.certifications.length > 0 && (
-                <div 
-                  onClick={() => onSelectSection?.('certifications')}
-                  className={getSectionWrapperClass('certifications')}
-                  style={getSectionStyle('certifications')}
-                >
-                  <div className="mb-4">
-                    <SectionHeader title="Certifications & Accreditations" sectionKey="certifications" />
-                    <div className="space-y-1.5">
-                      {resumeData.certifications.map((cert: any, i: number) => (
-                        <div key={i} className="flex justify-between items-start text-[9pt]">
-                          <span className="font-bold text-slate-800">• {cert.name}</span>
-                          <span className="text-slate-500">{cert.issuer} ({cert.year})</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Page 2 Footer */}
-            <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200/60 mt-auto">
-              <span>{profileData.full_name || 'Candidate'} — Confidential Resume</span>
-              <span>Page 2 of 2</span>
-            </div>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     );
   }

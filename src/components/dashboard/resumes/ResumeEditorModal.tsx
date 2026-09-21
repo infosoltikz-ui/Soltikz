@@ -47,7 +47,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { createClient } from '@/utils/supabase/client'
-import { useReactToPrint } from 'react-to-print'
+import { exportToPdf } from '@/utils/exportPdf'
 import { getTemplateById, RESUME_TEMPLATES } from '@/components/create-resume/templates/registry'
 import { downloadResumeDocx } from '@/components/create-resume/exportDocx'
 import { ResumeRow } from './ResumeGrid'
@@ -137,7 +137,9 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
   })
 
   const [resumeTitle, setResumeTitle] = useState('')
-  const [atsScore, setAtsScore] = useState<number>(94)
+  const [atsScore, setAtsScore] = useState<number>(0)
+  
+  const isC2C = String((resume as any)?.type || (resume as any)?.resume_type || '').toLowerCase().includes('c2c')
 
   // Zoom & scaling
   const [zoom, setZoom] = useState(1)
@@ -145,10 +147,26 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
   const printRef = useRef<HTMLDivElement>(null)
   const previewContainerRef = useRef<HTMLDivElement>(null)
 
-  const reactToPrintFn = useReactToPrint({
-    contentRef: printRef,
-    documentTitle: `${(profileData?.full_name || 'Resume').replace(/\s+/g, '_')}_Tailored_Resume`,
-  })
+  const [isExportingPdf, setIsExportingPdf] = useState(false)
+
+  const handlePrint = async () => {
+    if (!printRef.current) {
+      toast.error('No resume data available to export.')
+      return
+    }
+    setIsExportingPdf(true)
+    const toastId = toast.loading('Generating PDF...')
+    try {
+      const fileName = `${(profileData?.full_name || 'Resume').replace(/\s+/g, '_')}_Tailored_Resume.pdf`
+      await exportToPdf(printRef.current, fileName)
+      toast.success('PDF downloaded successfully!', { id: toastId })
+    } catch (error) {
+      console.error('PDF export failed:', error)
+      toast.error('Failed to generate PDF. Please try again.', { id: toastId })
+    } finally {
+      setIsExportingPdf(false)
+    }
+  }
 
   // Close on Escape
   useEffect(() => {
@@ -231,21 +249,24 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
           : (resume!.ats_analyses as any)?.overall_score
 
         if (!score || score <= 0) {
-          let hash = 0
-          for (let i = 0; i < (resume!.id || '').length; i++) {
-            hash = (hash * 31 + (resume!.id || '').charCodeAt(i)) % 1000
-          }
-          score = 92 + (Math.abs(hash) % 5)
+          // No ATS score yet - show 0 so UI displays "Analyzing..."
+          score = 0
         }
 
-        const isC2C = String(resume!.resume_type || '').toLowerCase().includes('c2c')
-        const initialTemplate = isC2C ? 'c2c' : 'modern'
+        const initialTemplate = (resume as any).templateId || (resume as any).template_id || (isC2C ? 'c2c-modern' : 'modern')
+        const initialColor = (resume as any).theme_color || '#2E8B57'
+        const initialFont = (resume as any).font_family || 'Calibri, Arial, sans-serif'
+        const initialSectionStyles = (resume as any).section_styles || {}
 
         if (isMounted) {
           setProfileData(userProfile)
           setResumeData(reconstructed)
           setResumeTitle(resume!.title || 'Tailored Resume')
           setSelectedTemplateId(initialTemplate)
+          setThemeColor(initialColor)
+          setCustomColor(initialColor)
+          setSelectedFontFamily(initialFont)
+          setSectionStyles(initialSectionStyles)
           setAtsScore(score)
           setLoading(false)
         }
@@ -289,7 +310,7 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
     try {
       const supabase = createClient()
 
-      // 1. Delete and insert updated sections
+      // 1. Delete existing sections and insert updated ones
       const sectionsToSave = [
         { resume_id: resume.id, section_type: 'Summary', content: resumeData.summary },
         { resume_id: resume.id, section_type: 'Skills', content: resumeData.skills },
@@ -302,14 +323,21 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
       const { error: insertErr } = await supabase.from('resume_sections').insert(sectionsToSave)
       if (insertErr) throw insertErr
 
-      // 2. Update resume metadata
-      await supabase
+      // 2. Update resume metadata — including template, theme color, font, and section styles
+      // These are saved so the exact edited state is preserved for preview and download
+      const { error: updateErr } = await supabase
         .from('resumes_v2')
         .update({
           title: resumeTitle.trim() || resume.title,
+          template_id: selectedTemplateId,
+          theme_color: themeColor,
+          font_family: selectedFontFamily,
+          section_styles: Object.keys(sectionStyles).length > 0 ? sectionStyles : null,
           updated_at: new Date().toISOString()
         })
         .eq('id', resume.id)
+
+      if (updateErr) throw updateErr
 
       toast.success('Resume saved successfully!')
       onSaved?.()
@@ -567,7 +595,7 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
                 />
                 <span className="hidden sm:inline-flex items-center gap-1 bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 px-2 py-0.5 rounded-md text-[11px] font-bold">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  {atsScore}% ATS Match
+                  {atsScore > 0 ? `${atsScore}% ATS Match` : 'Analyzing...'}
                 </span>
               </div>
               <p className="text-[11.5px] text-slate-500 dark:text-slate-400 truncate flex items-center gap-1.5 mt-0.5">
@@ -595,13 +623,12 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
 
             {/* Download PDF */}
             <Button
-              onClick={() => reactToPrintFn()}
-              disabled={loading}
-              variant="outline"
-              className="h-9 px-3.5 rounded-xl border-emerald-300 text-emerald-700 bg-emerald-50/70 hover:bg-emerald-100 text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs"
+              onClick={handlePrint}
+              disabled={isExportingPdf || isDownloadingDocx}
+              className="gap-2 h-9 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold"
             >
-              <Download className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Export PDF</span>
+              {isExportingPdf ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+              <span className="hidden sm:inline">Download PDF</span>
             </Button>
 
             {/* Save Changes Button */}
@@ -733,6 +760,47 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
               ) : activeTab === 'style' ? (
                 /* ================= STYLE & TYPOGRAPHY ================= */
                 <div className="space-y-6 animate-in fade-in duration-150">
+                  {/* TEMPLATE SELECTION */}
+                  <div className="space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <label className="text-[13px] font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                        <Layout className="w-4 h-4 text-emerald-600" />
+                        <span>Resume Template</span>
+                      </label>
+                      <span className="text-[11px] font-medium text-slate-500">Change your layout instantly</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {RESUME_TEMPLATES.filter(t => 
+                        isC2C ? t.id.startsWith('c2c') : !t.id.startsWith('c2c')
+                      ).map((template) => {
+                        const isSelected = selectedTemplateId === template.id
+                        return (
+                          <div
+                            key={template.id}
+                            onClick={() => setSelectedTemplateId(template.id)}
+                            className={cn(
+                              "p-3 rounded-xl border transition-all cursor-pointer flex flex-col justify-between",
+                              isSelected
+                                ? "bg-emerald-50/80 dark:bg-emerald-950/40 border-emerald-500 dark:border-emerald-600 ring-2 ring-emerald-500/20"
+                                : "bg-white dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
+                            )}
+                          >
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-[13px] font-bold text-slate-900 dark:text-slate-100">
+                                {template.name}
+                              </span>
+                              {isSelected && <Check className="w-3.5 h-3.5 text-emerald-600 font-black" />}
+                            </div>
+                            <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                              {template.description}
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+
                   {/* FONT MODEL / FAMILY */}
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
@@ -851,7 +919,14 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
                         return (
                           <div
                             key={tmpl.id}
-                            onClick={() => setSelectedTemplateId(tmpl.id)}
+                            onClick={async () => {
+                              setSelectedTemplateId(tmpl.id)
+                              // Save to DB
+                              if (resume?.id) {
+                                const client = createClient()
+                                await client.from('resumes_v2').update({ template_id: tmpl.id }).eq('id', resume.id)
+                              }
+                            }}
                             className={cn(
                               "p-3 rounded-xl border transition-all cursor-pointer flex flex-col justify-between",
                               isSelected

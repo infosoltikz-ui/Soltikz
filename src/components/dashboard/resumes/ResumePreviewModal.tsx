@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { X, Download, FileText, Edit3, ZoomIn, ZoomOut, Loader2, Sparkles, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { createClient } from '@/utils/supabase/client'
-import { useReactToPrint } from 'react-to-print'
+import { exportToPdf } from '@/utils/exportPdf'
 import { getTemplateById, DEFAULT_TEMPLATE_ID } from '@/components/create-resume/templates/registry'
 import { downloadResumeDocx } from '@/components/create-resume/exportDocx'
 import { ResumeRow } from './ResumeGrid'
@@ -23,7 +23,7 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
   const [loading, setLoading] = useState(true)
   const [resumeData, setResumeData] = useState<any>(null)
   const [profileData, setProfileData] = useState<any>({})
-  const [atsScore, setAtsScore] = useState<number>(94)
+  const [atsScore, setAtsScore] = useState<number>(0)
   const [zoom, setZoom] = useState(1)
   const [autoScale, setAutoScale] = useState(0.75)
   const [isDownloadingDocx, setIsDownloadingDocx] = useState(false)
@@ -31,10 +31,26 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
   const printRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const reactToPrintFn = useReactToPrint({
-    contentRef: printRef,
-    documentTitle: `${(profileData?.full_name || 'Resume').replace(/\s+/g, '_')}_Tailored_Resume`,
-  })
+  const [isExportingPdf, setIsExportingPdf] = useState(false)
+
+  const handlePrint = async () => {
+    if (!printRef.current) {
+      toast.error('No resume data available to export.')
+      return
+    }
+    setIsExportingPdf(true)
+    const toastId = toast.loading('Generating PDF...')
+    try {
+      const fileName = `${(profileData?.full_name || 'Resume').replace(/\s+/g, '_')}_Tailored_Resume.pdf`
+      await exportToPdf(printRef.current, fileName)
+      toast.success('PDF downloaded successfully!', { id: toastId })
+    } catch (error) {
+      console.error('PDF export failed:', error)
+      toast.error('Failed to generate PDF. Please try again.', { id: toastId })
+    } finally {
+      setIsExportingPdf(false)
+    }
+  }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -100,11 +116,8 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
           : (resume!.ats_analyses as any)?.overall_score
 
         if (!score || score <= 0) {
-          let hash = 0
-          for (let i = 0; i < (resume!.id || '').length; i++) {
-            hash = (hash * 31 + (resume!.id || '').charCodeAt(i)) % 1000
-          }
-          score = 92 + (Math.abs(hash) % 5)
+          // No ATS score yet - show 0 so UI displays "Analyzing..."
+          score = 0
         }
 
         if (isMounted) {
@@ -149,9 +162,20 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
   if (!resume) return null
 
   const isC2C = String(resume.resume_type || '').toLowerCase().includes('c2c')
-  const templateId = isC2C ? 'c2c' : 'modern'
-  const template = getTemplateById(templateId)
+
+  // Use the exact template_id stored in DB — never fall back to a generic default
+  const resolvedTemplateId = 
+    (resume as any).template_id ||
+    (resume as any).templateId ||
+    (isC2C ? 'c2c' : 'modern')
+
+  const template = getTemplateById(resolvedTemplateId)
   const TemplateComponent = template.component
+
+  // Use exact saved styling — read all 3 values from the DB record
+  const savedThemeColor = resume.theme_color || undefined
+  const savedFontFamily = resume.font_family || undefined
+  const savedSectionStyles = resume.section_styles || undefined
 
   const handleDownloadDocx = async () => {
     if (!resumeData) return
@@ -206,7 +230,7 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
             {/* ATS Score Meter Pill */}
             <div className="hidden sm:flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200/80 px-2.5 py-1 rounded-lg text-[12px] font-bold">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>{atsScore}% ATS Match</span>
+              <span>{atsScore > 0 ? `${atsScore}% ATS Match` : 'Analyzing...'}</span>
             </div>
 
             {/* Zoom Controls */}
@@ -247,11 +271,11 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
 
             {/* Download PDF */}
             <Button
-              onClick={() => reactToPrintFn()}
-              disabled={loading}
+              onClick={handlePrint}
+              disabled={loading || isExportingPdf}
               className="h-8.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-sm"
             >
-              <Download className="w-3.5 h-3.5" />
+              {isExportingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
               <span>PDF</span>
             </Button>
 
@@ -306,6 +330,9 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
                 <TemplateComponent
                   resumeData={resumeData}
                   profileData={profileData}
+                  themeColor={savedThemeColor}
+                  fontFamily={savedFontFamily}
+                  sectionStyles={savedSectionStyles}
                 />
               </div>
             </div>
@@ -330,6 +357,8 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
               <TemplateComponent
                 resumeData={resumeData}
                 profileData={profileData}
+                themeColor={savedThemeColor}
+                fontFamily={savedFontFamily}
               />
             </div>
           </div>

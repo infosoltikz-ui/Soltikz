@@ -1,6 +1,7 @@
 import { FileText, Building2, Target, Calendar, CheckCircle2, Eye, Edit3, Trash2, Copy, GitBranch, Loader2, Share2, Download } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/utils/cn'
+import { getTemplateById } from '@/components/create-resume/templates/registry'
 
 export interface ResumeData {
   id: string;
@@ -20,6 +21,9 @@ export interface ResumeData {
   experienceCompany?: string;
   experienceBullet?: string;
   skillsList?: string[];
+  templateId?: string;
+  fullResumeData?: any;
+  profileData?: any;
 }
 
 interface ResumeCardProps {
@@ -52,53 +56,59 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
       {/* Top Section: Full-Width Realistic Resume Document Sheet */}
       <div 
         onClick={() => onPreview?.()}
-        className="relative h-48 bg-white border-b border-slate-200 p-3 flex flex-col justify-between overflow-hidden cursor-pointer group-hover:bg-slate-50/40 transition-colors select-none"
+        className="relative h-48 bg-white border-b border-slate-200 overflow-hidden cursor-pointer group-hover:bg-slate-50/40 transition-colors select-none"
       >
-        {/* Top Header */}
-        <div className="border-b border-slate-100 pb-1.5 pr-18">
-          <div className="text-[9px] font-black uppercase text-emerald-800 tracking-wider truncate">
-            {displayName}
-          </div>
-          <div className="text-[7.5px] font-semibold text-slate-500 truncate mt-0.5">
-            {displayRole} • {displayCompany}
-          </div>
-        </div>
+        <div className="absolute inset-0 transform scale-[0.3] origin-top-left w-[333.33%] h-[333.33%] pointer-events-none">
+          {(() => {
+            const TemplateComponent = getTemplateById(data.templateId || data.template)?.component
+            if (TemplateComponent) {
+              const rData = data.fullResumeData || { summary: [], skills: [], experience: [], education: [], certifications: [] }
+              
+              // Ensure rData is properly typed as expected by the templates
+              if (!Array.isArray(rData.summary)) rData.summary = typeof rData.summary === 'string' ? [rData.summary] : []
+              if (!Array.isArray(rData.skills)) rData.skills = []
+              if (!Array.isArray(rData.experience)) rData.experience = []
+              if (!Array.isArray(rData.education)) rData.education = []
+              if (!Array.isArray(rData.certifications)) rData.certifications = []
 
-        {/* Real Summary Section */}
-        <div className="my-1 space-y-0.5">
-          <div className="text-[6.5px] font-bold text-emerald-700 uppercase tracking-widest leading-none">Summary</div>
-          <div className="text-[7px] text-slate-600 leading-snug line-clamp-2" title={displaySummary}>
-            {displaySummary}
-          </div>
-        </div>
+              const pData = data.profileData || {
+                full_name: data.candidateName || data.name || 'Candidate',
+                email: 'candidate@example.com',
+                phone: '+1 234 567 8900',
+                linkedin: 'linkedin.com/in/candidate',
+                location: 'Remote',
+                firstName: '',
+                lastName: ''
+              }
 
-        {/* Real Experience Section */}
-        <div className="my-1 space-y-0.5">
-          <div className="text-[6.5px] font-bold text-emerald-700 uppercase tracking-widest leading-none">Experience</div>
-          <div className="flex items-start gap-1">
-            <span className="w-1 h-1 rounded-full bg-emerald-500 shrink-0 mt-1"></span>
-            <div className="text-[7px] text-slate-600 leading-snug line-clamp-2" title={displayBullet}>
-              {displayBullet}
-            </div>
-          </div>
-        </div>
+              // Normalizing PData since some templates use full_name, some fallback to firstName lastName
+              const normalizedProfileData = {
+                ...pData,
+                full_name: pData.full_name || pData.fullName || `${pData.firstName || ''} ${pData.lastName || ''}`.trim() || data.candidateName || 'Candidate'
+              }
 
-        {/* Real Skills Chips */}
-        <div className="pt-1.5 border-t border-slate-100 flex flex-wrap gap-1 overflow-hidden max-h-[24px]">
-          {skillsToRender.map((skill, idx) => (
-            <span key={idx} className="text-[6.5px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/60 px-1.5 py-0.5 rounded-xs truncate max-w-[70px]">
-              {skill}
-            </span>
-          ))}
+              return (
+                <div style={{ pointerEvents: 'none' }}>
+                  <TemplateComponent 
+                    resumeData={rData} 
+                    profileData={normalizedProfileData} 
+                  />
+                </div>
+              )
+            }
+            return <div className="p-8 text-[12px] font-bold">Template preview unavailable</div>
+          })()}
         </div>
         
         {/* High-Impact ATS Score Badge */}
         <div className="absolute top-2.5 right-2.5 bg-white/95 backdrop-blur-xs px-2 py-0.5 rounded-lg border border-slate-200 shadow-xs flex items-center gap-1.5 z-10">
           <div className={cn(
             "w-1.5 h-1.5 rounded-full",
-            data.atsScore >= 90 ? "bg-emerald-500 animate-pulse" : data.atsScore >= 70 ? "bg-amber-500" : "bg-red-500"
+            data.atsScore >= 90 ? "bg-emerald-500 animate-pulse" : data.atsScore >= 70 ? "bg-amber-500" : data.atsScore > 0 ? "bg-red-500" : "bg-slate-300"
           )}></div>
-          <span className="text-[10.5px] font-black text-slate-800">{data.atsScore}% ATS</span>
+          <span className="text-[10.5px] font-black text-slate-800">
+            {data.atsScore > 0 ? `${data.atsScore}% ATS` : '— ATS'}
+          </span>
         </div>
 
         {/* Action Overlay on Hover */}
