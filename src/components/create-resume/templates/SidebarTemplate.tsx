@@ -153,12 +153,11 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
             >
               <div className="mb-3">
                 <SectionHeader title="Professional Summary" sectionKey="summary" />
+                {/* Full-Time prose summary: join sentences into one flowing paragraph */}
                 <p className="text-justify leading-snug m-0" style={{ fontSize: '9.5pt' }}>
-                  {resumeData.summary.map((point: string, i: number) => (
-                    <span key={i} className="block mb-1">
-                      {parseBoldText(point)}
-                    </span>
-                  ))}
+                  {Array.isArray(resumeData.summary)
+                    ? resumeData.summary.join(' ')
+                    : resumeData.summary}
                 </p>
               </div>
             </div>

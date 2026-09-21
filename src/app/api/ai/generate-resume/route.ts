@@ -93,44 +93,143 @@ KEYWORD PLACEMENT STRATEGY:
    - Use keyword exact form (e.g., "React.js" not "React", "Node.js" not "NodeJS").
 
 2. PROFESSIONAL SUMMARY (Secondary placement):
-   - Bold the 15-20 most critical keywords: **React.js**, **AWS Lambda**, **PostgreSQL**.
-   - Repeat the top 5-8 keywords across multiple bullet points for density.
+   - Weave the top 10-15 most critical JD keywords into the summary naturally.
+   - For C2C: Bold them with **keyword** syntax.
+   - For Full-Time: Embed them in prose without bolding.
 
 3. EXPERIENCE BULLETS (Tertiary placement):
-   - Weave remaining keywords naturally into bullets with bold syntax.
+   - Weave remaining keywords naturally into bullets.
    - Top 10 most important keywords should appear 3+ times total across the resume.
 
 ══════════════════════════════════════════════════════════════════
-CONTENT QUALITY RULES:
+UNIVERSAL CONTENT RULES (APPLY TO BOTH C2C AND FULL-TIME):
 ══════════════════════════════════════════════════════════════════
 
-1. STRICT 2-LINE BULLET (25-35 WORDS EACH — NO EXCEPTIONS):
-   - Formula: [Power Verb] + [Technical scope + JD keywords] + [Scale/method] + [Quantified % outcome].
-   - BANNED: "Responsible for", "Helped with", "Assisted in", "Worked on", "Handled tasks".
-   - BANNED: Bullets shorter than 25 words. BANNED: Bullets longer than 40 words.
+BANNED PHRASES — NEVER USE:
+  ✗ "Responsible for"  ✗ "Helped with"  ✗ "Assisted in"  ✗ "Worked on"
+  ✗ "Participated in"  ✗ "Involved in"  ✗ "Utilized"  ✗ "Tasked with"
+  ✗ "Familiar with"  ✗ "Exposure to"  ✗ "detail-oriented"  ✗ "results-driven"
+  ✗ "passionate"  ✗ "motivated"  ✗ "seeking a challenging role"
+  ✗ NEVER open a sentence or bullet with "I"
 
-2. QUANTIFIED METRICS (60%+ of bullets MUST have numbers):
-   - Examples: "reducing latency by 38%", "scaling to 1.2M monthly transactions", "cutting deploy time from 4 hours to 25 minutes".
-   - Action verbs: Architected, Engineered, Spearheaded, Automated, Deployed, Optimized, Scaled, Orchestrated.
+TENSE RULES (CRITICAL):
+  - CURRENT / PRESENT roles: PRESENT tense — "Architects", "Engineers", "Leads", "Deploys"
+  - PAST roles: PAST tense — "Architected", "Engineered", "Led", "Deployed"
 
-3. TENSE:
-   - Current/present roles: present tense ("Architects", "Engineers", "Leads").
-   - Past roles: past tense ("Architected", "Engineered", "Led").
+QUANTIFIED METRICS:
+  - Minimum 60% of ALL experience bullets MUST contain a real number.
+  - Use: percentages, volume, scale, time saved, team size, cost, revenue, users.
+  - Examples: "reducing API latency by 38%", "supporting 1.2M monthly transactions",
+    "cutting release time from 4 hours to 25 minutes", "mentoring a team of 8 engineers".
+  - If no exact number is available, use a defensible range ("~200-250 weekly").
 
-4. RESUME TYPE SPECIFICATIONS:
-   ★ C2C:
-     - Professional Summary: EXACTLY 10 bullets (strictly 2 lines each, all with metrics and JD keywords).
-     - Skills Matrix: 7-10 categories, 5-7 items each, JD keywords first.
-     - Experience: Most recent role: 8-10 bullets. 2nd role: 6-8 bullets. 3rd+: 5-6 bullets.
-     - Include "environment" tech stack array for all roles.
+BULLET ANATOMY:
+  [ACTION VERB] + [what you did] + [tool/method] + [scope/scale] + [outcome with a number]
+  Front-load each role's strongest bullet first.
+  Roughly 60% "built/designed/engineered/led" + 40% "optimized/ran/handled/supported".
 
-   ★ Full-Time:
-     - Professional Summary: 5-7 bullets (strictly 2 lines each).
-     - Skills Matrix: up to 6 categories, 7-8 items each.
-     - Experience: 10-12 bullets per role.
+ACTION VERB BANK:
+  Built (highest value): Engineered, Designed, Developed, Built, Architected, Implemented,
+    Deployed, Automated, Launched, Integrated, Configured, Migrated
+  Analyzed: Analyzed, Diagnosed, Investigated, Resolved, Troubleshot, Identified, Evaluated, Modeled
+  Improved: Optimized, Reduced, Increased, Streamlined, Consolidated, Refactored, Standardized, Scaled
+  Led: Led, Owned, Directed, Managed, Mentored, Established, Drove, Spearheaded, Championed
+  Communicated: Documented, Presented, Briefed, Reported, Advised, Trained, Partnered
+
+══════════════════════════════════════════════════════════════════
+★★★ C2C RESUME RULES (ONLY IF Resume Type = C2C) ★★★
+══════════════════════════════════════════════════════════════════
+
+PROFESSIONAL SUMMARY — C2C (BULLETS, NOT PROSE):
+  - EXACTLY 10 bullet points. Each bullet MUST be exactly 2 full lines (~25-35 words).
+  - Every bullet MUST include quantified metrics (%, scale, time saved, people mentored).
+  - Bold ALL critical JD keywords with **keyword** syntax.
+  - Exact 10-bullet sequence:
+    1. Headline: [Title] with [N]+ years across [domains] driving [metric]% improvement.
+    2. Primary technical depth — strongest JD tool built at scale, [%] efficiency gain.
+    3. Secondary technical depth — next JD capability at [metric] scale.
+    4. Design or build work — created from scratch, [%] improvement.
+    5. Analysis or problem-solving — hard problems solved, reducing errors by [%].
+    6. Delivery or operations — lifecycle phases owned end-to-end, [%] faster delivery.
+    7. Automation or efficiency — scripted/streamlined, [N] hours/week reclaimed.
+    8. Data/cloud/infrastructure — platforms, supporting [N] users or [metric] throughput.
+    9. Standards and compliance — frameworks, methodologies, 100% compliance achieved.
+    10. Leadership and communication — mentored [N] engineers, led cross-functional teams of [N]+.
+
+SKILLS MATRIX — C2C:
+  - EXACTLY 10 grouped categories (same 10 as Full-Time — keep at least 7 minimum if domain truly cannot fill all 10).
+  - EXACTLY 5-7 items per category. JD's exact terms MUST come first in every line.
+  - NO proficiency bars, ratings, percentages, or years-per-skill.
+
+EXPERIENCE — C2C:
+  - Experience 1 (most recent): EXACTLY 8 bullets. These are the STRONGEST 8 from all work done.
+  - Experience 2: EXACTLY 6-8 bullets. Pick the 6-8 strongest.
+  - Experience 3+: EXACTLY 5-6 bullets. Pick the 5-6 strongest.
+  - Every bullet: exactly 2 lines / 25-35 words.
+  - Include "environment" tech stack array for ALL roles (comma-separated, every tool used on that engagement).
+  - C2C length is 3-4 pages — DO NOT compress or shorten.
+  - Education: Degree, Major | University | City, State | Mon YYYY – Mon YYYY
+  - Certifications: Certification | Issuer | Earned Mon YYYY
+
+══════════════════════════════════════════════════════════════════
+★★★ FULL-TIME RESUME RULES (ONLY IF Resume Type = Full-Time) ★★★
+══════════════════════════════════════════════════════════════════
+
+PROFESSIONAL SUMMARY — FULL-TIME (PROSE PARAGRAPH, NOT BULLETS):
+  ⚠️ CRITICAL: Summary MUST be PROSE — a flowing paragraph, NEVER a bulleted list.
+  Direct-hire recruiters expect prose. Bullets read as a vendor/contract submission.
+
+  Return summary as an array of exactly 5 strings — each string is ONE complete sentence.
+  The template will join them with a space into one flowing paragraph on the page.
+
+  REQUIRED 5-SENTENCE STRUCTURE (in this exact order):
+    [1] [Job Title] with [N]+ years in [domain/environment], focused on [core JD function].
+    [2] Strong hands-on depth in [primary JD tools], with [secondary JD capability].
+    [3] [Strongest career accomplishment with a specific number — scale, %, volume, or time saved].
+    [4] Experienced across [environments / team structures / business contexts from profile].
+    [5] [Leadership scope, mentoring count, or stakeholder-facing work — only if in profile].
+
+  HARD RULES FOR PROSE SUMMARY:
+    ✗ NEVER open with "I" — always open with the Job Title.
+    ✗ NEVER say "seeking a challenging role" — they know why you sent the resume.
+    ✗ NEVER use adjectives: "detail-oriented", "results-driven", "passionate", "motivated".
+    ✗ NEVER use bullet characters, dashes, or numbered list markers.
+    ✗ DO NOT bold keywords in the summary — it is prose, not a bullet list.
+    ✓ Weave JD keywords naturally into the prose.
+    ✓ Third-person descriptive style (e.g., "Senior Engineer with 10 years...").
+
+SKILLS MATRIX — FULL-TIME (10 CATEGORIES REQUIRED):
+  - EXACTLY 10 categories. EXACTLY 5-7 items per category.
+  - JD's exact terms MUST appear first in each category line.
+  - Use THESE exact category names:
+      1. Core Domain Skills
+      2. Tools & Platforms
+      3. Programming & Scripting
+      4. Databases & Data Handling
+      5. Cloud & Infrastructure
+      6. Frameworks & Methodologies
+      7. Testing & Quality
+      8. Reporting & Visualization
+      9. Collaboration & Workflow
+      10. Operating Systems & Environments
+  - NO proficiency bars, ratings, percentages, or years-per-skill.
+
+EXPERIENCE — FULL-TIME (OFFICIAL BULLET COUNTS FROM TEMPLATE):
+  - Experience 1 (most recent): 5-6 bullets — these are the STRONGEST 5-6 from all work done on that role.
+  - Experience 2: 4-5 bullets — the strongest 4-5 from that role.
+  - Experience 3+: 3-4 bullets — the strongest 3-4 from that role.
+  - Every bullet: EXACTLY 2 lines / 24-32 words. NOT one line, NOT three.
+  - Anatomy: [ACTION VERB] + [what you did] + [tool/method] + [scope/scale] + [outcome with number].
+  - One accomplishment per bullet — two "and"s means it is two bullets.
+  - Name the exact tool: "rebuilt the intake workflow in ServiceNow" not "improved the process".
+  - DO NOT include an "environment" array for Full-Time roles (that is C2C format only).
+  - Full-Time length: 1 page under ~8 years, 2 pages beyond. DO NOT pad to reach two pages.
+  - Education: Degree, Major | University | City, State | Mon YYYY – Mon YYYY
+  - Certifications: Certification | Issuer | Earned Mon YYYY
 
 Return valid JSON matching exact schema. Populate ALL fields fully — no shortcuts, no truncation.
 `;
+
 
 // ─── MAIN POST HANDLER ────────────────────────────────────────────────────────
 export async function POST(req: Request) {

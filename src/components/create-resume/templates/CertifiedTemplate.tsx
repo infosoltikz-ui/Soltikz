@@ -119,13 +119,12 @@ export const CertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
               >
                 <div className="mb-3">
                   <SectionHeader title="Professional Summary" sectionKey="summary" />
-                  <ul className="list-disc pl-5 space-y-1 m-0" style={{ fontSize: '9.5pt' }}>
-                    {resumeData.summary.map((point: string, i: number) => (
-                      <li key={i} className="pl-1 leading-snug text-justify">
-                        {parseBoldText(point)}
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Full-Time prose summary: join sentences into one flowing paragraph */}
+                  <p className="text-justify leading-snug m-0" style={{ fontSize: '9.5pt' }}>
+                    {Array.isArray(resumeData.summary)
+                      ? resumeData.summary.join(' ')
+                      : resumeData.summary}
+                  </p>
                 </div>
               </div>
             )}
