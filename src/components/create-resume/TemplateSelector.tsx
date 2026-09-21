@@ -1,11 +1,11 @@
 'use client'
 
+import React, { Suspense, useState } from 'react'
 import { CheckCircle2, Eye, Check } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { RESUME_TEMPLATES, getTemplateById } from './templates/registry'
 import { sampleResumeData, sampleProfileData, c2cSampleData } from './templates/sampleData'
 import { TemplatePreviewModal } from './TemplatePreviewModal'
-import { useState } from 'react'
 
 interface TemplateSelectorProps {
   selectedId: string
@@ -24,10 +24,12 @@ function TemplateThumbnail({ id }: { id: string }) {
         className="absolute top-0 origin-top pointer-events-none select-none" 
         style={{ width: '850px', transform: 'scale(0.24)' }}
       >
-        <TemplateComponent 
-          resumeData={id === 'c2c' ? c2cSampleData : sampleResumeData} 
-          profileData={sampleProfileData} 
-        />
+        <Suspense fallback={<div className="w-full h-full bg-slate-100 animate-pulse" />}>
+          <TemplateComponent 
+            resumeData={id === 'c2c' ? c2cSampleData : sampleResumeData} 
+            profileData={sampleProfileData} 
+          />
+        </Suspense>
       </div>
     </div>
   )

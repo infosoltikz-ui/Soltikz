@@ -17,22 +17,22 @@ const KeywordExtractionFormat = z.object({
 // ─── STEP 2: Resume Generation Schema ────────────────────────────────────────
 const GeneratedResumeFormat = z.object({
   summary: z.array(z.string()).describe(
-    'High-impact bullet points for Professional Summary. Exactly 10 for C2C, 5-7 for Full-Time. Each bullet: strictly 25-35 words (~2 lines) with bolded keywords like **React.js**, **AWS Lambda**.'
+    'C2C: EXACTLY 10 bullet points (2 lines/25-35 words each) with bolded **keywords** and metrics. Full-Time: EXACTLY 5 sentences that join into one flowing prose paragraph — NO bullets, NO bold, NO "I".'
   ),
   skills: z.array(z.object({
     category: z.string(),
     items: z.array(z.string()),
   })).describe(
-    'Skills grouped by category. C2C: 7-10 categories with 5-7 items each. Full-Time: up to 6 categories with 7-8 items. Most critical JD skills MUST come first. No proficiency ratings.'
+    'EXACTLY 10 skill categories for both C2C and Full-Time. EXACTLY 5-7 items per category. JD exact terms MUST come first. Standard categories: Core Domain Skills, Tools & Platforms, Programming & Scripting, Databases & Data Handling, Cloud & Infrastructure, Frameworks & Methodologies, Testing & Quality, Reporting & Visualization, Collaboration & Workflow, Operating Systems & Environments. No proficiency ratings.'
   ),
   experience: z.array(z.object({
     id: z.string().describe('Original project/experience ID from master profile'),
     role: z.string(),
     company: z.string(),
     duration: z.string(),
-    environment: z.array(z.string()).nullable().describe('List of tools/tech used. Required for recent roles.'),
+    environment: z.array(z.string()).nullable().describe('C2C ONLY: comma-separated list of every tool/tech used on that engagement. Set null for Full-Time resumes.'),
     bullets: z.array(z.string()).describe(
-      'C2C: 8-10 bullets (most recent role), 6-8 (older), 5-6 (earliest). Full-Time: 10-12 per role. Every bullet: 25-35 words, bolded JD keywords, quantified outcomes. Formula: [ACTION VERB] + [scope] + [JD tool/method] + [metric outcome].'
+      'C2C: Exp1=8 bullets, Exp2=6-8, Exp3+=5-6. Full-Time: Exp1=5-6 strongest, Exp2=4-5 strongest, Exp3+=3-4 strongest. Every bullet: exactly 2 lines/24-32 words. Formula: [ACTION VERB]+[what]+[tool/method]+[scope]+[number outcome].'
     ),
   })),
   education: z.array(z.object({

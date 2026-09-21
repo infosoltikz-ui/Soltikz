@@ -1,3 +1,4 @@
+import React, { Suspense } from 'react'
 import { FileText, Building2, Target, Calendar, CheckCircle2, Eye, Edit3, Trash2, Copy, GitBranch, Loader2, Share2, Download } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/utils/cn'
@@ -89,10 +90,12 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
 
               return (
                 <div style={{ pointerEvents: 'none' }}>
-                  <TemplateComponent 
-                    resumeData={rData} 
-                    profileData={normalizedProfileData} 
-                  />
+                  <Suspense fallback={<div className="w-full h-full bg-slate-100 animate-pulse rounded" />}>
+                    <TemplateComponent 
+                      resumeData={rData} 
+                      profileData={normalizedProfileData} 
+                    />
+                  </Suspense>
                 </div>
               )
             }

@@ -1,21 +1,25 @@
-import { ResumeRenderer } from '../ResumeRenderer';
-import { ModernTemplate } from './ModernTemplate';
-import { BannerTemplate } from './BannerTemplate';
-import { CertifiedTemplate } from './CertifiedTemplate';
-import { SidebarTemplate } from './SidebarTemplate';
-import { C2CTemplate } from './C2CTemplate';
-import { C2CBannerTemplate } from './C2CBannerTemplate';
-import { C2CModernTemplate } from './C2CModernTemplate';
-import { C2CCertifiedTemplate } from './C2CCertifiedTemplate';
-import { C2CSidebarTemplate } from './C2CSidebarTemplate';
-import type { ResumeTemplateProps } from './types';
 import React from 'react';
+import type { ResumeTemplateProps } from './types';
+
+// ─── LAZY LOAD ALL TEMPLATES ─────────────────────────────────────────────────
+// Each template is loaded on-demand only when actually rendered.
+// This reduces initial JS bundle size significantly.
+const ResumeRenderer   = React.lazy(() => import('../ResumeRenderer').then(m => ({ default: m.ResumeRenderer })));
+const ModernTemplate   = React.lazy(() => import('./ModernTemplate').then(m => ({ default: m.ModernTemplate })));
+const BannerTemplate   = React.lazy(() => import('./BannerTemplate').then(m => ({ default: m.BannerTemplate })));
+const CertifiedTemplate = React.lazy(() => import('./CertifiedTemplate').then(m => ({ default: m.CertifiedTemplate })));
+const SidebarTemplate  = React.lazy(() => import('./SidebarTemplate').then(m => ({ default: m.SidebarTemplate })));
+const C2CTemplate      = React.lazy(() => import('./C2CTemplate').then(m => ({ default: m.C2CTemplate })));
+const C2CBannerTemplate    = React.lazy(() => import('./C2CBannerTemplate').then(m => ({ default: m.C2CBannerTemplate })));
+const C2CModernTemplate    = React.lazy(() => import('./C2CModernTemplate').then(m => ({ default: m.C2CModernTemplate })));
+const C2CCertifiedTemplate = React.lazy(() => import('./C2CCertifiedTemplate').then(m => ({ default: m.C2CCertifiedTemplate })));
+const C2CSidebarTemplate   = React.lazy(() => import('./C2CSidebarTemplate').then(m => ({ default: m.C2CSidebarTemplate })));
 
 export interface ResumeTemplateMeta {
   id: string;
   name: string;
   description: string;
-  component: React.ForwardRefExoticComponent<ResumeTemplateProps & React.RefAttributes<HTMLDivElement>>;
+  component: React.LazyExoticComponent<React.ForwardRefExoticComponent<ResumeTemplateProps & React.RefAttributes<HTMLDivElement>>>;
 }
 
 export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [

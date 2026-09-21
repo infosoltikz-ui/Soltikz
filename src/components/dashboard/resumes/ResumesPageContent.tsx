@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState, useRef } from 'react'
+import { useEffect, useMemo, useState, useRef, Suspense, lazy } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'react-hot-toast'
 import { formatDistanceToNow } from 'date-fns'
@@ -9,8 +9,9 @@ import { getTemplateById } from '@/components/create-resume/templates/registry'
 import { ResumeStats } from './ResumeStats'
 import { ResumeToolbar, ResumeFilterType, ResumeSortBy } from './ResumeToolbar'
 import { ResumeGrid, ResumeRow } from './ResumeGrid'
-import { ResumePreviewModal } from './ResumePreviewModal'
-import { ResumeEditorModal } from './ResumeEditorModal'
+// Lazy-load heavy modals — not bundled until user opens them
+const ResumePreviewModal = lazy(() => import('./ResumePreviewModal').then(m => ({ default: m.ResumePreviewModal })))
+const ResumeEditorModal = lazy(() => import('./ResumeEditorModal').then(m => ({ default: m.ResumeEditorModal })))
 
 function extractCompanyFromTitle(title?: string): string {
   if (!title) return 'Target Employer'
@@ -504,23 +505,27 @@ export function ResumesPageContent() {
       </div>
 
       {previewResume && (
-        <ResumePreviewModal
-          resume={previewResume}
-          onClose={() => setPreviewResume(null)}
-          onEdit={() => {
-            const target = previewResume
-            setPreviewResume(null)
-            setEditingResume(target)
-          }}
-        />
+        <Suspense fallback={null}>
+          <ResumePreviewModal
+            resume={previewResume}
+            onClose={() => setPreviewResume(null)}
+            onEdit={() => {
+              const target = previewResume
+              setPreviewResume(null)
+              setEditingResume(target)
+            }}
+          />
+        </Suspense>
       )}
 
       {editingResume && (
-        <ResumeEditorModal
-          resume={editingResume}
-          onClose={() => setEditingResume(null)}
-          onSaved={() => fetchResumes()}
-        />
+        <Suspense fallback={null}>
+          <ResumeEditorModal
+            resume={editingResume}
+            onClose={() => setEditingResume(null)}
+            onSaved={() => fetchResumes()}
+          />
+        </Suspense>
       )}
 
       {/* Hidden Print Container for High-Fidelity Exact Template PDF Export */}
@@ -542,13 +547,15 @@ export function ResumesPageContent() {
               const template = getTemplateById(printableResume.templateId)
               const TemplateComponent = template.component
               return (
-                <TemplateComponent
-                  resumeData={printableResume.resumeData}
-                  profileData={printableResume.profileData}
-                  themeColor={printableResume.themeColor}
-                  fontFamily={printableResume.fontFamily}
-                  sectionStyles={printableResume.sectionStyles}
-                />
+                <Suspense fallback={<div className="w-[794px] h-[1123px] bg-white" />}>
+                  <TemplateComponent
+                    resumeData={printableResume.resumeData}
+                    profileData={printableResume.profileData}
+                    themeColor={printableResume.themeColor}
+                    fontFamily={printableResume.fontFamily}
+                    sectionStyles={printableResume.sectionStyles}
+                  />
+                </Suspense>
               )
             })()}
           </div>
