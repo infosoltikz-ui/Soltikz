@@ -4,21 +4,23 @@ import React, { useState } from 'react'
 import { X, ZoomIn, ZoomOut, Check, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { RESUME_TEMPLATES, getTemplateById } from './templates/registry'
-import { sampleResumeData, sampleProfileData, c2cSampleData } from './templates/sampleData'
+import { buildResumeDataFromProfile } from './templates/buildResumeDataFromProfile'
 
 interface TemplatePreviewModalProps {
   templateId: string
   onClose: () => void
   onSelect: (id: string) => void
+  profileData?: any
 }
 
-export function TemplatePreviewModal({ templateId, onClose, onSelect }: TemplatePreviewModalProps) {
+export function TemplatePreviewModal({ templateId, onClose, onSelect, profileData }: TemplatePreviewModalProps) {
   const [zoom, setZoom] = useState(0.95)
 
   const template = RESUME_TEMPLATES.find(t => t.id === templateId)
   if (!template) return null
 
   const TemplateComponent = getTemplateById(templateId).component
+  const { profileData: pData, resumeData: rData } = buildResumeDataFromProfile(profileData, templateId)
 
   const handleZoomIn = () => setZoom(z => Math.min(z + 0.15, 1.5))
   const handleZoomOut = () => setZoom(z => Math.max(z - 0.15, 0.5))
@@ -101,8 +103,8 @@ export function TemplatePreviewModal({ templateId, onClose, onSelect }: Template
             }}
           >
             <TemplateComponent 
-              resumeData={templateId === 'c2c' ? c2cSampleData : sampleResumeData} 
-              profileData={sampleProfileData} 
+              resumeData={rData} 
+              profileData={pData} 
             />
           </div>
         </div>

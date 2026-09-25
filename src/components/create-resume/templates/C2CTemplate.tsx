@@ -71,10 +71,10 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
   
   if (experiences.length > 0) {
     const firstExp = experiences[0];
-    if (firstExp.bullets && firstExp.bullets.length > 5) {
-      page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 5), isSplit: true }];
+    if (firstExp.bullets && firstExp.bullets.length > 3) {
+      page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 3), isSplit: true }];
       page2Experiences = [
-        { ...firstExp, bullets: firstExp.bullets.slice(5), isContinued: true },
+        { ...firstExp, bullets: firstExp.bullets.slice(3), isContinued: true },
         ...experiences.slice(1)
       ];
     } else {
@@ -83,7 +83,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
     }
   }
 
-  const pageContainerClass = "resume-page bg-white w-[794px] mx-auto shadow-xl border border-slate-200 text-black relative";
+  const pageContainerClass = "resume-page bg-white w-[794px] min-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:border-none print:break-after-page";
   const pageContainerStyle: React.CSSProperties = {
     boxSizing: 'border-box',
     fontFamily: selectedFont,
@@ -137,127 +137,149 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
   );
 
   return (
-    <div ref={ref} className="text-black bg-slate-50 print:bg-white flex flex-col print:block">
+    <div ref={ref} className="text-black bg-slate-50 print:bg-white flex flex-col items-center">
       
       {/* ================= PAGE 1 ================= */}
       <div className={pageContainerClass} style={pageContainerStyle}>
-        
-        {/* Header */}
-        <div 
-          onClick={() => onSelectSection?.('header')}
-          className={getSectionWrapperClass('header')}
-          style={getSectionStyle('header')}
-        >
-          <div className="text-center mb-3.5 break-inside-avoid">
-            <h1 className="font-bold text-black m-0" style={{ fontSize: '15pt', color: sectionStyles?.header?.color || '#000000' }}>
-              {profileData.full_name || 'JOHN DOE'}
-            </h1>
-            <div className="mt-0.5">
-              {[profileData.location, profileData.phone, profileData.email, profileData.linkedin].filter(Boolean).join('  •  ')}
-            </div>
-            {(profileData.work_authorization || profileData.relocation || profileData.availability) && (
-              <div className="mt-0.5 text-slate-700">
-                {[
-                  profileData.work_authorization && `Work Authorization: ${profileData.work_authorization}`,
-                  profileData.relocation && `Relocation: ${profileData.relocation}`,
-                  profileData.availability && `Availability: ${profileData.availability}`
-                ].filter(Boolean).join('   |   ')}
+        <div>
+          {/* Header */}
+          <div 
+            onClick={() => onSelectSection?.('header')}
+            className={getSectionWrapperClass('header')}
+            style={getSectionStyle('header')}
+          >
+            <div className="text-center mb-3.5 break-inside-avoid">
+              <h1 className="font-bold text-black m-0" style={{ fontSize: '15pt', color: sectionStyles?.header?.color || '#000000' }}>
+                {profileData.full_name || 'JOHN DOE'}
+              </h1>
+              <div className="mt-0.5">
+                {[profileData.location, profileData.phone, profileData.email, profileData.linkedin].filter(Boolean).join('  •  ')}
               </div>
-            )}
+              {(profileData.work_authorization || profileData.relocation || profileData.availability) && (
+                <div className="mt-0.5 text-slate-700">
+                  {[
+                    profileData.work_authorization && `Work Authorization: ${profileData.work_authorization}`,
+                    profileData.relocation && `Relocation: ${profileData.relocation}`,
+                    profileData.availability && `Availability: ${profileData.availability}`
+                  ].filter(Boolean).join('   |   ')}
+                </div>
+              )}
+            </div>
           </div>
+
+          {/* Professional Summary */}
+          {resumeData.summary && resumeData.summary.length > 0 && (
+            <div 
+              onClick={() => onSelectSection?.('summary')}
+              className={getSectionWrapperClass('summary')}
+              style={getSectionStyle('summary')}
+            >
+              <div className="mb-3">
+                <SectionHeader title="Professional Summary" sectionKey="summary" />
+                <ul className="list-none m-0 space-y-1">
+                  {resumeData.summary.map((point: string, i: number) => (
+                    <li key={i} className="flex gap-2">
+                      <span className="shrink-0 font-semibold">•</span>
+                      <span className="text-justify">{renderWithBold(point)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* Technical Skills */}
+          {resumeData.skills && resumeData.skills.length > 0 && (
+            <div 
+              onClick={() => onSelectSection?.('skills')}
+              className={getSectionWrapperClass('skills')}
+              style={getSectionStyle('skills')}
+            >
+              <div className="mb-3">
+                <SectionHeader title="Technical Skills" sectionKey="skills" />
+                <div className="space-y-0.5">
+                  {resumeData.skills.map((skillGroup: any, i: number) => (
+                    <div key={i} className="leading-snug">
+                      <span className="font-bold">{skillGroup.category}: </span>
+                      <span>{Array.isArray(skillGroup.items) ? skillGroup.items.join(', ') : skillGroup.items}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Experience 1 (Page 1) */}
+          {page1Experiences.length > 0 && renderExperienceList(page1Experiences, false)}
         </div>
 
-        {/* Professional Summary */}
-        {resumeData.summary && resumeData.summary.length > 0 && (
-          <div 
-            onClick={() => onSelectSection?.('summary')}
-            className={getSectionWrapperClass('summary')}
-            style={getSectionStyle('summary')}
-          >
-            <div className="mb-3">
-              <SectionHeader title="Professional Summary" sectionKey="summary" />
-              <ul className="list-none m-0 space-y-1">
-                {resumeData.summary.map((point: string, i: number) => (
-                  <li key={i} className="flex gap-2">
-                    <span className="shrink-0 font-semibold">•</span>
-                    <span className="text-justify">{renderWithBold(point)}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
-
-        {/* Technical Skills */}
-        {resumeData.skills && resumeData.skills.length > 0 && (
-          <div 
-            onClick={() => onSelectSection?.('skills')}
-            className={getSectionWrapperClass('skills')}
-            style={getSectionStyle('skills')}
-          >
-            <div className="mb-3">
-              <SectionHeader title="Technical Skills" sectionKey="skills" />
-              <div className="space-y-0.5">
-                {resumeData.skills.map((skillGroup: any, i: number) => (
-                  <div key={i} className="leading-snug">
-                    <span className="font-bold">{skillGroup.category}: </span>
-                    <span>{Array.isArray(skillGroup.items) ? skillGroup.items.join(', ') : skillGroup.items}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Experience 1 (Page 1) */}
-        {page1Experiences.length > 0 && renderExperienceList(page1Experiences, false)}
+        {/* Page 1 Footer */}
+        <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none">
+          <span>{profileData.full_name || 'Candidate'} — C2C Classic Resume</span>
+          <span>Page 1 of 2</span>
+        </div>
       </div>
 
       {/* ================= PAGE 2 ================= */}
       <div className={pageContainerClass} style={pageContainerStyle}>
-        
-        {/* Experience 2+ (Page 2) */}
-        {page2Experiences.length > 0 && renderExperienceList(page2Experiences, true)}
+        <div>
+          {/* Page 2 Continuation Header */}
+          <div className="flex justify-between items-center pb-1.5 mb-3 border-b border-slate-300">
+            <span className="font-bold uppercase tracking-wider text-slate-900" style={{ fontSize: '10pt' }}>
+              {profileData.full_name || 'JOHN DOE'} — Professional Experience (Cont.)
+            </span>
+            <span className="text-slate-400 text-[8.5pt]">Page 2</span>
+          </div>
 
-        {/* Education */}
-        {resumeData.education && resumeData.education.length > 0 && (
-          <div 
-            onClick={() => onSelectSection?.('education')}
-            className={getSectionWrapperClass('education')}
-            style={getSectionStyle('education')}
-          >
-            <div className="mb-4">
-              <SectionHeader title="Education" sectionKey="education" />
-              <div className="space-y-1">
-                {resumeData.education.map((edu: any, i: number) => (
-                  <div key={i}>
-                    <span className="font-bold">{edu.degree}</span> | {edu.institution} | {edu.year}
-                  </div>
-                ))}
+          {/* Experience 2+ (Page 2) */}
+          {page2Experiences.length > 0 && renderExperienceList(page2Experiences, true)}
+
+          {/* Education */}
+          {resumeData.education && resumeData.education.length > 0 && (
+            <div 
+              onClick={() => onSelectSection?.('education')}
+              className={getSectionWrapperClass('education')}
+              style={getSectionStyle('education')}
+            >
+              <div className="mb-4">
+                <SectionHeader title="Education" sectionKey="education" />
+                <div className="space-y-1">
+                  {resumeData.education.map((edu: any, i: number) => (
+                    <div key={i}>
+                      <span className="font-bold">{edu.degree}</span> | {edu.institution} | {edu.year}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Certifications */}
-        {resumeData.certifications && resumeData.certifications.length > 0 && (
-          <div 
-            onClick={() => onSelectSection?.('certifications')}
-            className={getSectionWrapperClass('certifications')}
-            style={getSectionStyle('certifications')}
-          >
-            <div className="mb-4">
-              <SectionHeader title="Certifications" sectionKey="certifications" />
-              <div className="space-y-1">
-                {resumeData.certifications.map((cert: any, i: number) => (
-                  <div key={i}>
-                    <span className="font-bold">{cert.name}</span> | {cert.issuer} | Earned {cert.year}
-                  </div>
-                ))}
+          {/* Certifications */}
+          {resumeData.certifications && resumeData.certifications.length > 0 && (
+            <div 
+              onClick={() => onSelectSection?.('certifications')}
+              className={getSectionWrapperClass('certifications')}
+              style={getSectionStyle('certifications')}
+            >
+              <div className="mb-4">
+                <SectionHeader title="Certifications" sectionKey="certifications" />
+                <div className="space-y-1">
+                  {resumeData.certifications.map((cert: any, i: number) => (
+                    <div key={i}>
+                      <span className="font-bold">{cert.name}</span> | {cert.issuer} | Earned {cert.year}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+
+        {/* Page 2 Footer */}
+        <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none">
+          <span>{profileData.full_name || 'Candidate'} — C2C Classic Resume</span>
+          <span>Page 2 of 2</span>
+        </div>
       </div>
 
     </div>

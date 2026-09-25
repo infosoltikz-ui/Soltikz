@@ -464,7 +464,7 @@ export default function CreateResumePage() {
           </div>
           <h3 className="text-xl font-bold text-slate-900 mb-2">You've reached your limit!</h3>
           <p className="text-[13px] text-slate-500 mb-6 leading-relaxed">
-            You have used all 20 of your free AI resume generations. Upgrade to our Pro plan to unlock unlimited resumes, cover letters, and advanced ATS optimization.
+            You have used all 60 of your free AI resume generations. Upgrade to our Pro plan to unlock unlimited resumes, cover letters, and advanced ATS optimization.
           </p>
           <div className="flex gap-3 w-full">
             <Button variant="outline" className="flex-1" onClick={() => closeModal('paywall-modal')}>
@@ -494,6 +494,7 @@ export default function CreateResumePage() {
                 isSubscribed={isPremiumPlan(profileData?.plan_id)}
                 onRequiresUpgrade={() => openModal('paywall-modal')}
                 resumeType={resumeType}
+                profileData={profileData}
               />
               <ResumeTypeSelector selectedType={resumeType} onChange={(type) => {
                 setResumeType(type)
@@ -529,12 +530,10 @@ export default function CreateResumePage() {
             <div className="flex justify-end pt-4">
               <Button
                 onClick={() => setStep(2)}
-                className="h-12 px-8 rounded-xl shadow-lg shadow-primary/20 hover:-translate-y-0.5 transition-all text-[15px]"
+                className="h-13 px-8 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-xl shadow-emerald-600/25 hover:shadow-2xl hover:-translate-y-0.5 transition-all text-[15px] font-black flex items-center gap-2.5 cursor-pointer"
               >
-                <div className="flex items-center gap-2">
-                  Next Step: Job Details
-                  <ArrowRight className="w-4 h-4" />
-                </div>
+                <span>Next Step: Target Job & AI Generation</span>
+                <ArrowRight className="w-5 h-5 opacity-90" />
               </Button>
             </div>
           </div>
@@ -575,152 +574,161 @@ export default function CreateResumePage() {
                 </div>
               </>
             ) : (
-              <div className="space-y-3">
-                {/* Unified Single-Row Action & Document Control Bar */}
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 sm:px-4 flex items-center justify-between gap-3 shadow-2xs shrink-0 whitespace-nowrap overflow-x-auto scrollbar-none">
-                  
-                  {/* Left Controls: Navigation, ATS Match & Template Info */}
-                  <div className="flex items-center gap-2 shrink-0 whitespace-nowrap">
+              <div className="space-y-6">
+                {/* Step 2 Top Action & Control Header */}
+                <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
+                  <div className="flex flex-wrap items-center gap-3">
                     <Button
                       onClick={() => setGeneratedResume(null)}
-                      className="h-8 px-3 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 bg-white border border-slate-200 cursor-pointer whitespace-nowrap shrink-0 shadow-2xs text-[11.5px] font-semibold"
+                      variant="outline"
+                      className="h-10 px-4 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-slate-50 text-[13px] font-bold shadow-2xs flex items-center gap-2"
                     >
-                      <div className="flex items-center gap-1.5 whitespace-nowrap">
-                        <ArrowLeft className="w-3.5 h-3.5" />
-                        <span>Edit Job Details</span>
-                      </div>
+                      <ArrowLeft className="w-4 h-4" />
+                      <span>Edit Target Job & Details</span>
                     </Button>
 
-                    {/* Real-time ATS Score Meter Pill */}
-                    <div className="shrink-0 whitespace-nowrap">
-                      <ATSScoreMeter atsData={atsData} variant="compact" />
+                    <div className="flex items-center gap-2">
+                      <span className="px-3 py-1 rounded-xl text-[12px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200/80">
+                        {getTemplateById(selectedTemplateId).name} Layout
+                      </span>
+                      <span className="px-3 py-1 rounded-xl text-[12px] font-extrabold bg-slate-100 text-slate-700 border border-slate-200">
+                        {resumeType === 'c2c' ? 'C2C Vendor Submission' : 'Full-Time Corporate'}
+                      </span>
                     </div>
-
-                    <span className="text-slate-300 dark:text-slate-700 text-[12px] hidden md:inline shrink-0">•</span>
-                    <span className="text-[11.5px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200/70 whitespace-nowrap hidden md:inline shrink-0">
-                      {getTemplateById(selectedTemplateId).name} (A4)
-                    </span>
                   </div>
 
-                  {/* Right Controls: AI Quick Edits, Zoom Controls & Downloads */}
-                  <div className="flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+                  <div className="flex items-center gap-2.5 flex-wrap w-full md:w-auto justify-end">
                     <Button 
                       onClick={() => setIsRegenerateSummaryModalOpen(true)} 
                       variant="outline" 
-                      className="h-8 px-2.5 rounded-lg border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[11.5px] font-semibold cursor-pointer whitespace-nowrap shrink-0"
+                      className="h-10 px-3.5 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-slate-50 text-[12px] font-bold shadow-2xs"
                     >
                       Refine Summary
                     </Button>
                     <Button 
                       onClick={() => setIsManualEditModalOpen(true)} 
                       variant="outline" 
-                      className="h-8 px-2.5 rounded-lg border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[11.5px] font-semibold cursor-pointer whitespace-nowrap shrink-0"
+                      className="h-10 px-3.5 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-slate-50 text-[12px] font-bold shadow-2xs"
                     >
                       Edit Skills
                     </Button>
-
-                    {/* Zoom Controls */}
-                    <div className="flex items-center gap-0.5 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700 shrink-0">
-                      <button
-                        onClick={() => setResumeZoom(z => Math.max(Number((z - 0.1).toFixed(1)), 0.6))}
-                        className="p-1 hover:bg-white dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-300 hover:text-slate-900 transition-all cursor-pointer"
-                        title="Zoom Out"
-                      >
-                        <ZoomOut className="w-3 h-3" />
-                      </button>
-                      <button
-                        onClick={() => setResumeZoom(1)}
-                        className="px-1.5 py-0.5 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:text-slate-900 transition-colors cursor-pointer whitespace-nowrap"
-                        title="Reset to Fit Width"
-                      >
-                        {resumeZoom === 1 ? 'Fit' : `${Math.round(resumeZoom * 100)}%`}
-                      </button>
-                      <button
-                        onClick={() => setResumeZoom(z => Math.min(Number((z + 0.1).toFixed(1)), 1.5))}
-                        className="p-1 hover:bg-white dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-300 hover:text-slate-900 transition-all cursor-pointer"
-                        title="Zoom In"
-                      >
-                        <ZoomIn className="w-3 h-3" />
-                      </button>
-                    </div>
-
+                    
                     <Button 
                       onClick={handlePrint} 
-                      className="h-8.5 px-3.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs text-[12px] font-bold cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0"
+                      className="h-10 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md shadow-emerald-600/20 text-[13px] font-black cursor-pointer flex items-center gap-2"
                     >
-                      <Download className="w-3.5 h-3.5" />
+                      <Download className="w-4 h-4" />
                       <span>Download PDF</span>
                     </Button>
                     <Button 
                       onClick={handleDownloadDocx} 
                       disabled={isDownloadingDocx}
                       variant="outline" 
-                      className="h-8.5 px-2.5 rounded-lg border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[11.5px] font-semibold cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0"
+                      className="h-10 px-3.5 rounded-xl border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12px] font-bold flex items-center gap-2"
                     >
-                      {isDownloadingDocx ? <Loader2 className="w-3 h-3 animate-spin text-emerald-600" /> : <FileText className="w-3 h-3 text-slate-500" />}
+                      {isDownloadingDocx ? <Loader2 className="w-4 h-4 animate-spin text-emerald-600" /> : <FileText className="w-4 h-4 text-slate-500" />}
                       <span>Word (DOCX)</span>
                     </Button>
                   </div>
                 </div>
 
-                {/* Resume Workbench Canvas */}
-                <div className="space-y-3">
-
-                  {/* Document Canvas */}
-                  <div 
-                    ref={canvasContainerRef}
-                    className="bg-slate-200/80 dark:bg-slate-950/80 p-3 sm:p-5 rounded-2xl border border-slate-300/80 dark:border-slate-800 flex flex-col items-center justify-start overflow-y-auto overflow-x-hidden h-[78vh] min-h-[580px] shadow-inner scrollbar-thin"
-                  >
-                    {(() => {
-                      const effectiveScale = Number((autoScale * resumeZoom).toFixed(2))
-                      const horizontalMargin = (794 * effectiveScale - 794) / 2
-                      return (
-                        <div 
-                          className="flex justify-center transition-all duration-200 py-2 w-full"
-                        >
-                          <div 
-                            style={{ 
-                              transform: `scale(${effectiveScale})`, 
-                              transformOrigin: 'top center',
-                              width: '794px',
-                              marginLeft: `${horizontalMargin}px`,
-                              marginRight: `${horizontalMargin}px`,
-                            }}
-                          >
-                            {(() => {
-                              const SelectedTemplate = getTemplateById(selectedTemplateId).component
-                              return <SelectedTemplate resumeData={generatedResume} profileData={profileData} />
-                            })()}
-                          </div>
-                        </div>
-                      )
-                    })()}
+                {/* DUAL-COLUMN INTERACTIVE WORKBENCH GRID */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                  
+                  {/* LEFT COLUMN: FULL BOLD ATS SCORE METER DASHBOARD (Col-span-5) */}
+                  <div className="lg:col-span-5 space-y-6">
+                    <ATSScoreMeter atsData={atsData} variant="full" />
                   </div>
 
-                  {/* Bottom Next Step Callout */}
-                  <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
-                        <Sparkles className="w-5 h-5" />
+                  {/* RIGHT COLUMN: HD LIVE PRINTABLE A4 RESUME CANVAS (Col-span-7) */}
+                  <div className="lg:col-span-7 space-y-4">
+                    <div className="bg-white border border-slate-200 rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xs">
+                      <div className="flex items-center gap-2">
+                        <FileText className="w-4 h-4 text-emerald-600" />
+                        <span className="text-[13px] font-bold text-slate-800">Live Resume Canvas</span>
                       </div>
-                      <div>
-                        <h4 className="text-[14px] font-bold text-slate-900 dark:text-slate-100">
-                          Ready for Interview Prep & Application Strategy?
-                        </h4>
-                        <p className="text-[12px] text-slate-500 dark:text-slate-400">
-                          Generate tailored Cover Letter, 60s Pitch, STAR Stories, Tech Q&A, and Salary Tips.
-                        </p>
+
+                      {/* Zoom Controls */}
+                      <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                        <button
+                          onClick={() => setResumeZoom(z => Math.max(Number((z - 0.1).toFixed(1)), 0.5))}
+                          className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
+                          title="Zoom Out"
+                        >
+                          <ZoomOut className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => setResumeZoom(1)}
+                          className="px-2 py-0.5 text-[11px] font-bold text-slate-700 hover:text-slate-900 transition-colors cursor-pointer"
+                          title="Reset to Fit Width"
+                        >
+                          {resumeZoom === 1 ? 'Fit Width' : `${Math.round(resumeZoom * 100)}%`}
+                        </button>
+                        <button
+                          onClick={() => setResumeZoom(z => Math.min(Number((z + 0.1).toFixed(1)), 1.5))}
+                          className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
+                          title="Zoom In"
+                        >
+                          <ZoomIn className="w-3.5 h-3.5" />
+                        </button>
                       </div>
                     </div>
 
-                    <Button
-                      onClick={() => setStep(3)}
-                      className="w-full sm:w-auto h-11 px-6 rounded-xl bg-primary hover:bg-primary/90 text-white shadow-md shadow-primary/20 text-[13.5px] font-bold cursor-pointer flex items-center justify-center gap-2"
+                    {/* Document Sheet Container */}
+                    <div 
+                      ref={canvasContainerRef}
+                      className="bg-slate-200/80 p-4 sm:p-6 rounded-3xl border border-slate-300/80 flex flex-col items-center justify-start overflow-y-auto overflow-x-hidden h-[82vh] min-h-[620px] shadow-inner scrollbar-thin"
                     >
-                      <span>Proceed to Step 3: Interview Strategy</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </Button>
+                      {(() => {
+                        const effectiveScale = Number((autoScale * resumeZoom).toFixed(2))
+                        const horizontalMargin = (794 * effectiveScale - 794) / 2
+                        return (
+                          <div className="flex justify-center transition-all duration-200 py-2 w-full">
+                            <div 
+                              style={{ 
+                                transform: `scale(${effectiveScale})`, 
+                                transformOrigin: 'top center',
+                                width: '794px',
+                                marginLeft: `${horizontalMargin}px`,
+                                marginRight: `${horizontalMargin}px`,
+                              }}
+                            >
+                              {(() => {
+                                const SelectedTemplate = getTemplateById(selectedTemplateId).component
+                                return <SelectedTemplate resumeData={generatedResume} profileData={profileData} />
+                              })()}
+                            </div>
+                          </div>
+                        )
+                      })()}
+                    </div>
+
+                    {/* Proceed to Step 3 Callout Card */}
+                    <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-950 text-white rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shrink-0">
+                          <Sparkles className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h4 className="text-[15px] font-black text-white">
+                            Ready for Interview Strategy & Cover Letter?
+                          </h4>
+                          <p className="text-[12px] font-medium text-slate-300 mt-0.5">
+                            Generate tailored Cover Letter, STAR Stories, Tech Q&A, and Company Notes.
+                          </p>
+                        </div>
+                      </div>
+
+                      <Button
+                        onClick={() => setStep(3)}
+                        className="w-full sm:w-auto h-12 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-black shadow-lg shadow-emerald-500/30 text-[14px] cursor-pointer flex items-center justify-center gap-2.5 shrink-0"
+                      >
+                        <span>Proceed to Step 3: Interview Strategy</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
+
                 </div>
               </div>
             )}

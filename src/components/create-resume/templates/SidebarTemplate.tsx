@@ -76,203 +76,293 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
     const headerColor = sectionStyles?.[sectionKey || '']?.color || ACCENT;
     return (
       <h2 
-        className="font-bold pb-0.5 mb-2 mt-3 border-b border-slate-300 w-full break-inside-avoid" 
-        style={{ fontSize: '11.5pt', color: headerColor }}
+        className="font-bold pb-1 mb-3 mt-4 border-b border-slate-300 w-full break-inside-avoid tracking-wide" 
+        style={{ fontSize: '12pt', color: headerColor }}
       >
         {title}
       </h2>
     );
   };
 
-  const experiences = resumeData.experience || [];
+    const experiences = resumeData.experience || [];
+    let page1Experiences: any[] = [];
+    let page2Experiences: any[] = [];
 
-  return (
-    <div ref={ref} className="space-y-8 print:space-y-0 text-black">
-      <div
-        className="resume-page bg-white w-[794px] mx-auto shadow-xl border border-slate-200 text-black overflow-hidden relative"
-        style={{
-          boxSizing: 'border-box',
-          padding: '44px 50px',
-          fontFamily: selectedFont,
-          color: '#000000',
-          fontSize: '9.5pt',
-          lineHeight: '1.4'
-        }}
-      >
-        <div>
-          {/* Top Accent Bar */}
-          <div 
-            style={{ 
-              backgroundColor: TOP_BAR_COLOR, 
-              height: '12px', 
-              margin: '-44px -50px 22px -50px', 
-              width: 'calc(100% + 100px)' 
-            }} 
-          />
+    if (experiences.length > 0) {
+      const firstExp = experiences[0];
+      if (firstExp.bullets && firstExp.bullets.length > 3) {
+        page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 3) }];
+        page2Experiences = [
+          { ...firstExp, bullets: firstExp.bullets.slice(3), isContinued: true },
+          ...experiences.slice(1)
+        ];
+      } else {
+        page1Experiences = [firstExp];
+        page2Experiences = experiences.slice(1);
+      }
+    }
 
-          {/* Header */}
-          <div 
-            onClick={() => onSelectSection?.('header')}
-            className={getSectionWrapperClass('header')}
-            style={getSectionStyle('header')}
-          >
-            <div className="mb-3.5 text-center break-inside-avoid">
-              <h1 className="uppercase tracking-wider mb-1" style={{ fontSize: '22pt', fontWeight: 700 }}>
-                {renderName()}
-              </h1>
-              <div className="flex flex-wrap items-center justify-center gap-2" style={{ fontSize: '9.5pt' }}>
-                {profileData.location && <span>{profileData.location}</span>}
-                {profileData.phone && (
-                  <>
-                    {profileData.location && <span className="text-slate-400">|</span>}
-                    <span>{profileData.phone}</span>
-                  </>
-                )}
-                {profileData.email && (
-                  <>
-                    {(profileData.location || profileData.phone) && <span className="text-slate-400">|</span>}
-                    <span>{profileData.email}</span>
-                  </>
-                )}
-                {profileData.linkedin && (
-                  <>
-                    {(profileData.location || profileData.phone || profileData.email) && <span className="text-slate-400">|</span>}
-                    <span>{profileData.linkedin}</span>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
+    const hasPage2 = page2Experiences.length > 0 || (resumeData.education && resumeData.education.length > 0) || (resumeData.certifications && resumeData.certifications.length > 0);
 
-          {/* Professional Summary */}
-          {resumeData.summary && resumeData.summary.length > 0 && (
+    const pageContainerClass = "resume-page bg-white w-[794px] min-h-[1123px] h-[1123px] max-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:border-none print:break-after-page overflow-hidden";
+    const pageContainerStyle: React.CSSProperties = {
+      boxSizing: 'border-box',
+      padding: '36px 48px 32px 48px',
+      fontFamily: selectedFont,
+      color: '#000000',
+      fontSize: '9.5pt',
+      lineHeight: '1.4'
+    };
+
+    return (
+      <div ref={ref} className="text-black print:bg-white flex flex-col items-center">
+        {/* ─── PAGE 1 ─── */}
+        <div className={pageContainerClass} style={pageContainerStyle}>
+          <div className="flex-1 overflow-hidden">
+            {/* Top Accent Bar */}
             <div 
-              onClick={() => onSelectSection?.('summary')}
-              className={getSectionWrapperClass('summary')}
-              style={getSectionStyle('summary')}
-            >
-              <div className="mb-3">
-                <SectionHeader title="Professional Summary" sectionKey="summary" />
-                {/* Full-Time prose summary: join sentences into one flowing paragraph */}
-                <p className="text-justify leading-snug m-0" style={{ fontSize: '9.5pt' }}>
-                  {Array.isArray(resumeData.summary)
-                    ? resumeData.summary.join(' ')
-                    : resumeData.summary}
-                </p>
-              </div>
-            </div>
-          )}
+              style={{ 
+                backgroundColor: TOP_BAR_COLOR, 
+                height: '12px', 
+                margin: '-36px -48px 18px -48px', 
+                width: 'calc(100% + 96px)' 
+              }} 
+            />
 
-          {/* Technical Skills */}
-          {resumeData.skills && resumeData.skills.length > 0 && (
+            {/* Header */}
             <div 
-              onClick={() => onSelectSection?.('skills')}
-              className={getSectionWrapperClass('skills')}
-              style={getSectionStyle('skills')}
+              onClick={() => onSelectSection?.('header')}
+              className={getSectionWrapperClass('header')}
+              style={getSectionStyle('header')}
             >
-              <div className="mb-3">
-                <SectionHeader title="Technical Skills" sectionKey="skills" />
-                <div className="grid grid-cols-2 gap-x-6 gap-y-0.5" style={{ fontSize: '9pt' }}>
-                  {resumeData.skills.map((skillGroup, i) => (
-                    <ul key={i} className="list-disc pl-4 m-0 space-y-0.5">
-                      <li className="leading-snug">
-                        <span className="font-bold">{skillGroup.category}: </span>
-                        <span>{Array.isArray(skillGroup.items) ? skillGroup.items.join(', ') : skillGroup.items}</span>
-                      </li>
-                    </ul>
-                  ))}
+              <div className="mb-3 text-center break-inside-avoid">
+                <h1 className="uppercase tracking-wider mb-1" style={{ fontSize: '20pt', fontWeight: 700 }}>
+                  {renderName()}
+                </h1>
+                <div className="flex flex-wrap items-center justify-center gap-2" style={{ fontSize: '9pt' }}>
+                  {profileData.location && <span>{profileData.location}</span>}
+                  {profileData.phone && (
+                    <>
+                      {profileData.location && <span className="text-slate-400">|</span>}
+                      <span>{profileData.phone}</span>
+                    </>
+                  )}
+                  {profileData.email && (
+                    <>
+                      {(profileData.location || profileData.phone) && <span className="text-slate-400">|</span>}
+                      <span>{profileData.email}</span>
+                    </>
+                  )}
+                  {profileData.linkedin && (
+                    <>
+                      {(profileData.location || profileData.phone || profileData.email) && <span className="text-slate-400">|</span>}
+                      <span>{profileData.linkedin}</span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
-          )}
 
-          {experiences.length > 0 && (
-            <div 
-              onClick={() => onSelectSection?.('experience')}
-              className={getSectionWrapperClass('experience')}
-              style={getSectionStyle('experience')}
-            >
-              <div className="mb-2">
-                <SectionHeader title="Experience" sectionKey="experience" />
-                {experiences.map((exp, i) => (
-                  <div key={i} className="mb-2">
-                    <div className="flex justify-between items-start leading-tight mb-0.5" style={{ fontSize: '10pt' }}>
-                      <div className="font-bold text-black">{exp.role}</div>
-                      <div className="text-black whitespace-nowrap ml-4 font-semibold">{exp.duration}</div>
-                    </div>
-                    <div className="flex justify-between items-start leading-tight mb-1" style={{ fontSize: '9.5pt' }}>
-                      <div className="font-bold text-slate-800">{exp.company}</div>
-                    </div>
+            {/* Professional Summary */}
+            {resumeData.summary && resumeData.summary.length > 0 && (
+              <div 
+                onClick={() => onSelectSection?.('summary')}
+                className={getSectionWrapperClass('summary')}
+                style={getSectionStyle('summary')}
+              >
+                <div className="mb-3">
+                  <SectionHeader title="Professional Summary" sectionKey="summary" />
+                  <p className="text-justify leading-snug m-0" style={{ fontSize: '9.5pt' }}>
+                    {Array.isArray(resumeData.summary)
+                      ? resumeData.summary.join(' ')
+                      : resumeData.summary}
+                  </p>
+                </div>
+              </div>
+            )}
 
-                    {exp.environment && exp.environment.length > 0 && (
-                      <div className="mb-1 leading-snug text-slate-600" style={{ fontSize: '8.5pt' }}>
-                        <span className="font-bold text-black">Environment: </span>
-                        {exp.environment.join(', ')}
+            {/* Technical Skills */}
+            {resumeData.skills && resumeData.skills.length > 0 && (
+              <div 
+                onClick={() => onSelectSection?.('skills')}
+                className={getSectionWrapperClass('skills')}
+                style={getSectionStyle('skills')}
+              >
+                <div className="mb-3">
+                  <SectionHeader title="Technical Skills" sectionKey="skills" />
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-1" style={{ fontSize: '9.5pt' }}>
+                    {resumeData.skills.map((skillGroup, i) => (
+                      <ul key={i} className="list-disc pl-4 m-0 space-y-1">
+                        <li className="leading-snug">
+                          <span className="font-bold">{skillGroup.category}: </span>
+                          <span>{Array.isArray(skillGroup.items) ? skillGroup.items.join(', ') : skillGroup.items}</span>
+                        </li>
+                      </ul>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Recent Experience (Page 1) */}
+            {page1Experiences.length > 0 && (
+              <div 
+                onClick={() => onSelectSection?.('experience')}
+                className={getSectionWrapperClass('experience')}
+                style={getSectionStyle('experience')}
+              >
+                <div className="mb-2">
+                  <SectionHeader title="Experience" sectionKey="experience" />
+                  {page1Experiences.map((exp: any, i: number) => (
+                    <div key={i} className="mb-2">
+                      <div className="flex justify-between items-start leading-tight mb-1" style={{ fontSize: '10.5pt' }}>
+                        <div className="font-bold text-black">{exp.role}</div>
+                        <div className="text-black whitespace-nowrap ml-4 font-semibold">{exp.duration}</div>
                       </div>
-                    )}
+                      <div className="flex justify-between items-start leading-tight mb-1" style={{ fontSize: '9.5pt' }}>
+                        <div className="font-bold text-slate-800">{exp.company}</div>
+                      </div>
 
-                    <ul className="list-disc pl-5 space-y-1 mt-0.5 m-0" style={{ fontSize: '9pt' }}>
-                      {exp.bullets.map((bullet: string, j: number) => (
-                        <li key={j} className="pl-1 leading-snug text-justify">
-                          {parseBoldText(bullet)}
+                      {exp.environment && exp.environment.length > 0 && (
+                        <div className="mb-1.5 leading-snug text-slate-600" style={{ fontSize: '8.5pt' }}>
+                          <span className="font-bold text-black">Environment: </span>
+                          {exp.environment.join(', ')}
+                        </div>
+                      )}
+
+                      <ul className="list-disc pl-5 space-y-1 mt-1 m-0 text-[9.5pt]" style={{ lineHeight: '1.4' }}>
+                        {exp.bullets.map((bullet: string, j: number) => (
+                          <li key={j} className="pl-1 leading-snug text-justify">
+                            {parseBoldText(bullet)}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Page 1 Footer */}
+          {hasPage2 && (
+            <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
+              <span>{profileData.full_name || 'Candidate'} — Professional Resume</span>
+              <span>Page 1 of 2</span>
+            </div>
+          )}
+        </div>
+
+        {/* ─── PAGE 2 ─── */}
+        {hasPage2 && (
+          <div className={pageContainerClass} style={pageContainerStyle}>
+            <div className="flex-1 overflow-hidden">
+              {/* Continuation Header */}
+              <div className="flex justify-between items-center pb-1.5 mb-3 border-b border-slate-300">
+                <span className="font-bold uppercase tracking-wider text-[10pt]" style={{ color: ACCENT }}>
+                  {profileData.full_name || 'JOHN DOE'} — Experience (Cont.)
+                </span>
+                <span className="text-slate-400 text-[8.5pt]">Page 2</span>
+              </div>
+
+              {/* Remaining Experience */}
+              {page2Experiences.length > 0 && (
+                <div 
+                  onClick={() => onSelectSection?.('experience')}
+                  className={getSectionWrapperClass('experience')}
+                  style={getSectionStyle('experience')}
+                >
+                  <div className="mb-3 space-y-3">
+                    {page2Experiences.map((exp: any, i: number) => (
+                      <div key={i} className="mb-2">
+                        <div className="flex justify-between items-start leading-tight mb-1" style={{ fontSize: '10.5pt' }}>
+                          <div className="font-bold text-black">
+                            {exp.role} {exp.isContinued && <span className="italic font-normal text-slate-500 text-[9pt]">(Continued)</span>}
+                          </div>
+                          <div className="text-black whitespace-nowrap ml-4 font-semibold">{exp.duration}</div>
+                        </div>
+                        <div className="flex justify-between items-start leading-tight mb-1" style={{ fontSize: '9.5pt' }}>
+                          <div className="font-bold text-slate-800">{exp.company}</div>
+                        </div>
+
+                        {exp.environment && exp.environment.length > 0 && !exp.isContinued && (
+                          <div className="mb-1.5 leading-snug text-slate-600" style={{ fontSize: '8.5pt' }}>
+                            <span className="font-bold text-black">Environment: </span>
+                            {exp.environment.join(', ')}
+                          </div>
+                        )}
+
+                        <ul className="list-disc pl-5 space-y-1 mt-1 m-0 text-[9.5pt]" style={{ lineHeight: '1.4' }}>
+                          {exp.bullets.map((bullet: string, j: number) => (
+                            <li key={j} className="pl-1 leading-snug text-justify">
+                              {parseBoldText(bullet)}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Education */}
+              {resumeData.education && resumeData.education.length > 0 && (
+                <div 
+                  onClick={() => onSelectSection?.('education')}
+                  className={getSectionWrapperClass('education')}
+                  style={getSectionStyle('education')}
+                >
+                  <div className="mb-3">
+                    <SectionHeader title="Education and Training" sectionKey="education" />
+                    <div className="space-y-1.5 text-[9.5pt]">
+                      {resumeData.education.map((edu: any, i: number) => (
+                        <div key={i}>
+                          <div className="flex justify-between items-start mb-0.5" style={{ fontSize: '10pt' }}>
+                            <div className="font-bold">{edu.degree}</div>
+                            <div className="whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
+                          </div>
+                          <div style={{ fontSize: '9.5pt' }} className="text-slate-600">
+                            {edu.institution}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Certifications */}
+              {resumeData.certifications && resumeData.certifications.length > 0 && (
+                <div 
+                  onClick={() => onSelectSection?.('certifications')}
+                  className={getSectionWrapperClass('certifications')}
+                  style={getSectionStyle('certifications')}
+                >
+                  <div className="mb-3">
+                    <SectionHeader title="Certifications" sectionKey="certifications" />
+                    <ul className="list-disc pl-5 m-0 space-y-1 text-[9.5pt]">
+                      {resumeData.certifications.map((cert: any, i: number) => (
+                        <li key={i} className="pl-1 leading-relaxed">
+                          <span className="font-bold">{cert.name}</span> — {cert.issuer} ({cert.year})
                         </li>
                       ))}
                     </ul>
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {/* Education */}
-          {resumeData.education && resumeData.education.length > 0 && (
-            <div 
-              onClick={() => onSelectSection?.('education')}
-              className={getSectionWrapperClass('education')}
-              style={getSectionStyle('education')}
-            >
-              <div className="mb-4">
-                <SectionHeader title="Education and Training" sectionKey="education" />
-                <div className="space-y-1.5">
-                  {resumeData.education.map((edu, i) => (
-                    <div key={i}>
-                      <div className="flex justify-between items-start mb-0.5" style={{ fontSize: '9.5pt' }}>
-                        <div className="font-bold">{edu.degree}</div>
-                        <div className="whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
-                      </div>
-                      <div style={{ fontSize: '9pt' }} className="text-slate-600">
-                        {edu.institution}
-                      </div>
-                    </div>
-                  ))}
                 </div>
-              </div>
+              )}
             </div>
-          )}
 
-          {/* Certifications */}
-          {resumeData.certifications && resumeData.certifications.length > 0 && (
-            <div 
-              onClick={() => onSelectSection?.('certifications')}
-              className={getSectionWrapperClass('certifications')}
-              style={getSectionStyle('certifications')}
-            >
-              <div className="mb-4">
-                <SectionHeader title="Certifications" sectionKey="certifications" />
-                <ul className="list-disc pl-5 m-0 space-y-1" style={{ fontSize: '9pt' }}>
-                  {resumeData.certifications.map((cert, i) => (
-                    <li key={i} className="pl-1 leading-snug">
-                      <span className="font-bold">{cert.name}</span> — {cert.issuer} ({cert.year})
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            {/* Page 2 Footer */}
+            <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
+              <span>{profileData.full_name || 'Candidate'} — Professional Resume</span>
+              <span>Page 2 of 2</span>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 SidebarTemplate.displayName = 'SidebarTemplate';
 

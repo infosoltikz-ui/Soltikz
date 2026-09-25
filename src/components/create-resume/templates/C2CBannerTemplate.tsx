@@ -69,10 +69,10 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
   
   if (experiences.length > 0) {
     const firstExp = experiences[0];
-    if (firstExp.bullets && firstExp.bullets.length > 5) {
-      page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 5), isSplit: true }];
+    if (firstExp.bullets && firstExp.bullets.length > 3) {
+      page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 3), isSplit: true }];
       page2Experiences = [
-        { ...firstExp, bullets: firstExp.bullets.slice(5), isContinued: true },
+        { ...firstExp, bullets: firstExp.bullets.slice(3), isContinued: true },
         ...experiences.slice(1)
       ];
     } else {
@@ -81,8 +81,10 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
     }
   }
 
-  const pageContainerClass = "resume-page bg-white w-[794px] mx-auto overflow-hidden text-black relative";
+  const pageContainerClass = "resume-page bg-white w-[794px] min-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:border-none print:break-after-page overflow-hidden";
   const pageContainerStyle: React.CSSProperties = {
+    boxSizing: 'border-box',
+    padding: '44px 50px',
     fontFamily: selectedFont,
     color: '#2b2b2b',
     fontSize: '9.5pt',
@@ -239,65 +241,86 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
 
         {/* Experience 1 (Page 1) */}
         {page1Experiences.length > 0 && renderExperienceList(page1Experiences, false)}
+
+        {/* Page 1 Footer */}
+        <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none">
+          <span>{profileData.full_name || 'Candidate'} — C2C Professional Banner</span>
+          <span>Page 1 of 2</span>
+        </div>
       </div>
 
       {/* ================= PAGE 2 ================= */}
       <div className={pageContainerClass} style={pageContainerStyle}>
-        
-        {/* Experience 2+ (Page 2) */}
-        {page2Experiences.length > 0 && renderExperienceList(page2Experiences, true)}
+        <div>
+          {/* Page 2 Header */}
+          <div className="flex justify-between items-center pb-1.5 mb-3 border-b border-slate-300">
+            <span className="font-bold uppercase tracking-wider text-slate-900" style={{ fontSize: '10pt', color: BANNER }}>
+              {profileData.full_name || 'JOHN DOE'} — Professional Experience (Cont.)
+            </span>
+            <span className="text-slate-400 text-[8.5pt]">Page 2</span>
+          </div>
 
-        {/* C2C Education */}
-        {resumeData.education && resumeData.education.length > 0 && (
-          <div 
-            onClick={() => onSelectSection?.('education')}
-            className={getSectionWrapperClass('education')}
-            style={getSectionStyle('education')}
-          >
-            <div className="mb-4 break-inside-avoid">
-              <SectionHeader title="Education" sectionKey="education" />
-              <div className="space-y-1.5 text-[9.5pt]">
-                {resumeData.education.map((edu: any, i: number) => (
-                  <div key={i} className="flex flex-col">
-                    <div>
-                      <span className="font-bold text-slate-800">{edu.degree}</span> 
-                      <span className="mx-1 text-slate-400">|</span> 
-                      <span className="text-slate-700">{edu.institution}</span> 
-                      <span className="mx-1 text-slate-400">|</span> 
-                      <span className="font-semibold text-slate-800">{edu.location || 'City, State'}</span>
-                      <span className="mx-1 text-slate-400">|</span> 
-                      <span className="font-semibold text-slate-800">{edu.year}</span>
+          {/* Experience 2+ (Page 2) */}
+          {page2Experiences.length > 0 && renderExperienceList(page2Experiences, true)}
+
+          {/* C2C Education */}
+          {resumeData.education && resumeData.education.length > 0 && (
+            <div 
+              onClick={() => onSelectSection?.('education')}
+              className={getSectionWrapperClass('education')}
+              style={getSectionStyle('education')}
+            >
+              <div className="mb-4 break-inside-avoid">
+                <SectionHeader title="Education" sectionKey="education" />
+                <div className="space-y-1.5 text-[9.5pt]">
+                  {resumeData.education.map((edu: any, i: number) => (
+                    <div key={i} className="flex flex-col">
+                      <div>
+                        <span className="font-bold text-slate-800">{edu.degree}</span> 
+                        <span className="mx-1 text-slate-400">|</span> 
+                        <span className="text-slate-700">{edu.institution}</span> 
+                        <span className="mx-1 text-slate-400">|</span> 
+                        <span className="font-semibold text-slate-800">{edu.location || 'City, State'}</span>
+                        <span className="mx-1 text-slate-400">|</span> 
+                        <span className="font-semibold text-slate-800">{edu.year}</span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* C2C Certifications */}
-        {resumeData.certifications && resumeData.certifications.length > 0 && (
-          <div 
-            onClick={() => onSelectSection?.('certifications')}
-            className={getSectionWrapperClass('certifications')}
-            style={getSectionStyle('certifications')}
-          >
-            <div className="mb-4 break-inside-avoid">
-              <SectionHeader title="Certifications" sectionKey="certifications" />
-              <div className="space-y-1 text-[9.5pt]">
-                {resumeData.certifications.map((cert: any, i: number) => (
-                  <div key={i} className="flex">
-                    <span className="font-bold text-slate-800">{cert.name}</span>
-                    <span className="mx-1.5 text-slate-400">|</span>
-                    <span className="text-slate-700">{cert.issuer}</span>
-                    <span className="mx-1.5 text-slate-400">|</span>
-                    <span className="font-medium text-slate-600">Earned {cert.year}</span>
-                  </div>
-                ))}
+          {/* C2C Certifications */}
+          {resumeData.certifications && resumeData.certifications.length > 0 && (
+            <div 
+              onClick={() => onSelectSection?.('certifications')}
+              className={getSectionWrapperClass('certifications')}
+              style={getSectionStyle('certifications')}
+            >
+              <div className="mb-4 break-inside-avoid">
+                <SectionHeader title="Certifications" sectionKey="certifications" />
+                <div className="space-y-1 text-[9.5pt]">
+                  {resumeData.certifications.map((cert: any, i: number) => (
+                    <div key={i} className="flex">
+                      <span className="font-bold text-slate-800">{cert.name}</span>
+                      <span className="mx-1.5 text-slate-400">|</span>
+                      <span className="text-slate-700">{cert.issuer}</span>
+                      <span className="mx-1.5 text-slate-400">|</span>
+                      <span className="font-medium text-slate-600">Earned {cert.year}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+
+        {/* Page 2 Footer */}
+        <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none">
+          <span>{profileData.full_name || 'Candidate'} — C2C Professional Banner</span>
+          <span>Page 2 of 2</span>
+        </div>
       </div>
 
     </div>

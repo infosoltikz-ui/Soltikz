@@ -4,7 +4,7 @@ import React, { Suspense, useState } from 'react'
 import { CheckCircle2, Eye, Check } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { RESUME_TEMPLATES, getTemplateById } from './templates/registry'
-import { sampleResumeData, sampleProfileData, c2cSampleData } from './templates/sampleData'
+import { buildResumeDataFromProfile } from './templates/buildResumeDataFromProfile'
 import { TemplatePreviewModal } from './TemplatePreviewModal'
 
 interface TemplateSelectorProps {
@@ -13,10 +13,12 @@ interface TemplateSelectorProps {
   isSubscribed?: boolean
   onRequiresUpgrade?: () => void
   resumeType?: 'c2c' | 'fulltime'
+  profileData?: any
 }
 
-function TemplateThumbnail({ id }: { id: string }) {
+function TemplateThumbnail({ id, profileData }: { id: string; profileData?: any }) {
   const TemplateComponent = getTemplateById(id).component
+  const { profileData: pData, resumeData: rData } = buildResumeDataFromProfile(profileData, id)
   
   return (
     <div className="w-full h-full relative overflow-hidden bg-white flex justify-center">
@@ -26,8 +28,8 @@ function TemplateThumbnail({ id }: { id: string }) {
       >
         <Suspense fallback={<div className="w-full h-full bg-slate-100 animate-pulse" />}>
           <TemplateComponent 
-            resumeData={id === 'c2c' ? c2cSampleData : sampleResumeData} 
-            profileData={sampleProfileData} 
+            resumeData={rData} 
+            profileData={pData} 
           />
         </Suspense>
       </div>
@@ -35,7 +37,7 @@ function TemplateThumbnail({ id }: { id: string }) {
   )
 }
 
-export function TemplateSelector({ selectedId, onChange, isSubscribed = true, onRequiresUpgrade, resumeType = 'fulltime' }: TemplateSelectorProps) {
+export function TemplateSelector({ selectedId, onChange, isSubscribed = true, onRequiresUpgrade, resumeType = 'fulltime', profileData }: TemplateSelectorProps) {
   const [previewTemplateId, setPreviewTemplateId] = useState<string | null>(null)
 
   const handleTemplateClick = (id: string, e?: React.MouseEvent) => {
@@ -80,7 +82,7 @@ export function TemplateSelector({ selectedId, onChange, isSubscribed = true, on
               >
                 {/* Thumbnail Area with Hover Overlay */}
                 <div className="h-44 w-full border-b border-slate-100 bg-slate-50 overflow-hidden relative">
-                  <TemplateThumbnail id={template.id} />
+                  <TemplateThumbnail id={template.id} profileData={profileData} />
                   
                   {/* Floating Action Buttons on Thumbnail Hover */}
                   <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2 backdrop-blur-[1.5px]">
@@ -141,6 +143,7 @@ export function TemplateSelector({ selectedId, onChange, isSubscribed = true, on
           templateId={previewTemplateId} 
           onClose={() => setPreviewTemplateId(null)} 
           onSelect={handleSelectTemplate} 
+          profileData={profileData}
         />
       )}
     </>
