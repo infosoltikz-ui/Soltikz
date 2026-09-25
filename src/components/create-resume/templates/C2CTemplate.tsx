@@ -71,10 +71,10 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
   
   if (experiences.length > 0) {
     const firstExp = experiences[0];
-    if (firstExp.bullets && firstExp.bullets.length > 3) {
-      page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 3), isSplit: true }];
+    if (firstExp.bullets && firstExp.bullets.length > 4) {
+      page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 4), isSplit: true }];
       page2Experiences = [
-        { ...firstExp, bullets: firstExp.bullets.slice(3), isContinued: true },
+        { ...firstExp, bullets: firstExp.bullets.slice(4), isContinued: true },
         ...experiences.slice(1)
       ];
     } else {

@@ -65,10 +65,10 @@ export const CertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
 
     if (experiences.length > 0) {
       const firstExp = experiences[0];
-      if (firstExp.bullets && firstExp.bullets.length > 3) {
-        page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 3) }];
+      if (firstExp.bullets && firstExp.bullets.length > 4) {
+        page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 4) }];
         page2Experiences = [
-          { ...firstExp, bullets: firstExp.bullets.slice(3), isContinued: true },
+          { ...firstExp, bullets: firstExp.bullets.slice(4), isContinued: true },
           ...experiences.slice(1)
         ];
       } else {
@@ -82,11 +82,11 @@ export const CertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
     const pageContainerClass = "resume-page bg-white w-[794px] min-h-[1123px] h-[1123px] max-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:border-none print:break-after-page overflow-hidden";
     const pageContainerStyle: React.CSSProperties = {
       boxSizing: 'border-box',
-      padding: '36px 48px 32px 48px',
+      padding: '38px 48px 32px 48px',
       fontFamily: selectedFont,
       color: '#1a1a1a',
-      fontSize: '9.5pt',
-      lineHeight: '1.4'
+      fontSize: '10.5pt',
+      lineHeight: '1.5'
     };
 
     return (
@@ -100,12 +100,12 @@ export const CertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
               className={getSectionWrapperClass('header')}
               style={getSectionStyle('header')}
             >
-              <div className="flex flex-row justify-between items-start border-b-2 border-slate-800 pb-2.5 mb-2.5">
+              <div className="flex flex-row justify-between items-start border-b-2 border-slate-800 pb-3 mb-3">
                 <div className="flex-1 pr-4">
-                  <h1 className="uppercase font-black tracking-tight mb-1" style={{ fontSize: '20pt', color: sectionStyles?.header?.color || ACCENT }}>
+                  <h1 className="uppercase font-black tracking-tight mb-1" style={{ fontSize: '24pt', color: sectionStyles?.header?.color || ACCENT }}>
                     {profileData.full_name || 'JOHN DOE'}
                   </h1>
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[9pt] text-slate-700 font-medium">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[10pt] text-slate-700 font-medium">
                     {profileData.location && <span>📍 {profileData.location}</span>}
                     {profileData.phone && (
                       <>
@@ -240,14 +240,6 @@ export const CertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
         {hasPage2 && (
           <div className={pageContainerClass} style={pageContainerStyle}>
             <div className="flex-1 overflow-hidden">
-              {/* Page 2 Continuation Header */}
-              <div className="flex justify-between items-center pb-1.5 mb-2.5 border-b border-slate-300">
-                <span className="font-bold uppercase tracking-wider text-[10pt]" style={{ color: ACCENT }}>
-                  {profileData.full_name || 'JOHN DOE'} — Professional Experience (Cont.)
-                </span>
-                <span className="text-slate-400 text-[8.5pt]">Page 2</span>
-              </div>
-
               {/* Remaining Experience */}
               {page2Experiences.length > 0 && (
                 <div 

@@ -63,11 +63,10 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 
     if (experiences.length > 0) {
       const firstExp = experiences[0];
-      // If Role 1 has > 3 bullets, split so bullets 1-3 go to Page 1 and remaining go to Page 2
-      if (firstExp.bullets && firstExp.bullets.length > 3) {
-        page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 3) }];
+      if (firstExp.bullets && firstExp.bullets.length > 4) {
+        page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 4) }];
         page2Experiences = [
-          { ...firstExp, bullets: firstExp.bullets.slice(3), isContinued: true },
+          { ...firstExp, bullets: firstExp.bullets.slice(4), isContinued: true },
           ...experiences.slice(1)
         ];
       } else {
@@ -231,14 +230,6 @@ export const ResumeRenderer = React.forwardRef<HTMLDivElement, ResumeTemplatePro
         {hasPage2 && (
           <div className={pageContainerClass} style={pageContainerStyle}>
             <div className="flex-1 overflow-hidden">
-              {/* Continuation Header */}
-              <div className="flex justify-between items-center pb-1.5 mb-3 border-b border-slate-300">
-                <span className="font-bold uppercase tracking-wider" style={{ fontSize: '10.5pt', color: accentColor }}>
-                  {profileData.full_name || 'JOHN DOE'} — Professional Experience (Cont.)
-                </span>
-                <span className="text-slate-500 text-[9pt]">Page 2</span>
-              </div>
-
               {/* Remaining Experience */}
               {page2Experiences.length > 0 && (
                 <div 

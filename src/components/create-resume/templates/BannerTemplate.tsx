@@ -71,10 +71,10 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 
     if (experiences.length > 0) {
       const firstExp = experiences[0];
-      if (firstExp.bullets && firstExp.bullets.length > 3) {
-        page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 3) }];
+      if (firstExp.bullets && firstExp.bullets.length > 4) {
+        page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 4) }];
         page2Experiences = [
-          { ...firstExp, bullets: firstExp.bullets.slice(3), isContinued: true },
+          { ...firstExp, bullets: firstExp.bullets.slice(4), isContinued: true },
           ...experiences.slice(1)
         ];
       } else {
@@ -88,11 +88,11 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
     const pageContainerClass = "resume-page bg-white w-[794px] min-h-[1123px] h-[1123px] max-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:border-none print:break-after-page overflow-hidden";
     const pageContainerStyle: React.CSSProperties = {
       boxSizing: 'border-box',
-      padding: '36px 48px 32px 48px',
+      padding: '38px 48px 32px 48px',
       fontFamily: selectedFont,
       color: '#2b2b2b',
-      fontSize: '9.5pt',
-      lineHeight: '1.4'
+      fontSize: '10.5pt',
+      lineHeight: '1.5'
     };
 
     return (
@@ -106,16 +106,16 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
               className={`cursor-pointer ${activeSectionKey === 'header' ? 'ring-2 ring-emerald-400' : ''}`}
               style={{ 
                 backgroundColor: sectionStyles?.header?.color || BANNER, 
-                margin: '-36px -48px 18px -48px', 
-                padding: '32px 48px 18px 48px' 
+                margin: '-38px -48px 20px -48px', 
+                padding: '36px 48px 20px 48px' 
               }}
             >
               <div style={getSectionStyle('header')}>
-                <h1 className="uppercase tracking-widest mb-1.5 text-center" style={{ fontSize: '20pt', color: '#ffffff', fontWeight: 700, fontFamily: selectedFont }}>
+                <h1 className="uppercase tracking-widest mb-1.5 text-center" style={{ fontSize: '24pt', color: '#ffffff', fontWeight: 700, fontFamily: selectedFont }}>
                   {profileData.full_name || 'JOHN DOE'}
                 </h1>
 
-                <div className="flex flex-wrap items-center justify-center gap-2 mb-1" style={{ fontSize: '9pt', color: '#f8f8f8', fontWeight: 500 }}>
+                <div className="flex flex-wrap items-center justify-center gap-2 mb-1" style={{ fontSize: '10pt', color: '#f8f8f8', fontWeight: 500 }}>
                   {profileData.location && <span>{profileData.location}</span>}
                   {profileData.phone && (
                     <>
@@ -235,14 +235,6 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
         {hasPage2 && (
           <div className={pageContainerClass} style={pageContainerStyle}>
             <div className="flex-1 overflow-hidden">
-              {/* Page 2 Top Header Bar */}
-              <div className="flex justify-between items-center pb-1.5 mb-3 border-b border-slate-300">
-                <span className="font-bold uppercase tracking-wider text-[10pt]" style={{ color: BANNER }}>
-                  {profileData.full_name || 'JOHN DOE'} — Professional Experience (Cont.)
-                </span>
-                <span className="text-slate-400 text-[8.5pt]">Page 2</span>
-              </div>
-
               {/* Remaining Experience */}
               {page2Experiences.length > 0 && (
                 <div 
