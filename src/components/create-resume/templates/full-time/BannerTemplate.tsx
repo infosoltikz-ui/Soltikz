@@ -13,7 +13,135 @@ const parseBoldText = (text: string) => {
   });
 };
 
-export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
+// Custom pagination calculator specifically tailored for Banner Template
+function splitBannerTemplateExperiences(
+  experiences: any[] | undefined,
+  summary?: any,
+  skills?: any[]
+) {
+  const expList = experiences || [];
+  if (expList.length === 0) {
+    return { pages: [[]] };
+  }
+
+  // Canvas height for Page 1 & 2+ leaving ~25-30px for footer
+  const TOTAL_P1_CANVAS = 1020;
+  const TOTAL_P2_CANVAS = 1020;
+
+  // Banner header uses negative margin to pull up by 38px, taking roughly 144px overall, netting 106px of padded space.
+  const headerHeight = 106;
+
+  // Summary height: Section header (36px) + mb-3 (12px) + paragraph lines (~17.4px per 115 chars)
+  const summaryArray = getSummaryArray(summary);
+  const summaryText = summaryArray.join(' ');
+  const summaryLines = summaryText ? Math.ceil(summaryText.length / 115) : 0;
+  const summaryHeight = summaryText ? 48 + (summaryLines * 17.5) : 0;
+
+  // Technical Skills height: Section header (36px) + mb-3 (12px) + category rows (~22px per row, 2 cols)
+  const skillsCount = skills?.length || 0;
+  const skillsRows = Math.ceil(skillsCount / 2);
+  const skillsHeight = skillsCount > 0 ? 48 + (skillsRows * 22) : 0;
+
+  // Remaining space on Page 1 for Experience section (subtract 44px for section header + mb-2)
+  const availableExpHeightP1 = Math.max(150, TOTAL_P1_CANVAS - (headerHeight + summaryHeight + skillsHeight) - 44);
+
+  const pages: any[][] = [];
+  let pageIdx = 0;
+  pages[0] = [];
+  let currentCanvasRemaining = availableExpHeightP1;
+
+  for (let i = 0; i < expList.length; i++) {
+    let exp = expList[i];
+    // Role (17.5) + mb-1 (4) + Company (15.8) + mb-1 (4) + margins (8) + ul mt-1 (4) = 53.3px
+    // Environment (15.5) + mb-1.5 (6) = +21.5px (~75px)
+    let roleHeaderHeight = exp.environment && exp.environment.length > 0 ? 75 : 53;
+
+    const bullets: string[] = exp.bullets || [];
+    // Estimate bullet height in BannerTemplate (9.5pt font, lineHeight 1.4, ~115 chars per line)
+    const bulletHeights = bullets.map(b => {
+      const charCount = b.length;
+      const lines = Math.max(1, Math.ceil(charCount / 115));
+      return (lines * 17.6) + 4; // 17.6px per line + 4px space-y-1
+    });
+
+    let currentExpBullets = [...bullets];
+    let currentBulletHeights = [...bulletHeights];
+
+    while (currentExpBullets.length > 0) {
+      const totalBulletsH = currentBulletHeights.reduce((sum, h) => sum + h, 0);
+      const totalH = roleHeaderHeight + totalBulletsH;
+
+      if (totalH <= currentCanvasRemaining) {
+        // Fits completely on current page
+        pages[pageIdx].push({
+          ...exp,
+          bullets: currentExpBullets
+        });
+        currentCanvasRemaining -= totalH;
+        break;
+      } else {
+        // Space available for bullets on current page
+        const spaceForB = currentCanvasRemaining - roleHeaderHeight;
+
+        // Require at least 40px space to show at least 1-2 bullets before splitting
+        if (spaceForB >= 40) {
+          let fitCount = 0;
+          let accH = 0;
+          for (let bIdx = 0; bIdx < currentBulletHeights.length; bIdx++) {
+            if (accH + currentBulletHeights[bIdx] <= spaceForB) {
+              accH += currentBulletHeights[bIdx];
+              fitCount++;
+            } else {
+              break;
+            }
+          }
+
+          if (fitCount >= 1 && fitCount < currentExpBullets.length) {
+            pages[pageIdx].push({
+              ...exp,
+              bullets: currentExpBullets.slice(0, fitCount),
+              isSplit: true
+            });
+
+            // Prepare remaining bullets for next page
+            exp = {
+              ...exp,
+              isContinued: true
+            };
+            currentExpBullets = currentExpBullets.slice(fitCount);
+            currentBulletHeights = currentBulletHeights.slice(fitCount);
+            roleHeaderHeight = 53; // Continued header height
+
+            pageIdx++;
+            pages[pageIdx] = [];
+            // Next page has SectionHeader(36) + mb-3(12) = 48px overhead
+            currentCanvasRemaining = TOTAL_P2_CANVAS - 48;
+          } else {
+            pageIdx++;
+            pages[pageIdx] = [];
+            currentCanvasRemaining = TOTAL_P2_CANVAS - 48;
+          }
+        } else {
+          pageIdx++;
+          pages[pageIdx] = [];
+          currentCanvasRemaining = TOTAL_P2_CANVAS - 48;
+        }
+      }
+    }
+  }
+
+  // Account for Education/Certifications on the last page.
+  // We conservatively deduct ~150px on the last page to ensure they fit.
+  const hasEduOrCerts = (skills && skills.length > 0) || (summary && summary.length > 0);
+  if (currentCanvasRemaining < 160) {
+     pageIdx++;
+     pages[pageIdx] = [];
+  }
+
+  return { pages };
+}
+
+  const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
   resumeData,
   profileData,
   themeColor,
@@ -65,13 +193,16 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
     );
   };
 
-    const { page1Experiences, page2Experiences } = splitExperiencesForTemplate(
+    const { pages } = splitBannerTemplateExperiences(
       resumeData.experience,
-      'banner',
-      resumeData.summary
+      resumeData.summary,
+      resumeData.skills
     );
 
-    const hasPage2 = page2Experiences.length > 0 || (resumeData.education && resumeData.education.length > 0) || (resumeData.certifications && resumeData.certifications.length > 0);
+    const totalPages = pages.length;
+    const page1Experiences = pages[0] || [];
+    const subsequentPages = pages.slice(1);
+    const hasMultiplePages = totalPages > 1 || (resumeData.education && resumeData.education.length > 0) || (resumeData.certifications && resumeData.certifications.length > 0);
 
     const pageContainerClass = "resume-page bg-white w-[794px] min-h-[1123px] h-[1123px] max-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:border-none print:break-after-page overflow-hidden";
     const pageContainerStyle: React.CSSProperties = {
@@ -214,115 +345,127 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
           </div>
 
           {/* Page 1 Footer */}
-          {hasPage2 && (
+          {hasMultiplePages && (
             <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
               <span>{profileData.full_name || 'Candidate'} — Professional Banner</span>
-              <span>Page 1 of 2</span>
+              <span>Page 1 of {totalPages}</span>
             </div>
           )}
         </div>
 
-        {/* ─── PAGE 2 ─── */}
-        {hasPage2 && (
-          <div className={pageContainerClass} style={pageContainerStyle}>
-            <div className="flex-1 overflow-hidden">
-              {/* Remaining Experience */}
-              {page2Experiences.length > 0 && (
-                <div 
-                  onClick={() => onSelectSection?.('experience')}
-                  className={getSectionWrapperClass('experience')}
-                  style={getSectionStyle('experience')}
-                >
-                  <div className="mb-3 space-y-3">
-                    {page2Experiences.map((exp: any, i: number) => (
-                      <div key={i} className="mb-2">
-                        <div className="flex items-center leading-tight mb-1" style={{ fontSize: '10.5pt', fontWeight: 700 }}>
-                          <span className="uppercase">{exp.role}</span>
-                          {exp.isContinued && <span className="italic font-normal text-slate-500 text-[9pt] ml-1">(Continued)</span>}
-                          <span className="mx-1.5 text-gray-400 font-normal">|</span>
-                          <span>{exp.duration}</span>
-                        </div>
-                        
-                        <div className="leading-tight mb-1 font-semibold text-slate-700" style={{ fontSize: '9.5pt' }}>
-                          {exp.company}
-                        </div>
+        {/* ─── PAGE 2, PAGE 3, ETC. ─── */}
+        {subsequentPages.map((pageExps, pIndex) => {
+          const pageNumber = pIndex + 2;
+          const isLastPage = pageNumber === totalPages;
 
-                        {exp.environment && exp.environment.length > 0 && !exp.isContinued && (
-                          <div className="mb-1.5 leading-snug text-slate-600" style={{ fontSize: '8.5pt' }}>
-                            <span className="font-bold italic text-black">Environment: </span>
-                            {exp.environment.join(', ')}
+          return (
+            <div key={pIndex} className={pageContainerClass} style={pageContainerStyle}>
+              <div className="flex-1 overflow-hidden">
+                {/* Experiences on this page */}
+                {pageExps.length > 0 && (
+                  <div 
+                    onClick={() => onSelectSection?.('experience')}
+                    className={getSectionWrapperClass('experience')}
+                    style={getSectionStyle('experience')}
+                  >
+                    <div className="mb-3 space-y-3">
+                      {pageExps.map((exp: any, i: number) => (
+                        <div key={i} className="mb-2">
+                          <div className="flex items-center leading-tight mb-1" style={{ fontSize: '10.5pt', fontWeight: 700 }}>
+                            <span className="uppercase">{exp.role}</span>
+                            {exp.isContinued && <span className="italic font-normal text-slate-500 text-[9pt] ml-1">(Continued)</span>}
+                            <span className="mx-1.5 text-gray-400 font-normal">|</span>
+                            <span>{exp.duration}</span>
                           </div>
-                        )}
-
-                        <ul className="list-disc pl-5 space-y-1 mt-1 m-0 text-[9.5pt]" style={{ lineHeight: '1.4' }}>
-                          {exp.bullets.map((bullet: string, j: number) => (
-                            <li key={j} className="pl-1 leading-snug text-justify">
-                              {parseBoldText(bullet)}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Education */}
-              {resumeData.education && resumeData.education.length > 0 && (
-                <div 
-                  onClick={() => onSelectSection?.('education')}
-                  className={getSectionWrapperClass('education')}
-                  style={getSectionStyle('education')}
-                >
-                  <div className="mb-3">
-                    <SectionHeader title="Education" sectionKey="education" />
-                    <div className="space-y-1.5 text-[9.5pt]">
-                      {resumeData.education.map((edu: any, i: number) => (
-                        <div key={i} className="flex justify-between items-start">
-                          <div>
-                            <div className="font-bold text-slate-800 text-[10pt]">{edu.degree}</div>
-                            <div className="text-slate-600 font-medium text-[9.5pt]">{edu.institution}</div>
+                          
+                          <div className="leading-tight mb-1 font-semibold text-slate-700" style={{ fontSize: '9.5pt' }}>
+                            {exp.company}
                           </div>
-                          <div className="font-semibold whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
+
+                          {exp.environment && exp.environment.length > 0 && !exp.isContinued && (
+                            <div className="mb-1.5 leading-snug text-slate-600" style={{ fontSize: '8.5pt' }}>
+                              <span className="font-bold italic text-black">Environment: </span>
+                              {exp.environment.join(', ')}
+                            </div>
+                          )}
+
+                          <ul className="list-disc pl-5 space-y-1 mt-1 m-0 text-[9.5pt]" style={{ lineHeight: '1.4' }}>
+                            {exp.bullets.map((bullet: string, j: number) => (
+                              <li key={j} className="pl-1 leading-snug text-justify">
+                                {parseBoldText(bullet)}
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                       ))}
                     </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Certifications */}
-              {resumeData.certifications && resumeData.certifications.length > 0 && (
-                <div 
-                  onClick={() => onSelectSection?.('certifications')}
-                  className={getSectionWrapperClass('certifications')}
-                  style={getSectionStyle('certifications')}
-                >
-                  <div className="mb-3">
-                    <SectionHeader title="Certifications" sectionKey="certifications" />
-                    <ul className="list-disc pl-5 m-0 space-y-1 text-[9.5pt]">
-                      {resumeData.certifications.map((cert: any, i: number) => (
-                        <li key={i} className="pl-1 leading-relaxed">
-                          <span className="font-bold">{cert.name}</span> — {cert.issuer} ({cert.year})
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )}
-            </div>
+                {/* Render Education and Certifications on the Last Page */}
+                {isLastPage && (
+                  <>
+                    {/* Education */}
+                    {resumeData.education && resumeData.education.length > 0 && (
+                      <div 
+                        onClick={() => onSelectSection?.('education')}
+                        className={getSectionWrapperClass('education')}
+                        style={getSectionStyle('education')}
+                      >
+                        <div className="mb-3">
+                          <SectionHeader title="Education" sectionKey="education" />
+                          <div className="space-y-1.5 text-[9.5pt]">
+                            {resumeData.education.map((edu: any, i: number) => (
+                              <div key={i} className="flex justify-between items-start">
+                                <div>
+                                  <div className="font-bold text-slate-800 text-[10pt]">{edu.degree}</div>
+                                  <div className="text-slate-600 font-medium text-[9.5pt]">{edu.institution}</div>
+                                </div>
+                                <div className="font-semibold whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
-            {/* Page 2 Footer */}
-            <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
-              <span>{profileData.full_name || 'Candidate'} — Professional Banner</span>
-              <span>Page 2 of 2</span>
+                    {/* Certifications */}
+                    {resumeData.certifications && resumeData.certifications.length > 0 && (
+                      <div 
+                        onClick={() => onSelectSection?.('certifications')}
+                        className={getSectionWrapperClass('certifications')}
+                        style={getSectionStyle('certifications')}
+                      >
+                        <div className="mb-3">
+                          <SectionHeader title="Certifications" sectionKey="certifications" />
+                          <ul className="list-disc pl-5 m-0 space-y-1 text-[9.5pt]">
+                            {resumeData.certifications.map((cert: any, i: number) => (
+                              <li key={i} className="pl-1 leading-relaxed">
+                                <span className="font-bold">{cert.name}</span> — {cert.issuer} ({cert.year})
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {/* Page N Footer */}
+              <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
+                <span>{profileData.full_name || 'Candidate'} — Professional Banner</span>
+                <span>Page {pageNumber} of {totalPages}</span>
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })}
       </div>
     );
   }
 );
+
+export const BannerTemplate = BannerTemplateComponent;
 
 
 BannerTemplate.displayName = 'BannerTemplate';
