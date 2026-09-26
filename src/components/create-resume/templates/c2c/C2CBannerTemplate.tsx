@@ -1,8 +1,8 @@
 "use client";
 import React from 'react';
-import { ResumeTemplateProps, getSummaryArray } from './types';
+import { ResumeTemplateProps, getSummaryArray } from '../types';
 
-export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
+export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
   resumeData,
   profileData,
   themeColor,
@@ -11,14 +11,14 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
   activeSectionKey,
   onSelectSection
 }, ref) => {
-  const ACCENT = themeColor || '#0f172a'; // slate-900
-  const selectedFont = fontFamily || 'Arial, Helvetica, sans-serif';
+  const BANNER = themeColor || '#1e3a8a'; // Deep blue
+  const selectedFont = fontFamily || 'Georgia, "Times New Roman", serif';
 
   const renderWithBold = (text: string) => {
     const parts = text.split(/(\*\*.*?\*\*)/g);
     return parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
-        return <strong key={i} className="text-slate-900">{part.slice(2, -2)}</strong>;
+        return <strong key={i}>{part.slice(2, -2)}</strong>;
       }
       return <span key={i}>{part}</span>;
     });
@@ -53,9 +53,9 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
   };
 
   const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey?: string }) => {
-    const headerColor = sectionStyles?.[sectionKey || '']?.color || ACCENT;
+    const headerColor = sectionStyles?.[sectionKey || '']?.color || BANNER;
     return (
-      <h2 className="uppercase font-bold border-b-2 pb-1 mb-3 mt-5 tracking-wide break-inside-avoid" style={{ fontSize: '11pt', color: headerColor, borderColor: headerColor }}>
+      <h2 className="uppercase font-bold border-b-2 mb-2 pb-0.5 mt-4 break-inside-avoid" style={{ fontSize: '12pt', color: headerColor, borderColor: headerColor }}>
         {title}
       </h2>
     );
@@ -81,12 +81,12 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
     }
   }
 
-  const pageContainerClass = "resume-page bg-white w-[794px] min-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:border-none print:break-after-page";
+  const pageContainerClass = "resume-page bg-white w-[794px] min-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:border-none print:break-after-page overflow-hidden";
   const pageContainerStyle: React.CSSProperties = {
     boxSizing: 'border-box',
     padding: '44px 50px',
     fontFamily: selectedFont,
-    color: '#1e293b', // slate-800
+    color: '#2b2b2b',
     fontSize: '9.5pt',
     lineHeight: '1.4'
   };
@@ -104,35 +104,31 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
           <SectionHeader title="Professional Experience" sectionKey="experience" />
         )}
         {expList.map((exp: any, i: number) => (
-          <div key={i} className="mb-5 break-inside-avoid">
-            <div className="flex justify-between items-center bg-slate-100 p-2 border border-slate-200 rounded-sm mb-2">
+          <div key={i} className="mb-4 break-inside-avoid">
+            <div className="flex justify-between items-start font-bold text-[10pt] text-black">
               <div>
-                <div className="font-extrabold uppercase" style={{ fontSize: '10.5pt', color: ACCENT }}>
-                  {exp.company}
-                  {exp.isContinued && <span className="italic font-normal text-slate-500 ml-2 normal-case">(Continued)</span>}
-                </div>
-                {!exp.isContinued && (
-                  <div className="font-bold text-slate-700" style={{ fontSize: '9.5pt' }}>{exp.role} {exp.location ? `| ${exp.location}` : ''}</div>
-                )}
+                {exp.company} {exp.location ? `| ${exp.location}` : ''}
+                {exp.isContinued && <span className="italic font-normal text-slate-500 ml-2 normal-case">(Continued)</span>}
               </div>
-              <div className="text-right">
-                <div className="font-bold text-slate-700" style={{ fontSize: '9.5pt' }}>{exp.duration}</div>
-              </div>
+              <div>{exp.duration}</div>
             </div>
+            {!exp.isContinued && (
+              <div className="mb-1.5 font-semibold text-slate-800 text-[10pt]">{exp.role}</div>
+            )}
 
-            <ul className="list-none mt-1.5 mb-2 m-0 space-y-1.5" style={{ fontSize: '9.5pt' }}>
+            <ul className="list-none mt-1 mb-1.5 m-0 space-y-1 text-[9.5pt]">
               {exp.bullets.map((bullet: string, j: number) => (
                 <li key={j} className="flex gap-2">
-                  <span className="shrink-0 font-bold text-slate-500 bg-slate-100 px-1.5 rounded">•</span>
+                  <span className="shrink-0 font-bold text-slate-500">•</span>
                   <span className="text-justify text-slate-800">{renderWithBold(bullet)}</span>
                 </li>
               ))}
             </ul>
 
             {!exp.isSplit && exp.environment && exp.environment.length > 0 && (
-              <div className="mt-2 bg-slate-800 text-white px-2 py-1 rounded-sm flex gap-2" style={{ fontSize: '8.5pt' }}>
-                <span className="font-bold uppercase tracking-wider shrink-0 text-slate-300">Environment: </span>
-                <span>{exp.environment.join(', ')}</span>
+              <div className="mt-2 text-[9pt]">
+                <span className="font-bold text-black italic">Environment: </span>
+                <span className="text-slate-700">{exp.environment.join(', ')}</span>
               </div>
             )}
           </div>
@@ -142,39 +138,62 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
   );
 
   return (
-    <div ref={ref} className="text-black bg-slate-50 print:bg-white flex flex-col print:block">
+    <div ref={ref} className="text-black print:bg-white bg-slate-50 flex flex-col print:block">
       
       {/* ================= PAGE 1 ================= */}
       <div className={pageContainerClass} style={pageContainerStyle}>
-        {/* Header */}
+        
+        {/* Colored Banner Header (C2C Format) */}
         <div 
           onClick={() => onSelectSection?.('header')}
-          className={getSectionWrapperClass('header')}
-          style={getSectionStyle('header')}
+          className={`cursor-pointer ${activeSectionKey === 'header' ? 'ring-2 ring-emerald-400' : ''}`}
+          style={{ 
+            backgroundColor: sectionStyles?.header?.color || BANNER, 
+            margin: '-44px -50px 24px -50px', 
+            padding: '38px 50px 20px 50px' 
+          }}
         >
-          <div className="flex justify-between items-center border-b-4 pb-4 mb-4 break-inside-avoid" style={{ borderColor: ACCENT }}>
-            <div className="flex-1">
-              <h1 className="font-extrabold uppercase m-0 leading-tight" style={{ fontSize: '24pt', color: sectionStyles?.header?.color || ACCENT }}>
-                {profileData.full_name || 'JOHN DOE'}
-              </h1>
-              
-              {(profileData.work_authorization || profileData.relocation || profileData.availability) && (
-                <div className="mt-2 font-medium" style={{ fontSize: '9.5pt', color: ACCENT }}>
-                  {[
-                    profileData.work_authorization && `Auth: ${profileData.work_authorization}`,
-                    profileData.relocation && `Reloc: ${profileData.relocation}`,
-                    profileData.availability && `Avail: ${profileData.availability}`
-                  ].filter(Boolean).join(' | ')}
-                </div>
+          <div style={getSectionStyle('header')} className="text-center">
+            <h1 className="uppercase tracking-widest mb-1.5" style={{ fontSize: '22pt', color: '#ffffff', fontWeight: 700, fontFamily: selectedFont }}>
+              {profileData.full_name || 'JOHN DOE'}
+            </h1>
+
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-1" style={{ fontSize: '9.5pt', color: '#f8f8f8', fontWeight: 500 }}>
+              {profileData.location && <span>{profileData.location}</span>}
+              {profileData.phone && (
+                <>
+                  {profileData.location && <span className="text-white/60">•</span>}
+                  <span>{profileData.phone}</span>
+                </>
+              )}
+              {profileData.email && (
+                <>
+                  {(profileData.location || profileData.phone) && <span className="text-white/60">•</span>}
+                  <span>{profileData.email}</span>
+                </>
+              )}
+              {profileData.linkedin && (
+                <>
+                  {(profileData.location || profileData.phone || profileData.email) && <span className="text-white/60">•</span>}
+                  <span>{profileData.linkedin}</span>
+                </>
               )}
             </div>
             
-            <div className="text-right flex flex-col gap-1 border-l-2 pl-4 border-slate-200" style={{ fontSize: '9pt', color: '#475569' }}>
-              {profileData.location && <div className="font-semibold text-slate-700">{profileData.location}</div>}
-              {profileData.phone && <div>{profileData.phone}</div>}
-              {profileData.email && <div>{profileData.email}</div>}
-              {profileData.linkedin && <div>{profileData.linkedin}</div>}
-            </div>
+            {(profileData.work_authorization || profileData.relocation || profileData.availability) && (
+              <div className="flex flex-wrap justify-center items-center gap-2 mt-2 pt-2 border-t border-white/20" style={{ fontSize: '9pt', color: '#e2e8f0' }}>
+                {[
+                  profileData.work_authorization && `Work Authorization: ${profileData.work_authorization}`,
+                  profileData.relocation && `Relocation: ${profileData.relocation}`,
+                  profileData.availability && `Availability: ${profileData.availability}`
+                ].filter(Boolean).map((item, index, arr) => (
+                  <React.Fragment key={index}>
+                    <span className="font-medium">{item}</span>
+                    {index < arr.length - 1 && <span className="text-white/40">|</span>}
+                  </React.Fragment>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -190,10 +209,10 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
             >
               <div className="mb-4">
                 <SectionHeader title="Professional Summary" sectionKey="summary" />
-                <ul className="list-none m-0 space-y-1 text-justify" style={{ fontSize: '9.5pt' }}>
+                <ul className="list-none m-0 space-y-1 text-justify text-[9.5pt]">
                   {summaryList.map((point: string, i: number) => (
                     <li key={i} className="flex gap-2">
-                      <span className="shrink-0 font-bold" style={{ color: ACCENT }}>•</span>
+                      <span className="shrink-0 font-bold" style={{ color: BANNER }}>•</span>
                       <span>{renderWithBold(point)}</span>
                     </li>
                   ))}
@@ -212,10 +231,10 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
           >
             <div className="mb-4">
               <SectionHeader title="Technical Skills" sectionKey="skills" />
-              <div className="grid grid-cols-1 gap-y-1 bg-slate-50 border border-slate-200 p-3 rounded-sm" style={{ fontSize: '9pt' }}>
+              <div className="space-y-0.5 text-[9.5pt]">
                 {resumeData.skills.map((skillGroup: any, i: number) => (
                   <div key={i} className="leading-snug flex">
-                    <span className="font-bold w-[190px] shrink-0 text-slate-900 border-r border-slate-300 mr-2">{skillGroup.category}:</span>
+                    <span className="font-bold w-[200px] shrink-0 text-slate-800">{skillGroup.category}:</span>
                     <span className="text-slate-700">{Array.isArray(skillGroup.items) ? skillGroup.items.join(', ') : skillGroup.items}</span>
                   </div>
                 ))}
@@ -229,7 +248,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
 
         {/* Page 1 Footer */}
         <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none">
-          <span>{profileData.full_name || 'Candidate'} — C2C Certified Professional</span>
+          <span>{profileData.full_name || 'Candidate'} — C2C Professional Banner</span>
           <span>Page 1 of 2</span>
         </div>
       </div>
@@ -239,7 +258,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
         <div>
           {/* Page 2 Header */}
           <div className="flex justify-between items-center pb-1.5 mb-3 border-b border-slate-300">
-            <span className="font-bold uppercase tracking-wider text-slate-900" style={{ fontSize: '10pt', color: ACCENT }}>
+            <span className="font-bold uppercase tracking-wider text-slate-900" style={{ fontSize: '10pt', color: BANNER }}>
               {profileData.full_name || 'JOHN DOE'} — Professional Experience (Cont.)
             </span>
             <span className="text-slate-400 text-[8.5pt]">Page 2</span>
@@ -257,14 +276,18 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
             >
               <div className="mb-4 break-inside-avoid">
                 <SectionHeader title="Education" sectionKey="education" />
-                <div className="space-y-2" style={{ fontSize: '9.5pt' }}>
+                <div className="space-y-1.5 text-[9.5pt]">
                   {resumeData.education.map((edu: any, i: number) => (
-                    <div key={i} className="flex justify-between items-start border-l-2 pl-3 border-slate-300">
+                    <div key={i} className="flex flex-col">
                       <div>
-                        <div className="font-bold text-slate-900">{edu.degree}</div>
-                        <div className="text-slate-600 font-medium">{edu.institution} {edu.location ? `| ${edu.location}` : ''}</div>
+                        <span className="font-bold text-slate-800">{edu.degree}</span> 
+                        <span className="mx-1 text-slate-400">|</span> 
+                        <span className="text-slate-700">{edu.institution}</span> 
+                        <span className="mx-1 text-slate-400">|</span> 
+                        <span className="font-semibold text-slate-800">{edu.location || 'City, State'}</span>
+                        <span className="mx-1 text-slate-400">|</span> 
+                        <span className="font-semibold text-slate-800">{edu.year}</span>
                       </div>
-                      <div className="font-semibold whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
                     </div>
                   ))}
                 </div>
@@ -281,15 +304,14 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
             >
               <div className="mb-4 break-inside-avoid">
                 <SectionHeader title="Certifications" sectionKey="certifications" />
-                <div className="grid grid-cols-1 gap-2" style={{ fontSize: '9.5pt' }}>
+                <div className="space-y-1 text-[9.5pt]">
                   {resumeData.certifications.map((cert: any, i: number) => (
-                    <div key={i} className="flex justify-between items-start border-b border-slate-100 pb-1">
-                      <div>
-                        <span className="font-bold text-slate-900">{cert.name}</span>
-                        <span className="text-slate-400 mx-1.5">|</span>
-                        <span className="text-slate-600 font-medium">{cert.issuer}</span>
-                      </div>
-                      <div className="whitespace-nowrap ml-4 text-slate-500 font-semibold">{cert.year}</div>
+                    <div key={i} className="flex">
+                      <span className="font-bold text-slate-800">{cert.name}</span>
+                      <span className="mx-1.5 text-slate-400">|</span>
+                      <span className="text-slate-700">{cert.issuer}</span>
+                      <span className="mx-1.5 text-slate-400">|</span>
+                      <span className="font-medium text-slate-600">Earned {cert.year}</span>
                     </div>
                   ))}
                 </div>
@@ -300,7 +322,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
 
         {/* Page 2 Footer */}
         <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none">
-          <span>{profileData.full_name || 'Candidate'} — C2C Certified Professional</span>
+          <span>{profileData.full_name || 'Candidate'} — C2C Professional Banner</span>
           <span>Page 2 of 2</span>
         </div>
       </div>
@@ -309,4 +331,4 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
   );
 });
 
-C2CCertifiedTemplate.displayName = 'C2CCertifiedTemplate';
+C2CBannerTemplate.displayName = 'C2CBannerTemplate';

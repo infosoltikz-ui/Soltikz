@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { ResumeTemplateProps, getSummaryArray } from './types';
+import { ResumeTemplateProps, getSummaryArray } from '../types';
 
 // Helper to parse **bold** text in bullets
 const parseBoldText = (text: string) => {
@@ -13,7 +13,7 @@ const parseBoldText = (text: string) => {
   });
 };
 
-export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
+export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
   resumeData,
   profileData,
   themeColor,
@@ -22,9 +22,8 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
   activeSectionKey,
   onSelectSection
 }, ref) => {
-  const ACCENT = themeColor || '#4a0e0e'; // Maroon/brown accent
-  const TOP_BAR_COLOR = '#F5C05E'; // Mustard yellow
-  const selectedFont = fontFamily || 'Calibri, Arial, "Times New Roman", sans-serif';
+  const BANNER = themeColor || '#96847c'; // Taupe/brown accent
+  const selectedFont = fontFamily || 'Georgia, "Times New Roman", Times, serif';
 
   const getSectionStyle = (key: string, baseStyle: React.CSSProperties = {}): React.CSSProperties => {
     const custom = sectionStyles?.[key];
@@ -54,30 +53,12 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
     }`;
   };
 
-  // Helper function to split name into first and last for two-tone styling
-  const renderName = () => {
-    const nameStr = profileData.full_name || 'JOHN DOE';
-    const parts = nameStr.trim().split(' ');
-    const headerAccent = sectionStyles?.header?.color || ACCENT;
-    if (parts.length === 1) {
-      return <span style={{ color: headerAccent }}>{parts[0]}</span>;
-    }
-    const firstName = parts[0];
-    const restName = parts.slice(1).join(' ');
-    return (
-      <>
-        <span className="text-slate-600">{firstName}</span>{' '}
-        <span style={{ color: headerAccent }}>{restName}</span>
-      </>
-    );
-  };
-
   const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey?: string }) => {
-    const headerColor = sectionStyles?.[sectionKey || '']?.color || ACCENT;
+    const headerColor = sectionStyles?.[sectionKey || '']?.color || BANNER;
     return (
       <h2 
-        className="font-bold pb-1 mb-3 mt-4 border-b border-slate-300 w-full break-inside-avoid tracking-wide" 
-        style={{ fontSize: '12pt', color: headerColor }}
+        className="mb-1.5 mt-3 pb-0.5 border-b border-slate-200 break-inside-avoid" 
+        style={{ fontSize: '11.5pt', color: headerColor, fontFamily: selectedFont, fontWeight: 600 }}
       >
         {title}
       </h2>
@@ -109,7 +90,7 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
       boxSizing: 'border-box',
       padding: '38px 48px 32px 48px',
       fontFamily: selectedFont,
-      color: '#000000',
+      color: '#2b2b2b',
       fontSize: '10.5pt',
       lineHeight: '1.5'
     };
@@ -119,51 +100,46 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
         {/* ─── PAGE 1 ─── */}
         <div className={pageContainerClass} style={pageContainerStyle}>
           <div className="flex-1 overflow-hidden">
-            {/* Top Accent Bar */}
-            <div 
-              style={{ 
-                backgroundColor: TOP_BAR_COLOR, 
-                height: '14px', 
-                margin: '-38px -48px 20px -48px', 
-                width: 'calc(100% + 96px)' 
-              }} 
-            />
-
-            {/* Header */}
+            {/* Colored Banner Header */}
             <div 
               onClick={() => onSelectSection?.('header')}
-              className={getSectionWrapperClass('header')}
-              style={getSectionStyle('header')}
+              className={`cursor-pointer ${activeSectionKey === 'header' ? 'ring-2 ring-emerald-400' : ''}`}
+              style={{ 
+                backgroundColor: sectionStyles?.header?.color || BANNER, 
+                margin: '-38px -48px 20px -48px', 
+                padding: '36px 48px 20px 48px' 
+              }}
             >
-              <div className="mb-3.5 text-center break-inside-avoid">
-                <h1 className="uppercase tracking-wider mb-1" style={{ fontSize: '24pt', fontWeight: 700 }}>
-                  {renderName()}
+              <div style={getSectionStyle('header')}>
+                <h1 className="uppercase tracking-widest mb-1.5 text-center" style={{ fontSize: '24pt', color: '#ffffff', fontWeight: 700, fontFamily: selectedFont }}>
+                  {profileData.full_name || 'JOHN DOE'}
                 </h1>
-                <div className="flex flex-wrap items-center justify-center gap-2" style={{ fontSize: '9pt' }}>
+
+                <div className="flex flex-wrap items-center justify-center gap-2 mb-1" style={{ fontSize: '10pt', color: '#f8f8f8', fontWeight: 500 }}>
                   {profileData.location && <span>{profileData.location}</span>}
                   {profileData.phone && (
                     <>
-                      {profileData.location && <span className="text-slate-400">|</span>}
+                      {profileData.location && <span>|</span>}
                       <span>{profileData.phone}</span>
                     </>
                   )}
                   {profileData.email && (
                     <>
-                      {(profileData.location || profileData.phone) && <span className="text-slate-400">|</span>}
+                      {(profileData.location || profileData.phone) && <span>|</span>}
                       <span>{profileData.email}</span>
                     </>
                   )}
-                  {profileData.linkedin && (
-                    <>
-                      {(profileData.location || profileData.phone || profileData.email) && <span className="text-slate-400">|</span>}
-                      <span>{profileData.linkedin}</span>
-                    </>
-                  )}
                 </div>
+                
+                {profileData.linkedin && (
+                  <div className="flex justify-center" style={{ fontSize: '9pt', color: '#f8f8f8', fontWeight: 500 }}>
+                    <span className="mr-1">WWW:</span> <span>{profileData.linkedin}</span>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Professional Summary */}
+            {/* Personal Summary */}
             {(() => {
               const summaryList = getSummaryArray(resumeData.summary);
               if (!summaryList || summaryList.length === 0) return null;
@@ -184,15 +160,15 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
               );
             })()}
 
-            {/* Technical Skills */}
+            {/* Skills */}
             {resumeData.skills && resumeData.skills.length > 0 && (
               <div 
-                onClick={() => onSelectSection?.('skills')}
+                onClick={() => onSelectSection?.('summary')}
                 className={getSectionWrapperClass('skills')}
                 style={getSectionStyle('skills')}
               >
                 <div className="mb-3">
-                  <SectionHeader title="Technical Skills" sectionKey="skills" />
+                  <SectionHeader title="Skills" sectionKey="skills" />
                   <div className="grid grid-cols-2 gap-x-6 gap-y-1" style={{ fontSize: '9.5pt' }}>
                     {resumeData.skills.map((skillGroup, i) => (
                       <ul key={i} className="list-disc pl-4 m-0 space-y-1">
@@ -215,20 +191,22 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
                 style={getSectionStyle('experience')}
               >
                 <div className="mb-2">
-                  <SectionHeader title="Experience" sectionKey="experience" />
+                  <SectionHeader title="Professional Experience" sectionKey="experience" />
                   {page1Experiences.map((exp: any, i: number) => (
                     <div key={i} className="mb-2">
-                      <div className="flex justify-between items-start leading-tight mb-1" style={{ fontSize: '10.5pt' }}>
-                        <div className="font-bold text-black">{exp.role}</div>
-                        <div className="text-black whitespace-nowrap ml-4 font-semibold">{exp.duration}</div>
+                      <div className="flex items-center leading-tight mb-1" style={{ fontSize: '10.5pt', fontWeight: 700 }}>
+                        <span className="uppercase">{exp.role}</span>
+                        <span className="mx-1.5 text-gray-400 font-normal">|</span>
+                        <span>{exp.duration}</span>
                       </div>
-                      <div className="flex justify-between items-start leading-tight mb-1" style={{ fontSize: '9.5pt' }}>
-                        <div className="font-bold text-slate-800">{exp.company}</div>
+                      
+                      <div className="leading-tight mb-1 font-semibold text-slate-700" style={{ fontSize: '9.5pt' }}>
+                        {exp.company}
                       </div>
 
                       {exp.environment && exp.environment.length > 0 && (
                         <div className="mb-1.5 leading-snug text-slate-600" style={{ fontSize: '8.5pt' }}>
-                          <span className="font-bold text-black">Environment: </span>
+                          <span className="font-bold italic text-black">Environment: </span>
                           {exp.environment.join(', ')}
                         </div>
                       )}
@@ -250,7 +228,7 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
           {/* Page 1 Footer */}
           {hasPage2 && (
             <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
-              <span>{profileData.full_name || 'Candidate'} — Professional Resume</span>
+              <span>{profileData.full_name || 'Candidate'} — Professional Banner</span>
               <span>Page 1 of 2</span>
             </div>
           )}
@@ -270,19 +248,20 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
                   <div className="mb-3 space-y-3">
                     {page2Experiences.map((exp: any, i: number) => (
                       <div key={i} className="mb-2">
-                        <div className="flex justify-between items-start leading-tight mb-1" style={{ fontSize: '10.5pt' }}>
-                          <div className="font-bold text-black">
-                            {exp.role} {exp.isContinued && <span className="italic font-normal text-slate-500 text-[9pt]">(Continued)</span>}
-                          </div>
-                          <div className="text-black whitespace-nowrap ml-4 font-semibold">{exp.duration}</div>
+                        <div className="flex items-center leading-tight mb-1" style={{ fontSize: '10.5pt', fontWeight: 700 }}>
+                          <span className="uppercase">{exp.role}</span>
+                          {exp.isContinued && <span className="italic font-normal text-slate-500 text-[9pt] ml-1">(Continued)</span>}
+                          <span className="mx-1.5 text-gray-400 font-normal">|</span>
+                          <span>{exp.duration}</span>
                         </div>
-                        <div className="flex justify-between items-start leading-tight mb-1" style={{ fontSize: '9.5pt' }}>
-                          <div className="font-bold text-slate-800">{exp.company}</div>
+                        
+                        <div className="leading-tight mb-1 font-semibold text-slate-700" style={{ fontSize: '9.5pt' }}>
+                          {exp.company}
                         </div>
 
                         {exp.environment && exp.environment.length > 0 && !exp.isContinued && (
                           <div className="mb-1.5 leading-snug text-slate-600" style={{ fontSize: '8.5pt' }}>
-                            <span className="font-bold text-black">Environment: </span>
+                            <span className="font-bold italic text-black">Environment: </span>
                             {exp.environment.join(', ')}
                           </div>
                         )}
@@ -308,17 +287,15 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
                   style={getSectionStyle('education')}
                 >
                   <div className="mb-3">
-                    <SectionHeader title="Education and Training" sectionKey="education" />
+                    <SectionHeader title="Education" sectionKey="education" />
                     <div className="space-y-1.5 text-[9.5pt]">
                       {resumeData.education.map((edu: any, i: number) => (
-                        <div key={i}>
-                          <div className="flex justify-between items-start mb-0.5" style={{ fontSize: '10pt' }}>
-                            <div className="font-bold">{edu.degree}</div>
-                            <div className="whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
+                        <div key={i} className="flex justify-between items-start">
+                          <div>
+                            <div className="font-bold text-slate-800 text-[10pt]">{edu.degree}</div>
+                            <div className="text-slate-600 font-medium text-[9.5pt]">{edu.institution}</div>
                           </div>
-                          <div style={{ fontSize: '9.5pt' }} className="text-slate-600">
-                            {edu.institution}
-                          </div>
+                          <div className="font-semibold whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
                         </div>
                       ))}
                     </div>
@@ -349,7 +326,7 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
 
             {/* Page 2 Footer */}
             <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
-              <span>{profileData.full_name || 'Candidate'} — Professional Resume</span>
+              <span>{profileData.full_name || 'Candidate'} — Professional Banner</span>
               <span>Page 2 of 2</span>
             </div>
           </div>
@@ -359,5 +336,5 @@ export const SidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
   }
 );
 
-SidebarTemplate.displayName = 'SidebarTemplate';
 
+BannerTemplate.displayName = 'BannerTemplate';

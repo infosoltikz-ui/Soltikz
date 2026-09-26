@@ -1,5 +1,5 @@
 import React from 'react';
-import { C2CTemplate } from '@/components/create-resume/templates/C2CTemplate';
+import { C2CTemplate } from '@/components/create-resume/templates/c2c/C2CTemplate';
 import { c2cSampleData, sampleProfileData } from '@/components/create-resume/templates/sampleData';
 
 export default function C2CTestPage() {

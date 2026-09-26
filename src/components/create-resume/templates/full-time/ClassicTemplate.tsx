@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { ResumeTemplateProps, getSummaryArray } from './types';
+import { ResumeTemplateProps, getSummaryArray } from '../types';
 
 // Helper to parse **bold** text in bullets
 const parseBoldText = (text: string) => {
@@ -13,57 +13,50 @@ const parseBoldText = (text: string) => {
   });
 };
 
-export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
-  resumeData,
-  profileData,
-  themeColor,
-  fontFamily,
-  sectionStyles,
-  activeSectionKey,
-  onSelectSection
-}, ref) => {
-  const BANNER = themeColor || '#96847c'; // Taupe/brown accent
-  const selectedFont = fontFamily || 'Georgia, "Times New Roman", Times, serif';
+export const ClassicTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(
+  ({ resumeData, profileData, themeColor, fontFamily, sectionStyles, activeSectionKey, onSelectSection }, ref) => {
+    const selectedFont = fontFamily || 'Arial, Helvetica, sans-serif';
+    const accentColor = themeColor || '#000000';
 
-  const getSectionStyle = (key: string, baseStyle: React.CSSProperties = {}): React.CSSProperties => {
-    const custom = sectionStyles?.[key];
-    if (!custom) return baseStyle;
-    return {
-      ...baseStyle,
-      ...(custom.fontFamily ? { fontFamily: custom.fontFamily } : {}),
-      ...(custom.fontSize ? { fontSize: custom.fontSize } : {}),
-      ...(custom.color ? { color: custom.color } : {}),
-      ...(custom.fontWeight ? { fontWeight: custom.fontWeight as any } : {}),
-      ...(custom.fontStyle ? { fontStyle: custom.fontStyle as any } : {}),
-      ...(custom.textDecoration ? { textDecoration: custom.textDecoration } : {}),
-      ...(custom.textTransform ? { textTransform: custom.textTransform as any } : {}),
-      ...(custom.textAlign ? { textAlign: custom.textAlign as any } : {}),
-      ...(custom.lineHeight ? { lineHeight: custom.lineHeight } : {}),
+    const getSectionStyle = (key: string, baseStyle: React.CSSProperties = {}): React.CSSProperties => {
+      const custom = sectionStyles?.[key];
+      if (!custom) return baseStyle;
+      return {
+        ...baseStyle,
+        ...(custom.fontFamily ? { fontFamily: custom.fontFamily } : {}),
+        ...(custom.fontSize ? { fontSize: custom.fontSize } : {}),
+        ...(custom.color ? { color: custom.color } : {}),
+        ...(custom.fontWeight ? { fontWeight: custom.fontWeight as any } : {}),
+        ...(custom.fontStyle ? { fontStyle: custom.fontStyle as any } : {}),
+        ...(custom.textDecoration ? { textDecoration: custom.textDecoration } : {}),
+        ...(custom.textTransform ? { textTransform: custom.textTransform as any } : {}),
+        ...(custom.textAlign ? { textAlign: custom.textAlign as any } : {}),
+        ...(custom.lineHeight ? { lineHeight: custom.lineHeight } : {}),
+      };
     };
-  };
 
-  const getSectionWrapperClass = (key: string) => {
-    const isInteractive = Boolean(onSelectSection);
-    const isActive = activeSectionKey === key;
-    if (!isInteractive) return '';
-    return `group/sec relative transition-all rounded-lg p-1.5 -m-1.5 cursor-pointer ${
-      isActive
-        ? 'ring-2 ring-emerald-500 bg-emerald-50/25 shadow-xs'
-        : 'hover:ring-1 hover:ring-emerald-400/60 hover:bg-slate-50/50'
-    }`;
-  };
+    const getSectionWrapperClass = (key: string) => {
+      const isInteractive = Boolean(onSelectSection);
+      const isActive = activeSectionKey === key;
+      if (!isInteractive) return '';
+      return `group/sec relative transition-all rounded-lg p-1.5 -m-1.5 cursor-pointer ${
+        isActive
+          ? 'ring-2 ring-emerald-500 bg-emerald-50/25 shadow-xs'
+          : 'hover:ring-1 hover:ring-emerald-400/60 hover:bg-slate-50/50'
+      }`;
+    };
 
-  const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey?: string }) => {
-    const headerColor = sectionStyles?.[sectionKey || '']?.color || BANNER;
-    return (
-      <h2 
-        className="mb-1.5 mt-3 pb-0.5 border-b border-slate-200 break-inside-avoid" 
-        style={{ fontSize: '11.5pt', color: headerColor, fontFamily: selectedFont, fontWeight: 600 }}
-      >
-        {title}
-      </h2>
-    );
-  };
+    const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey?: string }) => {
+      const headerColor = sectionStyles?.[sectionKey || '']?.color || accentColor;
+      return (
+        <h2 
+          className="font-bold uppercase pb-1 mb-2 mt-3 border-b w-full break-inside-avoid tracking-wider" 
+          style={{ fontSize: '11.5pt', color: headerColor, fontFamily: selectedFont, borderColor: headerColor }}
+        >
+          {title}
+        </h2>
+      );
+    };
 
     const experiences = resumeData.experience || [];
     let page1Experiences: any[] = [];
@@ -90,56 +83,51 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
       boxSizing: 'border-box',
       padding: '38px 48px 32px 48px',
       fontFamily: selectedFont,
-      color: '#2b2b2b',
-      fontSize: '10.5pt',
-      lineHeight: '1.5'
+      color: '#000000',
+      fontSize: '10pt',
+      lineHeight: '1.45'
     };
 
     return (
-      <div ref={ref} className="text-black print:bg-white flex flex-col items-center">
+      <div ref={ref} className="space-y-8 print:space-y-0 text-black flex flex-col items-center">
         {/* ─── PAGE 1 ─── */}
         <div className={pageContainerClass} style={pageContainerStyle}>
           <div className="flex-1 overflow-hidden">
-            {/* Colored Banner Header */}
+            {/* Header - Classic ATS Center */}
             <div 
               onClick={() => onSelectSection?.('header')}
-              className={`cursor-pointer ${activeSectionKey === 'header' ? 'ring-2 ring-emerald-400' : ''}`}
-              style={{ 
-                backgroundColor: sectionStyles?.header?.color || BANNER, 
-                margin: '-38px -48px 20px -48px', 
-                padding: '36px 48px 20px 48px' 
-              }}
+              className={getSectionWrapperClass('header')}
+              style={getSectionStyle('header')}
             >
-              <div style={getSectionStyle('header')}>
-                <h1 className="uppercase tracking-widest mb-1.5 text-center" style={{ fontSize: '24pt', color: '#ffffff', fontWeight: 700, fontFamily: selectedFont }}>
+              <div className="mb-3 text-center break-inside-avoid">
+                <h1 className="uppercase font-bold mb-1 tracking-tight" style={{ fontSize: '22pt', color: sectionStyles?.header?.color || '#000000' }}>
                   {profileData.full_name || 'JOHN DOE'}
                 </h1>
-
-                <div className="flex flex-wrap items-center justify-center gap-2 mb-1" style={{ fontSize: '10pt', color: '#f8f8f8', fontWeight: 500 }}>
+                <div className="flex flex-wrap items-center justify-center gap-2 mt-1" style={{ fontSize: '9.5pt' }}>
                   {profileData.location && <span>{profileData.location}</span>}
                   {profileData.phone && (
                     <>
-                      {profileData.location && <span>|</span>}
+                      {profileData.location && <span className="text-slate-400">|</span>}
                       <span>{profileData.phone}</span>
                     </>
                   )}
                   {profileData.email && (
                     <>
-                      {(profileData.location || profileData.phone) && <span>|</span>}
+                      {(profileData.location || profileData.phone) && <span className="text-slate-400">|</span>}
                       <span>{profileData.email}</span>
                     </>
                   )}
+                  {profileData.linkedin && (
+                    <>
+                      {(profileData.location || profileData.phone || profileData.email) && <span className="text-slate-400">|</span>}
+                      <span>{profileData.linkedin}</span>
+                    </>
+                  )}
                 </div>
-                
-                {profileData.linkedin && (
-                  <div className="flex justify-center" style={{ fontSize: '9pt', color: '#f8f8f8', fontWeight: 500 }}>
-                    <span className="mr-1">WWW:</span> <span>{profileData.linkedin}</span>
-                  </div>
-                )}
               </div>
             </div>
 
-            {/* Personal Summary */}
+            {/* Professional Summary */}
             {(() => {
               const summaryList = getSummaryArray(resumeData.summary);
               if (!summaryList || summaryList.length === 0) return null;
@@ -152,7 +140,7 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
                 >
                   <div className="mb-3">
                     <SectionHeader title="Professional Summary" sectionKey="summary" />
-                    <p className="text-justify leading-snug m-0" style={{ fontSize: '9.5pt' }}>
+                    <p className="text-justify leading-snug m-0" style={{ fontSize: '10pt' }}>
                       {parseBoldText(paragraphText)}
                     </p>
                   </div>
@@ -160,30 +148,28 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
               );
             })()}
 
-            {/* Skills */}
+            {/* Technical Skills */}
             {resumeData.skills && resumeData.skills.length > 0 && (
               <div 
-                onClick={() => onSelectSection?.('summary')}
+                onClick={() => onSelectSection?.('skills')}
                 className={getSectionWrapperClass('skills')}
                 style={getSectionStyle('skills')}
               >
                 <div className="mb-3">
-                  <SectionHeader title="Skills" sectionKey="skills" />
-                  <div className="grid grid-cols-2 gap-x-6 gap-y-1" style={{ fontSize: '9.5pt' }}>
-                    {resumeData.skills.map((skillGroup, i) => (
-                      <ul key={i} className="list-disc pl-4 m-0 space-y-1">
-                        <li className="leading-snug">
-                          <span className="font-bold">{skillGroup.category}: </span>
-                          <span>{Array.isArray(skillGroup.items) ? skillGroup.items.join(', ') : skillGroup.items}</span>
-                        </li>
-                      </ul>
+                  <SectionHeader title="Technical Skills" sectionKey="skills" />
+                  <div className="space-y-1" style={{ fontSize: '9.5pt' }}>
+                    {resumeData.skills.map((skillGroup: any, i: number) => (
+                      <div key={i} className="leading-snug">
+                        <span className="font-bold">{skillGroup.category}: </span>
+                        <span>{Array.isArray(skillGroup.items) ? skillGroup.items.join(', ') : skillGroup.items}</span>
+                      </div>
                     ))}
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Recent Experience (Page 1) */}
+            {/* Experience (Page 1 - Role 1 Bullets 1 to 3) */}
             {page1Experiences.length > 0 && (
               <div 
                 onClick={() => onSelectSection?.('experience')}
@@ -194,24 +180,26 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
                   <SectionHeader title="Professional Experience" sectionKey="experience" />
                   {page1Experiences.map((exp: any, i: number) => (
                     <div key={i} className="mb-2">
-                      <div className="flex items-center leading-tight mb-1" style={{ fontSize: '10.5pt', fontWeight: 700 }}>
-                        <span className="uppercase">{exp.role}</span>
-                        <span className="mx-1.5 text-gray-400 font-normal">|</span>
-                        <span>{exp.duration}</span>
+                      <div className="flex justify-between items-start leading-tight mb-0.5" style={{ fontSize: '11pt' }}>
+                        <div className="font-bold text-black">{exp.role}</div>
+                        <div className="whitespace-nowrap ml-4 font-bold text-black">{exp.duration}</div>
                       </div>
-                      
-                      <div className="leading-tight mb-1 font-semibold text-slate-700" style={{ fontSize: '9.5pt' }}>
-                        {exp.company}
+                      <div className="leading-tight mb-1" style={{ fontSize: '10pt' }}>
+                        <span className="font-semibold text-slate-800">
+                          {exp.company}
+                          {exp.client && ` (Client: ${exp.client})`}
+                        </span>
+                        {exp.location && <span> | {exp.location}</span>}
                       </div>
 
                       {exp.environment && exp.environment.length > 0 && (
-                        <div className="mb-1.5 leading-snug text-slate-600" style={{ fontSize: '8.5pt' }}>
-                          <span className="font-bold italic text-black">Environment: </span>
+                        <div className="mb-1.5 leading-snug text-slate-600" style={{ fontSize: '9pt' }}>
+                          <span className="font-bold text-black">Environment: </span>
                           {exp.environment.join(', ')}
                         </div>
                       )}
 
-                      <ul className="list-disc pl-5 space-y-1 mt-1 m-0 text-[9.5pt]" style={{ lineHeight: '1.4' }}>
+                      <ul className="list-disc pl-5 space-y-1.5 mt-1 m-0" style={{ fontSize: '9.5pt' }}>
                         {exp.bullets.map((bullet: string, j: number) => (
                           <li key={j} className="pl-1 leading-snug text-justify">
                             {parseBoldText(bullet)}
@@ -227,8 +215,8 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 
           {/* Page 1 Footer */}
           {hasPage2 && (
-            <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
-              <span>{profileData.full_name || 'Candidate'} — Professional Banner</span>
+            <div className="pt-2 flex justify-between items-center text-[9pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
+              <span>{profileData.full_name || 'Candidate'} — Professional Resume</span>
               <span>Page 1 of 2</span>
             </div>
           )}
@@ -245,28 +233,31 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
                   className={getSectionWrapperClass('experience')}
                   style={getSectionStyle('experience')}
                 >
-                  <div className="mb-3 space-y-3">
+                  <div className="space-y-3 mb-3">
                     {page2Experiences.map((exp: any, i: number) => (
                       <div key={i} className="mb-2">
-                        <div className="flex items-center leading-tight mb-1" style={{ fontSize: '10.5pt', fontWeight: 700 }}>
-                          <span className="uppercase">{exp.role}</span>
-                          {exp.isContinued && <span className="italic font-normal text-slate-500 text-[9pt] ml-1">(Continued)</span>}
-                          <span className="mx-1.5 text-gray-400 font-normal">|</span>
-                          <span>{exp.duration}</span>
+                        <div className="flex justify-between items-start leading-tight mb-0.5" style={{ fontSize: '11pt' }}>
+                          <div className="font-bold text-black">
+                            {exp.role} {exp.isContinued && <span className="italic font-normal text-slate-500 text-[9.5pt]">(Continued)</span>}
+                          </div>
+                          <div className="whitespace-nowrap ml-4 font-bold text-black">{exp.duration}</div>
                         </div>
-                        
-                        <div className="leading-tight mb-1 font-semibold text-slate-700" style={{ fontSize: '9.5pt' }}>
-                          {exp.company}
+                        <div className="leading-tight mb-1" style={{ fontSize: '10pt' }}>
+                          <span className="font-semibold text-slate-800">
+                            {exp.company}
+                            {exp.client && ` (Client: ${exp.client})`}
+                          </span>
+                          {exp.location && <span> | {exp.location}</span>}
                         </div>
 
                         {exp.environment && exp.environment.length > 0 && !exp.isContinued && (
-                          <div className="mb-1.5 leading-snug text-slate-600" style={{ fontSize: '8.5pt' }}>
-                            <span className="font-bold italic text-black">Environment: </span>
+                          <div className="mb-1.5 leading-snug text-slate-600" style={{ fontSize: '9pt' }}>
+                            <span className="font-bold text-black">Environment: </span>
                             {exp.environment.join(', ')}
                           </div>
                         )}
 
-                        <ul className="list-disc pl-5 space-y-1 mt-1 m-0 text-[9.5pt]" style={{ lineHeight: '1.4' }}>
+                        <ul className="list-disc pl-5 space-y-1.5 mt-1 m-0" style={{ fontSize: '9.5pt' }}>
                           {exp.bullets.map((bullet: string, j: number) => (
                             <li key={j} className="pl-1 leading-snug text-justify">
                               {parseBoldText(bullet)}
@@ -287,15 +278,15 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
                   style={getSectionStyle('education')}
                 >
                   <div className="mb-3">
-                    <SectionHeader title="Education" sectionKey="education" />
-                    <div className="space-y-1.5 text-[9.5pt]">
+                    <SectionHeader title="Education and Training" sectionKey="education" />
+                    <div className="space-y-1.5" style={{ fontSize: '9.5pt' }}>
                       {resumeData.education.map((edu: any, i: number) => (
                         <div key={i} className="flex justify-between items-start">
                           <div>
-                            <div className="font-bold text-slate-800 text-[10pt]">{edu.degree}</div>
-                            <div className="text-slate-600 font-medium text-[9.5pt]">{edu.institution}</div>
+                            <div className="font-bold text-[10pt]">{edu.degree}</div>
+                            <div className="text-slate-700 text-[9.5pt]">{edu.institution}</div>
                           </div>
-                          <div className="font-semibold whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
+                          <div className="font-bold whitespace-nowrap ml-4 text-[9.5pt]">{edu.year}</div>
                         </div>
                       ))}
                     </div>
@@ -312,9 +303,9 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
                 >
                   <div className="mb-3">
                     <SectionHeader title="Certifications" sectionKey="certifications" />
-                    <ul className="list-disc pl-5 m-0 space-y-1 text-[9.5pt]">
+                    <ul className="list-disc pl-5 m-0 space-y-1" style={{ fontSize: '9.5pt' }}>
                       {resumeData.certifications.map((cert: any, i: number) => (
-                        <li key={i} className="pl-1 leading-relaxed">
+                        <li key={i} className="pl-1 leading-snug">
                           <span className="font-bold">{cert.name}</span> — {cert.issuer} ({cert.year})
                         </li>
                       ))}
@@ -325,8 +316,8 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
             </div>
 
             {/* Page 2 Footer */}
-            <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
-              <span>{profileData.full_name || 'Candidate'} — Professional Banner</span>
+            <div className="pt-2 flex justify-between items-center text-[9pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
+              <span>{profileData.full_name || 'Candidate'} — Professional Resume</span>
               <span>Page 2 of 2</span>
             </div>
           </div>
@@ -336,5 +327,4 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
   }
 );
 
-
-BannerTemplate.displayName = 'BannerTemplate';
+ClassicTemplate.displayName = 'ClassicTemplate';

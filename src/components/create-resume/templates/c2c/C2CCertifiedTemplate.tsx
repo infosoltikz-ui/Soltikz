@@ -1,8 +1,8 @@
 "use client";
 import React from 'react';
-import { ResumeTemplateProps, getSummaryArray } from './types';
+import { ResumeTemplateProps, getSummaryArray } from '../types';
 
-export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
+export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
   resumeData,
   profileData,
   themeColor,
@@ -11,15 +11,14 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
   activeSectionKey,
   onSelectSection
 }, ref) => {
-  const ACCENT = themeColor || '#0284c7'; // sky-600
-  const TOP_BAR_COLOR = ACCENT;
+  const ACCENT = themeColor || '#0f172a'; // slate-900
   const selectedFont = fontFamily || 'Arial, Helvetica, sans-serif';
 
   const renderWithBold = (text: string) => {
     const parts = text.split(/(\*\*.*?\*\*)/g);
     return parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
-        return <strong key={i}>{part.slice(2, -2)}</strong>;
+        return <strong key={i} className="text-slate-900">{part.slice(2, -2)}</strong>;
       }
       return <span key={i}>{part}</span>;
     });
@@ -56,12 +55,9 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
   const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey?: string }) => {
     const headerColor = sectionStyles?.[sectionKey || '']?.color || ACCENT;
     return (
-      <div className="flex items-center mb-3 mt-5 break-inside-avoid">
-        <h2 className="uppercase font-bold tracking-wider m-0" style={{ fontSize: '11pt', color: headerColor }}>
-          {title}
-        </h2>
-        <div className="ml-4 flex-grow border-t-2" style={{ borderColor: headerColor, opacity: 0.2 }} />
-      </div>
+      <h2 className="uppercase font-bold border-b-2 pb-1 mb-3 mt-5 tracking-wide break-inside-avoid" style={{ fontSize: '11pt', color: headerColor, borderColor: headerColor }}>
+        {title}
+      </h2>
     );
   };
 
@@ -85,12 +81,12 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
     }
   }
 
-  const pageContainerClass = "resume-page bg-white w-[794px] min-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black overflow-hidden relative flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:border-none print:break-after-page";
+  const pageContainerClass = "resume-page bg-white w-[794px] min-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:border-none print:break-after-page";
   const pageContainerStyle: React.CSSProperties = {
     boxSizing: 'border-box',
     padding: '44px 50px',
     fontFamily: selectedFont,
-    color: '#000000',
+    color: '#1e293b', // slate-800
     fontSize: '9.5pt',
     lineHeight: '1.4'
   };
@@ -107,38 +103,40 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
         ) : (
           <SectionHeader title="Professional Experience" sectionKey="experience" />
         )}
-        <div className="pl-[20px]">
-          {expList.map((exp: any, i: number) => (
-            <div key={i} className="mb-5 break-inside-avoid relative">
-              <div className="flex justify-between items-start leading-tight mb-0.5">
-                <div className="font-bold text-black uppercase" style={{ fontSize: '10.5pt', color: ACCENT }}>
-                  {exp.company} {exp.location ? `| ${exp.location}` : ''}
+        {expList.map((exp: any, i: number) => (
+          <div key={i} className="mb-5 break-inside-avoid">
+            <div className="flex justify-between items-center bg-slate-100 p-2 border border-slate-200 rounded-sm mb-2">
+              <div>
+                <div className="font-extrabold uppercase" style={{ fontSize: '10.5pt', color: ACCENT }}>
+                  {exp.company}
                   {exp.isContinued && <span className="italic font-normal text-slate-500 ml-2 normal-case">(Continued)</span>}
                 </div>
-                <div className="font-bold text-slate-500 whitespace-nowrap ml-4 text-[9.5pt]">{exp.duration}</div>
+                {!exp.isContinued && (
+                  <div className="font-bold text-slate-700" style={{ fontSize: '9.5pt' }}>{exp.role} {exp.location ? `| ${exp.location}` : ''}</div>
+                )}
               </div>
-              {!exp.isContinued && (
-                <div className="font-bold text-black mb-1.5" style={{ fontSize: '10pt' }}>{exp.role}</div>
-              )}
-
-              <ul className="list-none mt-1.5 mb-2 m-0 space-y-1.5" style={{ fontSize: '9.5pt' }}>
-                {exp.bullets.map((bullet: string, j: number) => (
-                  <li key={j} className="flex gap-2 text-justify">
-                    <span className="shrink-0 font-bold text-slate-400">•</span>
-                    <span className="text-slate-800">{renderWithBold(bullet)}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {!exp.isSplit && exp.environment && exp.environment.length > 0 && (
-                <div className="mt-2 text-[9pt] border-l-2 pl-2" style={{ borderColor: ACCENT }}>
-                  <span className="font-bold text-black uppercase tracking-wider text-[8pt]">Environment: </span>
-                  <span className="text-slate-600">{exp.environment.join(', ')}</span>
-                </div>
-              )}
+              <div className="text-right">
+                <div className="font-bold text-slate-700" style={{ fontSize: '9.5pt' }}>{exp.duration}</div>
+              </div>
             </div>
-          ))}
-        </div>
+
+            <ul className="list-none mt-1.5 mb-2 m-0 space-y-1.5" style={{ fontSize: '9.5pt' }}>
+              {exp.bullets.map((bullet: string, j: number) => (
+                <li key={j} className="flex gap-2">
+                  <span className="shrink-0 font-bold text-slate-500 bg-slate-100 px-1.5 rounded">•</span>
+                  <span className="text-justify text-slate-800">{renderWithBold(bullet)}</span>
+                </li>
+              ))}
+            </ul>
+
+            {!exp.isSplit && exp.environment && exp.environment.length > 0 && (
+              <div className="mt-2 bg-slate-800 text-white px-2 py-1 rounded-sm flex gap-2" style={{ fontSize: '8.5pt' }}>
+                <span className="font-bold uppercase tracking-wider shrink-0 text-slate-300">Environment: </span>
+                <span>{exp.environment.join(', ')}</span>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -148,44 +146,34 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
       
       {/* ================= PAGE 1 ================= */}
       <div className={pageContainerClass} style={pageContainerStyle}>
-        
-        {/* Top Accent Bar */}
-        <div 
-          style={{ 
-            backgroundColor: sectionStyles?.header?.color || TOP_BAR_COLOR, 
-            height: '12px', 
-            margin: '-44px -50px 30px -50px', 
-            width: 'calc(100% + 100px)' 
-          }} 
-        />
-
         {/* Header */}
         <div 
           onClick={() => onSelectSection?.('header')}
           className={getSectionWrapperClass('header')}
           style={getSectionStyle('header')}
         >
-          <div className="flex justify-between items-end mb-4 break-inside-avoid">
+          <div className="flex justify-between items-center border-b-4 pb-4 mb-4 break-inside-avoid" style={{ borderColor: ACCENT }}>
             <div className="flex-1">
-              <h1 className="font-extrabold uppercase tracking-tight m-0" style={{ fontSize: '26pt', color: '#111827', lineHeight: 1 }}>
+              <h1 className="font-extrabold uppercase m-0 leading-tight" style={{ fontSize: '24pt', color: sectionStyles?.header?.color || ACCENT }}>
                 {profileData.full_name || 'JOHN DOE'}
               </h1>
               
               {(profileData.work_authorization || profileData.relocation || profileData.availability) && (
-                <div className="mt-3 font-semibold uppercase tracking-wider" style={{ fontSize: '8.5pt', color: ACCENT }}>
+                <div className="mt-2 font-medium" style={{ fontSize: '9.5pt', color: ACCENT }}>
                   {[
                     profileData.work_authorization && `Auth: ${profileData.work_authorization}`,
                     profileData.relocation && `Reloc: ${profileData.relocation}`,
                     profileData.availability && `Avail: ${profileData.availability}`
-                  ].filter(Boolean).join('  |  ')}
+                  ].filter(Boolean).join(' | ')}
                 </div>
               )}
             </div>
-            <div className="text-right text-[9pt] font-medium text-slate-600 flex flex-col items-end gap-0.5 border-r-4 pr-3" style={{ borderColor: ACCENT }}>
-              {profileData.location && <span>{profileData.location}</span>}
-              {profileData.phone && <span>{profileData.phone}</span>}
-              {profileData.email && <span>{profileData.email}</span>}
-              {profileData.linkedin && <span>{profileData.linkedin}</span>}
+            
+            <div className="text-right flex flex-col gap-1 border-l-2 pl-4 border-slate-200" style={{ fontSize: '9pt', color: '#475569' }}>
+              {profileData.location && <div className="font-semibold text-slate-700">{profileData.location}</div>}
+              {profileData.phone && <div>{profileData.phone}</div>}
+              {profileData.email && <div>{profileData.email}</div>}
+              {profileData.linkedin && <div>{profileData.linkedin}</div>}
             </div>
           </div>
         </div>
@@ -202,7 +190,7 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
             >
               <div className="mb-4">
                 <SectionHeader title="Professional Summary" sectionKey="summary" />
-                <ul className="list-none m-0 space-y-1.5 text-justify pl-[20px]" style={{ fontSize: '9.5pt' }}>
+                <ul className="list-none m-0 space-y-1 text-justify" style={{ fontSize: '9.5pt' }}>
                   {summaryList.map((point: string, i: number) => (
                     <li key={i} className="flex gap-2">
                       <span className="shrink-0 font-bold" style={{ color: ACCENT }}>•</span>
@@ -224,10 +212,10 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
           >
             <div className="mb-4">
               <SectionHeader title="Technical Skills" sectionKey="skills" />
-              <div className="space-y-1 pl-[20px]" style={{ fontSize: '9.5pt' }}>
+              <div className="grid grid-cols-1 gap-y-1 bg-slate-50 border border-slate-200 p-3 rounded-sm" style={{ fontSize: '9pt' }}>
                 {resumeData.skills.map((skillGroup: any, i: number) => (
                   <div key={i} className="leading-snug flex">
-                    <span className="font-bold w-[180px] shrink-0 text-black">{skillGroup.category}:</span>
+                    <span className="font-bold w-[190px] shrink-0 text-slate-900 border-r border-slate-300 mr-2">{skillGroup.category}:</span>
                     <span className="text-slate-700">{Array.isArray(skillGroup.items) ? skillGroup.items.join(', ') : skillGroup.items}</span>
                   </div>
                 ))}
@@ -241,7 +229,7 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
 
         {/* Page 1 Footer */}
         <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none">
-          <span>{profileData.full_name || 'Candidate'} — C2C Left-Aligned Resume</span>
+          <span>{profileData.full_name || 'Candidate'} — C2C Certified Professional</span>
           <span>Page 1 of 2</span>
         </div>
       </div>
@@ -249,19 +237,9 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
       {/* ================= PAGE 2 ================= */}
       <div className={pageContainerClass} style={pageContainerStyle}>
         <div>
-          {/* Top Accent Bar - Page 2 */}
-          <div 
-            style={{ 
-              backgroundColor: sectionStyles?.header?.color || TOP_BAR_COLOR, 
-              height: '12px', 
-              margin: '-44px -50px 22px -50px', 
-              width: 'calc(100% + 100px)' 
-            }} 
-          />
-          
-          {/* Page 2 Continuation Header */}
+          {/* Page 2 Header */}
           <div className="flex justify-between items-center pb-1.5 mb-3 border-b border-slate-300">
-            <span className="font-bold uppercase tracking-wider text-slate-900" style={{ fontSize: '10pt' }}>
+            <span className="font-bold uppercase tracking-wider text-slate-900" style={{ fontSize: '10pt', color: ACCENT }}>
               {profileData.full_name || 'JOHN DOE'} — Professional Experience (Cont.)
             </span>
             <span className="text-slate-400 text-[8.5pt]">Page 2</span>
@@ -279,14 +257,14 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
             >
               <div className="mb-4 break-inside-avoid">
                 <SectionHeader title="Education" sectionKey="education" />
-                <div className="space-y-2 pl-[20px]" style={{ fontSize: '9.5pt' }}>
+                <div className="space-y-2" style={{ fontSize: '9.5pt' }}>
                   {resumeData.education.map((edu: any, i: number) => (
-                    <div key={i} className="flex justify-between items-start">
+                    <div key={i} className="flex justify-between items-start border-l-2 pl-3 border-slate-300">
                       <div>
-                        <div className="font-bold text-black">{edu.degree}</div>
-                        <div className="text-slate-600">{edu.institution} {edu.location ? `| ${edu.location}` : ''}</div>
+                        <div className="font-bold text-slate-900">{edu.degree}</div>
+                        <div className="text-slate-600 font-medium">{edu.institution} {edu.location ? `| ${edu.location}` : ''}</div>
                       </div>
-                      <div className="font-semibold whitespace-nowrap ml-4 text-[9pt] text-slate-500">{edu.year}</div>
+                      <div className="font-semibold whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
                     </div>
                   ))}
                 </div>
@@ -303,14 +281,15 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
             >
               <div className="mb-4 break-inside-avoid">
                 <SectionHeader title="Certifications" sectionKey="certifications" />
-                <div className="grid grid-cols-1 gap-1.5 pl-[20px]" style={{ fontSize: '9.5pt' }}>
+                <div className="grid grid-cols-1 gap-2" style={{ fontSize: '9.5pt' }}>
                   {resumeData.certifications.map((cert: any, i: number) => (
-                    <div key={i} className="flex">
-                      <span className="font-bold text-black">{cert.name}</span>
-                      <span className="mx-2 text-slate-300">|</span>
-                      <span className="text-slate-600">{cert.issuer}</span>
-                      <span className="mx-2 text-slate-300">|</span>
-                      <span className="font-medium text-slate-500">{cert.year}</span>
+                    <div key={i} className="flex justify-between items-start border-b border-slate-100 pb-1">
+                      <div>
+                        <span className="font-bold text-slate-900">{cert.name}</span>
+                        <span className="text-slate-400 mx-1.5">|</span>
+                        <span className="text-slate-600 font-medium">{cert.issuer}</span>
+                      </div>
+                      <div className="whitespace-nowrap ml-4 text-slate-500 font-semibold">{cert.year}</div>
                     </div>
                   ))}
                 </div>
@@ -321,7 +300,7 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
 
         {/* Page 2 Footer */}
         <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none">
-          <span>{profileData.full_name || 'Candidate'} — C2C Left-Aligned Resume</span>
+          <span>{profileData.full_name || 'Candidate'} — C2C Certified Professional</span>
           <span>Page 2 of 2</span>
         </div>
       </div>
@@ -330,4 +309,4 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
   );
 });
 
-C2CSidebarTemplate.displayName = 'C2CSidebarTemplate';
+C2CCertifiedTemplate.displayName = 'C2CCertifiedTemplate';

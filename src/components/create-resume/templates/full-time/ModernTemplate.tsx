@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { ResumeTemplateProps, getSummaryArray } from './types';
+import { ResumeTemplateProps, getSummaryArray } from '../types';
 
 export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
   resumeData,
@@ -46,11 +46,10 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
     const isInteractive = Boolean(onSelectSection);
     const isActive = activeSectionKey === key;
     if (!isInteractive) return '';
-    return `group/sec relative transition-all rounded-lg p-1.5 -m-1.5 cursor-pointer ${
-      isActive
-        ? 'ring-2 ring-emerald-500 bg-emerald-50/25 shadow-xs'
-        : 'hover:ring-1 hover:ring-emerald-400/60 hover:bg-slate-50/50'
-    }`;
+    return `group/sec relative transition-all rounded-lg p-1.5 -m-1.5 cursor-pointer ${isActive
+      ? 'ring-2 ring-emerald-500 bg-emerald-50/25 shadow-xs'
+      : 'hover:ring-1 hover:ring-emerald-400/60 hover:bg-slate-50/50'
+      }`;
   };
 
   const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey?: string }) => {
@@ -102,7 +101,7 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
       <div className={pageContainerClass} style={pageContainerStyle}>
         <div className="flex-1 overflow-hidden">
           {/* Header */}
-          <div 
+          <div
             onClick={() => onSelectSection?.('header')}
             className={getSectionWrapperClass('header')}
             style={getSectionStyle('header')}
@@ -141,7 +140,7 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
             if (!summaryList || summaryList.length === 0) return null;
             const paragraphText = summaryList.join(' ');
             return (
-              <div 
+              <div
                 onClick={() => onSelectSection?.('summary')}
                 className={getSectionWrapperClass('summary')}
                 style={getSectionStyle('summary')}
@@ -158,7 +157,7 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 
           {/* Skills */}
           {resumeData.skills && resumeData.skills.length > 0 && (
-            <div 
+            <div
               onClick={() => onSelectSection?.('skills')}
               className={getSectionWrapperClass('skills')}
               style={getSectionStyle('skills')}
@@ -181,7 +180,7 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 
           {/* Recent Experience (Page 1) */}
           {page1Experiences.length > 0 && (
-            <div 
+            <div
               onClick={() => onSelectSection?.('experience')}
               className={getSectionWrapperClass('experience')}
               style={getSectionStyle('experience')}
@@ -234,7 +233,7 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
           <div className="flex-1 overflow-hidden">
             {/* Remaining Experience */}
             {page2Experiences.length > 0 && (
-              <div 
+              <div
                 onClick={() => onSelectSection?.('experience')}
                 className={getSectionWrapperClass('experience')}
                 style={getSectionStyle('experience')}
@@ -274,7 +273,7 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 
             {/* Education */}
             {resumeData.education && resumeData.education.length > 0 && (
-              <div 
+              <div
                 onClick={() => onSelectSection?.('education')}
                 className={getSectionWrapperClass('education')}
                 style={getSectionStyle('education')}
@@ -298,7 +297,7 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 
             {/* Certifications */}
             {resumeData.certifications && resumeData.certifications.length > 0 && (
-              <div 
+              <div
                 onClick={() => onSelectSection?.('certifications')}
                 className={getSectionWrapperClass('certifications')}
                 style={getSectionStyle('certifications')}

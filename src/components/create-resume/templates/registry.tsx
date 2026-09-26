@@ -4,16 +4,16 @@ import type { ResumeTemplateProps } from './types';
 // ─── LAZY LOAD ALL TEMPLATES ─────────────────────────────────────────────────
 // Each template is loaded on-demand only when actually rendered.
 // This reduces initial JS bundle size significantly.
-const ResumeRenderer   = React.lazy(() => import('../ResumeRenderer').then(m => ({ default: m.ResumeRenderer })));
-const ModernTemplate   = React.lazy(() => import('./ModernTemplate').then(m => ({ default: m.ModernTemplate })));
-const BannerTemplate   = React.lazy(() => import('./BannerTemplate').then(m => ({ default: m.BannerTemplate })));
-const CertifiedTemplate = React.lazy(() => import('./CertifiedTemplate').then(m => ({ default: m.CertifiedTemplate })));
-const SidebarTemplate  = React.lazy(() => import('./SidebarTemplate').then(m => ({ default: m.SidebarTemplate })));
-const C2CTemplate      = React.lazy(() => import('./C2CTemplate').then(m => ({ default: m.C2CTemplate })));
-const C2CBannerTemplate    = React.lazy(() => import('./C2CBannerTemplate').then(m => ({ default: m.C2CBannerTemplate })));
-const C2CModernTemplate    = React.lazy(() => import('./C2CModernTemplate').then(m => ({ default: m.C2CModernTemplate })));
-const C2CCertifiedTemplate = React.lazy(() => import('./C2CCertifiedTemplate').then(m => ({ default: m.C2CCertifiedTemplate })));
-const C2CSidebarTemplate   = React.lazy(() => import('./C2CSidebarTemplate').then(m => ({ default: m.C2CSidebarTemplate })));
+const ClassicTemplate  = React.lazy(() => import('./full-time/ClassicTemplate').then(m => ({ default: m.ClassicTemplate })));
+const ModernTemplate   = React.lazy(() => import('./full-time/ModernTemplate').then(m => ({ default: m.ModernTemplate })));
+const BannerTemplate   = React.lazy(() => import('./full-time/BannerTemplate').then(m => ({ default: m.BannerTemplate })));
+const CertifiedTemplate = React.lazy(() => import('./full-time/CertifiedTemplate').then(m => ({ default: m.CertifiedTemplate })));
+const SidebarTemplate  = React.lazy(() => import('./full-time/SidebarTemplate').then(m => ({ default: m.SidebarTemplate })));
+const C2CTemplate      = React.lazy(() => import('./c2c/C2CTemplate').then(m => ({ default: m.C2CTemplate })));
+const C2CBannerTemplate    = React.lazy(() => import('./c2c/C2CBannerTemplate').then(m => ({ default: m.C2CBannerTemplate })));
+const C2CModernTemplate    = React.lazy(() => import('./c2c/C2CModernTemplate').then(m => ({ default: m.C2CModernTemplate })));
+const C2CCertifiedTemplate = React.lazy(() => import('./c2c/C2CCertifiedTemplate').then(m => ({ default: m.C2CCertifiedTemplate })));
+const C2CSidebarTemplate   = React.lazy(() => import('./c2c/C2CSidebarTemplate').then(m => ({ default: m.C2CSidebarTemplate })));
 
 export interface ResumeTemplateMeta {
   id: string;
@@ -27,7 +27,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     id: 'classic',
     name: 'Classic ATS',
     description: 'Strictly black & white, highly readable standard layout optimized for Applicant Tracking Systems.',
-    component: ResumeRenderer,
+    component: ClassicTemplate,
   },
   {
     id: 'modern',

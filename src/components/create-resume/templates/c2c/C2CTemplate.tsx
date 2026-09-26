@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { ResumeTemplateProps, getSummaryArray } from './types';
+import { ResumeTemplateProps, getSummaryArray } from '../types';
 
 export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
   resumeData,
