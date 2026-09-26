@@ -25,22 +25,22 @@ function splitBannerTemplateExperiences(
   }
 
   // Canvas height for Page 1 & 2+ leaving ~25-30px for footer and extra safety margin
-  const TOTAL_P1_CANVAS = 1000;
-  const TOTAL_P2_CANVAS = 1000;
+  const TOTAL_P1_CANVAS = 940;
+  const TOTAL_P2_CANVAS = 960;
 
   // Banner header uses negative margin to pull up by 38px, taking roughly 144px overall, netting 106px of padded space.
   const headerHeight = 106;
 
-  // Summary height: Section header (36px) + mb-3 (12px) + paragraph lines (~17.4px per 95 chars for serif)
+  // Summary height: Section header (36px) + mb-3 (12px) + paragraph lines (~17.4px per 85 chars for serif)
   const summaryArray = getSummaryArray(summary);
   const summaryText = summaryArray.join(' ');
-  const summaryLines = summaryText ? Math.ceil(summaryText.length / 95) : 0;
+  const summaryLines = summaryText ? Math.ceil(summaryText.length / 85) : 0;
   const summaryHeight = summaryText ? 48 + (summaryLines * 17.5) : 0;
 
-  // Technical Skills height: Section header (36px) + mb-3 (12px) + category rows (~22px per row, 2 cols)
+  // Technical Skills height: Section header (36px) + mb-3 (12px) + category rows (~24px per row, 2 cols)
   const skillsCount = skills?.length || 0;
   const skillsRows = Math.ceil(skillsCount / 2);
-  const skillsHeight = skillsCount > 0 ? 48 + (skillsRows * 22) : 0;
+  const skillsHeight = skillsCount > 0 ? 48 + (skillsRows * 24) : 0;
 
   // Remaining space on Page 1 for Experience section (subtract 44px for section header + mb-2)
   const availableExpHeightP1 = Math.max(150, TOTAL_P1_CANVAS - (headerHeight + summaryHeight + skillsHeight) - 44);
@@ -54,13 +54,17 @@ function splitBannerTemplateExperiences(
     let exp = expList[i];
     // Role (17.5) + mb-1 (4) + Company (15.8) + mb-1 (4) + margins (8) + ul mt-1 (4) = 53.3px
     // Environment (15.5) + mb-1.5 (6) = +21.5px (~75px)
+    // Add 12px to account for space-y-3 between experiences (if not the first one on the page)
     let roleHeaderHeight = exp.environment && exp.environment.length > 0 ? 75 : 53;
+    if (pages[pageIdx].length > 0) {
+      roleHeaderHeight += 12; 
+    }
 
     const bullets: string[] = exp.bullets || [];
-    // Estimate bullet height in BannerTemplate (9.5pt font, lineHeight 1.4, ~95 chars per line for Serif)
+    // Estimate bullet height in BannerTemplate (9.5pt font, lineHeight 1.4, ~80 chars per line for Georgia/Serif)
     const bulletHeights = bullets.map(b => {
       const charCount = b.length;
-      const lines = Math.max(1, Math.ceil(charCount / 95));
+      const lines = Math.max(1, Math.ceil(charCount / 80));
       return (lines * 17.6) + 4; // 17.6px per line + 4px space-y-1
     });
 
