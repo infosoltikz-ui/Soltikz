@@ -13,28 +13,53 @@ export const sampleProfileData: ProfileData = {
 
 export const sampleResumeData: ResumeData = {
   summary: [
-    'Results-driven Senior Full Stack Software Engineer with 8+ years of experience in designing, architecting, and deploying enterprise-grade web applications and scalable cloud solutions.',
-    'Proven expertise across React, Next.js, TypeScript, Node.js, PostgreSQL, and AWS (EC2, S3, Lambda, Docker) with a strong focus on high performance, security, and responsive UI design.',
-    'Spearheaded complex microservices migrations, optimized database indexing to slash API response latency by 45%, and automated CI/CD deployment pipelines using GitHub Actions.',
-    'Adept at translating intricate business requirements into high-performing, ATS-compliant technical architectures while collaborating seamlessly across agile engineering teams.'
+    'Senior Full Stack Software Engineer with 8+ years of experience in designing, architecting, and deploying enterprise-grade web applications and scalable cloud solutions.',
+    'Demonstrates strong hands-on depth in React, Next.js, TypeScript, Node.js, PostgreSQL, and AWS cloud infrastructure, with secondary capabilities in CI/CD automation and containerized microservices.',
+    'Spearheaded complex architectural migrations that reduced system downtime by 99.9% and slashed API response latency by 45% across 1.2M monthly active users.',
+    'Experienced across high-growth enterprise environments, agile engineering squads, and cross-functional product delivery teams.',
+    'Proven track record of mentoring 6+ engineers, authoring technical design documentation, and driving engineering excellence across the organization.'
   ],
   skills: [
     {
-      category: 'Core Languages & Frameworks',
-      items: ['JavaScript', 'TypeScript', 'Python', 'React', 'Next.js', 'Node.js', 'Express.js', 'HTML5', 'CSS3', 'Tailwind CSS'],
+      category: 'Core Domain Skills',
+      items: ['Full Stack Development', 'Cloud Architecture', 'Microservices', 'RESTful API Design', 'System Design', 'Agile Engineering']
     },
     {
-      category: 'Databases & Cloud Platforms',
-      items: ['AWS (EC2, S3, Lambda, Docker)', 'PostgreSQL', 'MongoDB', 'Redis'],
+      category: 'Tools & Platforms',
+      items: ['Git', 'GitHub Actions', 'Docker', 'Kubernetes', 'Jira', 'Postman', 'VS Code']
     },
     {
-      category: 'Tools, DevOps & CI/CD',
-      items: ['Git', 'GitHub Actions', 'Jest', 'Cypress', 'Vite', 'Webpack', 'Linux', 'Tailwind CSS'],
+      category: 'Programming & Scripting',
+      items: ['TypeScript', 'JavaScript (ES6+)', 'Python', 'Java', 'SQL', 'Bash', 'HTML5/CSS3']
     },
     {
-      category: 'Architecture & Methodologies',
-      items: ['Microservices', 'RESTful APIs', 'GraphQL', 'Serverless', 'Agile/Scrum', 'Test-Driven Development (TDD)', 'System Design'],
+      category: 'Databases & Data Handling',
+      items: ['PostgreSQL', 'MongoDB', 'Redis', 'Elasticsearch', 'DynamoDB', 'MySQL']
     },
+    {
+      category: 'Cloud & Infrastructure',
+      items: ['AWS (EC2, S3, Lambda, ECS)', 'Google Cloud Platform (GCP)', 'Terraform', 'Nginx', 'Linux (RHEL, Ubuntu)']
+    },
+    {
+      category: 'Frameworks & Methodologies',
+      items: ['React', 'Next.js', 'Node.js', 'Express.js', 'Django', 'Tailwind CSS', 'Redux Toolkit']
+    },
+    {
+      category: 'Testing & Quality',
+      items: ['Jest', 'Cypress', 'Playwright', 'React Testing Library', 'SonarQube', 'Postman API Testing']
+    },
+    {
+      category: 'Reporting & Visualization',
+      items: ['Grafana', 'Prometheus', 'Datadog', 'D3.js', 'Chart.js', 'Google Analytics']
+    },
+    {
+      category: 'Collaboration & Workflow',
+      items: ['GitHub', 'GitLab', 'Confluence', 'Slack', 'Agile (Scrum/Kanban)', 'CI/CD Pipelines']
+    },
+    {
+      category: 'Operating Systems & Environments',
+      items: ['Linux', 'Unix', 'macOS', 'Windows Server', 'Docker Containers']
+    }
   ],
   experience: [
     {
@@ -43,14 +68,14 @@ export const sampleResumeData: ResumeData = {
       duration: '03/2022 - Present',
       environment: ['React', 'Next.js', 'Node.js', 'TypeScript', 'AWS', 'PostgreSQL', 'Docker'],
       bullets: [
-        'Architected scalable cloud microservices using Node.js, TypeScript, and AWS Lambda, reducing backend infrastructure overhead by 32% across 1.2M monthly transactions.',
-        'Engineered high-performance responsive web interfaces using Next.js, React, and Tailwind CSS, improving Core Web Vitals and lowering page load times by 45%.',
-        'Designed resilient PostgreSQL and Redis caching layers, eliminating query bottlenecks and improving concurrent request throughput by 60%.',
-        'Automated end-to-end CI/CD delivery pipelines using Docker and GitHub Actions, cutting release deployment cycles from 4 hours to under 20 minutes.',
-        'Spearheaded the integration of GraphQL and RESTful APIs, streamlining front-end data fetching and reducing payload sizes across mobile and web clients by 35%.',
-        'Established robust unit, integration, and E2E testing frameworks with Jest and Cypress, elevating overall code coverage from 55% to 92%.',
-        'Enforced strict OAuth2 and JWT authentication protocols, protecting user data privacy and ensuring compliance with international SOC2 and HIPAA standards.',
-        'Mentored and onboarded 6 software engineers, conducting daily code reviews, establishing best practices, and fostering an agile test-driven development environment.'
+        'Architected scalable cloud microservices using **Node.js**, **TypeScript**, and **AWS Lambda**, reducing backend infrastructure overhead by **32%** across 1.2M monthly transactions.',
+        'Engineered high-performance responsive web interfaces using **Next.js**, **React**, and **Tailwind CSS**, improving Core Web Vitals and lowering page load times by **45%**.',
+        'Designed resilient **PostgreSQL** and **Redis** caching layers, eliminating query bottlenecks and improving concurrent request throughput by **60%**.',
+        'Automated end-to-end **CI/CD** delivery pipelines using **Docker** and **GitHub Actions**, cutting release deployment cycles from 4 hours to under **20 minutes**.',
+        'Spearheaded the integration of **GraphQL** and **RESTful APIs**, streamlining front-end data fetching and reducing payload sizes across mobile and web clients by **35%**.',
+        'Established robust unit, integration, and E2E testing frameworks with **Jest** and **Cypress**, elevating overall code coverage from 55% to **92%**.',
+        'Enforced strict **OAuth2** and **JWT** authentication protocols, protecting user data privacy and ensuring compliance with international **SOC2** and **HIPAA** standards.',
+        'Mentored and onboarded **6 software engineers**, conducting daily code reviews, establishing best practices, and fostering an agile test-driven development environment.'
       ],
     },
     {
@@ -59,13 +84,14 @@ export const sampleResumeData: ResumeData = {
       duration: '01/2019 - 02/2022',
       environment: ['Python', 'Django', 'React', 'MongoDB', 'AWS', 'Docker'],
       bullets: [
-        'Developed high-throughput e-commerce platform services using Python, Django, and React, processing over $10M in monthly online customer transactions.',
-        'Integrated multi-tenant Stripe and PayPal payment gateways, ensuring strict PCI-DSS compliance and reducing transaction failures by 24%.',
-        'Refactored legacy database schemas in MongoDB and PostgreSQL, optimizing aggregation queries and reducing database CPU utilization by 40%.',
-        'Built interactive real-time telemetry dashboards using WebSocket and D3.js, enabling operations teams to monitor live system metrics effortlessly.',
-        'Collaborated with UX product teams to revamp checkout flows, driving a 28% boost in user conversion rates and reducing cart abandonment.',
-        'Configured Dockerized microservices on AWS Elastic Beanstalk, facilitating rapid automated scaling during major marketing launch campaigns.',
-        'Resolved high-priority production incidents and system bottlenecks, maintaining an average Mean Time to Resolution (MTTR) under 15 minutes.'
+        'Developed high-throughput e-commerce platform services using **Python**, **Django**, and **React**, processing over **$10M** in monthly online customer transactions.',
+        'Integrated multi-tenant **Stripe** and **PayPal** payment gateways, ensuring strict **PCI-DSS** compliance and reducing transaction failures by **24%**.',
+        'Refactored legacy database schemas in **MongoDB** and **PostgreSQL**, optimizing aggregation queries and reducing database CPU utilization by **40%**.',
+        'Built interactive real-time telemetry dashboards using **WebSocket** and **D3.js**, enabling operations teams to monitor live system metrics effortlessly.',
+        'Collaborated with UX product teams to revamp checkout flows, driving a **28%** boost in user conversion rates and reducing cart abandonment.',
+        'Configured Dockerized microservices on **AWS Elastic Beanstalk**, facilitating rapid automated scaling during major marketing launch campaigns.',
+        'Resolved high-priority production incidents and system bottlenecks, maintaining an average Mean Time to Resolution (**MTTR**) under **15 minutes**.',
+        'Documented comprehensive RESTful API endpoints using **Swagger/OpenAPI**, accelerating integration workflows for third-party developer partners.'
       ],
     },
     {
@@ -74,13 +100,12 @@ export const sampleResumeData: ResumeData = {
       duration: '06/2016 - 12/2018',
       environment: ['JavaScript', 'HTML5', 'CSS3', 'Sass', 'Webpack', 'REST API'],
       bullets: [
-        'Built custom responsive web applications for 25+ enterprise clients across healthcare, finance, and retail sectors using JavaScript, HTML5, and Sass.',
-        'Designed and integrated RESTful web APIs for headless CMS platforms like Contentful and WordPress, empowering marketing teams to publish content dynamically.',
-        'Optimized web page performance and SEO structures, boosting organic search engine rankings and increasing client site traffic by an average of 50%.',
-        'Implemented WCAG 2.1 AA accessibility guidelines, making client portals accessible to users with disabilities across all modern web browsers.',
+        'Built custom responsive web applications for **25+** enterprise clients across healthcare, finance, and retail sectors using **JavaScript**, **HTML5**, and **Sass**.',
+        'Designed and integrated RESTful web APIs for headless CMS platforms like **Contentful** and **WordPress**, empowering marketing teams to publish content dynamically.',
+        'Optimized web page performance and SEO structures, boosting organic search engine rankings and increasing client site traffic by an average of **50%**.',
+        'Implemented **WCAG 2.1 AA** accessibility guidelines, making client portals accessible to users with disabilities across all modern web browsers.',
         'Configured cross-browser testing matrices across desktop and mobile devices, eliminating UI layout regressions before production releases.',
-        'Automated asset bundling and image optimization using Webpack and Babel, reducing initial bundle footprint by 40%.',
-        'Participated in daily Scrum standups and sprint planning, consistently delivering high-quality user stories within allocated timeframes.'
+        'Automated asset bundling and image optimization using **Webpack** and **Babel**, reducing initial bundle footprint by **40%**.'
       ],
     },
   ],
