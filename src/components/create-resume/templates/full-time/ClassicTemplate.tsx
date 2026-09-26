@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { ResumeTemplateProps, getSummaryArray, splitExperiencesForTemplate } from '../types';
+import { ResumeTemplateProps, getSummaryArray } from '../types';
 
 // Helper to parse **bold** text in bullets
 const parseBoldText = (text: string) => {
@@ -13,6 +13,114 @@ const parseBoldText = (text: string) => {
     return part;
   });
 };
+
+// Custom pagination calculator specifically tailored for Classic ATS Template
+function splitClassicTemplateExperiences(
+  experiences: any[] | undefined,
+  summary?: any,
+  skills?: any[]
+) {
+  const expList = experiences || [];
+  if (expList.length === 0) {
+    return { page1Experiences: [], page2Experiences: [] };
+  }
+
+  // Total printable height = 1020px (1123px container - 70px padding - 33px footer)
+  const TOTAL_P1_CANVAS = 1020;
+
+  // 1. Header (Name + Contact info): ~66px
+  const headerHeight = 66;
+
+  // 2. Summary height: Section header (32px) + paragraph lines (~16.5px per 115 chars)
+  const summaryArray = getSummaryArray(summary);
+  const summaryText = summaryArray.join(' ');
+  const summaryLines = summaryText ? Math.ceil(summaryText.length / 115) : 0;
+  const summaryHeight = summaryText ? 32 + (summaryLines * 16.5) + 12 : 0;
+
+  // 3. Technical Skills height: Section header (32px) + category lines (~20.5px per category)
+  const skillsCount = skills?.length || 0;
+  const skillsHeight = skillsCount > 0 ? 32 + (skillsCount * 20.5) + 12 : 0;
+
+  // Remaining height available on Page 1 for Experience section (subtract 32px for section header)
+  const availableExpHeightP1 = Math.max(150, TOTAL_P1_CANVAS - (headerHeight + summaryHeight + skillsHeight) - 32);
+
+  let currentP1Height = 0;
+  const page1Exps: any[] = [];
+  const page2Exps: any[] = [];
+  let splitOccurred = false;
+
+  for (let i = 0; i < expList.length; i++) {
+    const exp = expList[i];
+    if (splitOccurred) {
+      page2Exps.push(exp);
+      continue;
+    }
+
+    // Role header height: Role + Company + Environment = ~54px
+    const roleHeaderHeight = exp.environment && exp.environment.length > 0 ? 54 : 38;
+
+    const bullets: string[] = exp.bullets || [];
+    // Estimate bullet height: ~105 chars per line in 9.5pt font
+    const bulletHeights = bullets.map(b => {
+      const charCount = b.length;
+      const lines = Math.max(1, Math.ceil(charCount / 105));
+      return (lines * 16) + 6; // 16px per line + 6px space-y-1.5
+    });
+    const totalBulletsHeight = bulletHeights.reduce((sum, h) => sum + h, 0);
+
+    const totalExpHeight = roleHeaderHeight + totalBulletsHeight;
+
+    if (currentP1Height + totalExpHeight <= availableExpHeightP1) {
+      // Entire experience fits on Page 1
+      page1Exps.push(exp);
+      currentP1Height += totalExpHeight;
+    } else {
+      // Experience cannot fit completely on Page 1
+      const spaceForBullets = availableExpHeightP1 - currentP1Height - roleHeaderHeight;
+
+      if (spaceForBullets >= 70) {
+        // Can fit at least 2 bullets on Page 1
+        let p1BulletsCount = 0;
+        let accBulletsHeight = 0;
+
+        for (let bIdx = 0; bIdx < bulletHeights.length; bIdx++) {
+          if (accBulletsHeight + bulletHeights[bIdx] <= spaceForBullets) {
+            accBulletsHeight += bulletHeights[bIdx];
+            p1BulletsCount++;
+          } else {
+            break;
+          }
+        }
+
+        if (p1BulletsCount >= 2 && p1BulletsCount < bullets.length) {
+          page1Exps.push({
+            ...exp,
+            bullets: bullets.slice(0, p1BulletsCount),
+            isSplit: true
+          });
+          page2Exps.push({
+            ...exp,
+            bullets: bullets.slice(p1BulletsCount),
+            isContinued: true
+          });
+          splitOccurred = true;
+        } else if (p1BulletsCount >= bullets.length) {
+          page1Exps.push(exp);
+          currentP1Height += totalExpHeight;
+        } else {
+          page2Exps.push(exp);
+          splitOccurred = true;
+        }
+      } else {
+        // Less than 2 bullets fit, push whole experience to Page 2
+        page2Exps.push(exp);
+        splitOccurred = true;
+      }
+    }
+  }
+
+  return { page1Experiences: page1Exps, page2Experiences: page2Exps };
+}
 
 export const ClassicTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(
   ({ resumeData, profileData, themeColor, fontFamily, sectionStyles, activeSectionKey, onSelectSection }, ref) => {
@@ -59,10 +167,10 @@ export const ClassicTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
       );
     };
 
-    const { page1Experiences, page2Experiences } = splitExperiencesForTemplate(
+    const { page1Experiences, page2Experiences } = splitClassicTemplateExperiences(
       resumeData.experience,
-      'classic',
-      resumeData.summary
+      resumeData.summary,
+      resumeData.skills
     );
 
     const hasPage2 = page2Experiences.length > 0 || (resumeData.education && resumeData.education.length > 0) || (resumeData.certifications && resumeData.certifications.length > 0);
@@ -158,7 +266,7 @@ export const ClassicTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
               </div>
             )}
 
-            {/* Experience (Page 1 - Role 1 Bullets 1 to 3) */}
+            {/* Experience (Page 1) */}
             {page1Experiences.length > 0 && (
               <div 
                 onClick={() => onSelectSection?.('experience')}
@@ -223,6 +331,7 @@ export const ClassicTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePr
                   style={getSectionStyle('experience')}
                 >
                   <div className="space-y-3 mb-3">
+                    <SectionHeader title="Professional Experience (Continued)" sectionKey="experience" />
                     {page2Experiences.map((exp: any, i: number) => (
                       <div key={i} className="mb-2">
                         <div className="flex justify-between items-start leading-tight mb-0.5" style={{ fontSize: '11pt' }}>
