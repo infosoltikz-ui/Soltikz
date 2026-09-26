@@ -222,11 +222,13 @@ SKILLS MATRIX — FULL-TIME (10 CATEGORIES REQUIRED):
   - NO proficiency bars, ratings, percentages, or years-per-skill.
 
 EXPERIENCE — FULL-TIME (STRICT MANDATORY BULLET COUNTS):
-  - Experience 1 (most recent / current role): EXACTLY 6 to 8 Powerful Bullet Points.
-  - Experience 2: EXACTLY 6 to 8 Powerful Bullet Points.
-  - Experience 3+: EXACTLY 5 to 6 Powerful Bullet Points.
-  - Every bullet: MUST be 35-50 words (2 to 3 full lines) with bolded **keyword** syntax and metrics.
-  - Anatomy: [POWER ACTION VERB] + [Detailed Context & Tools] + [Methodology] + [Quantified Metric Result] + [Business Outcome].
+  - Experience 1 (most recent / current role): EXACTLY 8 Powerful Bullet Points (STRICT MANDATORY 8 BULLETS).
+  - Experience 2: EXACTLY 8 Powerful Bullet Points (STRICT MANDATORY 8 BULLETS).
+  - Experience 3 & Experience 4+: EXACTLY 5 to 6 Powerful Bullet Points.
+  - Every bullet: MUST be 35-50 words (2 to 3 full lines) with bolded **keyword** syntax and quantified metrics (%).
+  - Anatomy: [POWER ACTION VERB] + [Detailed Context & Tools] + [Methodology] + [Quantified Metric Result (%)] + [Business Outcome].
+  - 🛑 BANNED WEAK VERBS: NEVER use passive/weak words like "helped", "assisted", "worked on", "responsible for", "handled", "participated in", "involved in", "supported".
+  - ✅ MANDATORY POWER VERBS: ALWAYS use high-impact action verbs like "Architected", "Engineered", "Spearheaded", "Orchestrated", "Optimized", "Automated", "Pioneered", "Overhauled", "Formulated".
   - One accomplishment per bullet — two "and"s means it is two bullets.
   - Name the exact tool: "rebuilt the intake workflow in **ServiceNow**" not "improved the process".
   - DO NOT include an "environment" array for Full-Time roles (that is C2C format only).
@@ -330,10 +332,10 @@ export async function POST(req: Request) {
       FOR FULL-TIME RESUMES (CORPORATE DIRECT HIRE):
       - PROFESSIONAL SUMMARY: EXACTLY 5 sentences that join into one flowing prose paragraph. No bullets, no bold, no "I".
       - SKILLS MATRIX: EXACTLY 10 categories, each with 5-7 items.
-      - EXPERIENCE 1 (Most Recent Role): EXACTLY 6 to 8 BULLET POINTS.
-      - EXPERIENCE 2: EXACTLY 6 to 8 BULLET POINTS.
-      - EXPERIENCE 3+: EXACTLY 5 to 6 BULLET POINTS.
-      - EVERY SINGLE BULLET: MUST BE MINIMUM 35-50 WORDS (2 TO 3 FULL PRINTED LINES). SHORT 1-LINE BULLETS ARE BANNED.
+      - EXPERIENCE 1 (Most Recent Role): EXACTLY 8 BULLET POINTS (MANDATORY 8 BULLETS).
+      - EXPERIENCE 2: EXACTLY 8 BULLET POINTS (MANDATORY 8 BULLETS).
+      - EXPERIENCE 3 & EXPERIENCE 4+: EXACTLY 5 to 6 BULLET POINTS.
+      - EVERY SINGLE BULLET: MUST BE MINIMUM 35-50 WORDS (2 TO 3 FULL PRINTED LINES) WITH BOLD KEYWORDS & METRICS (%). NO WEAK VERBS.
       `,
       `CRITICAL: DO NOT SHORTEN OR COMPRESS BULLET POINTS. GENERATE LONG DETAILED 3-LINE BULLETS WITH METRICS AND BOLD KEYWORDS.`
     ].join('\n');
@@ -352,7 +354,7 @@ export async function POST(req: Request) {
 
     // ═══════════════════════════════════════════════════════════════
     // STEP 3: Automated Post-Generation Quality & Count Enforcer Guard
-    // Guarantees exact bullet counts (C2C=10 bullets for Exp1) and 35-50 word 3-line bullet lengths
+    // Guarantees exact bullet counts (Full-time: Exp 1 & 2 = 8 bullets, Exp 3 & 4 = 5-6 bullets)
     // ═══════════════════════════════════════════════════════════════
     let finalResumeData = aiResponse.data;
 
@@ -363,7 +365,7 @@ export async function POST(req: Request) {
 
       // Enforce Experience Bullets
       data.experience = data.experience.map((exp: any, index: number) => {
-        const targetMinBullets = isC2C ? (index === 0 ? 10 : index === 1 ? 8 : 6) : (index < 2 ? 6 : 5);
+        const targetMinBullets = isC2C ? (index === 0 ? 10 : index === 1 ? 8 : 6) : (index === 0 || index === 1 ? 8 : 5);
         let bullets = Array.isArray(exp.bullets) ? [...exp.bullets] : [];
 
         // 1. Expand short bullets to 35-50 words (2-3 full lines)

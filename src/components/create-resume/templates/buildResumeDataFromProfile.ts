@@ -85,12 +85,13 @@ export function buildResumeDataFromProfile(
       bulletsArr = bulletsArr.map(b => b.replace(/^[-•*]\s*/, ''))
 
       if (!isC2C) {
+        const targetBullets = expIdx < 2 ? 8 : 6
         let poolExpIdx = 0
-        while (bulletsArr.length < 8 && poolExpIdx < defaultResumeData.experience.length) {
+        while (bulletsArr.length < targetBullets && poolExpIdx < defaultResumeData.experience.length) {
           const sampleExp = defaultResumeData.experience[(expIdx + poolExpIdx) % defaultResumeData.experience.length]
           if (sampleExp && Array.isArray(sampleExp.bullets)) {
             for (const b of sampleExp.bullets) {
-              if (bulletsArr.length >= 8) break
+              if (bulletsArr.length >= targetBullets) break
               const candidateBullet = b.replace(/^[-•*]\s*/, '')
               if (!bulletsArr.includes(candidateBullet)) {
                 bulletsArr.push(candidateBullet)
@@ -98,6 +99,9 @@ export function buildResumeDataFromProfile(
             }
           }
           poolExpIdx++
+        }
+        if (bulletsArr.length > targetBullets) {
+          bulletsArr = bulletsArr.slice(0, targetBullets)
         }
       }
 
@@ -122,12 +126,13 @@ export function buildResumeDataFromProfile(
     experience = userProfile.experience.map((emp: any, expIdx: number) => {
       let bulletsArr = Array.isArray(emp.bullets) ? emp.bullets.map((b: string) => b.replace(/^[-•*]\s*/, '')) : []
       if (!isC2C) {
+        const targetBullets = expIdx < 2 ? 8 : 6
         let poolExpIdx = 0
-        while (bulletsArr.length < 8 && poolExpIdx < defaultResumeData.experience.length) {
+        while (bulletsArr.length < targetBullets && poolExpIdx < defaultResumeData.experience.length) {
           const sampleExp = defaultResumeData.experience[(expIdx + poolExpIdx) % defaultResumeData.experience.length]
           if (sampleExp && Array.isArray(sampleExp.bullets)) {
             for (const b of sampleExp.bullets) {
-              if (bulletsArr.length >= 8) break
+              if (bulletsArr.length >= targetBullets) break
               const candidateBullet = b.replace(/^[-•*]\s*/, '')
               if (!bulletsArr.includes(candidateBullet)) {
                 bulletsArr.push(candidateBullet)
@@ -135,6 +140,9 @@ export function buildResumeDataFromProfile(
             }
           }
           poolExpIdx++
+        }
+        if (bulletsArr.length > targetBullets) {
+          bulletsArr = bulletsArr.slice(0, targetBullets)
         }
       }
       return {
