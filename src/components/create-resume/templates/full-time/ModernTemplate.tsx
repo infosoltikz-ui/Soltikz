@@ -24,26 +24,27 @@ function splitModernTemplateExperiences(
     return { pages: [[]] };
   }
 
-  // Printable height per page = 1020px
+  // Printable height per page = 1123px - 38px (pt) - 32px (pb) = 1053px. 
+  // We use 1020px to leave a small safe buffer.
   const TOTAL_P1_CANVAS = 1020;
   const TOTAL_P2_CANVAS = 1020;
 
-  // Header: Name + Contact info = ~72px
-  const headerHeight = 72;
+  // Header: Name + Contact info = ~62px
+  const headerHeight = 62;
 
-  // Summary height: Section header (38px) + paragraph lines (~18px per 110 chars)
+  // Summary height: Section header (48px) + mb-3 (12px) + paragraph lines (~19px per 110 chars)
   const summaryArray = getSummaryArray(summary);
   const summaryText = summaryArray.join(' ');
   const summaryLines = summaryText ? Math.ceil(summaryText.length / 110) : 0;
-  const summaryHeight = summaryText ? 38 + (summaryLines * 18) + 16 : 0;
+  const summaryHeight = summaryText ? 60 + (summaryLines * 19) : 0;
 
-  // Technical Skills height (2-Column Grid): Section header (38px) + 5 rows (~22px per row)
+  // Technical Skills height (2-Column Grid): Section header (48) + mb-3 (12) + rows (~20px per row)
   const skillsCount = skills?.length || 0;
   const skillRows = Math.ceil(skillsCount / 2);
-  const skillsHeight = skillsCount > 0 ? 38 + (skillRows * 22) + 16 : 0;
+  const skillsHeight = skillsCount > 0 ? 60 + (skillRows * 20) : 0;
 
-  // Remaining space on Page 1 for Experience section (subtract 38px for section header)
-  const availableExpP1 = Math.max(150, TOTAL_P1_CANVAS - (headerHeight + summaryHeight + skillsHeight) - 38);
+  // Remaining space on Page 1 for Experience section (subtract 56px for section header + mb-2)
+  const availableExpP1 = Math.max(150, TOTAL_P1_CANVAS - (headerHeight + summaryHeight + skillsHeight) - 56);
 
   const pages: any[][] = [];
   let pageIdx = 0;
@@ -52,14 +53,16 @@ function splitModernTemplateExperiences(
 
   for (let i = 0; i < expList.length; i++) {
     let exp = expList[i];
-    let roleHeaderHeight = exp.environment && exp.environment.length > 0 ? 62 : 44;
+    // Role (19) + Company (18) + margins (16) = 53px
+    // Environment (18) + mb-1.5 (6) = +24px
+    let roleHeaderHeight = exp.environment && exp.environment.length > 0 ? 77 : 53;
 
     const bullets: string[] = exp.bullets || [];
-    // Estimate bullet height in ModernTemplate (10.5pt font, leading-relaxed, ~100 chars per line)
+    // Estimate bullet height in ModernTemplate (9.5pt font, leading-snug, ~90 chars per line)
     const bulletHeights = bullets.map(b => {
       const charCount = b.length;
-      const lines = Math.max(1, Math.ceil(charCount / 100));
-      return (lines * 19) + 8; // 19px per line + 8px space-y-2
+      const lines = Math.max(1, Math.ceil(charCount / 90));
+      return (lines * 18) + 6; // 18px per line + 6px space-y-1.5
     });
 
     let currentExpBullets = [...bullets];
@@ -81,7 +84,8 @@ function splitModernTemplateExperiences(
         // Space available for bullets on current page
         const spaceForB = currentCanvasRemaining - roleHeaderHeight;
 
-        if (spaceForB >= 70) {
+        // Require at least 60px space to show a couple of bullets before splitting
+        if (spaceForB >= 60) {
           let fitCount = 0;
           let accH = 0;
           for (let bIdx = 0; bIdx < currentBulletHeights.length; bIdx++) {
@@ -107,23 +111,36 @@ function splitModernTemplateExperiences(
             };
             currentExpBullets = currentExpBullets.slice(fitCount);
             currentBulletHeights = currentBulletHeights.slice(fitCount);
-            roleHeaderHeight = 40;
+            // Height for continued header (Role + Company + margins)
+            roleHeaderHeight = 45; 
 
             pageIdx++;
             pages[pageIdx] = [];
-            currentCanvasRemaining = TOTAL_P2_CANVAS - 38;
+            // Next page has SectionHeader + space-y-3 -> ~60px overhead
+            currentCanvasRemaining = TOTAL_P2_CANVAS - 60;
           } else {
             pageIdx++;
             pages[pageIdx] = [];
-            currentCanvasRemaining = TOTAL_P2_CANVAS - 38;
+            currentCanvasRemaining = TOTAL_P2_CANVAS - 60;
           }
         } else {
           pageIdx++;
           pages[pageIdx] = [];
-          currentCanvasRemaining = TOTAL_P2_CANVAS - 38;
+          currentCanvasRemaining = TOTAL_P2_CANVAS - 60;
         }
       }
     }
+  }
+
+  // Account for Education/Certifications on the last page.
+  // We conservatively deduct ~150px on the last page to ensure they fit,
+  // or push to a new page if the last page is nearly full.
+  const hasEduOrCerts = (skills && skills.length > 0) || (summary && summary.length > 0); // Simplified check since we don't pass edu/certs to the function. We assume yes if not empty resume.
+  if (currentCanvasRemaining < 180) {
+     // If less than 180px left, the Education/Certs section might cut off.
+     // By adding an empty array, the renderer will generate another page for Education.
+     pageIdx++;
+     pages[pageIdx] = [];
   }
 
   return { pages };
@@ -171,9 +188,9 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
   const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey?: string }) => {
     const headerColor = sectionStyles?.[sectionKey || '']?.color || ACCENT;
     return (
-      <div className="mb-3.5 mt-4 break-inside-avoid">
+      <div className="mb-2.5 mt-3 break-inside-avoid">
         <div className="border-t border-slate-300 w-full" />
-        <h2 className="uppercase font-bold text-center py-1.5 m-0 tracking-wider" style={{ fontSize: '13pt', color: headerColor }}>
+        <h2 className="uppercase font-bold text-center py-1 m-0 tracking-wider" style={{ fontSize: '12pt', color: headerColor }}>
           {title}
         </h2>
         <div className="border-t border-slate-300 w-full" />
@@ -198,8 +215,8 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
     padding: '38px 48px 32px 48px',
     fontFamily: selectedFont,
     color: '#1a1a1a',
-    fontSize: '10.5pt',
-    lineHeight: '1.5'
+    fontSize: '10pt',
+    lineHeight: '1.45'
   };
 
   return (
@@ -213,11 +230,11 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
             className={getSectionWrapperClass('header')}
             style={getSectionStyle('header')}
           >
-            <div className="mb-4 text-center break-inside-avoid">
-              <h1 className="font-bold uppercase mb-1.5 tracking-tight" style={{ fontSize: '24pt', color: sectionStyles?.header?.color || ACCENT }}>
+            <div className="mb-3 text-center break-inside-avoid">
+              <h1 className="font-bold uppercase mb-1 tracking-tight" style={{ fontSize: '22pt', color: sectionStyles?.header?.color || ACCENT }}>
                 {profileData.full_name || 'JOHN DOE'}
               </h1>
-              <div className="flex flex-wrap items-center justify-center gap-2.5 mt-1" style={{ fontSize: '10.5pt' }}>
+              <div className="flex flex-wrap items-center justify-center gap-2 mt-1" style={{ fontSize: '9.5pt' }}>
                 {profileData.location && <span>{profileData.location}</span>}
                 {profileData.phone && (
                   <>
@@ -252,9 +269,9 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
                 className={getSectionWrapperClass('summary')}
                 style={getSectionStyle('summary')}
               >
-                <div className="mb-4">
+                <div className="mb-3">
                   <SectionHeader title="Summary" sectionKey="summary" />
-                  <p className="text-justify leading-relaxed m-0" style={{ fontSize: '10.5pt' }}>
+                  <p className="text-justify leading-snug m-0" style={{ fontSize: '10pt' }}>
                     {renderWithBold(paragraphText)}
                   </p>
                 </div>
@@ -269,12 +286,12 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
               className={getSectionWrapperClass('skills')}
               style={getSectionStyle('skills')}
             >
-              <div className="mb-4">
+              <div className="mb-3">
                 <SectionHeader title="Technical Skills" sectionKey="skills" />
-                <div className="grid grid-cols-2 gap-x-6 gap-y-1.5" style={{ fontSize: '10.5pt' }}>
+                <div className="grid grid-cols-2 gap-x-6 gap-y-1" style={{ fontSize: '9.5pt' }}>
                   {resumeData.skills.map((skillGroup, i) => (
-                    <ul key={i} className="list-disc pl-5 m-0 space-y-1">
-                      <li className="leading-relaxed">
+                    <ul key={i} className="list-disc pl-5 m-0 space-y-0.5">
+                      <li className="leading-snug">
                         <span className="font-bold">{skillGroup.category}: </span>
                         <span>{Array.isArray(skillGroup.items) ? skillGroup.items.join(', ') : skillGroup.items}</span>
                       </li>
@@ -292,28 +309,28 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
               className={getSectionWrapperClass('experience')}
               style={getSectionStyle('experience')}
             >
-              <div className="mb-3">
+              <div className="mb-2">
                 <SectionHeader title="Professional Experience" sectionKey="experience" />
                 {page1Experiences.map((exp, i) => (
-                  <div key={i} className="mb-3">
-                    <div className="flex justify-between items-start leading-tight" style={{ fontSize: '11.5pt' }}>
+                  <div key={i} className="mb-2">
+                    <div className="flex justify-between items-start leading-tight" style={{ fontSize: '11pt' }}>
                       <div className="font-bold text-black">{exp.role}</div>
                       <div className="font-bold text-black whitespace-nowrap ml-4">{exp.duration}</div>
                     </div>
-                    <div className="flex justify-between items-start leading-tight mb-1.5" style={{ fontSize: '11pt' }}>
+                    <div className="flex justify-between items-start leading-tight mb-1" style={{ fontSize: '10.5pt' }}>
                       <div className="font-semibold text-slate-700">{exp.company}</div>
                     </div>
 
                     {exp.environment && exp.environment.length > 0 && (
-                      <div className="mb-2 leading-relaxed text-slate-600" style={{ fontSize: '10pt' }}>
+                      <div className="mb-1.5 leading-snug text-slate-600" style={{ fontSize: '9.5pt' }}>
                         <span className="font-bold text-black">Environment: </span>
                         {exp.environment.join(', ')}
                       </div>
                     )}
 
-                    <ul className="list-disc pl-5 space-y-2 mt-1.5 m-0" style={{ fontSize: '10.5pt' }}>
+                    <ul className="list-disc pl-5 space-y-1.5 mt-1 m-0" style={{ fontSize: '9.5pt' }}>
                       {exp.bullets.map((bullet: string, j: number) => (
-                        <li key={j} className="pl-1 leading-relaxed text-justify">
+                        <li key={j} className="pl-1 leading-snug text-justify">
                           {renderWithBold(bullet)}
                         </li>
                       ))}
@@ -327,7 +344,7 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 
         {/* Page 1 Footer */}
         {hasMultiplePages && (
-          <div className="pt-2.5 flex justify-between items-center text-[9.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
+          <div className="pt-2 flex justify-between items-center text-[9pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
             <span>{profileData.full_name || 'Candidate'} — Modern Resume</span>
             <span>Page 1 of {totalPages}</span>
           </div>
@@ -349,30 +366,30 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
                   className={getSectionWrapperClass('experience')}
                   style={getSectionStyle('experience')}
                 >
-                  <div className="mb-4 space-y-3.5">
+                  <div className="mb-3 space-y-3">
                     <SectionHeader title="Professional Experience (Continued)" sectionKey="experience" />
                     {pageExps.map((exp, i) => (
-                      <div key={i} className="mb-3">
-                        <div className="flex justify-between items-start leading-tight" style={{ fontSize: '11.5pt' }}>
+                      <div key={i} className="mb-2">
+                        <div className="flex justify-between items-start leading-tight" style={{ fontSize: '11pt' }}>
                           <div className="font-bold text-black">
-                            {exp.role} {exp.isContinued && <span className="italic font-normal text-slate-500 text-[10pt]">(Continued)</span>}
+                            {exp.role} {exp.isContinued && <span className="italic font-normal text-slate-500 text-[9.5pt]">(Continued)</span>}
                           </div>
                           <div className="font-bold text-black whitespace-nowrap ml-4">{exp.duration}</div>
                         </div>
-                        <div className="flex justify-between items-start leading-tight mb-1.5" style={{ fontSize: '11pt' }}>
+                        <div className="flex justify-between items-start leading-tight mb-1" style={{ fontSize: '10.5pt' }}>
                           <div className="font-semibold text-slate-700">{exp.company}</div>
                         </div>
 
                         {exp.environment && exp.environment.length > 0 && !exp.isContinued && (
-                          <div className="mb-2 leading-relaxed text-slate-600" style={{ fontSize: '10pt' }}>
+                          <div className="mb-1.5 leading-snug text-slate-600" style={{ fontSize: '9.5pt' }}>
                             <span className="font-bold text-black">Environment: </span>
                             {exp.environment.join(', ')}
                           </div>
                         )}
 
-                        <ul className="list-disc pl-5 space-y-2 mt-1.5 m-0" style={{ fontSize: '10.5pt' }}>
+                        <ul className="list-disc pl-5 space-y-1.5 mt-1 m-0" style={{ fontSize: '9.5pt' }}>
                           {exp.bullets.map((bullet: string, j: number) => (
-                            <li key={j} className="pl-1 leading-relaxed text-justify">
+                            <li key={j} className="pl-1 leading-snug text-justify">
                               {renderWithBold(bullet)}
                             </li>
                           ))}
@@ -393,16 +410,16 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
                       className={getSectionWrapperClass('education')}
                       style={getSectionStyle('education')}
                     >
-                      <div className="mb-4">
+                      <div className="mb-3">
                         <SectionHeader title="Education and Training" sectionKey="education" />
-                        <div className="space-y-2" style={{ fontSize: '10.5pt' }}>
+                        <div className="space-y-1.5" style={{ fontSize: '9.5pt' }}>
                           {resumeData.education.map((edu, i) => (
                             <div key={i} className="flex justify-between items-start">
                               <div>
-                                <div className="font-bold text-[11pt]">{edu.degree}</div>
-                                <div className="text-slate-600 text-[10.5pt]">{edu.institution}</div>
+                                <div className="font-bold text-[10pt]">{edu.degree}</div>
+                                <div className="text-slate-600 text-[9.5pt]">{edu.institution}</div>
                               </div>
-                              <div className="font-bold whitespace-nowrap ml-4 text-[10.5pt]">{edu.year}</div>
+                              <div className="font-bold whitespace-nowrap ml-4 text-[9.5pt]">{edu.year}</div>
                             </div>
                           ))}
                         </div>
@@ -417,11 +434,11 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
                       className={getSectionWrapperClass('certifications')}
                       style={getSectionStyle('certifications')}
                     >
-                      <div className="mb-4">
+                      <div className="mb-3">
                         <SectionHeader title="Certifications" sectionKey="certifications" />
-                        <ul className="list-disc pl-5 m-0 space-y-1.5" style={{ fontSize: '10.5pt' }}>
+                        <ul className="list-disc pl-5 m-0 space-y-1" style={{ fontSize: '9.5pt' }}>
                           {resumeData.certifications.map((cert, i) => (
-                            <li key={i} className="pl-1 leading-relaxed">
+                            <li key={i} className="pl-1 leading-snug">
                               <span className="font-bold">{cert.name}</span> — {cert.issuer} ({cert.year})
                             </li>
                           ))}
@@ -434,7 +451,7 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
             </div>
 
             {/* Page N Footer */}
-            <div className="pt-2.5 flex justify-between items-center text-[9.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
+            <div className="pt-2 flex justify-between items-center text-[9pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
               <span>{profileData.full_name || 'Candidate'} — Modern Resume</span>
               <span>Page {pageNumber} of {totalPages}</span>
             </div>
