@@ -14,73 +14,64 @@ const parseBoldText = (text: string) => {
 };
 
 // Custom pagination calculator specifically tailored for Banner Template
-function splitBannerTemplateExperiences(
-  experiences: any[] | undefined,
-  summary?: any,
-  skills?: any[]
-) {
-  const expList = experiences || [];
-  if (expList.length === 0) {
-    return { pages: [[]] };
-  }
+function splitBannerTemplateExperiences(resumeData: any) {
+  const expList = resumeData.experience || [];
+  const summary = resumeData.summary;
+  const skills = resumeData.skills;
+  const education = resumeData.education;
+  const certifications = resumeData.certifications;
 
-  // Set canvas bounds to fully utilize the A4 page without leaving large white gaps.
-  // P1 gets a bit more because of the negative margin on the banner.
+  const pages: { experiences: any[], hasEducation: boolean, hasCertifications: boolean }[] = [];
+  pages[0] = { experiences: [], hasEducation: false, hasCertifications: false };
+
+  // Canvas bounds ensuring we don't clip the bottom footer
   const TOTAL_P1_CANVAS = 1040;
   const TOTAL_P2_CANVAS = 1010;
   const headerHeight = 106;
 
   const summaryArray = getSummaryArray(summary);
   const summaryText = summaryArray.join(' ');
-  const summaryLines = summaryText ? Math.ceil(summaryText.length / 90) : 0;
-  const summaryHeight = summaryText ? 48 + (summaryLines * 17.5) : 0;
+  const summaryLines = summaryText ? Math.ceil(summaryText.length / 85) : 0;
+  const summaryHeight = summaryText ? 48 + (summaryLines * 18) : 0;
 
   const skillsCount = skills?.length || 0;
   const skillsRows = Math.ceil(skillsCount / 2);
   const skillsHeight = skillsCount > 0 ? 48 + (skillsRows * 24) : 0;
 
   let currentCanvasRemaining = Math.max(150, TOTAL_P1_CANVAS - (headerHeight + summaryHeight + skillsHeight) - 44);
-
-  const pages: any[][] = [[]];
   let pageIdx = 0;
 
-  // Deep clone to safely mutate during splitting
-  let queue = expList.map(e => ({ ...e, bullets: [...(e.bullets || [])] }));
+  // 1. Paginate Experiences
+  let queue = expList.map((e: any) => ({ ...e, bullets: [...(e.bullets || [])] }));
 
   while (queue.length > 0) {
     let exp = queue.shift();
     if (!exp) break;
 
-    // Calculate dynamic header height
     let headerH = 0;
     if (!exp.isContinued) {
       headerH = exp.environment && exp.environment.length > 0 ? 75 : 53;
     } else {
       headerH = 53;
     }
-    // Add gap if not the first item on this page
-    if (pages[pageIdx].length > 0) {
+    if (pages[pageIdx].experiences.length > 0) {
       headerH += 12; 
     }
 
-    // Estimate bullet heights more accurately (90 chars per line for Georgia/Serif in 674px width)
+    // 85 chars per line is pessimistic to guarantee we never underestimate and clip
     const bulletHeights = exp.bullets.map((b: string) => {
-      const lines = Math.max(1, Math.ceil(b.length / 90));
-      return (lines * 17.6) + 4;
+      const lines = Math.max(1, Math.ceil(b.length / 85));
+      return (lines * 18) + 4; 
     });
 
     const totalBulletsH = bulletHeights.reduce((sum: number, h: number) => sum + h, 0);
     const totalH = headerH + totalBulletsH;
 
     if (totalH <= currentCanvasRemaining) {
-      // Fits completely
-      pages[pageIdx].push(exp);
+      pages[pageIdx].experiences.push(exp);
       currentCanvasRemaining -= totalH;
     } else {
-      // Needs splitting
       const spaceForB = currentCanvasRemaining - headerH;
-      
-      // Need at least 40px to safely fit 1-2 bullets
       if (spaceForB >= 40) {
         let fitCount = 0;
         let accH = 0;
@@ -94,46 +85,56 @@ function splitBannerTemplateExperiences(
         }
 
         if (fitCount > 0 && fitCount < exp.bullets.length) {
-          // Push fitting part
-          pages[pageIdx].push({
+          pages[pageIdx].experiences.push({
             ...exp,
             bullets: exp.bullets.slice(0, fitCount),
             isSplit: true
           });
-
-          // Re-queue the rest
           queue.unshift({
             ...exp,
             bullets: exp.bullets.slice(fitCount),
             isContinued: true
           });
-
-          // Move to next page
           pageIdx++;
-          pages[pageIdx] = [];
-          currentCanvasRemaining = TOTAL_P2_CANVAS - 48; // 48px overhead for page top margin/padding
+          pages[pageIdx] = { experiences: [], hasEducation: false, hasCertifications: false };
+          currentCanvasRemaining = TOTAL_P2_CANVAS - 48;
         } else {
-          // Couldn't fit even one bullet, push entire exp to next page
           pageIdx++;
-          pages[pageIdx] = [];
+          pages[pageIdx] = { experiences: [], hasEducation: false, hasCertifications: false };
           currentCanvasRemaining = TOTAL_P2_CANVAS - 48;
           queue.unshift(exp);
         }
       } else {
-        // Not enough room for even the header, push entire exp to next page
         pageIdx++;
-        pages[pageIdx] = [];
+        pages[pageIdx] = { experiences: [], hasEducation: false, hasCertifications: false };
         currentCanvasRemaining = TOTAL_P2_CANVAS - 48;
         queue.unshift(exp);
       }
     }
   }
 
-  // Account for Education/Certifications on the last page.
-  const hasEduOrCerts = (skills && skills.length > 0) || (summary && summary.length > 0);
-  if (currentCanvasRemaining < 160) {
-     pageIdx++;
-     pages[pageIdx] = [];
+  // 2. Paginate Education
+  if (education && education.length > 0) {
+    const eduHeight = 48 + (education.length * 32);
+    if (eduHeight > currentCanvasRemaining) {
+      pageIdx++;
+      pages[pageIdx] = { experiences: [], hasEducation: false, hasCertifications: false };
+      currentCanvasRemaining = TOTAL_P2_CANVAS - 48;
+    }
+    pages[pageIdx].hasEducation = true;
+    currentCanvasRemaining -= eduHeight;
+  }
+
+  // 3. Paginate Certifications
+  if (certifications && certifications.length > 0) {
+    const certHeight = 48 + (certifications.length * 24);
+    if (certHeight > currentCanvasRemaining) {
+      pageIdx++;
+      pages[pageIdx] = { experiences: [], hasEducation: false, hasCertifications: false };
+      currentCanvasRemaining = TOTAL_P2_CANVAS - 48;
+    }
+    pages[pageIdx].hasCertifications = true;
+    currentCanvasRemaining -= certHeight;
   }
 
   return { pages };
@@ -190,16 +191,12 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
     );
   };
 
-  const { pages } = splitBannerTemplateExperiences(
-    resumeData.experience,
-    resumeData.summary,
-    resumeData.skills
-  );
+  const { pages } = splitBannerTemplateExperiences(resumeData);
 
   const totalPages = pages.length;
-  const page1Experiences = pages[0] || [];
+  const page1Experiences = pages[0]?.experiences || [];
   const subsequentPages = pages.slice(1);
-  const hasMultiplePages = totalPages > 1 || (resumeData.education && resumeData.education.length > 0) || (resumeData.certifications && resumeData.certifications.length > 0);
+  const hasMultiplePages = totalPages > 1 || pages[0].hasEducation || pages[0].hasCertifications;
 
   const pageContainerClass = "resume-page bg-white w-[794px] min-h-[1123px] h-[1123px] max-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:border-none print:break-after-page overflow-hidden";
   const pageContainerStyle: React.CSSProperties = {
@@ -279,7 +276,7 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
           {/* Skills */}
           {resumeData.skills && resumeData.skills.length > 0 && (
             <div
-              onClick={() => onSelectSection?.('summary')}
+              onClick={() => onSelectSection?.('skills')}
               className={getSectionWrapperClass('skills')}
               style={getSectionStyle('skills')}
             >
@@ -339,6 +336,50 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
               </div>
             </div>
           )}
+
+          {/* Education on Page 1 (if fits) */}
+          {pages[0]?.hasEducation && resumeData.education && resumeData.education.length > 0 && (
+            <div
+              onClick={() => onSelectSection?.('education')}
+              className={getSectionWrapperClass('education')}
+              style={getSectionStyle('education')}
+            >
+              <div className="mb-3">
+                <SectionHeader title="Education" sectionKey="education" />
+                <div className="space-y-1.5 text-[9.5pt]">
+                  {resumeData.education.map((edu: any, i: number) => (
+                    <div key={i} className="flex justify-between items-start">
+                      <div>
+                        <div className="font-bold text-slate-800 text-[10pt]">{edu.degree}</div>
+                        <div className="text-slate-600 font-medium text-[9.5pt]">{edu.institution}</div>
+                      </div>
+                      <div className="font-semibold whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Certifications on Page 1 (if fits) */}
+          {pages[0]?.hasCertifications && resumeData.certifications && resumeData.certifications.length > 0 && (
+            <div
+              onClick={() => onSelectSection?.('certifications')}
+              className={getSectionWrapperClass('certifications')}
+              style={getSectionStyle('certifications')}
+            >
+              <div className="mb-3">
+                <SectionHeader title="Certifications" sectionKey="certifications" />
+                <ul className="list-disc pl-5 m-0 space-y-1 text-[9.5pt]">
+                  {resumeData.certifications.map((cert: any, i: number) => (
+                    <li key={i} className="pl-1 leading-relaxed">
+                      <span className="font-bold">{cert.name}</span> — {cert.issuer} ({cert.year})
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Page 1 Footer */}
@@ -351,22 +392,21 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
       </div>
 
       {/* ─── PAGE 2, PAGE 3, ETC. ─── */}
-      {subsequentPages.map((pageExps, pIndex) => {
+      {subsequentPages.map((page, pIndex) => {
         const pageNumber = pIndex + 2;
-        const isLastPage = pageNumber === totalPages;
 
         return (
           <div key={pIndex} className={pageContainerClass} style={pageContainerStyle}>
             <div className="flex-1 overflow-hidden">
               {/* Experiences on this page */}
-              {pageExps.length > 0 && (
+              {page.experiences.length > 0 && (
                 <div
                   onClick={() => onSelectSection?.('experience')}
                   className={getSectionWrapperClass('experience')}
                   style={getSectionStyle('experience')}
                 >
                   <div className="mb-3 space-y-3">
-                    {pageExps.map((exp: any, i: number) => (
+                    {page.experiences.map((exp: any, i: number) => (
                       <div key={i} className="mb-2">
                         <div className="flex items-center leading-tight mb-1" style={{ fontSize: '10.5pt', fontWeight: 700 }}>
                           <span className="uppercase">{exp.role}</span>
@@ -399,53 +439,48 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
                 </div>
               )}
 
-              {/* Render Education and Certifications on the Last Page */}
-              {isLastPage && (
-                <>
-                  {/* Education */}
-                  {resumeData.education && resumeData.education.length > 0 && (
-                    <div
-                      onClick={() => onSelectSection?.('education')}
-                      className={getSectionWrapperClass('education')}
-                      style={getSectionStyle('education')}
-                    >
-                      <div className="mb-3">
-                        <SectionHeader title="Education" sectionKey="education" />
-                        <div className="space-y-1.5 text-[9.5pt]">
-                          {resumeData.education.map((edu: any, i: number) => (
-                            <div key={i} className="flex justify-between items-start">
-                              <div>
-                                <div className="font-bold text-slate-800 text-[10pt]">{edu.degree}</div>
-                                <div className="text-slate-600 font-medium text-[9.5pt]">{edu.institution}</div>
-                              </div>
-                              <div className="font-semibold whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
-                            </div>
-                          ))}
+              {/* Education */}
+              {page.hasEducation && resumeData.education && resumeData.education.length > 0 && (
+                <div
+                  onClick={() => onSelectSection?.('education')}
+                  className={getSectionWrapperClass('education')}
+                  style={getSectionStyle('education')}
+                >
+                  <div className="mb-3">
+                    <SectionHeader title="Education" sectionKey="education" />
+                    <div className="space-y-1.5 text-[9.5pt]">
+                      {resumeData.education.map((edu: any, i: number) => (
+                        <div key={i} className="flex justify-between items-start">
+                          <div>
+                            <div className="font-bold text-slate-800 text-[10pt]">{edu.degree}</div>
+                            <div className="text-slate-600 font-medium text-[9.5pt]">{edu.institution}</div>
+                          </div>
+                          <div className="font-semibold whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
                         </div>
-                      </div>
+                      ))}
                     </div>
-                  )}
+                  </div>
+                </div>
+              )}
 
-                  {/* Certifications */}
-                  {resumeData.certifications && resumeData.certifications.length > 0 && (
-                    <div
-                      onClick={() => onSelectSection?.('certifications')}
-                      className={getSectionWrapperClass('certifications')}
-                      style={getSectionStyle('certifications')}
-                    >
-                      <div className="mb-3">
-                        <SectionHeader title="Certifications" sectionKey="certifications" />
-                        <ul className="list-disc pl-5 m-0 space-y-1 text-[9.5pt]">
-                          {resumeData.certifications.map((cert: any, i: number) => (
-                            <li key={i} className="pl-1 leading-relaxed">
-                              <span className="font-bold">{cert.name}</span> — {cert.issuer} ({cert.year})
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  )}
-                </>
+              {/* Certifications */}
+              {page.hasCertifications && resumeData.certifications && resumeData.certifications.length > 0 && (
+                <div
+                  onClick={() => onSelectSection?.('certifications')}
+                  className={getSectionWrapperClass('certifications')}
+                  style={getSectionStyle('certifications')}
+                >
+                  <div className="mb-3">
+                    <SectionHeader title="Certifications" sectionKey="certifications" />
+                    <ul className="list-disc pl-5 m-0 space-y-1 text-[9.5pt]">
+                      {resumeData.certifications.map((cert: any, i: number) => (
+                        <li key={i} className="pl-1 leading-relaxed">
+                          <span className="font-bold">{cert.name}</span> — {cert.issuer} ({cert.year})
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               )}
             </div>
 
@@ -459,8 +494,7 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
       })}
     </div>
   );
-}
-);
+});
 
 export const BannerTemplate = BannerTemplateComponent;
 
