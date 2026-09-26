@@ -126,7 +126,9 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
         for (let j = 0; j < bullets.length; j++) {
             const bulletH = getElementHeight(`meas-exp-${i}-bullet-${j}`);
             
-            if (remainingHeight < currentExpHeaderH + bulletH) {
+            const requiredSpace = currentExpObj.bullets.length === 0 ? currentExpHeaderH + bulletH : bulletH;
+            
+            if (remainingHeight < requiredSpace) {
                 if (currentExpObj.bullets.length > 0) {
                     currentPage.experiences.push({ ...currentExpObj, isSplit: true });
                     remainingHeight -= 12; // mb-3 gap between experiences
