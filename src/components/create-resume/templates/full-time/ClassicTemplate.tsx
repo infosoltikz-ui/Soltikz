@@ -4,7 +4,8 @@ import { ResumeTemplateProps, getSummaryArray, splitExperiencesForTemplate } fro
 
 // Helper to parse **bold** text in bullets
 const parseBoldText = (text: string) => {
-  const parts = text.split(/(\*\*.*?\*\*)/g);
+  const cleanText = text.replace(/^[-•*]\s*/, '');
+  const parts = cleanText.split(/(\*\*.*?\*\*)/g);
   return parts.map((part, index) => {
     if (part.startsWith('**') && part.endsWith('**')) {
       return <strong key={index}>{part.slice(2, -2)}</strong>;

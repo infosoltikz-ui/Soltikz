@@ -67,7 +67,7 @@ export function buildResumeDataFromProfile(
   // 3. Employment / Experience
   let experience: ResumeExperience[] = []
   if (Array.isArray(master.employment) && master.employment.length > 0) {
-    experience = master.employment.map((emp: any) => {
+    experience = master.employment.map((emp: any, expIdx: number) => {
       let durationStr = emp.startDate || ''
       if (emp.current) durationStr += ' - Present'
       else if (emp.endDate) durationStr += ` - ${emp.endDate}`
@@ -80,6 +80,20 @@ export function buildResumeDataFromProfile(
         bulletsArr = emp.responsibilities.split('\n').map((b: string) => b.trim()).filter(Boolean)
       } else if (Array.isArray(emp.bullets)) {
         bulletsArr = emp.bullets.filter(Boolean)
+      }
+
+      bulletsArr = bulletsArr.map(b => b.replace(/^[-•*]\s*/, ''))
+
+      const defaultExp = defaultResumeData.experience[expIdx % defaultResumeData.experience.length]
+      if (!isC2C && defaultExp) {
+        let padIdx = 0
+        while (bulletsArr.length < 8 && padIdx < defaultExp.bullets.length) {
+          const candidateBullet = defaultExp.bullets[padIdx].replace(/^[-•*]\s*/, '')
+          if (!bulletsArr.includes(candidateBullet)) {
+            bulletsArr.push(candidateBullet)
+          }
+          padIdx++
+        }
       }
 
       let envArr: string[] = []
@@ -100,7 +114,24 @@ export function buildResumeDataFromProfile(
       }
     })
   } else if (Array.isArray(userProfile.experience) && userProfile.experience.length > 0) {
-    experience = userProfile.experience
+    experience = userProfile.experience.map((emp: any, expIdx: number) => {
+      let bulletsArr = Array.isArray(emp.bullets) ? emp.bullets.map((b: string) => b.replace(/^[-•*]\s*/, '')) : []
+      const defaultExp = defaultResumeData.experience[expIdx % defaultResumeData.experience.length]
+      if (!isC2C && defaultExp) {
+        let padIdx = 0
+        while (bulletsArr.length < 8 && padIdx < defaultExp.bullets.length) {
+          const candidateBullet = defaultExp.bullets[padIdx].replace(/^[-•*]\s*/, '')
+          if (!bulletsArr.includes(candidateBullet)) {
+            bulletsArr.push(candidateBullet)
+          }
+          padIdx++
+        }
+      }
+      return {
+        ...emp,
+        bullets: bulletsArr
+      }
+    })
   } else {
     experience = defaultResumeData.experience
   }
