@@ -24,118 +24,110 @@ function splitBannerTemplateExperiences(
     return { pages: [[]] };
   }
 
-  // Canvas height for Page 1 & 2+ leaving ~25-30px for footer and extra safety margin
   const TOTAL_P1_CANVAS = 940;
-  const TOTAL_P2_CANVAS = 960;
-
-  // Banner header uses negative margin to pull up by 38px, taking roughly 144px overall, netting 106px of padded space.
+  const TOTAL_P2_CANVAS = 980;
   const headerHeight = 106;
 
-  // Summary height: Section header (36px) + mb-3 (12px) + paragraph lines (~17.4px per 85 chars for serif)
   const summaryArray = getSummaryArray(summary);
   const summaryText = summaryArray.join(' ');
-  const summaryLines = summaryText ? Math.ceil(summaryText.length / 85) : 0;
+  const summaryLines = summaryText ? Math.ceil(summaryText.length / 80) : 0;
   const summaryHeight = summaryText ? 48 + (summaryLines * 17.5) : 0;
 
-  // Technical Skills height: Section header (36px) + mb-3 (12px) + category rows (~24px per row, 2 cols)
   const skillsCount = skills?.length || 0;
   const skillsRows = Math.ceil(skillsCount / 2);
   const skillsHeight = skillsCount > 0 ? 48 + (skillsRows * 24) : 0;
 
-  // Remaining space on Page 1 for Experience section (subtract 44px for section header + mb-2)
-  const availableExpHeightP1 = Math.max(150, TOTAL_P1_CANVAS - (headerHeight + summaryHeight + skillsHeight) - 44);
+  let currentCanvasRemaining = Math.max(150, TOTAL_P1_CANVAS - (headerHeight + summaryHeight + skillsHeight) - 44);
 
-  const pages: any[][] = [];
+  const pages: any[][] = [[]];
   let pageIdx = 0;
-  pages[0] = [];
-  let currentCanvasRemaining = availableExpHeightP1;
 
-  for (let i = 0; i < expList.length; i++) {
-    let exp = expList[i];
-    // Role (17.5) + mb-1 (4) + Company (15.8) + mb-1 (4) + margins (8) + ul mt-1 (4) = 53.3px
-    // Environment (15.5) + mb-1.5 (6) = +21.5px (~75px)
-    // Add 12px to account for space-y-3 between experiences (if not the first one on the page)
-    let roleHeaderHeight = exp.environment && exp.environment.length > 0 ? 75 : 53;
+  // Deep clone to safely mutate during splitting
+  let queue = expList.map(e => ({ ...e, bullets: [...(e.bullets || [])] }));
+
+  while (queue.length > 0) {
+    let exp = queue.shift();
+    if (!exp) break;
+
+    // Calculate dynamic header height
+    let headerH = 0;
+    if (!exp.isContinued) {
+      headerH = exp.environment && exp.environment.length > 0 ? 75 : 53;
+    } else {
+      headerH = 53;
+    }
+    // Add gap if not the first item on this page
     if (pages[pageIdx].length > 0) {
-      roleHeaderHeight += 12; 
+      headerH += 12; 
     }
 
-    const bullets: string[] = exp.bullets || [];
-    // Estimate bullet height in BannerTemplate (9.5pt font, lineHeight 1.4, ~80 chars per line for Georgia/Serif)
-    const bulletHeights = bullets.map(b => {
-      const charCount = b.length;
-      const lines = Math.max(1, Math.ceil(charCount / 80));
-      return (lines * 17.6) + 4; // 17.6px per line + 4px space-y-1
+    // Estimate bullet heights
+    const bulletHeights = exp.bullets.map((b: string) => {
+      const lines = Math.max(1, Math.ceil(b.length / 80));
+      return (lines * 17.6) + 4;
     });
 
-    let currentExpBullets = [...bullets];
-    let currentBulletHeights = [...bulletHeights];
+    const totalBulletsH = bulletHeights.reduce((sum: number, h: number) => sum + h, 0);
+    const totalH = headerH + totalBulletsH;
 
-    while (currentExpBullets.length > 0) {
-      const totalBulletsH = currentBulletHeights.reduce((sum, h) => sum + h, 0);
-      const totalH = roleHeaderHeight + totalBulletsH;
-
-      if (totalH <= currentCanvasRemaining) {
-        // Fits completely on current page
-        pages[pageIdx].push({
-          ...exp,
-          bullets: currentExpBullets
-        });
-        currentCanvasRemaining -= totalH;
-        break;
-      } else {
-        // Space available for bullets on current page
-        const spaceForB = currentCanvasRemaining - roleHeaderHeight;
-
-        // Require at least 40px space to show at least 1-2 bullets before splitting
-        if (spaceForB >= 40) {
-          let fitCount = 0;
-          let accH = 0;
-          for (let bIdx = 0; bIdx < currentBulletHeights.length; bIdx++) {
-            if (accH + currentBulletHeights[bIdx] <= spaceForB) {
-              accH += currentBulletHeights[bIdx];
-              fitCount++;
-            } else {
-              break;
-            }
-          }
-
-          if (fitCount >= 1 && fitCount < currentExpBullets.length) {
-            pages[pageIdx].push({
-              ...exp,
-              bullets: currentExpBullets.slice(0, fitCount),
-              isSplit: true
-            });
-
-            // Prepare remaining bullets for next page
-            exp = {
-              ...exp,
-              isContinued: true
-            };
-            currentExpBullets = currentExpBullets.slice(fitCount);
-            currentBulletHeights = currentBulletHeights.slice(fitCount);
-            roleHeaderHeight = 53; // Continued header height
-
-            pageIdx++;
-            pages[pageIdx] = [];
-            // Next page has SectionHeader(36) + mb-3(12) = 48px overhead
-            currentCanvasRemaining = TOTAL_P2_CANVAS - 48;
+    if (totalH <= currentCanvasRemaining) {
+      // Fits completely
+      pages[pageIdx].push(exp);
+      currentCanvasRemaining -= totalH;
+    } else {
+      // Needs splitting
+      const spaceForB = currentCanvasRemaining - headerH;
+      
+      // Need at least 40px to safely fit 1-2 bullets
+      if (spaceForB >= 40) {
+        let fitCount = 0;
+        let accH = 0;
+        for (let h of bulletHeights) {
+          if (accH + h <= spaceForB) {
+            accH += h;
+            fitCount++;
           } else {
-            pageIdx++;
-            pages[pageIdx] = [];
-            currentCanvasRemaining = TOTAL_P2_CANVAS - 48;
+            break;
           }
+        }
+
+        if (fitCount > 0 && fitCount < exp.bullets.length) {
+          // Push fitting part
+          pages[pageIdx].push({
+            ...exp,
+            bullets: exp.bullets.slice(0, fitCount),
+            isSplit: true
+          });
+
+          // Re-queue the rest
+          queue.unshift({
+            ...exp,
+            bullets: exp.bullets.slice(fitCount),
+            isContinued: true
+          });
+
+          // Move to next page
+          pageIdx++;
+          pages[pageIdx] = [];
+          currentCanvasRemaining = TOTAL_P2_CANVAS - 48; // 48px overhead for page top margin/padding
         } else {
+          // Couldn't fit even one bullet, push entire exp to next page
           pageIdx++;
           pages[pageIdx] = [];
           currentCanvasRemaining = TOTAL_P2_CANVAS - 48;
+          queue.unshift(exp);
         }
+      } else {
+        // Not enough room for even the header, push entire exp to next page
+        pageIdx++;
+        pages[pageIdx] = [];
+        currentCanvasRemaining = TOTAL_P2_CANVAS - 48;
+        queue.unshift(exp);
       }
     }
   }
 
   // Account for Education/Certifications on the last page.
-  // We conservatively deduct ~150px on the last page to ensure they fit.
   const hasEduOrCerts = (skills && skills.length > 0) || (summary && summary.length > 0);
   if (currentCanvasRemaining < 160) {
      pageIdx++;
