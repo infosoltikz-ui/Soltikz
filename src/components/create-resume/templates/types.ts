@@ -137,38 +137,75 @@ export function splitExperiencesForTemplate(
   const summaryArray = getSummaryArray(summary);
   const summaryLength = summaryArray.join(' ').length;
 
-  // Base bullet budget for Page 1 first experience based on template layout header size
-  let maxBullets = 4; // Default for Classic ATS, Modern, Sidebar
+  // Max line capacity budget for Page 1 experience section
+  // Total A4 content height = 1023px. Header + Summary + Skills take ~280px.
+  let maxP1Lines = 20;
 
   if (templateKey.includes('banner') || templateKey.includes('certified')) {
-    // Banner and Certified templates have large headers/cert boxes (~140-160px)
-    maxBullets = 3;
-  } else {
-    maxBullets = 4;
+    maxP1Lines = 16;
   }
 
-  // Adjust for summary text length
-  if (summaryLength > 600 && maxBullets > 3) {
-    maxBullets -= 1;
-  } else if (summaryLength < 150 && maxBullets < 5 && !templateKey.includes('banner')) {
-    maxBullets += 1;
+  if (summaryLength > 600) {
+    maxP1Lines -= 2;
+  } else if (summaryLength < 150) {
+    maxP1Lines += 2;
   }
 
-  const firstExp = expList[0];
-  let page1Experiences: ResumeExperience[] = [];
-  let page2Experiences: ResumeExperience[] = [];
+  let page1Exps: ResumeExperience[] = [];
+  let page2Exps: ResumeExperience[] = [];
+  let currentP1Lines = 0;
+  let splitOccurred = false;
 
-  if (firstExp.bullets && firstExp.bullets.length > maxBullets) {
-    page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, maxBullets) }];
-    page2Experiences = [
-      { ...firstExp, bullets: firstExp.bullets.slice(maxBullets), isContinued: true },
-      ...expList.slice(1)
-    ];
-  } else {
-    page1Experiences = [firstExp];
-    page2Experiences = expList.slice(1);
+  for (let i = 0; i < expList.length; i++) {
+    const exp = expList[i];
+    if (splitOccurred) {
+      page2Exps.push(exp);
+      continue;
+    }
+
+    const expBullets = exp.bullets || [];
+    // Calculate line cost: 2 lines for role title/company + ~1.2 lines per bullet
+    const expLines = 2 + expBullets.length * 1.2;
+
+    if (currentP1Lines + expLines <= maxP1Lines) {
+      // Entire experience fits on Page 1
+      page1Exps.push(exp);
+      currentP1Lines += expLines;
+    } else {
+      // Experience needs to be split across Page 1 and Page 2
+      const remainingP1Lines = maxP1Lines - currentP1Lines - 2;
+      const p1BulletsCount = Math.floor(remainingP1Lines / 1.2);
+
+      if (p1BulletsCount >= 2 && expBullets.length > p1BulletsCount) {
+        page1Exps.push({
+          ...exp,
+          bullets: expBullets.slice(0, p1BulletsCount),
+          isSplit: true
+        });
+        page2Exps.push({
+          ...exp,
+          bullets: expBullets.slice(p1BulletsCount),
+          isContinued: true
+        });
+      } else if (currentP1Lines > 0) {
+        page2Exps.push(exp);
+      } else {
+        const safeCount = Math.max(2, Math.min(expBullets.length - 1, p1BulletsCount));
+        page1Exps.push({
+          ...exp,
+          bullets: expBullets.slice(0, safeCount),
+          isSplit: true
+        });
+        page2Exps.push({
+          ...exp,
+          bullets: expBullets.slice(safeCount),
+          isContinued: true
+        });
+      }
+      splitOccurred = true;
+    }
   }
 
-  return { page1Experiences, page2Experiences };
+  return { page1Experiences: page1Exps, page2Experiences: page2Exps };
 }
 
