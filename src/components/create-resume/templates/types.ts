@@ -138,16 +138,17 @@ export function splitExperiencesForTemplate(
   const summaryLength = summaryArray.join(' ').length;
 
   // Max line capacity budget for Page 1 experience section
-  // Total A4 content height = 1023px. Header + Summary + Skills take ~280px.
-  let maxP1Lines = 20;
+  // Printable A4 height = 1053px. Header + Summary + Skills take ~300px.
+  // Remaining space = ~753px = ~34-36 printed lines.
+  let maxP1Lines = 34;
 
   if (templateKey.includes('banner') || templateKey.includes('certified')) {
-    maxP1Lines = 16;
+    maxP1Lines = 28;
   }
 
-  if (summaryLength > 600) {
+  if (summaryLength > 800) {
     maxP1Lines -= 2;
-  } else if (summaryLength < 150) {
+  } else if (summaryLength < 200) {
     maxP1Lines += 2;
   }
 
@@ -164,19 +165,20 @@ export function splitExperiencesForTemplate(
     }
 
     const expBullets = exp.bullets || [];
-    // Calculate line cost: 2 lines for role title/company + ~1.2 lines per bullet
-    const expLines = 2 + expBullets.length * 1.2;
+    // Calculate line cost: 2 lines for role title/company + ~1.1 lines per bullet
+    const expLines = 2 + expBullets.length * 1.1;
 
     if (currentP1Lines + expLines <= maxP1Lines) {
       // Entire experience fits on Page 1
       page1Exps.push(exp);
       currentP1Lines += expLines;
     } else {
-      // Experience needs to be split across Page 1 and Page 2
+      // Experience doesn't fit completely on Page 1
       const remainingP1Lines = maxP1Lines - currentP1Lines - 2;
-      const p1BulletsCount = Math.floor(remainingP1Lines / 1.2);
+      const p1BulletsCount = Math.floor(remainingP1Lines / 1.1);
 
-      if (p1BulletsCount >= 2 && expBullets.length > p1BulletsCount) {
+      if (p1BulletsCount >= 6 && expBullets.length > p1BulletsCount) {
+        // Only split if we can keep AT LEAST 6 bullets on Page 1
         page1Exps.push({
           ...exp,
           bullets: expBullets.slice(0, p1BulletsCount),
@@ -187,22 +189,12 @@ export function splitExperiencesForTemplate(
           bullets: expBullets.slice(p1BulletsCount),
           isContinued: true
         });
-      } else if (currentP1Lines > 0) {
-        page2Exps.push(exp);
+        splitOccurred = true;
       } else {
-        const safeCount = Math.max(2, Math.min(expBullets.length - 1, p1BulletsCount));
-        page1Exps.push({
-          ...exp,
-          bullets: expBullets.slice(0, safeCount),
-          isSplit: true
-        });
-        page2Exps.push({
-          ...exp,
-          bullets: expBullets.slice(safeCount),
-          isContinued: true
-        });
+        // If remaining space allows less than 6 bullets, move the WHOLE experience entry to Page 2
+        page2Exps.push(exp);
+        splitOccurred = true;
       }
-      splitOccurred = true;
     }
   }
 

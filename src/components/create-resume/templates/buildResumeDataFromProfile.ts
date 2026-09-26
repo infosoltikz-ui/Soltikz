@@ -84,15 +84,20 @@ export function buildResumeDataFromProfile(
 
       bulletsArr = bulletsArr.map(b => b.replace(/^[-•*]\s*/, ''))
 
-      const defaultExp = defaultResumeData.experience[expIdx % defaultResumeData.experience.length]
-      if (!isC2C && defaultExp) {
-        let padIdx = 0
-        while (bulletsArr.length < 8 && padIdx < defaultExp.bullets.length) {
-          const candidateBullet = defaultExp.bullets[padIdx].replace(/^[-•*]\s*/, '')
-          if (!bulletsArr.includes(candidateBullet)) {
-            bulletsArr.push(candidateBullet)
+      if (!isC2C) {
+        let poolExpIdx = 0
+        while (bulletsArr.length < 8 && poolExpIdx < defaultResumeData.experience.length) {
+          const sampleExp = defaultResumeData.experience[(expIdx + poolExpIdx) % defaultResumeData.experience.length]
+          if (sampleExp && Array.isArray(sampleExp.bullets)) {
+            for (const b of sampleExp.bullets) {
+              if (bulletsArr.length >= 8) break
+              const candidateBullet = b.replace(/^[-•*]\s*/, '')
+              if (!bulletsArr.includes(candidateBullet)) {
+                bulletsArr.push(candidateBullet)
+              }
+            }
           }
-          padIdx++
+          poolExpIdx++
         }
       }
 
@@ -116,15 +121,20 @@ export function buildResumeDataFromProfile(
   } else if (Array.isArray(userProfile.experience) && userProfile.experience.length > 0) {
     experience = userProfile.experience.map((emp: any, expIdx: number) => {
       let bulletsArr = Array.isArray(emp.bullets) ? emp.bullets.map((b: string) => b.replace(/^[-•*]\s*/, '')) : []
-      const defaultExp = defaultResumeData.experience[expIdx % defaultResumeData.experience.length]
-      if (!isC2C && defaultExp) {
-        let padIdx = 0
-        while (bulletsArr.length < 8 && padIdx < defaultExp.bullets.length) {
-          const candidateBullet = defaultExp.bullets[padIdx].replace(/^[-•*]\s*/, '')
-          if (!bulletsArr.includes(candidateBullet)) {
-            bulletsArr.push(candidateBullet)
+      if (!isC2C) {
+        let poolExpIdx = 0
+        while (bulletsArr.length < 8 && poolExpIdx < defaultResumeData.experience.length) {
+          const sampleExp = defaultResumeData.experience[(expIdx + poolExpIdx) % defaultResumeData.experience.length]
+          if (sampleExp && Array.isArray(sampleExp.bullets)) {
+            for (const b of sampleExp.bullets) {
+              if (bulletsArr.length >= 8) break
+              const candidateBullet = b.replace(/^[-•*]\s*/, '')
+              if (!bulletsArr.includes(candidateBullet)) {
+                bulletsArr.push(candidateBullet)
+              }
+            }
           }
-          padIdx++
+          poolExpIdx++
         }
       }
       return {
