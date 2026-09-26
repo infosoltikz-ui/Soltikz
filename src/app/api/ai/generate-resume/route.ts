@@ -324,17 +324,19 @@ export async function POST(req: Request) {
       FOR C2C RESUMES (CONTRACT TO HIRE VENDOR SUBMISSION):
       - PROFESSIONAL SUMMARY: EXACTLY 10 bullet points. Every bullet MUST be 1 to 2 lines long (15 to 18 words per point) with bold **keywords** and quantified metrics (%).
       - SKILLS MATRIX: EXACTLY 10 categories, each with 5-7 items.
+      - ONLY generate Experience entries for companies that exist in the Master Profile. NEVER invent or hallucinate extra companies.
       - EXPERIENCE 1 (Most Recent Role): EXACTLY 10 BULLET POINTS (STRICT MINIMUM 10 BULLETS).
-      - EXPERIENCE 2: EXACTLY 8 to 10 BULLET POINTS.
-      - EXPERIENCE 3+: EXACTLY 6 to 8 BULLET POINTS.
+      - EXPERIENCE 2 (If exists in profile): EXACTLY 8 to 10 BULLET POINTS.
+      - EXPERIENCE 3+ (If exists in profile): EXACTLY 6 to 8 BULLET POINTS.
       - EVERY SINGLE BULLET: MUST BE MINIMUM 35-50 WORDS (2 TO 3 FULL PRINTED LINES). SHORT 1-LINE BULLETS ARE BANNED.
       ` : `
       FOR FULL-TIME RESUMES (CORPORATE DIRECT HIRE):
       - PROFESSIONAL SUMMARY: EXACTLY 5 sentences that join into one flowing prose paragraph. No bullets, no bold, no "I".
       - SKILLS MATRIX: EXACTLY 10 categories, each with 5-7 items.
+      - ONLY generate Experience entries for companies that exist in the Master Profile. NEVER invent or hallucinate extra companies.
       - EXPERIENCE 1 (Most Recent Role): EXACTLY 8 BULLET POINTS (MANDATORY 8 BULLETS).
-      - EXPERIENCE 2: EXACTLY 8 BULLET POINTS (MANDATORY 8 BULLETS).
-      - EXPERIENCE 3 & EXPERIENCE 4+: EXACTLY 5 to 6 BULLET POINTS.
+      - EXPERIENCE 2 (If exists in profile): EXACTLY 8 BULLET POINTS (MANDATORY 8 BULLETS).
+      - EXPERIENCE 3 & EXPERIENCE 4+ (If exists in profile): EXACTLY 5 to 6 BULLET POINTS.
       - EVERY SINGLE BULLET: MUST BE MINIMUM 35-50 WORDS (2 TO 3 FULL PRINTED LINES) WITH BOLD KEYWORDS & METRICS (%). NO WEAK VERBS.
       `,
       `CRITICAL: DO NOT SHORTEN OR COMPRESS BULLET POINTS. GENERATE LONG DETAILED 3-LINE BULLETS WITH METRICS AND BOLD KEYWORDS.`
