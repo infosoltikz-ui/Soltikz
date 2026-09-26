@@ -138,20 +138,19 @@ export function splitExperiencesForTemplate(
   const summaryLength = summaryArray.join(' ').length;
 
   // Base bullet budget for Page 1 first experience based on template layout header size
-  let maxBullets = 4; // Default for Classic ATS
+  let maxBullets = 4; // Default for Classic ATS, Modern, Sidebar
 
   if (templateKey.includes('banner') || templateKey.includes('certified')) {
-    // Banner and Certified templates have large headers/cert boxes (~150px)
-    maxBullets = 2;
-  } else if (templateKey.includes('modern') || templateKey.includes('sidebar')) {
-    // Modern & Sidebar templates have ~120px headers
+    // Banner and Certified templates have large headers/cert boxes (~140-160px)
     maxBullets = 3;
+  } else {
+    maxBullets = 4;
   }
 
   // Adjust for summary text length
-  if (summaryLength > 400 && maxBullets > 2) {
+  if (summaryLength > 600 && maxBullets > 3) {
     maxBullets -= 1;
-  } else if (summaryLength < 100 && maxBullets < 4 && !templateKey.includes('banner')) {
+  } else if (summaryLength < 150 && maxBullets < 5 && !templateKey.includes('banner')) {
     maxBullets += 1;
   }
 

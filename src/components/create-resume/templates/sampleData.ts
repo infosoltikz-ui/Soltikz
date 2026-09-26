@@ -13,67 +13,74 @@ export const sampleProfileData: ProfileData = {
 
 export const sampleResumeData: ResumeData = {
   summary: [
-    'Highly motivated and results-driven Senior Software Engineer with over 8 years of experience in designing, developing, and deploying scalable web applications.',
-    'Proven expertise in full-stack development, cloud architecture, and leading cross-functional teams to deliver high-impact software solutions on time.',
-    'Adept at solving complex technical challenges, optimizing performance, and mentoring junior developers to foster a culture of continuous learning and technical excellence.',
+    'Results-driven Senior Full Stack Software Engineer with 8+ years of experience in designing, architecting, and deploying enterprise-grade web applications and scalable cloud solutions.',
+    'Proven expertise across React, Next.js, TypeScript, Node.js, PostgreSQL, and AWS (EC2, S3, Lambda, Docker) with a strong focus on high performance, security, and responsive UI design.',
+    'Spearheaded complex microservices migrations, optimized database indexing to slash API response latency by 45%, and automated CI/CD deployment pipelines using GitHub Actions.',
+    'Adept at translating intricate business requirements into high-performing, ATS-compliant technical architectures while collaborating seamlessly across agile engineering teams.'
   ],
   skills: [
     {
-      category: 'Languages',
-      items: ['JavaScript', 'TypeScript', 'Python', 'Java', 'SQL', 'HTML/CSS'],
+      category: 'Core Languages & Frameworks',
+      items: ['JavaScript', 'TypeScript', 'Python', 'React', 'Next.js', 'Node.js', 'Express.js', 'HTML5', 'CSS3', 'Tailwind CSS'],
     },
     {
-      category: 'Frameworks',
-      items: ['React', 'Next.js', 'Node.js', 'Express', 'Django', 'Spring Boot'],
+      category: 'Databases & Cloud Platforms',
+      items: ['AWS (EC2, S3, Lambda, Docker)', 'PostgreSQL', 'MongoDB', 'Redis'],
     },
     {
-      category: 'Cloud & DevOps',
-      items: ['AWS', 'Docker', 'Kubernetes', 'CI/CD', 'Terraform', 'GitHub Actions'],
+      category: 'Tools, DevOps & CI/CD',
+      items: ['Git', 'GitHub Actions', 'Jest', 'Cypress', 'Vite', 'Webpack', 'Linux', 'Tailwind CSS'],
     },
     {
-      category: 'Databases',
-      items: ['PostgreSQL', 'MongoDB', 'Redis', 'Elasticsearch'],
+      category: 'Architecture & Methodologies',
+      items: ['Microservices', 'RESTful APIs', 'GraphQL', 'Serverless', 'Agile/Scrum', 'Test-Driven Development (TDD)', 'System Design'],
     },
   ],
   experience: [
     {
-      role: 'Senior Software Engineer',
-      company: 'TechNova Solutions',
-      duration: 'Mar 2021 - Present',
-      environment: ['React', 'Node.js', 'AWS', 'PostgreSQL'],
+      role: 'Senior Full Stack Engineer',
+      company: 'Infosys Technologies',
+      duration: '03/2022 - Present',
+      environment: ['React', 'Next.js', 'Node.js', 'TypeScript', 'AWS', 'PostgreSQL', 'Docker'],
       bullets: [
-        'Spearheaded the migration of a legacy monolithic application to a **microservices architecture**, improving system scalability by 40% and reducing deployment time by 60%.',
-        'Led a team of 5 engineers in developing a real-time analytics dashboard used by over **10,000 enterprise clients**.',
-        'Optimized database queries and implemented caching strategies with Redis, reducing API response times by an average of 300ms.',
-        'Established CI/CD pipelines using GitHub Actions, ensuring 99.9% uptime and zero-downtime deployments.',
-        'Mentored 3 junior developers, conducting code reviews and hosting weekly knowledge-sharing sessions.',
-        'Additional bullet point to extend content and ensure it spans to the next page when combined with other sections. This demonstrates the template layout for two pages.'
+        'Architected scalable cloud microservices using Node.js, TypeScript, and AWS Lambda, reducing backend infrastructure overhead by 32% across 1.2M monthly transactions.',
+        'Engineered high-performance responsive web interfaces using Next.js, React, and Tailwind CSS, improving Core Web Vitals and lowering page load times by 45%.',
+        'Designed resilient PostgreSQL and Redis caching layers, eliminating query bottlenecks and improving concurrent request throughput by 60%.',
+        'Automated end-to-end CI/CD delivery pipelines using Docker and GitHub Actions, cutting release deployment cycles from 4 hours to under 20 minutes.',
+        'Spearheaded the integration of GraphQL and RESTful APIs, streamlining front-end data fetching and reducing payload sizes across mobile and web clients by 35%.',
+        'Established robust unit, integration, and E2E testing frameworks with Jest and Cypress, elevating overall code coverage from 55% to 92%.',
+        'Enforced strict OAuth2 and JWT authentication protocols, protecting user data privacy and ensuring compliance with international SOC2 and HIPAA standards.',
+        'Mentored and onboarded 6 software engineers, conducting daily code reviews, establishing best practices, and fostering an agile test-driven development environment.'
+      ],
+    },
+    {
+      role: 'Full Stack Software Engineer',
+      company: 'Innovate Systems Inc.',
+      duration: '01/2019 - 02/2022',
+      environment: ['Python', 'Django', 'React', 'MongoDB', 'AWS', 'Docker'],
+      bullets: [
+        'Developed high-throughput e-commerce platform services using Python, Django, and React, processing over $10M in monthly online customer transactions.',
+        'Integrated multi-tenant Stripe and PayPal payment gateways, ensuring strict PCI-DSS compliance and reducing transaction failures by 24%.',
+        'Refactored legacy database schemas in MongoDB and PostgreSQL, optimizing aggregation queries and reducing database CPU utilization by 40%.',
+        'Built interactive real-time telemetry dashboards using WebSocket and D3.js, enabling operations teams to monitor live system metrics effortlessly.',
+        'Collaborated with UX product teams to revamp checkout flows, driving a 28% boost in user conversion rates and reducing cart abandonment.',
+        'Configured Dockerized microservices on AWS Elastic Beanstalk, facilitating rapid automated scaling during major marketing launch campaigns.',
+        'Resolved high-priority production incidents and system bottlenecks, maintaining an average Mean Time to Resolution (MTTR) under 15 minutes.'
       ],
     },
     {
       role: 'Software Engineer',
-      company: 'Innovate Systems Inc.',
-      duration: 'Jun 2017 - Feb 2021',
-      environment: ['Python', 'Django', 'React', 'MongoDB'],
-      bullets: [
-        'Developed and maintained a high-traffic e-commerce platform processing over **$5M in monthly transactions**.',
-        'Implemented a secure payment gateway integration using Stripe API, ensuring PCI compliance and reducing transaction failures by 15%.',
-        'Built a comprehensive automated testing suite (unit, integration, and E2E) that increased code coverage from 45% to 85%.',
-        'Collaborated with UX/UI designers to redesign the checkout flow, resulting in a 22% increase in conversion rates.',
-        'Resolved critical production bugs and performance bottlenecks during peak holiday traffic events.',
-        'Designed RESTful APIs for mobile application consumption, ensuring strict versioning and backward compatibility.',
-      ],
-    },
-    {
-      role: 'Junior Web Developer',
       company: 'Creative Digital Agency',
-      duration: 'Aug 2015 - May 2017',
-      environment: ['JavaScript', 'HTML5', 'CSS3', 'PHP'],
+      duration: '06/2016 - 12/2018',
+      environment: ['JavaScript', 'HTML5', 'CSS3', 'Sass', 'Webpack', 'REST API'],
       bullets: [
-        'Created responsive, mobile-first websites for 20+ clients across various industries including retail, healthcare, and education.',
-        'Integrated third-party APIs and CMS platforms (WordPress, Contentful) to enable dynamic content management.',
-        'Improved website accessibility and SEO, increasing average organic traffic for clients by 35%.',
-        'Demonstrated strong problem-solving skills in high-pressure environments, consistently delivering projects ahead of schedule.'
+        'Built custom responsive web applications for 25+ enterprise clients across healthcare, finance, and retail sectors using JavaScript, HTML5, and Sass.',
+        'Designed and integrated RESTful web APIs for headless CMS platforms like Contentful and WordPress, empowering marketing teams to publish content dynamically.',
+        'Optimized web page performance and SEO structures, boosting organic search engine rankings and increasing client site traffic by an average of 50%.',
+        'Implemented WCAG 2.1 AA accessibility guidelines, making client portals accessible to users with disabilities across all modern web browsers.',
+        'Configured cross-browser testing matrices across desktop and mobile devices, eliminating UI layout regressions before production releases.',
+        'Automated asset bundling and image optimization using Webpack and Babel, reducing initial bundle footprint by 40%.',
+        'Participated in daily Scrum standups and sprint planning, consistently delivering high-quality user stories within allocated timeframes.'
       ],
     },
   ],
@@ -81,12 +88,12 @@ export const sampleResumeData: ResumeData = {
     {
       degree: 'Master of Science in Computer Science',
       institution: 'Stanford University',
-      year: '2015',
+      year: '2016',
     },
     {
       degree: 'Bachelor of Science in Software Engineering',
       institution: 'University of California, Berkeley',
-      year: '2013',
+      year: '2014',
     },
   ],
   certifications: [
@@ -99,11 +106,6 @@ export const sampleResumeData: ResumeData = {
       name: 'Certified Kubernetes Administrator (CKA)',
       issuer: 'Cloud Native Computing Foundation',
       year: '2022',
-    },
-    {
-      name: 'Professional Scrum Master I (PSM I)',
-      issuer: 'Scrum.org',
-      year: '2020',
     },
   ],
 };
