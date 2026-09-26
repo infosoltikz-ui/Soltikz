@@ -25,26 +25,26 @@ function splitClassicTemplateExperiences(
     return { pages: [[]] };
   }
 
-  // Canvas height for Page 1 (has Header, Summary, Skills) = 1020px
+  // Printable height per page = 1123px - 38px (pt) - 32px (pb) = 1053px. 
+  // We use 1020px to leave space for the footer (approx 25-30px).
   const TOTAL_P1_CANVAS = 1020;
-  // Canvas height for Page 2+ (Experience / Education / Certifications) = 1020px
   const TOTAL_P2_CANVAS = 1020;
 
-  // 1. Header (Name + Contact info): ~66px
-  const headerHeight = 66;
+  // Header: Name (30) + Contact (17) + margins (16) = 63px
+  const headerHeight = 63;
 
-  // 2. Summary height: Section header (32px) + paragraph lines (~16.5px per 115 chars)
+  // Summary height: Section header (40px) + mb-3 (12px) + paragraph lines (~18.5px per 115 chars)
   const summaryArray = getSummaryArray(summary);
   const summaryText = summaryArray.join(' ');
   const summaryLines = summaryText ? Math.ceil(summaryText.length / 115) : 0;
-  const summaryHeight = summaryText ? 32 + (summaryLines * 16.5) + 12 : 0;
+  const summaryHeight = summaryText ? 52 + (summaryLines * 18.5) : 0;
 
-  // 3. Technical Skills height: Section header (32px) + category lines (~20.5px per category)
+  // Technical Skills height: Section header (40) + mb-3 (12) + category lines (~21.5px per category)
   const skillsCount = skills?.length || 0;
-  const skillsHeight = skillsCount > 0 ? 32 + (skillsCount * 20.5) + 12 : 0;
+  const skillsHeight = skillsCount > 0 ? 52 + (skillsCount * 21.5) : 0;
 
-  // Remaining height available on Page 1 for Experience section (subtract 32px for section header)
-  const availableExpHeightP1 = Math.max(150, TOTAL_P1_CANVAS - (headerHeight + summaryHeight + skillsHeight) - 32);
+  // Remaining space on Page 1 for Experience section (subtract 48px for section header + mb-2)
+  const availableExpHeightP1 = Math.max(150, TOTAL_P1_CANVAS - (headerHeight + summaryHeight + skillsHeight) - 48);
 
   const pages: any[][] = [];
   let pageIdx = 0;
@@ -53,13 +53,16 @@ function splitClassicTemplateExperiences(
 
   for (let i = 0; i < expList.length; i++) {
     let exp = expList[i];
-    let roleHeaderHeight = exp.environment && exp.environment.length > 0 ? 54 : 38;
+    // Role (18.3) + mb-0.5 (2) + Company (16.6) + mb-1 (4) + margins (12) = 53px
+    // Environment (16.5) + mb-1.5 (6) = +22.5px (~76px)
+    let roleHeaderHeight = exp.environment && exp.environment.length > 0 ? 76 : 53;
 
     const bullets: string[] = exp.bullets || [];
+    // Estimate bullet height in ClassicTemplate (9.5pt font, leading-snug, ~120 chars per line safely)
     const bulletHeights = bullets.map(b => {
       const charCount = b.length;
-      const lines = Math.max(1, Math.ceil(charCount / 105));
-      return (lines * 16) + 6; // 16px per line + 6px space-y-1.5
+      const lines = Math.max(1, Math.ceil(charCount / 120));
+      return (lines * 17.5) + 6; // 17.5px per line + 6px space-y-1.5
     });
 
     let currentExpBullets = [...bullets];
@@ -81,7 +84,8 @@ function splitClassicTemplateExperiences(
         // Space available for bullets on current page
         const spaceForB = currentCanvasRemaining - roleHeaderHeight;
 
-        if (spaceForB >= 60) {
+        // Require at least 40px space to show at least 1-2 bullets before splitting
+        if (spaceForB >= 40) {
           let fitCount = 0;
           let accH = 0;
           for (let bIdx = 0; bIdx < currentBulletHeights.length; bIdx++) {
@@ -107,23 +111,33 @@ function splitClassicTemplateExperiences(
             };
             currentExpBullets = currentExpBullets.slice(fitCount);
             currentBulletHeights = currentBulletHeights.slice(fitCount);
-            roleHeaderHeight = 36;
+            // Height for continued header (Role + Company + margins)
+            roleHeaderHeight = 53; 
 
             pageIdx++;
             pages[pageIdx] = [];
-            currentCanvasRemaining = TOTAL_P2_CANVAS - 32;
+            // Next page has SectionHeader(40) + mb-3(12) = 52px overhead
+            currentCanvasRemaining = TOTAL_P2_CANVAS - 52;
           } else {
             pageIdx++;
             pages[pageIdx] = [];
-            currentCanvasRemaining = TOTAL_P2_CANVAS - 32;
+            currentCanvasRemaining = TOTAL_P2_CANVAS - 52;
           }
         } else {
           pageIdx++;
           pages[pageIdx] = [];
-          currentCanvasRemaining = TOTAL_P2_CANVAS - 32;
+          currentCanvasRemaining = TOTAL_P2_CANVAS - 52;
         }
       }
     }
+  }
+
+  // Account for Education/Certifications on the last page.
+  // We conservatively deduct ~150px on the last page to ensure they fit.
+  const hasEduOrCerts = (skills && skills.length > 0) || (summary && summary.length > 0);
+  if (currentCanvasRemaining < 160) {
+     pageIdx++;
+     pages[pageIdx] = [];
   }
 
   return { pages };
