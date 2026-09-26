@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import type { ResumeTemplateProps } from './types';
+import { ResumeTemplateProps, getSummaryArray } from './types';
 
 export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
   resumeData,
@@ -168,25 +168,29 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
           </div>
 
           {/* Professional Summary */}
-          {resumeData.summary && resumeData.summary.length > 0 && (
-            <div 
-              onClick={() => onSelectSection?.('summary')}
-              className={getSectionWrapperClass('summary')}
-              style={getSectionStyle('summary')}
-            >
-              <div className="mb-3">
-                <SectionHeader title="Professional Summary" sectionKey="summary" />
-                <ul className="list-none m-0 space-y-1">
-                  {resumeData.summary.map((point: string, i: number) => (
-                    <li key={i} className="flex gap-2">
-                      <span className="shrink-0 font-semibold">•</span>
-                      <span className="text-justify">{renderWithBold(point)}</span>
-                    </li>
-                  ))}
-                </ul>
+          {(() => {
+            const summaryList = getSummaryArray(resumeData.summary);
+            if (!summaryList || summaryList.length === 0) return null;
+            return (
+              <div 
+                onClick={() => onSelectSection?.('summary')}
+                className={getSectionWrapperClass('summary')}
+                style={getSectionStyle('summary')}
+              >
+                <div className="mb-3">
+                  <SectionHeader title="Professional Summary" sectionKey="summary" />
+                  <ul className="list-none m-0 space-y-1">
+                    {summaryList.map((point: string, i: number) => (
+                      <li key={i} className="flex gap-2">
+                        <span className="shrink-0 font-semibold">•</span>
+                        <span className="text-justify">{renderWithBold(point)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* Technical Skills */}
           {resumeData.skills && resumeData.skills.length > 0 && (

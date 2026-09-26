@@ -1,5 +1,5 @@
 import { sampleProfileData, sampleResumeData, c2cSampleData } from './sampleData'
-import type { ProfileData, ResumeData, ResumeExperience, ResumeEducation, ResumeCertification, ResumeSkillCategory } from './types'
+import { getSummaryArray, ProfileData, ResumeData, ResumeExperience, ResumeEducation, ResumeCertification, ResumeSkillCategory } from './types'
 
 export function buildResumeDataFromProfile(
   userProfile?: any,
@@ -50,13 +50,17 @@ export function buildResumeDataFromProfile(
 
   // 2. Summary
   let summaryText = personal.summary || master.summary || ''
-  let summary: string[] = []
-  if (Array.isArray(summaryText)) {
-    summary = summaryText.filter(Boolean)
-  } else if (typeof summaryText === 'string' && summaryText.trim()) {
-    summary = [summaryText.trim()]
-  }
-  if (summary.length === 0) {
+  let summary: string[] = getSummaryArray(summaryText)
+
+  if (isC2C) {
+    let c2cSummary = summary.length > 0 ? [...summary] : []
+    let fillIdx = 0
+    while (c2cSummary.length < 10) {
+      c2cSummary.push(c2cSampleData.summary[fillIdx % c2cSampleData.summary.length])
+      fillIdx++
+    }
+    summary = c2cSummary.slice(0, 10)
+  } else if (summary.length === 0) {
     summary = defaultResumeData.summary
   }
 

@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import type { ResumeTemplateProps } from './types';
+import { ResumeTemplateProps, getSummaryArray } from './types';
 
 export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
   resumeData,
@@ -198,25 +198,29 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
         </div>
 
         {/* C2C Professional Summary */}
-        {resumeData.summary && resumeData.summary.length > 0 && (
-          <div 
-            onClick={() => onSelectSection?.('summary')}
-            className={getSectionWrapperClass('summary')}
-            style={getSectionStyle('summary')}
-          >
-            <div className="mb-4">
-              <SectionHeader title="Professional Summary" sectionKey="summary" />
-              <ul className="list-none m-0 space-y-1 text-justify text-[9.5pt]">
-                {resumeData.summary.map((point: string, i: number) => (
-                  <li key={i} className="flex gap-2">
-                    <span className="shrink-0 font-bold" style={{ color: BANNER }}>•</span>
-                    <span>{renderWithBold(point)}</span>
-                  </li>
-                ))}
-              </ul>
+        {(() => {
+          const summaryList = getSummaryArray(resumeData.summary);
+          if (!summaryList || summaryList.length === 0) return null;
+          return (
+            <div 
+              onClick={() => onSelectSection?.('summary')}
+              className={getSectionWrapperClass('summary')}
+              style={getSectionStyle('summary')}
+            >
+              <div className="mb-4">
+                <SectionHeader title="Professional Summary" sectionKey="summary" />
+                <ul className="list-none m-0 space-y-1 text-justify text-[9.5pt]">
+                  {summaryList.map((point: string, i: number) => (
+                    <li key={i} className="flex gap-2">
+                      <span className="shrink-0 font-bold" style={{ color: BANNER }}>•</span>
+                      <span>{renderWithBold(point)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* C2C Technical Skills */}
         {resumeData.skills && resumeData.skills.length > 0 && (

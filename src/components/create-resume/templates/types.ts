@@ -58,6 +58,48 @@ export interface ProfileData {
   availability?: string; // e.g., 2 weeks, Immediate
 }
 
+export const getSummaryArray = (summary: any): string[] => {
+  if (!summary) return [];
+  let rawItems: string[] = [];
+  
+  if (Array.isArray(summary)) {
+    rawItems = summary;
+  } else if (typeof summary === 'string') {
+    rawItems = [summary];
+  } else {
+    return [];
+  }
+  
+  const result: string[] = [];
+  
+  rawItems.forEach(item => {
+    if (typeof item !== 'string' || !item.trim()) return;
+    
+    // Split by newlines or bullet markers first
+    const lines = item.split(/\n|•|;(?=\s*[A-Z])/).map(l => l.trim()).filter(Boolean);
+    
+    lines.forEach(line => {
+      // Clean leading bullets or numbers like "1.", "-", "*", "•"
+      const cleanedLine = line.replace(/^[-•*]\s*/, '').replace(/^\d+[\.\)]\s*/, '').trim();
+      if (!cleanedLine) return;
+      
+      // If line is a long paragraph (> 130 chars) and contains sentence breaks (". "), split into sentences
+      if (cleanedLine.length > 130 && cleanedLine.includes('. ')) {
+        const sentences = cleanedLine
+          .split(/(?<=\.)\s+(?=[A-Z])/)
+          .map(s => s.trim().replace(/^[-•*]\s*/, '').replace(/^\d+[\.\)]\s*/, ''))
+          .filter(Boolean);
+        
+        sentences.forEach(s => result.push(s));
+      } else {
+        result.push(cleanedLine);
+      }
+    });
+  });
+  
+  return result;
+};
+
 export interface SectionStyleConfig {
   fontFamily?: string;
   fontSize?: string;

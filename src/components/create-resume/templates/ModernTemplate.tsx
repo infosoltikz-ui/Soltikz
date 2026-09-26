@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import type { ResumeTemplateProps } from './types';
+import { ResumeTemplateProps, getSummaryArray } from './types';
 
 export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
   resumeData,
@@ -136,22 +136,25 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
           </div>
 
           {/* Professional Summary */}
-          {resumeData.summary && resumeData.summary.length > 0 && (
-            <div 
-              onClick={() => onSelectSection?.('summary')}
-              className={getSectionWrapperClass('summary')}
-              style={getSectionStyle('summary')}
-            >
-              <div className="mb-4">
-                <SectionHeader title="Summary" sectionKey="summary" />
-                <p className="text-justify leading-relaxed m-0" style={{ fontSize: '10.5pt' }}>
-                  {Array.isArray(resumeData.summary)
-                    ? resumeData.summary.join(' ')
-                    : resumeData.summary}
-                </p>
+          {(() => {
+            const summaryList = getSummaryArray(resumeData.summary);
+            if (!summaryList || summaryList.length === 0) return null;
+            const paragraphText = summaryList.join(' ');
+            return (
+              <div 
+                onClick={() => onSelectSection?.('summary')}
+                className={getSectionWrapperClass('summary')}
+                style={getSectionStyle('summary')}
+              >
+                <div className="mb-4">
+                  <SectionHeader title="Summary" sectionKey="summary" />
+                  <p className="text-justify leading-relaxed m-0" style={{ fontSize: '10.5pt' }}>
+                    {renderWithBold(paragraphText)}
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* Skills */}
           {resumeData.skills && resumeData.skills.length > 0 && (

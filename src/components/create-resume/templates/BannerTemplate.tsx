@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import type { ResumeTemplateProps } from './types';
+import { ResumeTemplateProps, getSummaryArray } from './types';
 
 // Helper to parse **bold** text in bullets
 const parseBoldText = (text: string) => {
@@ -140,22 +140,25 @@ export const BannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
             </div>
 
             {/* Personal Summary */}
-            {resumeData.summary && resumeData.summary.length > 0 && (
-              <div 
-                onClick={() => onSelectSection?.('summary')}
-                className={getSectionWrapperClass('summary')}
-                style={getSectionStyle('summary')}
-              >
-                <div className="mb-3">
-                  <SectionHeader title="Professional Summary" sectionKey="summary" />
-                  <p className="text-justify leading-snug m-0" style={{ fontSize: '9.5pt' }}>
-                    {Array.isArray(resumeData.summary)
-                      ? resumeData.summary.join(' ')
-                      : resumeData.summary}
-                  </p>
+            {(() => {
+              const summaryList = getSummaryArray(resumeData.summary);
+              if (!summaryList || summaryList.length === 0) return null;
+              const paragraphText = summaryList.join(' ');
+              return (
+                <div 
+                  onClick={() => onSelectSection?.('summary')}
+                  className={getSectionWrapperClass('summary')}
+                  style={getSectionStyle('summary')}
+                >
+                  <div className="mb-3">
+                    <SectionHeader title="Professional Summary" sectionKey="summary" />
+                    <p className="text-justify leading-snug m-0" style={{ fontSize: '9.5pt' }}>
+                      {parseBoldText(paragraphText)}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
 
             {/* Skills */}
             {resumeData.skills && resumeData.skills.length > 0 && (
