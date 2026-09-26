@@ -24,17 +24,17 @@ function splitBannerTemplateExperiences(
     return { pages: [[]] };
   }
 
-  // Canvas height for Page 1 & 2+ leaving ~25-30px for footer
-  const TOTAL_P1_CANVAS = 1020;
-  const TOTAL_P2_CANVAS = 1020;
+  // Canvas height for Page 1 & 2+ leaving ~25-30px for footer and extra safety margin
+  const TOTAL_P1_CANVAS = 1000;
+  const TOTAL_P2_CANVAS = 1000;
 
   // Banner header uses negative margin to pull up by 38px, taking roughly 144px overall, netting 106px of padded space.
   const headerHeight = 106;
 
-  // Summary height: Section header (36px) + mb-3 (12px) + paragraph lines (~17.4px per 115 chars)
+  // Summary height: Section header (36px) + mb-3 (12px) + paragraph lines (~17.4px per 95 chars for serif)
   const summaryArray = getSummaryArray(summary);
   const summaryText = summaryArray.join(' ');
-  const summaryLines = summaryText ? Math.ceil(summaryText.length / 115) : 0;
+  const summaryLines = summaryText ? Math.ceil(summaryText.length / 95) : 0;
   const summaryHeight = summaryText ? 48 + (summaryLines * 17.5) : 0;
 
   // Technical Skills height: Section header (36px) + mb-3 (12px) + category rows (~22px per row, 2 cols)
@@ -57,10 +57,10 @@ function splitBannerTemplateExperiences(
     let roleHeaderHeight = exp.environment && exp.environment.length > 0 ? 75 : 53;
 
     const bullets: string[] = exp.bullets || [];
-    // Estimate bullet height in BannerTemplate (9.5pt font, lineHeight 1.4, ~115 chars per line)
+    // Estimate bullet height in BannerTemplate (9.5pt font, lineHeight 1.4, ~95 chars per line for Serif)
     const bulletHeights = bullets.map(b => {
       const charCount = b.length;
-      const lines = Math.max(1, Math.ceil(charCount / 115));
+      const lines = Math.max(1, Math.ceil(charCount / 95));
       return (lines * 17.6) + 4; // 17.6px per line + 4px space-y-1
     });
 
