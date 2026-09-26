@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { ResumeTemplateProps, getSummaryArray } from '../types';
+import { ResumeTemplateProps, getSummaryArray, splitExperiencesForTemplate } from '../types';
 
 export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
   resumeData,
@@ -64,24 +64,11 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 
   let globalBulletCount = 1;
 
-  const experiences = resumeData.experience || [];
-  
-  let page1Experiences: any[] = [];
-  let page2Experiences: any[] = [];
-  
-  if (experiences.length > 0) {
-    const firstExp = experiences[0];
-    if (firstExp.bullets && firstExp.bullets.length > 4) {
-      page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 4), isSplit: true }];
-      page2Experiences = [
-        { ...firstExp, bullets: firstExp.bullets.slice(4), isContinued: true },
-        ...experiences.slice(1)
-      ];
-    } else {
-      page1Experiences = [firstExp];
-      page2Experiences = experiences.slice(1);
-    }
-  }
+  const { page1Experiences, page2Experiences } = splitExperiencesForTemplate(
+    resumeData.experience,
+    'c2c',
+    resumeData.summary
+  );
 
   const pageContainerClass = "resume-page bg-white w-[794px] min-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:border-none print:break-after-page";
   const pageContainerStyle: React.CSSProperties = {

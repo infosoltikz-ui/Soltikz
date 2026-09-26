@@ -9,6 +9,8 @@ export interface ResumeExperience {
   isCurrent?: boolean;
   environment?: string[]; // E.g., ['React', 'Node.js', 'AWS']
   bullets: string[];
+  isContinued?: boolean;
+  isSplit?: boolean;
 }
 
 export interface ResumeEducation {
@@ -121,3 +123,53 @@ export interface ResumeTemplateProps {
   activeSectionKey?: string | null;
   onSelectSection?: (sectionKey: string) => void;
 }
+
+export function splitExperiencesForTemplate(
+  experiences: ResumeExperience[] | undefined,
+  templateKey: 'classic' | 'modern' | 'banner' | 'certified' | 'sidebar' | 'c2c' | 'c2c-banner' | 'c2c-certified' | 'c2c-modern' | 'c2c-sidebar' | string,
+  summary?: any
+): { page1Experiences: ResumeExperience[]; page2Experiences: ResumeExperience[] } {
+  const expList = experiences || [];
+  if (expList.length === 0) {
+    return { page1Experiences: [], page2Experiences: [] };
+  }
+
+  const summaryArray = getSummaryArray(summary);
+  const summaryLength = summaryArray.join(' ').length;
+
+  // Base bullet budget for Page 1 first experience based on template layout header size
+  let maxBullets = 4; // Default for Classic ATS
+
+  if (templateKey.includes('banner') || templateKey.includes('certified')) {
+    // Banner and Certified templates have large headers/cert boxes (~150px)
+    maxBullets = 2;
+  } else if (templateKey.includes('modern') || templateKey.includes('sidebar')) {
+    // Modern & Sidebar templates have ~120px headers
+    maxBullets = 3;
+  }
+
+  // Adjust for summary text length
+  if (summaryLength > 400 && maxBullets > 2) {
+    maxBullets -= 1;
+  } else if (summaryLength < 100 && maxBullets < 4 && !templateKey.includes('banner')) {
+    maxBullets += 1;
+  }
+
+  const firstExp = expList[0];
+  let page1Experiences: ResumeExperience[] = [];
+  let page2Experiences: ResumeExperience[] = [];
+
+  if (firstExp.bullets && firstExp.bullets.length > maxBullets) {
+    page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, maxBullets) }];
+    page2Experiences = [
+      { ...firstExp, bullets: firstExp.bullets.slice(maxBullets), isContinued: true },
+      ...expList.slice(1)
+    ];
+  } else {
+    page1Experiences = [firstExp];
+    page2Experiences = expList.slice(1);
+  }
+
+  return { page1Experiences, page2Experiences };
+}
+

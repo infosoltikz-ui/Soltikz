@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { ResumeTemplateProps, getSummaryArray } from '../types';
+import { ResumeTemplateProps, getSummaryArray, splitExperiencesForTemplate } from '../types';
 
 export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>(({
   resumeData,
@@ -65,23 +65,11 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
     );
   };
 
-  const experiences = resumeData.experience || [];
-  let page1Experiences: any[] = [];
-  let page2Experiences: any[] = [];
-
-  if (experiences.length > 0) {
-    const firstExp = experiences[0];
-    if (firstExp.bullets && firstExp.bullets.length > 4) {
-      page1Experiences = [{ ...firstExp, bullets: firstExp.bullets.slice(0, 4) }];
-      page2Experiences = [
-        { ...firstExp, bullets: firstExp.bullets.slice(4), isContinued: true },
-        ...experiences.slice(1)
-      ];
-    } else {
-      page1Experiences = [firstExp];
-      page2Experiences = experiences.slice(1);
-    }
-  }
+  const { page1Experiences, page2Experiences } = splitExperiencesForTemplate(
+    resumeData.experience,
+    'modern',
+    resumeData.summary
+  );
 
   const hasPage2 = page2Experiences.length > 0 || (resumeData.education && resumeData.education.length > 0) || (resumeData.certifications && resumeData.certifications.length > 0);
 
