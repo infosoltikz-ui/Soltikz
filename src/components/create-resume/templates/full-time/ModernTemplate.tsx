@@ -25,18 +25,18 @@ function splitModernTemplateExperiences(
   }
 
   // Printable height per page = 1123px - 38px (pt) - 32px (pb) = 1053px. 
-  // We use 1020px to leave a small safe buffer.
-  const TOTAL_P1_CANVAS = 1020;
-  const TOTAL_P2_CANVAS = 1020;
+  // We use 1050px to maximize usage while keeping a tiny 3px buffer.
+  const TOTAL_P1_CANVAS = 1050;
+  const TOTAL_P2_CANVAS = 1050;
 
-  // Header: Name + Contact info = ~62px
-  const headerHeight = 62;
+  // Header: Name (30) + Contact (17) + margins (16) = 63px
+  const headerHeight = 63;
 
-  // Summary height: Section header (48px) + mb-3 (12px) + paragraph lines (~19px per 110 chars)
+  // Summary height: Section header (48px) + mb-3 (12px) + paragraph lines (~18.5px per 115 chars)
   const summaryArray = getSummaryArray(summary);
   const summaryText = summaryArray.join(' ');
-  const summaryLines = summaryText ? Math.ceil(summaryText.length / 110) : 0;
-  const summaryHeight = summaryText ? 60 + (summaryLines * 19) : 0;
+  const summaryLines = summaryText ? Math.ceil(summaryText.length / 115) : 0;
+  const summaryHeight = summaryText ? 60 + (summaryLines * 18.5) : 0;
 
   // Technical Skills height (2-Column Grid): Section header (48) + mb-3 (12) + rows (~20px per row)
   const skillsCount = skills?.length || 0;
@@ -53,16 +53,16 @@ function splitModernTemplateExperiences(
 
   for (let i = 0; i < expList.length; i++) {
     let exp = expList[i];
-    // Role (19) + Company (18) + margins (16) = 53px
-    // Environment (18) + mb-1.5 (6) = +24px
-    let roleHeaderHeight = exp.environment && exp.environment.length > 0 ? 77 : 53;
+    // Role (18.3) + Company (17.5) + margins (16.2) = ~52px
+    // Environment (17.4) + mb-1.5 (6) = +23.4px (~75px)
+    let roleHeaderHeight = exp.environment && exp.environment.length > 0 ? 75 : 52;
 
     const bullets: string[] = exp.bullets || [];
-    // Estimate bullet height in ModernTemplate (9.5pt font, leading-snug, ~90 chars per line)
+    // Estimate bullet height in ModernTemplate (9.5pt font, leading-snug, ~120 chars per line safely)
     const bulletHeights = bullets.map(b => {
       const charCount = b.length;
-      const lines = Math.max(1, Math.ceil(charCount / 90));
-      return (lines * 18) + 6; // 18px per line + 6px space-y-1.5
+      const lines = Math.max(1, Math.ceil(charCount / 120));
+      return (lines * 17.5) + 6; // 17.5px per line + 6px space-y-1.5
     });
 
     let currentExpBullets = [...bullets];
@@ -84,8 +84,8 @@ function splitModernTemplateExperiences(
         // Space available for bullets on current page
         const spaceForB = currentCanvasRemaining - roleHeaderHeight;
 
-        // Require at least 60px space to show a couple of bullets before splitting
-        if (spaceForB >= 60) {
+        // Require at least 40px space to show at least 1-2 bullets before splitting
+        if (spaceForB >= 40) {
           let fitCount = 0;
           let accH = 0;
           for (let bIdx = 0; bIdx < currentBulletHeights.length; bIdx++) {
@@ -112,7 +112,7 @@ function splitModernTemplateExperiences(
             currentExpBullets = currentExpBullets.slice(fitCount);
             currentBulletHeights = currentBulletHeights.slice(fitCount);
             // Height for continued header (Role + Company + margins)
-            roleHeaderHeight = 45; 
+            roleHeaderHeight = 52; 
 
             pageIdx++;
             pages[pageIdx] = [];
@@ -135,10 +135,9 @@ function splitModernTemplateExperiences(
   // Account for Education/Certifications on the last page.
   // We conservatively deduct ~150px on the last page to ensure they fit,
   // or push to a new page if the last page is nearly full.
-  const hasEduOrCerts = (skills && skills.length > 0) || (summary && summary.length > 0); // Simplified check since we don't pass edu/certs to the function. We assume yes if not empty resume.
-  if (currentCanvasRemaining < 180) {
-     // If less than 180px left, the Education/Certs section might cut off.
-     // By adding an empty array, the renderer will generate another page for Education.
+  const hasEduOrCerts = (skills && skills.length > 0) || (summary && summary.length > 0);
+  if (currentCanvasRemaining < 160) {
+     // If less than 160px left, the Education/Certs section might cut off.
      pageIdx++;
      pages[pageIdx] = [];
   }
