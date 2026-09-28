@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowLeft, Check, Layout, Sparkles, ShieldCheck, FileCheck, ChevronDown, Settings, LogOut, BookOpen } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, Layout, Sparkles, ShieldCheck, FileCheck, ChevronDown, Settings, LogOut, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/utils/cn'
 import { useState, useRef, useEffect } from 'react'
@@ -193,16 +193,6 @@ export function CreateResumeHeader({
 
         {/* ── Right: badge + user ── */}
         <div className="flex items-center gap-2 shrink-0">
-          {/* How It Works guide button */}
-          <button
-            onClick={() => setGuideOpen(true)}
-            className="hidden sm:flex items-center gap-1.5 h-9 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-emerald-700 hover:border-emerald-300 transition-all text-[12px] font-bold shadow-xs"
-            title="How to generate your resume"
-          >
-            <BookOpen className="w-3.5 h-3.5" />
-            <span className="hidden lg:block">How it Works</span>
-          </button>
-
           <div className="hidden lg:flex items-center gap-1.5 text-[12px] font-bold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
             <FileCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
             <span>ATS Certified</span>
@@ -212,6 +202,55 @@ export function CreateResumeHeader({
 
       </div>
     </header>
+
+    {/* ── Animated Sub-bar ── */}
+    <div className="sticky top-[68px] z-30 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-slate-700/50 shadow-lg">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-10 flex items-center justify-between gap-4">
+
+        {/* Left: pulsing dot + sparkle + explanation text */}
+        <div className="flex items-center gap-2.5 min-w-0 flex-1 overflow-hidden">
+          {/* Live pulsing dot */}
+          <span className="relative flex h-2 w-2 shrink-0">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+          </span>
+
+          {/* Rotating sparkle icon */}
+          <Sparkles
+            className="w-3 h-3 text-emerald-400 shrink-0"
+            style={{ animation: 'spin 5s linear infinite' }}
+          />
+
+          {/* Explanation text */}
+          <p className="text-[11.5px] font-semibold text-slate-400 whitespace-nowrap overflow-hidden text-ellipsis">
+            <span className="text-emerald-400 font-bold">AI Resume Suite</span>
+            <span className="mx-2 text-slate-600">·</span>
+            Paste any job description — AI tailors your resume with ATS keywords, power bullets &amp; interview prep in under 3 min.
+          </p>
+        </div>
+
+        {/* Right: bouncing arrow + How it Works button */}
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="hidden sm:flex items-center gap-1 text-slate-500">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Guide</span>
+            <ArrowRight
+              className="w-3.5 h-3.5 text-emerald-400"
+              style={{ animation: 'bounce 1s ease-in-out infinite alternate' }}
+            />
+          </span>
+
+          <button
+            onClick={() => setGuideOpen(true)}
+            className="flex items-center gap-1.5 h-7 px-3.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white text-[11.5px] font-bold transition-all shadow-md shadow-emerald-500/30 hover:shadow-emerald-400/40 hover:scale-[1.03] active:scale-[0.97] select-none"
+          >
+            <BookOpen className="w-3 h-3 shrink-0" />
+            How it Works
+          </button>
+        </div>
+
+      </div>
+    </div>
     </>
+
   )
 }
