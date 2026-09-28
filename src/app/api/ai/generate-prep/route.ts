@@ -4,41 +4,61 @@ import { zodResponseFormat } from 'openai/helpers/zod';
 import { generateAIResponse } from '@/utils/ai-gateway';
 import { createClient } from '@/utils/supabase/server';
 
+const KeyPointSchema = z.object({
+  title: z.string(),
+  bullets: z.array(z.string()),
+  tip: z.string().optional()
+})
+
+const SelfPitchSchema = z.object({
+  fullVersion: z.string().describe("A natural spoken 5-6 paragraph full introduction for 'Tell me about yourself'. Each paragraph 3-4 lines. Simple, confident, conversational language. Cover: who they are, current role and tech stack, key achievement with metrics, backend/cross-team experience, engineering practices, and why this specific role."),
+  shortVersion: z.string().describe("A crisp 3-paragraph version for when the interviewer wants a quick answer. Each paragraph 3-4 lines covering: who+experience+skills, key achievements+role, why this opportunity."),
+  keyPoints: z.array(KeyPointSchema).describe("Exactly 8 key talking points the candidate must remember. Each with a title (e.g. 'Who You Are'), 2-4 bullet points with specific details from their profile, and an optional tip for that point."),
+  strengthsAnswer: z.object({
+    opening: z.string().describe("1-2 sentence opener for 'What are your strengths?' (e.g. 'My key strengths are X, Y, Z.')"),
+    strengths: z.array(z.object({
+      name: z.string(),
+      detail: z.string()
+    })).describe("4-5 strengths with a one-sentence explanation each, derived from actual resume experience.")
+  }),
+  whyShouldWeHireYou: z.string().describe("A 2-paragraph answer to 'Why should we hire you?' that references the JD requirements and the candidate's actual experience."),
+  interviewTip: z.object({
+    avoid: z.array(z.string()).describe("4-6 topics/skills to NOT emphasize (e.g. backend skills if applying for frontend role)"),
+    focus: z.array(z.string()).describe("6-8 core themes to lead the entire interview narrative with"),
+    flow: z.array(z.string()).describe("8-10 sequential interview flow steps (e.g. 'Who I am' → '6+ years' → 'React + TS')")
+  })
+})
+
 const InterviewPrepFormat = z.object({
-  hrQuestions: z.array(z.string()).describe("3 common behavioral HR questions based on the role level."),
-  techQuestions: z.array(z.string()).describe("5 deep technical questions based directly on the JD requirements."),
+  hrQuestions: z.array(z.string()),
+  techQuestions: z.array(z.string()),
   starAnswers: z.array(z.object({
     question: z.string(),
     situation: z.string(),
     task: z.string(),
     action: z.string(),
     result: z.string()
-  })).describe("2 example STAR method answers constructed using the user's actual resume experience."),
-  selfIntroduction: z.string().describe("A powerful 3-4 paragraph spoken 'Tell me about yourself' pitch. Each paragraph must be 3-4 lines. Use simple, confident, conversational language. Deeply align with the specific JD, company, and candidate's real experience and metrics. Use \\n\\n to separate paragraphs."),
-  companyNotes: z.string().describe("General advice on what this type of company usually looks for.")
+  })),
+  selfPitch: SelfPitchSchema,
+  companyNotes: z.string()
 });
 
 const SYSTEM_PROMPT = `
-You are a Senior Technical Interview Coach with 20+ years of experience preparing candidates for top tech companies.
+You are a Senior Technical Interview Coach with 20+ years of experience preparing candidates at Google, Meta, Amazon, and top startups.
 Analyze the candidate's tailored Resume and the target Job Description carefully.
 
-Generate interview preparation materials tailored EXACTLY to this specific candidate, role, and company.
+Generate a COMPLETE, deeply personalized interview preparation guide for this SPECIFIC candidate applying for this SPECIFIC role at this SPECIFIC company.
 
-For the selfIntroduction (Tell me about yourself):
-- Write a SPOKEN pitch, not a formal letter. It should sound natural when said out loud in an interview.
-- Write EXACTLY 3 to 4 paragraphs separated by \n\n.
-- Each paragraph must be 3 to 4 lines long (not short, not too long).
-- USE SIMPLE, CLEAR, CONFIDENT WORDS. Avoid jargon-heavy or overly formal language.
-- Paragraph 1: Who you are, how many years of experience, and your main technical strength (React, frontend, etc.). Reference the company name and role directly.
-- Paragraph 2: Your most impressive real achievement(s) from the resume with specific numbers/metrics. Connect it directly to what the JD is asking for.
-- Paragraph 3: Why THIS company specifically excites you. Reference the company's domain, mission, or tech stack.
-- Paragraph 4 (optional): Your leadership/teamwork value and what you bring to the team beyond code.
+RULES:
+1. Use ONLY the candidate's actual experience, metrics, and skills from their resume. NEVER invent details.
+2. The selfPitch must sound like a real human speaking confidently — natural, clear, not robotic.
+3. All numbers/metrics in the pitch MUST come from the actual resume (e.g., 45% improvement, 6 junior engineers).
+4. The keyPoints array must have EXACTLY 8 items covering: Who You Are, Primary Expertise, Current Role, Performance Achievement, Architecture, API/Backend Collaboration, Quality & Engineering Practices, Leadership.
+5. The interviewTip.avoid list should clearly identify skills that are in the resume but NOT the primary focus of this JD (e.g. heavy backend skills for a frontend role).
+6. The interviewTip.flow should be a step-by-step interview narrative flow using arrows.
+7. For STAR answers, use ONLY the candidate's actual experience bullets. Make each STAR component 2-3 sentences.
 
-For STAR answers:
-- Construct realistic answers using ONLY the candidate's actual experience bullets from their resume.
-- Each STAR component (situation/task/action/result) should be 2-3 sentences.
-
-Return a perfect JSON object mapping to the schema.
+Return a perfect JSON object matching the schema exactly.
 `;
 
 export async function POST(req: Request) {
@@ -61,13 +81,16 @@ export async function POST(req: Request) {
 
     if (aiResponse.error || !aiResponse.data) throw new Error(aiResponse.error || 'Failed to generate prep');
 
+    const d = aiResponse.data
+
+    // Store selfPitch as JSON string in self_introduction for backward compat
     await supabase.from('interview_preparations').insert({
       resume_id: resumeId,
-      hr_questions: aiResponse.data.hrQuestions,
-      tech_questions: aiResponse.data.techQuestions,
-      star_answers: aiResponse.data.starAnswers,
-      self_introduction: aiResponse.data.selfIntroduction,
-      company_notes: aiResponse.data.companyNotes
+      hr_questions: d.hrQuestions,
+      tech_questions: d.techQuestions,
+      star_answers: d.starAnswers,
+      self_introduction: JSON.stringify(d.selfPitch),
+      company_notes: d.companyNotes
     });
 
     await supabase.from('ai_telemetry_logs').insert({
@@ -82,7 +105,7 @@ export async function POST(req: Request) {
       status: 'success'
     });
 
-    return NextResponse.json({ success: true, prep: aiResponse.data });
+    return NextResponse.json({ success: true, prep: d });
 
   } catch (error: any) {
     console.error('Interview Prep Error:', error);
