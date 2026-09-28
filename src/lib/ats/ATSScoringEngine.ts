@@ -34,33 +34,45 @@ export class ATSScoringEngine {
     evidence.push(...formatAnalysis.evidence);
 
     // 3. Keyword/Skills Analysis
-    const requiredSkills = jd.requiredSkills || [];
-    const preferredSkills = jd.preferredSkills || jd.technologies || []; // fallback to tech if preferred not defined by AI
-    
-    // Separate Priority keywords into required if not there
+    const requiredSkills = new Set(jd.requiredSkills || []);
+    const preferredSkills = new Set(jd.preferredSkills || []);
+    const technologies = jd.technologies || [];
     const priorityKws = jd.priorityKeywords || [];
-    for (const kw of priorityKws) {
-      if (!requiredSkills.includes(kw) && !preferredSkills.includes(kw)) {
-        requiredSkills.push(kw);
+
+    // Merge all extracted technologies into preferred skills if they aren't already required
+    for (const tech of technologies) {
+      if (!requiredSkills.has(tech)) {
+        preferredSkills.add(tech);
       }
     }
 
-    const skillsAnalysis = this.keywordMatcher.analyzeSkills(requiredSkills, preferredSkills, resumeText);
+    // Priority keywords MUST be required
+    for (const kw of priorityKws) {
+      if (!requiredSkills.has(kw)) {
+        requiredSkills.add(kw);
+        preferredSkills.delete(kw); // promote from preferred to required
+      }
+    }
+
+    const finalRequired = Array.from(requiredSkills);
+    const finalPreferred = Array.from(preferredSkills);
+
+    const skillsAnalysis = this.keywordMatcher.analyzeSkills(finalRequired, finalPreferred, resumeText);
     
     // Calculate Skills Scores
     let requiredScore = 0;
-    if (requiredSkills.length > 0) {
-      requiredScore = (skillsAnalysis.matchedRequired.length / requiredSkills.length) * 100;
-      evidence.push(`Found ${skillsAnalysis.matchedRequired.length}/${requiredSkills.length} Required Skills.`);
+    if (finalRequired.length > 0) {
+      requiredScore = (skillsAnalysis.matchedRequired.length / finalRequired.length) * 100;
+      evidence.push(`Found ${skillsAnalysis.matchedRequired.length}/${finalRequired.length} Required Skills.`);
     } else {
       requiredScore = 100; // No requirements = perfect match
       evidence.push(`No required skills strictly specified in JD.`);
     }
 
     let preferredScore = 0;
-    if (preferredSkills.length > 0) {
-      preferredScore = (skillsAnalysis.matchedPreferred.length / preferredSkills.length) * 100;
-      evidence.push(`Found ${skillsAnalysis.matchedPreferred.length}/${preferredSkills.length} Preferred Skills.`);
+    if (finalPreferred.length > 0) {
+      preferredScore = (skillsAnalysis.matchedPreferred.length / finalPreferred.length) * 100;
+      evidence.push(`Found ${skillsAnalysis.matchedPreferred.length}/${finalPreferred.length} Preferred Skills.`);
     } else {
       preferredScore = 100;
     }
