@@ -32,12 +32,7 @@ export class FormatAnalyzer {
       evidence.push("Basic educational qualifications cannot be verified.");
     }
 
-    // 2. Check contact info
-    if (!resume.personalInfo?.email && !resume.personalInfo?.phone) {
-      score -= 20;
-      issues.push("Missing contact information (Email/Phone).");
-      evidence.push("ATS drops profiles that lack contact parsing.");
-    }
+    // 2. Check contact info (Skipped: Contact info is injected by the UI via profileData, not AI generated resumeData)
 
     // 3. Bullet length analysis (Readability / Keyword stuffing check)
     if (resume.experience) {

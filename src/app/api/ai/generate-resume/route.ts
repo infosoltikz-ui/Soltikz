@@ -4,16 +4,7 @@ import { zodResponseFormat } from 'openai/helpers/zod';
 import { generateAIResponse } from '@/utils/ai-gateway';
 import { createClient } from '@/utils/supabase/server';
 
-// ─── STEP 1: Keyword Extraction Schema ───────────────────────────────────────
-const KeywordExtractionFormat = z.object({
-  mustHaveKeywords: z.array(z.string()).describe(
-    'Every exact technical keyword, tool, framework, library, cloud service, methodology, and skill explicitly required or mentioned in the JD.'
-  ),
-  jobTitle: z.string().describe('The exact job title from the JD'),
-  coreDomain: z.string().describe('The primary domain (e.g., Frontend Engineering, Data Engineering, DevOps)'),
-  keyResponsibilities: z.array(z.string()).describe('Top 5 core responsibilities from the JD as short phrases'),
-});
-
+// --- Keyword Extraction code removed since we now rely on parse-jd data ---
 // ─── STEP 2: Resume Generation Schema ────────────────────────────────────────
 const GeneratedResumeFormat = z.object({
   summary: z.array(z.string()).describe(
@@ -47,18 +38,6 @@ const GeneratedResumeFormat = z.object({
     year: z.string(),
   })),
 });
-
-// ─── KEYWORD EXTRACTION PROMPT ────────────────────────────────────────────────
-const KEYWORD_EXTRACTION_PROMPT = `
-You are an expert ATS keyword analyst. Extract every single keyword from the Job Description.
-
-Rules:
-- Extract EVERY keyword — tools, frameworks, libraries, databases, cloud services, methodologies, soft skills.
-- Use EXACT spelling and capitalisation (e.g., "React.js" not "react", "AWS Lambda" not "lambda").
-- Include ALL technologies mentioned anywhere in the JD, even in "nice to have" sections.
-- This keyword list is directly injected into the resume — completeness is critical for 90+ ATS scores.
-- Return 25-60 keywords depending on JD richness. More is better.
-`;
 
 // ─── RESUME GENERATION PROMPT (DYNAMIC, KEYWORD-INJECTED) ─────────────────────
 const buildGenerationPrompt = (
@@ -278,20 +257,18 @@ export async function POST(req: Request) {
     // }
 
     // ═══════════════════════════════════════════════════════════════
-    // STEP 1: Extract ALL keywords from JD
-    // Fast, cheap, deterministic (temperature=0, gpt-4o-mini)
+    // STEP 1: Aggregate ALL keywords from already parsed JD Data
+    // Ensures consistency between ATS Scoring Engine and Generation Engine
     // ═══════════════════════════════════════════════════════════════
-    const keywordResponse = await generateAIResponse<any>({
-      systemPrompt: KEYWORD_EXTRACTION_PROMPT,
-      userPrompt: `Extract all keywords from this Job Description:\n${JSON.stringify(parsedJdData)}`,
-      model: 'gpt-4o-mini',
-      temperature: 0,
-      responseFormat: zodResponseFormat(KeywordExtractionFormat, 'keyword_extraction'),
-    });
-
-    const extractedKeywords: string[] = keywordResponse.data?.mustHaveKeywords || [];
-    const jobTitle: string = keywordResponse.data?.jobTitle || parsedJdData?.jobTitle || 'Software Engineer';
-    const coreDomain: string = keywordResponse.data?.coreDomain || 'Software Engineering';
+    const extractedKeywords: string[] = Array.from(new Set([
+      ...(parsedJdData.requiredSkills || []),
+      ...(parsedJdData.preferredSkills || []),
+      ...(parsedJdData.technologies || []),
+      ...(parsedJdData.priorityKeywords || [])
+    ]));
+    
+    const jobTitle: string = parsedJdData.jobTitle || 'Software Engineer';
+    const coreDomain: string = parsedJdData.industry || 'Software Engineering';
 
     // ═══════════════════════════════════════════════════════════════
     // STEP 2: Generate Resume with ALL keywords explicitly injected
