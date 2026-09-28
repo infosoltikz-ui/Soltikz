@@ -25,13 +25,13 @@ CRITICAL REQUIREMENT: You MUST generate EXACTLY 3 distinct variations of the cov
 2. The Impact-Driven Innovator (Bold, metric-focused, aggressive, startup-friendly tone)
 3. The Passionate Storyteller (Narrative-driven, focuses on culture fit, enthusiasm, and passion for the product)
 
-RULES:
+RULES FOR EVERY VARIATION:
 - Write in first person, as the candidate.
-- Reference the actual company name and job title from the JD naturally in the opening paragraph.
+- Length & Structure: Each variation MUST contain 3 to 4 substantial paragraphs. Every single paragraph MUST contain 4 to 5 detailed, well-crafted sentences. Do not write short 1-2 sentence paragraphs.
+- Deep Alignment: Reference the actual company name and job title naturally. Deeply align the content with the company's domain, the specific requirements of the role, and the candidate's exact profile.
 - Ground every claim in the candidate's real, provided experience. NEVER invent employers, projects, metrics, or skills that are not present in the Master Profile.
 - Use the JD's own keywords/terminology where the candidate genuinely has that skill, to help with ATS keyword matching.
-- Keep it concise: 3-4 short paragraphs per variation. No filler like "I am a hard worker" without concrete backing.
-- Do not repeat the resume verbatim — this should read as a genuine, focused pitch for why this specific role is a fit.
+- Tell a compelling story connecting past achievements to the future value the candidate will bring to THIS specific company and role.
 
 Return a perfect JSON object mapping exactly to the schema, containing the 3 variations.
 `;
