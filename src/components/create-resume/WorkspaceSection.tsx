@@ -562,7 +562,7 @@ export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateNa
             </div>
           </div>
 
-          {!coverLetter ? (
+          {!coverLetterRes ? (
             <div className="text-center py-10">
               <p className="text-[13px] text-slate-500 font-medium max-w-md mx-auto mb-5">
                 Generate a cover letter written from your Master Profile and tailored to this job description's own keywords.
@@ -577,7 +577,7 @@ export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateNa
               </Button>
             </div>
           ) : (
-            <CoverLetterViewer content={coverLetter} candidateName={candidateName} documentTitle="Cover_Letter" />
+            <CoverLetterViewer content={coverLetterRes} candidateName={candidateName} documentTitle="Cover_Letter" />
           )}
         </div>
       )}
