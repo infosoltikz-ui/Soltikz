@@ -39,10 +39,10 @@ export class ATSScoringEngine {
     const technologies = jd.technologies || [];
     const priorityKws = jd.priorityKeywords || [];
 
-    // Merge all extracted technologies into preferred skills if they aren't already required
+    // Merge all extracted technologies into REQUIRED skills, because in the real world, ATS systems filter heavily based on tech stack
     for (const tech of technologies) {
-      if (!requiredSkills.has(tech)) {
-        preferredSkills.add(tech);
+      if (!preferredSkills.has(tech)) {
+        requiredSkills.add(tech);
       }
     }
 
@@ -138,8 +138,8 @@ export class ATSScoringEngine {
       (titleScore * (SCORING_CONFIG.title / 100))
     );
 
-    // Overall Score (e.g. 30% ATS parsing + 70% Job Match)
-    const overallScore = Math.round((atsCompatibilityScore * 0.3) + (jobMatchScore * 0.7));
+    // Overall Score (e.g. 20% ATS parsing + 80% Job Match)
+    const overallScore = Math.round((atsCompatibilityScore * 0.2) + (jobMatchScore * 0.8));
 
     // Confidence
     // Confidence drops if JD is very sparse or Resume is very sparse
