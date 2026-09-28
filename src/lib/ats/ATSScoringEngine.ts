@@ -64,6 +64,10 @@ export class ATSScoringEngine {
     if (finalRequired.length > 0) {
       requiredScore = (skillsAnalysis.matchedRequired.length / finalRequired.length) * 100;
       evidence.push(`Found ${skillsAnalysis.matchedRequired.length}/${finalRequired.length} Required Skills.`);
+      
+      if (skillsAnalysis.missingRequired.length > 0) {
+        evidence.push(`CRITICAL GAP: You are missing ${skillsAnalysis.missingRequired.length} required skills (${skillsAnalysis.missingRequired.join(', ')}). Add these to your 'Core Skills' or recent project bullets if you have experience with them, as ATS filters strictly evaluate these.`);
+      }
     } else {
       requiredScore = 100; // No requirements = perfect match
       evidence.push(`No required skills strictly specified in JD.`);
@@ -73,6 +77,10 @@ export class ATSScoringEngine {
     if (finalPreferred.length > 0) {
       preferredScore = (skillsAnalysis.matchedPreferred.length / finalPreferred.length) * 100;
       evidence.push(`Found ${skillsAnalysis.matchedPreferred.length}/${finalPreferred.length} Preferred Skills.`);
+      
+      if (skillsAnalysis.missingPreferred.length > 0) {
+        evidence.push(`PREFERRED GAP: Missing ${skillsAnalysis.missingPreferred.length} preferred tools/technologies (${skillsAnalysis.missingPreferred.join(', ')}). Including these can significantly boost your ranking against competing candidates.`);
+      }
     } else {
       preferredScore = 100;
     }
