@@ -141,12 +141,15 @@ export function WorkspaceSection({
     setTimeout(() => setCopiedKey(null), 2500)
   }
 
-  // Parse selfPitch — supports new JSON format and old plain string fallback
-  const rawSelfIntro = interviewPrep?.self_introduction || ''
-  let selfPitch: any = null
-  try { selfPitch = rawSelfIntro ? JSON.parse(rawSelfIntro) : null } catch { selfPitch = null }
+  // Parse selfPitch — supports new JSON format (from API) and DB string fallback
+  let selfPitch: any = interviewPrep?.selfPitch || null
+  const rawSelfIntro = interviewPrep?.self_introduction || interviewPrep?.selfIntroduction || ''
+  
+  if (!selfPitch && rawSelfIntro) {
+    try { selfPitch = typeof rawSelfIntro === 'string' ? JSON.parse(rawSelfIntro) : rawSelfIntro } catch { selfPitch = null }
+  }
 
-  const selfIntroFull = selfPitch?.fullVersion || rawSelfIntro ||
+  const selfIntroFull = selfPitch?.fullVersion || (typeof rawSelfIntro === 'string' ? rawSelfIntro : '') ||
     "Hello, I am an experienced professional passionate about building high-performance solutions that solve complex business challenges. Over the course of my career, I have specialized in delivering resilient architectures, optimizing system workflows, and driving team productivity.\n\nIn my recent roles, I led initiatives that noticeably improved system throughput and slashed downtime, collaborating closely with cross-functional product and engineering teams.\n\nI am thrilled about this opportunity because your team's mission directly aligns with my technical expertise and passion for building impactful software."
 
   const selfIntroShort = selfPitch?.shortVersion || ''
