@@ -1,4 +1,4 @@
-import { ATSAnalysisOptions, ATSMatchResult, ParsedJobDescription, ResumeData } from './types';
+import { ATSMatchResult, ParsedJobDescription, ResumeData } from './types';
 import { KeywordMatcher } from './KeywordMatcher';
 import { ExperienceMatcher } from './ExperienceMatcher';
 import { FormatAnalyzer } from './FormatAnalyzer';
