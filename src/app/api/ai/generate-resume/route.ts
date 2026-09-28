@@ -7,7 +7,7 @@ import { createClient } from '@/utils/supabase/server';
 // ─── STEP 1: Keyword Extraction Schema ───────────────────────────────────────
 const KeywordExtractionFormat = z.object({
   mustHaveKeywords: z.array(z.string()).describe(
-    'Every exact technical keyword, tool, framework, library, cloud service, methodology, and skill explicitly required or mentioned in the JD. These MUST appear verbatim in the resume.'
+    'Every exact technical keyword, tool, framework, library, cloud service, methodology, and skill explicitly required or mentioned in the JD.'
   ),
   jobTitle: z.string().describe('The exact job title from the JD'),
   coreDomain: z.string().describe('The primary domain (e.g., Frontend Engineering, Data Engineering, DevOps)'),
@@ -23,7 +23,7 @@ const GeneratedResumeFormat = z.object({
     category: z.string(),
     items: z.array(z.string()),
   })).describe(
-    'EXACTLY 10 skill categories for both C2C and Full-Time. EXACTLY 5-7 items per category. JD exact terms MUST come first. Standard categories: Core Domain Skills, Tools & Platforms, Programming & Scripting, Databases & Data Handling, Cloud & Infrastructure, Frameworks & Methodologies, Testing & Quality, Reporting & Visualization, Collaboration & Workflow, Operating Systems & Environments. No proficiency ratings.'
+    'EXACTLY 10 skill categories for both C2C and Full-Time. EXACTLY 5-7 items per category. Only include JD terms if they match the user profile. Standard categories: Core Domain Skills, Tools & Platforms, Programming & Scripting, Databases & Data Handling, Cloud & Infrastructure, Frameworks & Methodologies, Testing & Quality, Reporting & Visualization, Collaboration & Workflow, Operating Systems & Environments. No proficiency ratings.'
   ),
   experience: z.array(z.object({
     id: z.string().describe('Original project/experience ID from master profile'),
@@ -164,8 +164,9 @@ PROFESSIONAL SUMMARY — C2C (BULLETS, NOT PROSE):
 
 SKILLS MATRIX — C2C:
   - EXACTLY 10 grouped categories.
-  - EXACTLY 5-7 items per category. JD's exact terms MUST come first in every line.
-  - NO proficiency bars, ratings, percentages, or years-per-skill.
+  - EXACTLY 5-7 items per category.
+  - If a JD keyword is highly relevant to the user's master profile, place it first in the line.
+  - DO NOT inject JD keywords that the user does not possess.
 
 EXPERIENCE — C2C (STRICT MANDATORY BULLET COUNTS):
   - EXACTLY 10 Powerful Bullet Points for EVERY company/experience (NO LESS THAN 10).
@@ -205,7 +206,8 @@ PROFESSIONAL SUMMARY — FULL-TIME (PROSE PARAGRAPH, NOT BULLETS):
 
 SKILLS MATRIX — FULL-TIME (10 CATEGORIES REQUIRED):
   - EXACTLY 10 categories. EXACTLY 5-7 items per category.
-  - JD's exact terms MUST appear first in each category line.
+  - If a JD keyword is highly relevant to the user's master profile, place it first in the line.
+  - DO NOT inject JD keywords that the user does not possess.
   - Use THESE exact category names:
       1. Core Domain Skills
       2. Tools & Platforms
