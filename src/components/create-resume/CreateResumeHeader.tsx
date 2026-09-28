@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowLeft, ArrowRight, Check, Layout, Sparkles, ShieldCheck, FileCheck, ChevronDown, Settings, LogOut, BookOpen } from 'lucide-react'
+import { ArrowLeft, ChevronRight, Check, Layout, Sparkles, ShieldCheck, FileCheck, ChevronDown, Settings, LogOut, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/utils/cn'
 import { useState, useRef, useEffect } from 'react'
@@ -229,15 +229,10 @@ export function CreateResumeHeader({
           </p>
         </div>
 
-        {/* Right: bouncing arrow + How it Works button */}
+        {/* Right: pulsing arrow + How it Works button */}
         <div className="flex items-center gap-2 shrink-0">
-          <span className="hidden sm:flex items-center gap-1 text-slate-500">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Guide</span>
-            <ArrowRight
-              className="w-3.5 h-3.5 text-emerald-400"
-              style={{ animation: 'bounce 1s ease-in-out infinite alternate' }}
-            />
-          </span>
+          {/* Pulsing arrow pointing to button */}
+          <ChevronRight className="w-4 h-4 text-emerald-400 animate-pulse" />
 
           <button
             onClick={() => setGuideOpen(true)}
