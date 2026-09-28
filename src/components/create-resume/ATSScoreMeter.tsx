@@ -355,6 +355,21 @@ export function ATSScoreMeter({
           </div>
         )}
 
+        {/* Action Plan for Missing Keywords */}
+        {missingKw.length > 0 && (
+          <div className="bg-emerald-50 dark:bg-emerald-950/20 rounded-xl border border-emerald-200/80 dark:border-emerald-800/50 p-4 shadow-2xs space-y-2">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-emerald-600" />
+              <h4 className="text-[13px] font-extrabold text-emerald-900 dark:text-emerald-100">
+                Action Plan to Boost Your Score
+              </h4>
+            </div>
+            <p className="text-[12px] text-emerald-800 dark:text-emerald-200/80 leading-relaxed font-medium">
+              To increase your ATS score to 95%+, click <strong>Edit Target Job & Details</strong> and add these exact keywords to your profile. If you don't have experience with them, consider learning the basics of these technologies!
+            </p>
+          </div>
+        )}
+
         {/* Evidence Analysis Box */}
         <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700/80 p-4 shadow-2xs space-y-2.5">
           <div className="flex items-center gap-2">
