@@ -61,9 +61,15 @@ interface WorkspaceSectionProps {
   atsData?: ATSAnalysisData | null
   resumeId?: string | null
   candidateName?: string
+  email?: string
+  phone?: string
+  location?: string
+  linkedin?: string
+  companyName?: string
+  jobTitle?: string
 }
 
-export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateName }: WorkspaceSectionProps) {
+export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateName, email, phone, location, linkedin, companyName, jobTitle }: WorkspaceSectionProps) {
   const [activeTab, setActiveTab] = useState<'intro' | 'tech' | 'hr' | 'star' | 'ats' | 'company' | 'cover'>('intro')
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const [expandedStarIdx, setExpandedStarIdx] = useState<number | null>(0)
@@ -275,18 +281,21 @@ export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateNa
                 <MessageSquare className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-[17px] font-black text-slate-900">Tailored Elevator Pitch</h3>
+                <h3 className="text-[17px] font-black text-slate-900">Tailored Self Pitch</h3>
                 <div className="flex items-center gap-2 text-[12px] font-medium text-slate-500 mt-0.5">
                   <Clock className="w-3.5 h-3.5 text-slate-400" />
                   <span>~{readingTimeMin} min spoken pitch ({wordCount} words)</span>
+                  <span className="px-1.5 py-0.5 bg-primary/10 text-primary rounded-full text-[10px] font-black">
+                    {selfIntro.split('\n\n').filter(Boolean).length} paragraphs
+                  </span>
                 </div>
               </div>
             </div>
 
             <button
-              onClick={() => handleCopy(selfIntro, 'intro', 'Introduction copied to clipboard!')}
+              onClick={() => handleCopy(selfIntro, 'intro', 'Pitch copied to clipboard!')}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-primary/40 bg-slate-50 hover:bg-primary/5 text-[12px] font-bold text-slate-700 hover:text-primary transition-all cursor-pointer shrink-0 shadow-xs"
-              title="Copy Self Introduction"
+              title="Copy Self Pitch"
             >
               {copiedKey === 'intro' ? (
                 <>
@@ -302,18 +311,23 @@ export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateNa
             </button>
           </div>
 
-          <div className="space-y-4 text-[14px] leading-relaxed text-slate-700 font-medium bg-slate-50/80 p-5 sm:p-6 rounded-xl border border-slate-100">
-            {selfIntro.split('\n\n').map((para, i) => (
-              <p key={i} className="text-slate-800 leading-relaxed">
-                {para}
-              </p>
+          <div className="space-y-4">
+            {selfIntro.split('\n\n').filter(Boolean).map((para, i) => (
+              <div key={i} className="flex items-start gap-3.5 p-4 sm:p-5 rounded-xl bg-slate-50/80 border border-slate-100 hover:bg-white hover:border-primary/20 transition-all">
+                <span className="w-6 h-6 rounded-lg bg-primary/10 text-primary text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5">
+                  {i + 1}
+                </span>
+                <p className="text-[14px] text-slate-800 leading-[1.85] font-medium">
+                  {para}
+                </p>
+              </div>
             ))}
           </div>
 
           <div className="mt-5 p-4 rounded-xl bg-primary/5 border border-primary/15 flex items-start gap-3">
             <Sparkles className="w-5 h-5 text-primary shrink-0 mt-0.5" />
             <p className="text-[12px] text-slate-600 leading-relaxed font-medium">
-              <strong className="text-slate-900 font-bold">Pro Interview Strategy:</strong> Deliver this pitch when asked <span className="italic font-semibold text-slate-800">"Tell me about yourself"</span>. It directly weaves the keywords from this Job Description into your past accomplishments.
+              <strong className="text-slate-900 font-bold">Pro Interview Strategy:</strong> Deliver this pitch when asked <span className="italic font-semibold text-slate-800">"Tell me about yourself"</span>. Each paragraph focuses on a different angle — who you are, what you've achieved, why this company, and what you bring to the team.
             </p>
           </div>
         </div>
@@ -577,7 +591,17 @@ export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateNa
               </Button>
             </div>
           ) : (
-            <CoverLetterViewer content={coverLetterRes} candidateName={candidateName} documentTitle="Cover_Letter" />
+            <CoverLetterViewer
+                content={coverLetterRes}
+                candidateName={candidateName}
+                email={email}
+                phone={phone}
+                location={location}
+                linkedin={linkedin}
+                companyName={companyName}
+                jobTitle={jobTitle}
+                documentTitle="Cover_Letter"
+              />
           )}
         </div>
       )}

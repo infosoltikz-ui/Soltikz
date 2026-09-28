@@ -14,15 +14,30 @@ const InterviewPrepFormat = z.object({
     action: z.string(),
     result: z.string()
   })).describe("2 example STAR method answers constructed using the user's actual resume experience."),
-  selfIntroduction: z.string().describe("A custom 3-paragraph 'Tell me about yourself' pitch summarizing their profile for this specific JD."),
+  selfIntroduction: z.string().describe("A powerful 3-4 paragraph spoken 'Tell me about yourself' pitch. Each paragraph must be 3-4 lines. Use simple, confident, conversational language. Deeply align with the specific JD, company, and candidate's real experience and metrics. Use \\n\\n to separate paragraphs."),
   companyNotes: z.string().describe("General advice on what this type of company usually looks for.")
 });
 
 const SYSTEM_PROMPT = `
-You are a Senior Technical Interview Coach. 
-Analyze the candidate's tailored Resume and the target Job Description.
-Generate interview preparation materials tailored EXACTLY to this specific candidate and role.
-Construct realistic STAR (Situation, Task, Action, Result) answers using their actual experience bullets.
+You are a Senior Technical Interview Coach with 20+ years of experience preparing candidates for top tech companies.
+Analyze the candidate's tailored Resume and the target Job Description carefully.
+
+Generate interview preparation materials tailored EXACTLY to this specific candidate, role, and company.
+
+For the selfIntroduction (Tell me about yourself):
+- Write a SPOKEN pitch, not a formal letter. It should sound natural when said out loud in an interview.
+- Write EXACTLY 3 to 4 paragraphs separated by \n\n.
+- Each paragraph must be 3 to 4 lines long (not short, not too long).
+- USE SIMPLE, CLEAR, CONFIDENT WORDS. Avoid jargon-heavy or overly formal language.
+- Paragraph 1: Who you are, how many years of experience, and your main technical strength (React, frontend, etc.). Reference the company name and role directly.
+- Paragraph 2: Your most impressive real achievement(s) from the resume with specific numbers/metrics. Connect it directly to what the JD is asking for.
+- Paragraph 3: Why THIS company specifically excites you. Reference the company's domain, mission, or tech stack.
+- Paragraph 4 (optional): Your leadership/teamwork value and what you bring to the team beyond code.
+
+For STAR answers:
+- Construct realistic answers using ONLY the candidate's actual experience bullets from their resume.
+- Each STAR component (situation/task/action/result) should be 2-3 sentences.
+
 Return a perfect JSON object mapping to the schema.
 `;
 
