@@ -13,7 +13,19 @@ export function CompanyDetailsSection({ onGenerate }: CompanyDetailsSectionProps
   const [role, setRole] = useState('')
   const [jd, setJd] = useState('')
 
-  const handleFillDummyData = () => {
+  const handleFillUnrelated = () => {
+    setCompany('Global Logistics Corp')
+    setRole('HR Manager')
+    setJd('We are seeking an HR Manager to oversee our employee relations, benefits administration, and talent acquisition. You must have 7+ years of HR experience, SHRM certification, and expertise in resolving workplace conflicts. Technical programming skills are not required. You will be responsible for onboarding, performance reviews, and compliance with labor laws.')
+  }
+
+  const handleFillPartial = () => {
+    setCompany('FinTech Solutions')
+    setRole('Full Stack Developer')
+    setJd('Looking for a Full Stack Developer to build banking platforms. Required: 3+ years in React.js, Node.js, and AWS. Preferred: Python, Docker, Kubernetes, and PostgreSQL. You will design REST APIs and create responsive UIs for mobile and web. Financial domain experience is a big plus.')
+  }
+
+  const handleFillPerfect = () => {
     setCompany('Tech Innovators Inc.')
     setRole('Senior Frontend Engineer')
     setJd('We are looking for an experienced Senior Frontend Engineer to join our core product team. You will be responsible for building responsive, high-performance web applications using React, Next.js, and Tailwind CSS. The ideal candidate has 5+ years of experience in modern JavaScript, a strong understanding of web performance optimization, and experience collaborating with design and backend teams. You should have a proven track record of shipping complex user interfaces and mentoring junior developers.')
@@ -28,7 +40,7 @@ export function CompanyDetailsSection({ onGenerate }: CompanyDetailsSectionProps
       <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl opacity-50 -mr-20 -mt-20 pointer-events-none group-hover:bg-emerald-100 transition-colors duration-500" />
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 border-b border-slate-100 pb-5 relative z-10">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-8 border-b border-slate-100 pb-5 relative z-10">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
@@ -39,15 +51,21 @@ export function CompanyDetailsSection({ onGenerate }: CompanyDetailsSectionProps
           </p>
         </div>
 
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={handleFillDummyData}
-          className="text-[12px] h-9 px-4 font-bold text-emerald-700 border-emerald-300 bg-emerald-50 hover:bg-emerald-100 transition-all rounded-xl self-start sm:self-auto shadow-sm hover:shadow-md hover:-translate-y-0.5"
-        >
-          <Wand2 className="w-3.5 h-3.5 mr-1.5 text-emerald-600 animate-pulse" />
-          Auto-Fill Sample Data
-        </Button>
+        <div className="flex flex-col gap-2">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider text-right hidden sm:block">ATS Score Testing</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button variant="outline" size="sm" onClick={handleFillUnrelated} className="text-[11px] h-8 px-3 font-bold text-rose-700 border-rose-200 bg-rose-50 hover:bg-rose-100 transition-all rounded-lg">
+              0% Match
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleFillPartial} className="text-[11px] h-8 px-3 font-bold text-amber-700 border-amber-200 bg-amber-50 hover:bg-amber-100 transition-all rounded-lg">
+              Partial Match
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleFillPerfect} className="text-[11px] h-8 px-3 font-bold text-emerald-700 border-emerald-300 bg-emerald-50 hover:bg-emerald-100 transition-all rounded-lg">
+              <Wand2 className="w-3 h-3 mr-1.5 text-emerald-600" />
+              100% Match
+            </Button>
+          </div>
+        </div>
       </div>
 
       <div className="space-y-6 relative z-10">
