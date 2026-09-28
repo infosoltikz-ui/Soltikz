@@ -1,47 +1,17 @@
-import { jsPDF } from 'jspdf';
-import { toJpeg } from 'html-to-image';
-
 export const exportToPdf = async (element: HTMLElement, filename: string) => {
-  // Find all individual pages within the container
-  const pages = Array.from(element.querySelectorAll('.resume-page')) as HTMLElement[];
+  // Using native browser print dialog for ATS-friendly, text-searchable PDFs
+  // The globals.css already contains @media print rules that hide UI elements (.no-print)
+  // and format the .resume-page elements perfectly for A4.
   
-  if (pages.length === 0) {
-    throw new Error('No resume pages found to export.');
-  }
-
-  const pdf = new jsPDF({
-    orientation: 'portrait',
-    unit: 'mm',
-    format: 'a4',
-    compress: true, // Enable jsPDF compression
-  });
-
-  for (let i = 0; i < pages.length; i++) {
-    const pageEl = pages[i];
+  // A brief delay allows any UI state changes to settle before printing
+  setTimeout(() => {
+    // Modify document title temporarily so the default save filename matches
+    const originalTitle = document.title;
+    document.title = filename;
     
-    // Convert to high-quality JPEG to drastically reduce file size vs PNG.
-    // - pixelRatio: 2 gives crisp text without creating a 50MB image (retina display resolution)
-    // - quality: 0.95 provides excellent visual quality with strong compression
-    const dataUrl = await toJpeg(pageEl, {
-      quality: 0.95,
-      pixelRatio: 2, 
-      backgroundColor: '#ffffff',
-      cacheBust: true,
-      skipFonts: false,
-      style: {
-        printColorAdjust: 'exact',
-      } as Partial<CSSStyleDeclaration>,
-    });
-
-    if (i > 0) {
-      pdf.addPage();
-    }
-
-    // A4 dimensions in mm (210 x 297)
-    // Using JPEG drastically reduces the final PDF size.
-    pdf.addImage(dataUrl, 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
-  }
-
-  pdf.save(filename);
+    window.print();
+    
+    // Restore original title
+    document.title = originalTitle;
+  }, 100);
 };
-
