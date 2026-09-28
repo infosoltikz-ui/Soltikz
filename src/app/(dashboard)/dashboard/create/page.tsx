@@ -456,7 +456,7 @@ export default function CreateResumePage() {
   }
 
   return (
-    <div className="px-8 pt-8 pb-8 max-w-[1600px] mx-auto min-h-screen bg-slate-50/50">
+    <div className="pb-10 max-w-[1600px] mx-auto min-h-screen bg-slate-50/50">
       <Modal id="paywall-modal" title="Upgrade to Pro" size="sm">
         <div className="flex flex-col items-center text-center pt-2">
           <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4">
@@ -479,11 +479,13 @@ export default function CreateResumePage() {
         </div>
       </Modal>
 
-      <CreateResumeHeader />
+      <CreateResumeHeader
+        currentStep={step}
+        onStepClick={(s) => setStep(s)}
+        onBack={step > 1 ? () => setStep(step - 1) : undefined}
+      />
 
-      <main className="mt-5">
-        {/* Dynamic AI Generation Pipeline Stepper */}
-        <HowItWorks currentStep={step} onStepClick={(s) => setStep(s)} />
+      <main className="px-4 sm:px-6 lg:px-8 pt-6">
 
         {step === 1 && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -502,10 +504,13 @@ export default function CreateResumePage() {
                 if (type === 'c2c' && !selectedTemplateId.startsWith('c2c')) setSelectedTemplateId('c2c')
                 else if (type === 'fulltime' && selectedTemplateId.startsWith('c2c')) setSelectedTemplateId('modern')
               }} />
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
-                <div className="mb-8 flex justify-between items-center">
+              <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200/80 shadow-xl shadow-slate-200/20 p-8 relative overflow-hidden group hover:shadow-2xl hover:border-emerald-200 transition-all duration-500">
+                {/* Ambient Glow */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl opacity-50 -mr-20 -mt-20 pointer-events-none group-hover:bg-emerald-100 transition-colors duration-500" />
+                
+                <div className="mb-8 flex justify-between items-center relative z-10">
                   <div>
-                    <h2 className="text-[18px] font-black text-slate-900 mb-1">Resume Details</h2>
+                    <h2 className="text-[20px] font-black text-slate-900 tracking-tight mb-1">Resume Details</h2>
                     <p className="text-[13px] font-medium text-slate-500">Verify your profile information before generating your tailored resume</p>
                   </div>
                   {editingTab && (
@@ -530,10 +535,12 @@ export default function CreateResumePage() {
             <div className="flex justify-end pt-4">
               <Button
                 onClick={() => setStep(2)}
-                className="h-13 px-8 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-xl shadow-emerald-600/25 hover:shadow-2xl hover:-translate-y-0.5 transition-all text-[15px] font-black flex items-center gap-2.5 cursor-pointer"
+                className="relative h-14 px-10 text-[16px] font-black rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xl shadow-emerald-600/30 flex items-center gap-3 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-600/50 hover:-translate-y-1 overflow-hidden group/btn cursor-pointer"
               >
-                <span>Next Step: Target Job & AI Generation</span>
-                <ArrowRight className="w-5 h-5 opacity-90" />
+                {/* Shimmer Effect */}
+                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover/btn:animate-[shimmer_1.5s_infinite]" />
+                <span className="relative z-10 tracking-wide">Next Step: Target Job & AI Generation</span>
+                <ArrowRight className="w-5 h-5 opacity-90 group-hover/btn:translate-x-1.5 transition-transform relative z-10" />
               </Button>
             </div>
           </div>
@@ -543,23 +550,6 @@ export default function CreateResumePage() {
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {!generatedResume ? (
               <>
-                <div className="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                  <Button
-                    onClick={() => setStep(1)}
-                    className="h-10 px-6 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 bg-transparent"
-                    disabled={isGenerating}
-                  >
-                    <div className="flex items-center gap-2">
-                      <ArrowLeft className="w-4 h-4" />
-                      Back to Step 1
-                    </div>
-                  </Button>
-                  <div className="text-[14px] font-bold text-slate-800">
-                    Step 2 of 3: Target Job & Details
-                  </div>
-                  <div className="w-[130px]"></div>
-                </div>
-
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
                   <div className="w-full min-w-0 space-y-6 relative">
                     {isGenerating && (
@@ -576,7 +566,7 @@ export default function CreateResumePage() {
             ) : (
               <div className="space-y-6">
                 {/* Step 2 Top Action & Control Header */}
-                <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
+                <div className="bg-white/80 backdrop-blur-md border border-slate-200/80 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-md">
                   <div className="flex flex-wrap items-center gap-3">
                     <Button
                       onClick={() => setGeneratedResume(null)}
@@ -704,16 +694,20 @@ export default function CreateResumePage() {
                     </div>
 
                     {/* Proceed to Step 3 Callout Card */}
-                    <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-950 text-white rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
-                      <div className="flex items-center gap-3.5">
-                        <div className="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shrink-0">
-                          <Sparkles className="w-6 h-6" />
+                    <div className="relative bg-slate-900 overflow-hidden text-white rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl border border-slate-700/50 group/card transition-all duration-500 hover:border-emerald-500/50 hover:shadow-emerald-900/20">
+                      
+                      {/* Animated Glow Background */}
+                      <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl opacity-50 pointer-events-none group-hover/card:bg-emerald-500/20 transition-colors duration-700 -mr-32 -mt-32" />
+                      
+                      <div className="flex items-center gap-4 relative z-10">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shrink-0 shadow-lg shadow-emerald-900/50">
+                          <Sparkles className="w-7 h-7 animate-pulse" />
                         </div>
                         <div>
-                          <h4 className="text-[15px] font-black text-white">
+                          <h4 className="text-[17px] font-black text-white tracking-tight">
                             Ready for Interview Strategy & Cover Letter?
                           </h4>
-                          <p className="text-[12px] font-medium text-slate-300 mt-0.5">
+                          <p className="text-[13px] font-medium text-slate-400 mt-1">
                             Generate tailored Cover Letter, STAR Stories, Tech Q&A, and Company Notes.
                           </p>
                         </div>
@@ -721,10 +715,11 @@ export default function CreateResumePage() {
 
                       <Button
                         onClick={() => setStep(3)}
-                        className="w-full sm:w-auto h-12 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-black shadow-lg shadow-emerald-500/30 text-[14px] cursor-pointer flex items-center justify-center gap-2.5 shrink-0"
+                        className="relative w-full sm:w-auto h-14 px-8 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-black shadow-lg shadow-emerald-500/30 text-[15px] cursor-pointer flex items-center justify-center gap-3 shrink-0 overflow-hidden group/btn hover:shadow-emerald-500/50 hover:-translate-y-0.5 transition-all duration-300"
                       >
-                        <span>Proceed to Step 3: Interview Strategy</span>
-                        <ArrowRight className="w-4 h-4" />
+                        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent group-hover/btn:animate-[shimmer_1.5s_infinite]" />
+                        <span className="relative z-10 tracking-wide">Proceed to Step 3</span>
+                        <ArrowRight className="w-5 h-5 opacity-90 group-hover/btn:translate-x-1.5 transition-transform relative z-10" />
                       </Button>
                     </div>
                   </div>
@@ -738,7 +733,7 @@ export default function CreateResumePage() {
         {step === 3 && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Top Navigation Bar */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/80 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-md">
               <div className="flex items-center gap-3">
                 <Button
                   onClick={() => setStep(2)}

@@ -145,7 +145,7 @@ export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateNa
   return (
     <div className="space-y-6">
       {/* Interactive Tabs Header */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-2">
+      <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-slate-200/80 shadow-md p-2">
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
           <button
             onClick={() => setActiveTab('cover')}
