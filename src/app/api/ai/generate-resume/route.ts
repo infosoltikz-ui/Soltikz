@@ -32,7 +32,7 @@ const GeneratedResumeFormat = z.object({
     duration: z.string(),
     environment: z.array(z.string()).nullable().describe('C2C ONLY: comma-separated list of every tool/tech used on that engagement. Set null for Full-Time resumes.'),
     bullets: z.array(z.string()).describe(
-      'C2C: Exp1=EXACTLY 10 bullets, Exp2=8-10 bullets, Exp3+=6-8 bullets. Full-Time: Exp1=6-8 bullets, Exp2=6-8 bullets, Exp3+=5-6 bullets. Every bullet: MUST be 35-50 words (2-3 full lines) with bolded **keywords** and metrics. Formula: [POWER ACTION VERB]+[Detailed Context & Tools]+[Methodology/Process]+[Quantified Metric Result]+[Business Value].'
+      'C2C: EXACTLY 10 bullets for EVERY company/experience. Full-Time: Exp1=6-8 bullets, Exp2=6-8 bullets, Exp3+=5-6 bullets. Every bullet: MUST be 25-30 words (2-3 full lines) with bolded **keywords** and metrics. Use VERY STRONG action verbs. Formula: [POWER ACTION VERB]+[Detailed Context & Tools]+[Methodology/Process]+[Quantified Metric Result]+[Business Value].'
     ),
   })),
   education: z.array(z.object({
@@ -117,7 +117,7 @@ TENSE RULES (CRITICAL):
   - PAST roles: PAST tense — "Architected", "Engineered", "Led", "Deployed"
 
 BULLET POINT LENGTH & QUALITY REQUIREMENT (CRITICAL — NON-NEGOTIABLE):
-  * Each bullet point MUST be **MINIMUM 35-50 WORDS** and span **2 to 3 FULL LINES** when rendered in standard print/PDF view.
+  * Each bullet point MUST be **MINIMUM 25-30 WORDS** and span **2 to 3 FULL LINES** when rendered in standard print/PDF view. Use VERY STRONG, executive-level action words instead of weak words.
   * NEVER write single-line bullets (less than 2 lines is a failure).
   * Structure: **Action Verb + Detailed Context with Tools/Technologies + Specific Methodologies/Processes + Quantifiable Impact/Results + Business Value**
   * Bold key technologies and critical metrics using **keyword** syntax (e.g. **React.js**, **AWS Lambda**, **35% latency reduction**).
@@ -169,10 +169,9 @@ SKILLS MATRIX — C2C:
   - NO proficiency bars, ratings, percentages, or years-per-skill.
 
 EXPERIENCE — C2C (STRICT MANDATORY BULLET COUNTS):
-  - Experience 1 (most recent / current role): EXACTLY 10 Powerful Bullet Points (NO LESS THAN 10).
-  - Experience 2: EXACTLY 8-10 Powerful Bullet Points.
-  - Experience 3+: EXACTLY 6-8 Powerful Bullet Points.
-  - Every bullet: MUST be 35-50 words (2 to 3 full lines) with bolded **keyword** syntax and metrics.
+  - EXACTLY 10 Powerful Bullet Points for EVERY company/experience (NO LESS THAN 10).
+  - Every bullet: MUST be 25-30 words (2 to 3 full lines) with bolded **keyword** syntax and metrics.
+  - Use VERY STRONG action verbs (e.g., Architected, Spearheaded, Engineered) instead of weak words.
   - Include "environment" tech stack array for ALL roles (comma-separated, every tool used on that engagement).
   - C2C length is 3-4 pages — DO NOT compress or shorten.
   - Education: Degree, Major | University | City, State | Mon YYYY – Mon YYYY
