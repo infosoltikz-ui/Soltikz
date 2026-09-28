@@ -110,16 +110,18 @@ export function WorkspaceSection({
   }
 
   const handleRegeneratePrep = async () => {
-    if (!resumeId || !parsedJdData || !generatedResume) {
-      toast.error('Missing data required to regenerate prep.')
+    if (!resumeId || !generatedResume) {
+      toast.error('Missing resume data required to regenerate prep.')
       return
     }
+    const jdData = parsedJdData || { job_title: jobTitle || 'Software Engineer', company_name: companyName || 'the company' }
+    
     setIsRegeneratingPrep(true)
     try {
       const res = await fetch('/api/ai/generate-prep', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ resumeId, parsedJdData, resumeContent: generatedResume })
+        body: JSON.stringify({ resumeId, parsedJdData: jdData, resumeContent: generatedResume })
       })
       const data = await res.json()
       if (!data.success) throw new Error(data.error || 'Failed to regenerate prep')
