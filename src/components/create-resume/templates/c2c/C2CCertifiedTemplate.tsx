@@ -112,7 +112,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
         const bulletH = getElementHeight(`meas-exp-${i}-bullet-${j}`);
         const isLastBullet = j === bullets.length - 1;
 
-        const UL_MARGIN = 14; // mt-1.5 (6) + mb-2 (8)
+        const UL_MARGIN = 10; // mt-1 (4) + mb-1.5 (6)
         let requiredSpace = currentExpObj.bullets.length === 0 ? currentExpHeaderH + bulletH + UL_MARGIN : bulletH;
         if (isLastBullet) requiredSpace += envH;
 
@@ -149,10 +149,10 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
 
       if (currentExpObj.bullets.length > 0 || bullets.length === 0) {
         if (bullets.length === 0) {
-          remainingHeight -= (currentExpHeaderH + 14);
+          remainingHeight -= (currentExpHeaderH + 10);
         }
         currentPage.experiences.push(currentExpObj);
-        remainingHeight -= 20; // mb-5 gap
+        remainingHeight -= 12; // mb-3 gap
       }
     }
 
@@ -256,7 +256,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
   const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey?: string }) => {
     const headerColor = sectionStyles?.[sectionKey || '']?.color || ACCENT;
     return (
-      <h2 className="uppercase font-bold border-b-2 pb-1 mb-3 mt-5 tracking-wide break-inside-avoid" style={{ fontSize: '11pt', color: headerColor, borderColor: headerColor }}>
+      <h2 className="uppercase font-bold border-b-2 pb-1 mb-2 mt-3 tracking-wide break-inside-avoid" style={{ fontSize: '11pt', color: headerColor, borderColor: headerColor }}>
         {title}
       </h2>
     );
@@ -291,7 +291,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
       }}
     >
       <div id="meas-header" className={getSectionWrapperClass('header')} style={getSectionStyle('header')}>
-        <div className="flex justify-between items-center border-b-4 pb-4 mb-4 break-inside-avoid" style={{ borderColor: ACCENT }}>
+        <div className="flex justify-between items-center border-b-2 pb-3 mb-3 break-inside-avoid" style={{ borderColor: ACCENT }}>
           <div className="flex-1">
             <h1 className="font-extrabold uppercase m-0 leading-tight" style={{ fontSize: '24pt', color: sectionStyles?.header?.color || ACCENT }}>
               {profileData.full_name || 'JOHN DOE'}
@@ -317,7 +317,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
 
       {getSummaryArray(resumeData.summary).length > 0 && (
         <div id="meas-summary" className={getSectionWrapperClass('summary')} style={getSectionStyle('summary')}>
-          <div className="mb-4">
+          <div className="mb-3">
             <SectionHeader title="Professional Summary" sectionKey="summary" />
             <ul className="list-none m-0 space-y-1 text-justify" style={{ fontSize: '9.5pt' }}>
               {getSummaryArray(resumeData.summary).map((point: string, i: number) => (
@@ -333,9 +333,9 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
 
       {resumeData.skills && resumeData.skills.length > 0 && (
         <div id="meas-skills" className={getSectionWrapperClass('skills')} style={getSectionStyle('skills')}>
-          <div className="mb-4">
+          <div className="mb-3">
             <SectionHeader title="Technical Skills" sectionKey="skills" />
-            <div className="grid grid-cols-1 gap-y-1 bg-slate-50 border border-slate-200 p-3 rounded-sm" style={{ fontSize: '9pt' }}>
+            <div className="grid grid-cols-1 gap-y-0.5 bg-slate-50 border border-slate-200 p-2 rounded-sm" style={{ fontSize: '9pt' }}>
               {resumeData.skills.map((skillGroup: any, i: number) => (
                 <div key={i} className="leading-snug flex">
                   <span className="font-bold w-[190px] shrink-0 text-slate-900 border-r border-slate-300 mr-2">{skillGroup.category}:</span>
@@ -378,7 +378,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
           </div>
 
           {exp.bullets && exp.bullets.length > 0 && (
-            <ul className="list-none mt-1.5 mb-2 m-0 space-y-1.5" style={{ fontSize: '9.5pt' }}>
+            <ul className="list-none mt-1 mb-1.5 m-0 space-y-1.5" style={{ fontSize: '9.5pt' }}>
               {exp.bullets.map((b: string, j: number) => (
                 <li id={`meas-exp-${i}-bullet-${j}`} key={`bullet-meas-${j}`} className="flex gap-2">
                   <span className="shrink-0 font-bold text-slate-500 bg-slate-100 px-1.5 rounded">•</span>
@@ -476,7 +476,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
                   className={getSectionWrapperClass('header')}
                   style={getSectionStyle('header')}
                 >
-                  <div className="flex justify-between items-center border-b-4 pb-4 mb-4 break-inside-avoid" style={{ borderColor: ACCENT }}>
+                  <div className="flex justify-between items-center border-b-2 pb-3 mb-3 break-inside-avoid" style={{ borderColor: ACCENT }}>
                     <div className="flex-1">
                       <h1 className="font-extrabold uppercase m-0 leading-tight" style={{ fontSize: '24pt', color: sectionStyles?.header?.color || ACCENT }}>
                         {profileData.full_name || 'JOHN DOE'}
@@ -510,7 +510,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
                   className={getSectionWrapperClass('summary')}
                   style={getSectionStyle('summary')}
                 >
-                  <div className="mb-4">
+                  <div className="mb-3">
                     <SectionHeader title="Professional Summary" sectionKey="summary" />
                     <ul className="list-none m-0 space-y-1 text-justify" style={{ fontSize: '9.5pt' }}>
                       {getSummaryArray(resumeData.summary).map((point: string, i: number) => (
@@ -531,9 +531,9 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
                   className={getSectionWrapperClass('skills')}
                   style={getSectionStyle('skills')}
                 >
-                  <div className="mb-4">
+                  <div className="mb-3">
                     <SectionHeader title="Technical Skills" sectionKey="skills" />
-                    <div className="grid grid-cols-1 gap-y-1 bg-slate-50 border border-slate-200 p-3 rounded-sm" style={{ fontSize: '9pt' }}>
+                    <div className="grid grid-cols-1 gap-y-0.5 bg-slate-50 border border-slate-200 p-2 rounded-sm" style={{ fontSize: '9pt' }}>
                       {resumeData.skills.map((skillGroup: any, i: number) => (
                         <div key={i} className="leading-snug flex">
                           <span className="font-bold w-[190px] shrink-0 text-slate-900 border-r border-slate-300 mr-2">{skillGroup.category}:</span>
@@ -552,7 +552,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
                   className={getSectionWrapperClass('experience')}
                   style={getSectionStyle('experience')}
                 >
-                  <div className="mb-4">
+                  <div className="mb-3">
                     {page.hasExperienceHeading && (
                       <SectionHeader 
                         title={isPage1 ? "Professional Experience" : "Professional Experience (Continued)"} 
@@ -561,7 +561,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
                     )}
                     
                     {page.experiences.map((exp: any, i: number) => (
-                      <div key={i} className="mb-5 break-inside-avoid">
+                      <div key={i} className="mb-3 break-inside-avoid">
                         <div className="flex justify-between items-center bg-slate-100 p-2 border border-slate-200 rounded-sm mb-2">
                           <div>
                             <div className="font-extrabold uppercase" style={{ fontSize: '10.5pt', color: ACCENT }}>
@@ -577,7 +577,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
                           </div>
                         </div>
 
-                        <ul className="list-none mt-1.5 mb-2 m-0 space-y-1.5" style={{ fontSize: '9.5pt' }}>
+                        <ul className="list-none mt-1 mb-1.5 m-0 space-y-1.5" style={{ fontSize: '9.5pt' }}>
                           {exp.bullets.map((bullet: string, j: number) => (
                             <li key={j} className="flex gap-2">
                               <span className="shrink-0 font-bold text-slate-500 bg-slate-100 px-1.5 rounded">•</span>
