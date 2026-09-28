@@ -39,6 +39,13 @@ export interface InterviewPrepData {
   }[]
   self_introduction?: string
   company_notes?: string
+  // API responses (camelCase)
+  hrQuestions?: string[]
+  techQuestions?: string[]
+  starAnswers?: any[]
+  selfPitch?: any
+  selfIntroduction?: string
+  companyNotes?: string
 }
 
 export interface ATSAnalysisData {
@@ -142,8 +149,9 @@ export function WorkspaceSection({
   }
 
   // Parse selfPitch — supports new JSON format (from API) and DB string fallback
-  let selfPitch: any = interviewPrep?.selfPitch || null
-  const rawSelfIntro = interviewPrep?.self_introduction || interviewPrep?.selfIntroduction || ''
+  const prepAny = interviewPrep as any
+  let selfPitch: any = prepAny?.selfPitch || null
+  const rawSelfIntro = prepAny?.self_introduction || prepAny?.selfIntroduction || ''
   
   if (!selfPitch && rawSelfIntro) {
     try { selfPitch = typeof rawSelfIntro === 'string' ? JSON.parse(rawSelfIntro) : rawSelfIntro } catch { selfPitch = null }
@@ -161,8 +169,9 @@ export function WorkspaceSection({
   type SelfPitchSubTab = 'full' | 'short' | 'keypoints' | 'strengths' | 'whyhire' | 'tips'
   const [selfSubTab, setSelfSubTab] = useState<SelfPitchSubTab>('full')
 
-  const techQuestions = interviewPrep?.tech_questions && interviewPrep.tech_questions.length > 0
-    ? interviewPrep.tech_questions
+  const techQuestionsData = prepAny?.techQuestions || prepAny?.tech_questions || []
+  const techQuestions = techQuestionsData.length > 0
+    ? techQuestionsData
     : [
         "How do you approach designing scalable and maintainable system architectures?",
         "Can you describe your experience with performance optimization and caching strategies?",
@@ -171,16 +180,18 @@ export function WorkspaceSection({
         "How do you handle technical debt while keeping product delivery on schedule?"
       ]
 
-  const hrQuestions = interviewPrep?.hr_questions && interviewPrep.hr_questions.length > 0
-    ? interviewPrep.hr_questions
+  const hrQuestionsData = prepAny?.hrQuestions || prepAny?.hr_questions || []
+  const hrQuestions = hrQuestionsData.length > 0
+    ? hrQuestionsData
     : [
         "Tell me about a time you had a technical disagreement with a team member and how you resolved it.",
         "How do you prioritize competing deadlines when multiple critical tasks arise?",
         "Why are you interested in joining our company and what makes you a great fit for this role?"
       ]
 
-  const starAnswers = interviewPrep?.star_answers && interviewPrep.star_answers.length > 0
-    ? interviewPrep.star_answers
+  const starAnswersData = prepAny?.starAnswers || prepAny?.star_answers || []
+  const starAnswers = starAnswersData.length > 0
+    ? starAnswersData
     : [
         {
           question: "Describe a high-impact technical project you led.",
@@ -191,7 +202,7 @@ export function WorkspaceSection({
         }
       ]
 
-  const companyNotes = interviewPrep?.company_notes || 
+  const companyNotes = prepAny?.companyNotes || prepAny?.company_notes || 
     "This organization values candidates who demonstrate strong ownership, transparent communication, and data-backed decision making. Be prepared to showcase concrete metrics and how your past work created tangible business value."
 
   // Calculate estimated speaking time for full intro (approx 130 words per minute)
