@@ -22,7 +22,8 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
   activeSectionKey,
   onSelectSection
 }, ref) => {
-  const ACCENT = themeColor || '#005580'; // Dark blue accent
+  const compId = React.useId().replace(/:/g, '');
+  const ACCENT = themeColor || '#005580';
   const selectedFont = fontFamily || 'Calibri, Arial, "Times New Roman", sans-serif';
 
   const [paginationState, setPaginationState] = useState<{
@@ -46,25 +47,17 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
   }, []);
 
   useLayoutEffect(() => {
-    if (paginationState.resumeDataHash === dataHash && paginationState.pages !== null && fontsLoaded) {
-      return;
-    }
+    if (!measRef.current) return;
 
-    let scale = 1;
-    if (measRef.current) {
-      const rect = measRef.current.getBoundingClientRect();
-      const offsetW = measRef.current.offsetWidth;
-      if (offsetW > 0) {
-        scale = rect.width / offsetW;
-      }
-    }
+    const measRect = measRef.current.getBoundingClientRect();
+    const trueScale = measRect.width / 794;
 
     const getElementHeight = (id: string) => {
-      const el = measRef.current?.querySelector(`#${id}`);
+      const el = document.getElementById(`${id}-${compId}`);
       if (!el) return 0;
       
       const rect = el.getBoundingClientRect();
-      const unscaledHeight = scale > 0 ? rect.height / scale : (el as HTMLElement).offsetHeight;
+      const unscaledHeight = trueScale > 0 ? rect.height / trueScale : (el as HTMLElement).offsetHeight;
       
       const style = window.getComputedStyle(el);
       const mt = parseFloat(style.marginTop) || 0;
@@ -77,7 +70,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
     const PAGE_PADDING_BOTTOM = 32;
     const FOOTER_HEIGHT = getElementHeight('meas-footer') || 30;
     
-    const SAFETY_MARGIN = 15;
+    const SAFETY_MARGIN = 24;
     const MAX_CONTENT_HEIGHT = PAGE_HEIGHT - PAGE_PADDING_TOP - PAGE_PADDING_BOTTOM - FOOTER_HEIGHT - SAFETY_MARGIN;
 
     let currentPages: any[] = [];
@@ -247,7 +240,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
         lineHeight: '1.5'
       }}
     >
-      <div id="meas-header" className="flex flex-row justify-between items-start border-b-2 border-slate-800 pb-3 mb-3">
+      <div id={`meas-header-${compId}`} className="flex flex-row justify-between items-start border-b-2 border-slate-800 pb-3 mb-3">
         <div className="flex-1 pr-4">
           <h1 className="uppercase font-black tracking-tight mb-1" style={{ fontSize: '24pt', color: sectionStyles?.header?.color || ACCENT }}>
             {profileData.full_name || 'JOHN DOE'}
@@ -291,7 +284,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
       </div>
 
       {getSummaryArray(resumeData.summary).length > 0 && (
-        <div id="meas-summary" className={getSectionWrapperClass('summary')} style={getSectionStyle('summary')}>
+        <div id={`meas-summary-${compId}`} className={getSectionWrapperClass('summary')} style={getSectionStyle('summary')}>
           <div className="mb-2.5">
             <SectionHeader title="Professional Summary" sectionKey="summary" />
             <p className="text-justify leading-snug m-0 text-slate-800" style={{ fontSize: '10.5pt' }}>
@@ -302,7 +295,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
       )}
 
       {resumeData.skills && resumeData.skills.length > 0 && (
-        <div id="meas-skills" className={getSectionWrapperClass('skills')} style={getSectionStyle('skills')}>
+        <div id={`meas-skills-${compId}`} className={getSectionWrapperClass('skills')} style={getSectionStyle('skills')}>
           <div className="mb-2.5">
             <SectionHeader title="Technical Competencies" sectionKey="skills" />
             <div className="border border-slate-200 rounded-sm overflow-hidden text-[10pt]">
@@ -321,13 +314,13 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
         </div>
       )}
 
-      <div id="meas-exp-section-heading">
+      <div id={`meas-exp-section-heading-${compId}`}>
         <SectionHeader title="Professional Experience" sectionKey="experience" />
       </div>
 
       {resumeData.experience?.map((exp: any, i: number) => (
         <div key={`exp-meas-${i}`}>
-          <div id={`meas-exp-${i}-header`}>
+          <div id={`meas-exp-${i}-header-${compId}`}>
             <div className="flex justify-between items-start leading-tight" style={{ fontSize: '11.5pt' }}>
               <div className="font-bold text-slate-900">{exp.role}</div>
               <div className="font-bold text-slate-800 whitespace-nowrap ml-4">{exp.duration}</div>
@@ -343,7 +336,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
             )}
           </div>
 
-          <div id={`meas-exp-${i}-header-continued`}>
+          <div id={`meas-exp-${i}-header-continued-${compId}`}>
             <div className="flex justify-between items-start leading-tight" style={{ fontSize: '11.5pt' }}>
               <div className="font-bold text-slate-900">
                 {exp.role} <span className="italic font-normal text-slate-500 text-[10pt]">(Continued)</span>
@@ -358,7 +351,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
           {exp.bullets && exp.bullets.length > 0 && (
             <ul className="list-disc pl-5 space-y-1 m-0 text-[10.5pt]" style={{ lineHeight: '1.4' }}>
               {exp.bullets.map((b: string, j: number) => (
-                <li id={`meas-exp-${i}-bullet-${j}`} key={`bullet-meas-${j}`} className="pl-1 leading-snug text-justify text-slate-800">
+                <li id={`meas-exp-${i}-bullet-${j}-${compId}`} key={`bullet-meas-${j}`} className="pl-1 leading-snug text-justify text-slate-800">
                   {parseBoldText(b)}
                 </li>
               ))}
@@ -368,7 +361,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
       ))}
 
       {resumeData.education && resumeData.education.length > 0 && (
-        <div id="meas-education" className={getSectionWrapperClass('education')} style={getSectionStyle('education')}>
+        <div id={`meas-education-${compId}`} className={getSectionWrapperClass('education')} style={getSectionStyle('education')}>
           <div className="mb-2.5">
             <SectionHeader title="Education and Training" sectionKey="education" />
             <div className="space-y-1 text-[10.5pt]">
@@ -387,7 +380,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
       )}
 
       {resumeData.certifications && resumeData.certifications.length > 0 && (
-        <div id="meas-certifications" className={getSectionWrapperClass('certifications')} style={getSectionStyle('certifications')}>
+        <div id={`meas-certifications-${compId}`} className={getSectionWrapperClass('certifications')} style={getSectionStyle('certifications')}>
           <div className="mb-2.5">
             <SectionHeader title="Certifications & Training" sectionKey="certifications" />
             <ul className="list-disc pl-5 m-0 space-y-1 text-[10.5pt]">
@@ -401,7 +394,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
         </div>
       )}
 
-      <div id="meas-footer" className="pt-2 flex justify-between items-center text-[9.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
+      <div id={`meas-footer-${compId}`} className="pt-2 flex justify-between items-center text-[9.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
         <span>{profileData.full_name || 'Candidate'} — Certified Professional</span>
         <span>Page 1 of 2</span>
       </div>
