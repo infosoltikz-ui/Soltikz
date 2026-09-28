@@ -56,7 +56,7 @@ export function AIGenerationLoadingHUD({ currentState }: { currentState: string 
   ]
 
   return (
-    <div className="absolute inset-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl z-50 flex flex-col items-center justify-center p-6 sm:p-10 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-2xl overflow-hidden animate-in fade-in duration-300">
+    <div className="absolute inset-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl z-20 flex flex-col items-center justify-center p-6 sm:p-10 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-2xl overflow-hidden animate-in fade-in duration-300">
       
       {/* Background Ambient Mesh Glow */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -translate-y-24 translate-x-24 pointer-events-none" />
