@@ -243,7 +243,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
         border: '1px solid transparent',
         fontFamily: selectedFont,
         color: '#1a1a1a',
-        fontSize: '10.5pt',
+        fontSize: '11.5pt',
         lineHeight: '1.5'
       }}
     >
@@ -252,7 +252,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
           <h1 className="uppercase font-black tracking-tight mb-1" style={{ fontSize: '24pt', color: sectionStyles?.header?.color || ACCENT }}>
             {profileData.full_name || 'JOHN DOE'}
           </h1>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[10pt] text-slate-700 font-medium">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[11pt] text-slate-700 font-medium">
             {profileData.location && <span>📍 {profileData.location}</span>}
             {profileData.phone && (
               <>
@@ -278,7 +278,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
         {resumeData.certifications && resumeData.certifications.length > 0 && (
           <div className="w-[36%] p-2 bg-slate-50 border border-slate-200 rounded-md">
             <h3 className="font-bold uppercase mb-1 text-slate-600 text-[9px] tracking-wider">Key Certifications</h3>
-            <ul className="space-y-0.5 text-[8.5pt]">
+            <ul className="space-y-0.5 text-[9.5pt]">
               {resumeData.certifications.slice(0, 3).map((cert: any, i: number) => (
                 <li key={i} className="flex items-center text-slate-800 font-semibold truncate" title={cert.name}>
                   <span className="text-emerald-600 mr-1.5 font-bold">✓</span>
@@ -294,7 +294,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
         <div id="meas-summary" className={getSectionWrapperClass('summary')} style={getSectionStyle('summary')}>
           <div className="mb-2.5">
             <SectionHeader title="Professional Summary" sectionKey="summary" />
-            <p className="text-justify leading-snug m-0 text-slate-800" style={{ fontSize: '9.5pt' }}>
+            <p className="text-justify leading-snug m-0 text-slate-800" style={{ fontSize: '10.5pt' }}>
               {parseBoldText(getSummaryArray(resumeData.summary).join(' '))}
             </p>
           </div>
@@ -305,7 +305,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
         <div id="meas-skills" className={getSectionWrapperClass('skills')} style={getSectionStyle('skills')}>
           <div className="mb-2.5">
             <SectionHeader title="Technical Competencies" sectionKey="skills" />
-            <div className="border border-slate-200 rounded-sm overflow-hidden text-[9pt]">
+            <div className="border border-slate-200 rounded-sm overflow-hidden text-[10pt]">
               {resumeData.skills.map((skillGroup: any, i: number) => (
                 <div key={i} className="flex flex-row border-b border-slate-200 last:border-b-0">
                   <div className="w-[28%] bg-slate-50 p-1 px-2 border-r border-slate-200 font-bold text-slate-800 flex items-center">
@@ -328,15 +328,15 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
       {resumeData.experience?.map((exp: any, i: number) => (
         <div key={`exp-meas-${i}`}>
           <div id={`meas-exp-${i}-header`}>
-            <div className="flex justify-between items-start leading-tight" style={{ fontSize: '10.5pt' }}>
+            <div className="flex justify-between items-start leading-tight" style={{ fontSize: '11.5pt' }}>
               <div className="font-bold text-slate-900">{exp.role}</div>
               <div className="font-bold text-slate-800 whitespace-nowrap ml-4">{exp.duration}</div>
             </div>
-            <div className="flex justify-between items-start leading-tight mb-1 text-[9.5pt]">
+            <div className="flex justify-between items-start leading-tight mb-1 text-[10.5pt]">
               <div className="font-semibold text-slate-700">{exp.company} {exp.location ? `| ${exp.location}` : ''}</div>
             </div>
             {exp.environment && exp.environment.length > 0 && (
-              <div className="mb-1 leading-snug text-[8.5pt]">
+              <div className="mb-1 leading-snug text-[9.5pt]">
                 <span className="font-bold text-slate-800">Tech Stack: </span>
                 <span className="text-slate-600 italic">{exp.environment.join(', ')}</span>
               </div>
@@ -344,19 +344,19 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
           </div>
 
           <div id={`meas-exp-${i}-header-continued`}>
-            <div className="flex justify-between items-start leading-tight" style={{ fontSize: '10.5pt' }}>
+            <div className="flex justify-between items-start leading-tight" style={{ fontSize: '11.5pt' }}>
               <div className="font-bold text-slate-900">
-                {exp.role} <span className="italic font-normal text-slate-500 text-[9pt]">(Continued)</span>
+                {exp.role} <span className="italic font-normal text-slate-500 text-[10pt]">(Continued)</span>
               </div>
               <div className="font-bold text-slate-800 whitespace-nowrap ml-4">{exp.duration}</div>
             </div>
-            <div className="flex justify-between items-start leading-tight mb-1 text-[9.5pt]">
+            <div className="flex justify-between items-start leading-tight mb-1 text-[10.5pt]">
               <div className="font-semibold text-slate-700">{exp.company} {exp.location ? `| ${exp.location}` : ''}</div>
             </div>
           </div>
 
           {exp.bullets && exp.bullets.length > 0 && (
-            <ul className="list-disc pl-5 space-y-1 m-0 text-[9.5pt]" style={{ lineHeight: '1.4' }}>
+            <ul className="list-disc pl-5 space-y-1 m-0 text-[10.5pt]" style={{ lineHeight: '1.4' }}>
               {exp.bullets.map((b: string, j: number) => (
                 <li id={`meas-exp-${i}-bullet-${j}`} key={`bullet-meas-${j}`} className="pl-1 leading-snug text-justify text-slate-800">
                   {parseBoldText(b)}
@@ -371,14 +371,14 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
         <div id="meas-education" className={getSectionWrapperClass('education')} style={getSectionStyle('education')}>
           <div className="mb-2.5">
             <SectionHeader title="Education and Training" sectionKey="education" />
-            <div className="space-y-1 text-[9.5pt]">
+            <div className="space-y-1 text-[10.5pt]">
               {resumeData.education.map((edu: any, i: number) => (
                 <div key={`edu-meas-${i}`} className="flex justify-between items-start">
                   <div>
-                    <div className="font-bold text-slate-900 text-[10pt]">{edu.degree}</div>
-                    <div className="text-slate-600 font-medium text-[9.5pt]">{edu.institution}</div>
+                    <div className="font-bold text-slate-900 text-[11pt]">{edu.degree}</div>
+                    <div className="text-slate-600 font-medium text-[10.5pt]">{edu.institution}</div>
                   </div>
-                  <div className="font-semibold whitespace-nowrap ml-4 text-[9pt] text-slate-800">{edu.year}</div>
+                  <div className="font-semibold whitespace-nowrap ml-4 text-[10pt] text-slate-800">{edu.year}</div>
                 </div>
               ))}
             </div>
@@ -390,7 +390,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
         <div id="meas-certifications" className={getSectionWrapperClass('certifications')} style={getSectionStyle('certifications')}>
           <div className="mb-2.5">
             <SectionHeader title="Certifications & Training" sectionKey="certifications" />
-            <ul className="list-disc pl-5 m-0 space-y-1 text-[9.5pt]">
+            <ul className="list-disc pl-5 m-0 space-y-1 text-[10.5pt]">
               {resumeData.certifications.map((cert: any, i: number) => (
                 <li key={`cert-meas-${i}`} className="pl-1 leading-relaxed">
                   <span className="font-bold text-slate-900">{cert.name}</span> — {cert.issuer} ({cert.year})
@@ -401,7 +401,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
         </div>
       )}
 
-      <div id="meas-footer" className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
+      <div id="meas-footer" className="pt-2 flex justify-between items-center text-[9.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
         <span>{profileData.full_name || 'Candidate'} — Certified Professional</span>
         <span>Page 1 of 2</span>
       </div>
@@ -415,7 +415,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
     padding: '38px 48px 32px 48px',
     fontFamily: selectedFont,
     color: '#1a1a1a',
-    fontSize: '10.5pt',
+    fontSize: '11.5pt',
     lineHeight: '1.5'
   };
 
@@ -452,7 +452,7 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
                       <h1 className="uppercase font-black tracking-tight mb-1" style={{ fontSize: '24pt', color: sectionStyles?.header?.color || ACCENT }}>
                         {profileData.full_name || 'JOHN DOE'}
                       </h1>
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[10pt] text-slate-700 font-medium">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[11pt] text-slate-700 font-medium">
                         {profileData.location && <span>📍 {profileData.location}</span>}
                         {profileData.phone && (
                           <>
