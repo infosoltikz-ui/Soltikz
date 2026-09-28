@@ -474,7 +474,7 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
                 >
                   <div className="mb-3">
                     <SectionHeader title="Professional Summary" sectionKey="summary" />
-                    <p className="text-justify leading-snug m-0" style={{ fontSize: '9.5pt' }}>
+                    <p className="text-justify leading-snug m-0" style={{ fontSize: '10.5pt' }}>
                       {parseBoldText(getSummaryArray(resumeData.summary).join(' '))}
                     </p>
                   </div>
@@ -490,7 +490,7 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
                 >
                   <div className="mb-3">
                     <SectionHeader title="Skills" sectionKey="skills" />
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-1" style={{ fontSize: '9.5pt' }}>
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-1" style={{ fontSize: '10.5pt' }}>
                       {resumeData.skills.map((skillGroup: any, i: number) => (
                         <ul key={i} className="list-disc pl-4 m-0 space-y-1">
                           <li className="leading-snug">
@@ -519,26 +519,26 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
                   <div>
                     {page.experiences.map((exp: any, i: number) => (
                       <div key={i} className="mb-3">
-                        <div className="flex items-center leading-tight mb-1" style={{ fontSize: '10.5pt', fontWeight: 700 }}>
+                        <div className="flex items-center leading-tight mb-1" style={{ fontSize: '11.5pt', fontWeight: 700 }}>
                           <span className="uppercase">{exp.role}</span>
-                          {exp.isContinued && <span className="italic font-normal text-slate-500 text-[9pt] ml-1">(Continued)</span>}
+                          {exp.isContinued && <span className="italic font-normal text-slate-500 text-[10pt] ml-1">(Continued)</span>}
                           <span className="mx-1.5 text-gray-400 font-normal">|</span>
                           <span>{exp.duration}</span>
                         </div>
 
-                        <div className="leading-tight mb-1 font-semibold text-slate-700" style={{ fontSize: '9.5pt' }}>
+                        <div className="leading-tight mb-1 font-semibold text-slate-700" style={{ fontSize: '10.5pt' }}>
                           {exp.company}
                         </div>
 
                         {exp.environment && exp.environment.length > 0 && !exp.isContinued && (
-                          <div className="mb-1.5 leading-snug text-slate-600" style={{ fontSize: '8.5pt' }}>
+                          <div className="mb-1.5 leading-snug text-slate-600" style={{ fontSize: '9.5pt' }}>
                             <span className="font-bold italic text-black">Environment: </span>
                             {exp.environment.join(', ')}
                           </div>
                         )}
 
                         {exp.bullets.length > 0 && (
-                          <ul className="list-disc pl-5 space-y-1 mt-1 m-0 text-[9.5pt]" style={{ lineHeight: '1.4' }}>
+                          <ul className="list-disc pl-5 space-y-1 mt-1 m-0 text-[10.5pt]" style={{ lineHeight: '1.4' }}>
                             {exp.bullets.map((bullet: string, j: number) => (
                               <li key={j} className="pl-1 leading-snug text-justify">
                                 {parseBoldText(bullet)}
@@ -565,10 +565,10 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
                       {resumeData.education.map((edu: any, i: number) => (
                         <div key={i} className="flex justify-between items-start">
                           <div>
-                            <div className="font-bold text-slate-800 text-[10pt]">{edu.degree}</div>
-                            <div className="text-slate-600 font-medium text-[9.5pt]">{edu.institution}</div>
+                            <div className="font-bold text-slate-800 text-[11pt]">{edu.degree}</div>
+                            <div className="text-slate-600 font-medium text-[10.5pt]">{edu.institution}</div>
                           </div>
-                          <div className="font-semibold whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
+                          <div className="font-semibold whitespace-nowrap ml-4 text-[10pt]">{edu.year}</div>
                         </div>
                       ))}
                     </div>
@@ -585,7 +585,7 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
                 >
                   <div className="mb-3">
                     <SectionHeader title="Certifications" sectionKey="certifications" />
-                    <ul className="list-disc pl-5 m-0 space-y-1 text-[9.5pt]">
+                    <ul className="list-disc pl-5 m-0 space-y-1 text-[10.5pt]">
                       {resumeData.certifications.map((cert: any, i: number) => (
                         <li key={i} className="pl-1 leading-relaxed">
                           <span className="font-bold">{cert.name}</span> — {cert.issuer} ({cert.year})

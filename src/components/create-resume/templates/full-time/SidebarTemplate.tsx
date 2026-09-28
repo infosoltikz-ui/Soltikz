@@ -547,7 +547,7 @@ const SidebarTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplate
                 >
                   <div className="mb-3">
                     <SectionHeader title="Professional Summary" sectionKey="summary" />
-                    <p className="text-justify leading-snug m-0" style={{ fontSize: '9.5pt' }}>
+                    <p className="text-justify leading-snug m-0" style={{ fontSize: '10.5pt' }}>
                       {parseBoldText(getSummaryArray(resumeData.summary).join(' '))}
                     </p>
                   </div>
@@ -563,7 +563,7 @@ const SidebarTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplate
                 >
                   <div className="mb-3">
                     <SectionHeader title="Technical Skills" sectionKey="skills" />
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-1" style={{ fontSize: '9.5pt' }}>
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-1" style={{ fontSize: '10.5pt' }}>
                       {resumeData.skills.map((skillGroup: any, i: number) => (
                         <ul key={i} className="list-disc pl-4 m-0 space-y-1">
                           <li className="leading-snug">
