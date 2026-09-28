@@ -63,17 +63,20 @@ export function AIGenerationLoadingHUD({ currentState }: { currentState: string 
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl translate-y-24 -translate-x-24 pointer-events-none" />
 
       {/* Main Centerpiece: Elegant Executive AI Orb */}
-      <div className="relative flex items-center justify-center mb-6">
+      <div className="relative flex items-center justify-center mb-8 mt-4">
         
-        {/* Outer Gentle Pulse Ring */}
-        <div className="absolute w-28 h-28 rounded-full bg-emerald-500/10 animate-ping opacity-30 pointer-events-none" />
+        {/* Ambient Core Glow */}
+        <div className="absolute w-32 h-32 rounded-full bg-emerald-500/10 blur-xl pointer-events-none" />
         
-        {/* Smooth Spinning Gradient Ring */}
-        <div className="w-24 h-24 rounded-full border-2 border-slate-200 dark:border-slate-700 border-t-emerald-600 dark:border-t-emerald-400 border-r-teal-500 animate-[spin_2s_linear_infinite]" />
+        {/* Outer Spinning Ring */}
+        <div className="absolute w-24 h-24 rounded-full border border-slate-200/50 dark:border-slate-700/50 border-t-emerald-500 dark:border-t-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.15)] animate-[spin_3s_linear_infinite]" />
+        
+        {/* Inner Spinning Ring (Opposite direction) */}
+        <div className="absolute w-16 h-16 rounded-full border border-slate-200/50 dark:border-slate-700/50 border-b-teal-500 dark:border-b-teal-400 animate-[spin_2s_linear_infinite_reverse]" />
 
-        {/* Center Glowing Icon */}
-        <div className="absolute w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-600/25">
-          <Sparkles className="w-8 h-8 text-white animate-pulse" />
+        {/* Center Glowing Core */}
+        <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/30 animate-pulse">
+          <Sparkles className="w-5 h-5 text-white" />
         </div>
       </div>
 
