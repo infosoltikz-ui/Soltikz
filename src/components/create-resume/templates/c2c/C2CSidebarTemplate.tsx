@@ -94,7 +94,7 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
       for (let i = 0; i < resumeData.experience.length; i++) {
         const exp = resumeData.experience[i];
         let currentExpHeaderH = getElementHeight(`meas-side-exp-${i}-header`);
-        let currentExpObj = { ...exp, bullets: [], isContinued: false, isSplit: false };
+        let currentExpObj = { ...exp, bullets: [] as string[], isContinued: false, isSplit: false };
         
         let fullHeaderH = currentExpHeaderH;
         if (exp.environment && exp.environment.length > 0) {
@@ -131,7 +131,7 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
               }
 
               const isActuallyContinued = currentExpObj.bullets.length > 0;
-              currentExpObj = { ...exp, bullets: [], isContinued: isActuallyContinued, isSplit: false };
+              currentExpObj = { ...exp, bullets: [] as string[], isContinued: isActuallyContinued, isSplit: false };
               currentExpHeaderH = getElementHeight(isActuallyContinued ? `meas-side-exp-${i}-header-continued` : `meas-side-exp-${i}-header`);
             }
           }
@@ -146,7 +146,7 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
             currentPages.push(currentPage);
             currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: true, hasEducationHeading: false, hasCertificationsHeading: false };
             remainingHeight = MAX_CONTENT_HEIGHT - expSectionHeadingHeight;
-            currentExpObj = { ...exp, bullets: [], isContinued: true, isSplit: false };
+            currentExpObj = { ...exp, bullets: [] as string[], isContinued: true, isSplit: false };
           }
           remainingHeight -= envHeight;
         }

@@ -43,17 +43,21 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
   useLayoutEffect(() => {
     if (!measRef.current) return;
 
-    // Calculate global scale applied by the container (e.g. Fit Width)
-    const measRect = measRef.current.getBoundingClientRect();
-    const trueScale = measRect.width / 794;
-
     const getElementHeight = (id: string) => {
       const el = document.getElementById(id);
       if (!el) return 0;
       const rect = el.getBoundingClientRect();
       const style = window.getComputedStyle(el);
-      
-      const unscaledHeight = rect.height / trueScale;
+
+      let scale = 1;
+      const transform = style.transform;
+      if (transform && transform !== 'none') {
+        const matrix = transform.match(/^matrix\((.+)\)$/);
+        if (matrix) {
+          scale = parseFloat(matrix[1].split(',')[0]);
+        }
+      }
+      const unscaledHeight = scale > 0 ? rect.height / scale : (el as HTMLElement).offsetHeight;
 
       const mt = parseFloat(style.marginTop) || 0;
       const mb = parseFloat(style.marginBottom) || 0;
@@ -81,7 +85,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
     currentPage.skills = true;
     remainingHeight -= (headerHeight + summaryHeight + skillsHeight);
 
-    const expSectionHeadingHeight = getElementHeight('meas-exp-section-heading') + 24; 
+    const expSectionHeadingHeight = getElementHeight('meas-exp-section-heading') + 24;
     let hasAddedExpSectionHeading = false;
 
     const exps = resumeData.experience || [];
@@ -124,17 +128,12 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 
           if (currentExpObj.bullets.length > 0 || remainingHeight < MAX_CONTENT_HEIGHT) {
             currentPages.push(currentPage);
-            const transferExpHeading = currentPage.hasExperienceHeading && currentPage.experiences.length === 0;
-
-            currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: transferExpHeading, hasEducationHeading: false, hasCertificationsHeading: false };
+            currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: false, hasEducationHeading: false, hasCertificationsHeading: false };
             remainingHeight = MAX_CONTENT_HEIGHT;
 
             const isActuallyContinued = currentExpObj.bullets.length > 0;
             currentExpObj = { ...exp, bullets: [], isContinued: isActuallyContinued, isSplit: false };
             currentExpHeaderH = getElementHeight(isActuallyContinued ? `meas-exp-${i}-header-continued` : `meas-exp-${i}-header`);
-            if (transferExpHeading) {
-              currentExpHeaderH += expSectionHeadingHeight;
-            }
           }
         }
 
@@ -163,24 +162,24 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 
       for (let i = 0; i < edus.length; i++) {
         const eduItemH = getElementHeight(`meas-edu-${i}`);
-        
+
         let requiredSpace = eduItemH;
         if (!hasAddedEduHeading) {
-            requiredSpace += eduHeadingH;
+          requiredSpace += eduHeadingH;
         }
 
         if (remainingHeight < requiredSpace) {
-            if (currentPage.education.length > 0 || remainingHeight < MAX_CONTENT_HEIGHT) {
-                currentPages.push(currentPage);
-                currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: false, hasEducationHeading: false, hasCertificationsHeading: false };
-                remainingHeight = MAX_CONTENT_HEIGHT;
-            }
+          if (currentPage.education.length > 0 || remainingHeight < MAX_CONTENT_HEIGHT) {
+            currentPages.push(currentPage);
+            currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: false, hasEducationHeading: false, hasCertificationsHeading: false };
+            remainingHeight = MAX_CONTENT_HEIGHT;
+          }
         }
 
         if (!hasAddedEduHeading) {
-            hasAddedEduHeading = true;
-            currentPage.hasEducationHeading = true;
-            remainingHeight -= eduHeadingH;
+          hasAddedEduHeading = true;
+          currentPage.hasEducationHeading = true;
+          remainingHeight -= eduHeadingH;
         }
 
         currentPage.education.push(edus[i]);
@@ -195,24 +194,24 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 
       for (let i = 0; i < certs.length; i++) {
         const certItemH = getElementHeight(`meas-cert-${i}`);
-        
+
         let requiredSpace = certItemH;
         if (!hasAddedCertHeading) {
-            requiredSpace += certHeadingH;
+          requiredSpace += certHeadingH;
         }
 
         if (remainingHeight < requiredSpace) {
-            if (currentPage.certifications.length > 0 || remainingHeight < MAX_CONTENT_HEIGHT) {
-                currentPages.push(currentPage);
-                currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: false, hasEducationHeading: false, hasCertificationsHeading: false };
-                remainingHeight = MAX_CONTENT_HEIGHT;
-            }
+          if (currentPage.certifications.length > 0 || remainingHeight < MAX_CONTENT_HEIGHT) {
+            currentPages.push(currentPage);
+            currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: false, hasEducationHeading: false, hasCertificationsHeading: false };
+            remainingHeight = MAX_CONTENT_HEIGHT;
+          }
         }
 
         if (!hasAddedCertHeading) {
-            hasAddedCertHeading = true;
-            currentPage.hasCertificationsHeading = true;
-            remainingHeight -= certHeadingH;
+          hasAddedCertHeading = true;
+          currentPage.hasCertificationsHeading = true;
+          remainingHeight -= certHeadingH;
         }
 
         currentPage.certifications.push(certs[i]);
@@ -246,11 +245,10 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
     const isInteractive = Boolean(onSelectSection);
     const isActive = activeSectionKey === key;
     if (!isInteractive) return '';
-    return `group/sec relative transition-all rounded-lg p-1.5 -m-1.5 cursor-pointer ${
-      isActive
+    return `group/sec relative transition-all rounded-lg p-1.5 -m-1.5 cursor-pointer ${isActive
         ? 'ring-2 ring-emerald-500 bg-emerald-50/25 shadow-xs'
         : 'hover:ring-1 hover:ring-emerald-400/60 hover:bg-slate-50/50'
-    }`;
+      }`;
   };
 
   const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey?: string }) => {
@@ -426,7 +424,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
   return (
     <div ref={ref} className="text-black bg-slate-50 print:bg-white flex flex-col items-center">
       {measurementDOM}
-      
+
       {pages.length === 0 && (
         <div className={pageContainerClass} style={pageContainerStyle}>
           <div className="flex-1 flex items-center justify-center text-slate-400">
@@ -442,10 +440,10 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
         return (
           <div key={pIndex} className={pageContainerClass} style={pageContainerStyle}>
             <div className={`flex-1 flex flex-col ${pIndex !== pages.length - 1 ? 'justify-between' : 'justify-start'}`}>
-              
+
               {/* Header */}
               {isPage1 && (
-                <div 
+                <div
                   onClick={() => onSelectSection?.('header')}
                   className={getSectionWrapperClass('header')}
                   style={getSectionStyle('header')}
@@ -472,7 +470,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 
               {/* Professional Summary */}
               {page.summary && getSummaryArray(resumeData.summary).length > 0 && (
-                <div 
+                <div
                   onClick={() => onSelectSection?.('summary')}
                   className={getSectionWrapperClass('summary')}
                   style={getSectionStyle('summary')}
@@ -493,7 +491,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 
               {/* Technical Skills */}
               {page.skills && resumeData.skills && resumeData.skills.length > 0 && (
-                <div 
+                <div
                   onClick={() => onSelectSection?.('skills')}
                   className={getSectionWrapperClass('skills')}
                   style={getSectionStyle('skills')}
@@ -514,19 +512,19 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 
               {/* Experiences */}
               {page.experiences.length > 0 && (
-                <div 
+                <div
                   onClick={() => onSelectSection?.('experience')}
                   className={getSectionWrapperClass('experience')}
                   style={getSectionStyle('experience')}
                 >
                   <div className="mb-2">
                     {page.hasExperienceHeading && (
-                      <SectionHeader 
-                        title={isPage1 ? "Professional Experience" : "Professional Experience (Continued)"} 
-                        sectionKey="experience" 
+                      <SectionHeader
+                        title={isPage1 ? "Professional Experience" : "Professional Experience (Continued)"}
+                        sectionKey="experience"
                       />
                     )}
-                    
+
                     {page.experiences.map((exp: any, i: number) => (
                       <div key={i} className="mb-4">
                         <div className="font-bold">
@@ -560,7 +558,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 
               {/* Education */}
               {page.education && page.education.length > 0 && (
-                <div 
+                <div
                   onClick={() => onSelectSection?.('education')}
                   className={getSectionWrapperClass('education')}
                   style={getSectionStyle('education')}
@@ -580,7 +578,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
 
               {/* Certifications */}
               {page.certifications && page.certifications.length > 0 && (
-                <div 
+                <div
                   onClick={() => onSelectSection?.('certifications')}
                   className={getSectionWrapperClass('certifications')}
                   style={getSectionStyle('certifications')}
