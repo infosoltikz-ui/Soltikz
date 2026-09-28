@@ -10,6 +10,7 @@ const ParsedJDFormat = z.object({
   companyName: z.string().nullable().describe("The name of the company hiring, if mentioned"),
   experienceLevel: z.string().describe("Required experience level, e.g., Mid, Senior, 5+ years"),
   requiredSkills: z.array(z.string()).describe("A list of 5-10 core mandatory skills"),
+  preferredSkills: z.array(z.string()).describe("A list of nice-to-have or preferred skills"),
   technologies: z.array(z.string()).describe("Specific tools, languages, or frameworks mentioned (e.g. AWS, React)"),
   responsibilities: z.array(z.string()).describe("Top 3-5 core daily responsibilities extracted"),
   softSkills: z.array(z.string()).describe("Required soft skills like Leadership, Communication"),
@@ -22,6 +23,7 @@ const SYSTEM_PROMPT = `
 You are an expert ATS (Applicant Tracking System) algorithm and Senior IT Recruiter.
 Your job is to analyze Job Descriptions (JDs) and extract structured data.
 You must return a perfect JSON object that matches the requested schema.
+CRITICAL: Differentiate clearly between REQUIRED and PREFERRED skills. 
 Extract exact keywords used in the JD (do not use synonyms).
 Identify the priority keywords that are most likely weighted heavily by an ATS.
 `;
