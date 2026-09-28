@@ -178,6 +178,18 @@
     padding: 0 !important;
   }
 
+  /* When printing via the PDF Export function, hide the main app and show only the mounted print clone */
+  body.printing-resume > *:not(#print-mount) {
+    display: none !important;
+  }
+  
+  #print-mount {
+    display: block !important;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
   .resume-page {
     /* Strict A4 dimensions for print */
     width: 210mm !important;
