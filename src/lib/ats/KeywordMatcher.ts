@@ -47,22 +47,32 @@ export class KeywordMatcher {
 
   /**
    * Scans a full text string for a keyword, considering synonyms.
-   * Returns true if a match is found.
+   * Returns true if a match is found using word boundaries.
    */
   public hasKeyword(keyword: string, text: string): boolean {
     const normalizedTarget = this.normalize(keyword);
     const lowerText = text.toLowerCase();
     
-    // Exact match of normalized target
-    if (lowerText.includes(normalizedTarget)) {
-      // Need word boundary check ideally, but includes is a safe baseline for now
+    // Helper to safely check with word boundaries or space boundaries for symbols
+    const checkMatch = (target: string) => {
+      // Escape special regex characters in the target (like . or +)
+      const escaped = target.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      // If the target starts/ends with a word character, use \b. 
+      // Otherwise, use negative lookaround to ensure it's not immediately surrounded by letters/numbers.
+      const prefix = /^\w/.test(target) ? '\\b' : '(?<!\\w)';
+      const suffix = /\w$/.test(target) ? '\\b' : '(?!\\w)';
+      const regex = new RegExp(`${prefix}${escaped}${suffix}`);
+      return regex.test(lowerText);
+    };
+
+    if (checkMatch(normalizedTarget)) {
       return true;
     }
 
     // Check aliases
     const aliases = this.synonyms[normalizedTarget] || [];
     for (const alias of aliases) {
-      if (lowerText.includes(alias)) {
+      if (checkMatch(alias)) {
         return true;
       }
     }

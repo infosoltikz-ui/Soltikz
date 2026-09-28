@@ -148,7 +148,7 @@ SKILLS MATRIX — C2C:
   - DO NOT inject JD keywords that the user does not possess.
 
 EXPERIENCE — C2C (STRICT MANDATORY BULLET COUNTS):
-  - EXACTLY 10 Powerful Bullet Points for EVERY company/experience (NO LESS THAN 10).
+  - Follow the exact bullet point counts specified later in the prompt per experience level (Experience 1 vs 2 vs 3).
   - Every bullet: MUST be 25-30 words (2 to 3 full lines) with bolded **keyword** syntax and metrics.
   - Use VERY STRONG action verbs (e.g., Architected, Spearheaded, Engineered) instead of weak words.
   - Include "environment" tech stack array for ALL roles (comma-separated, every tool used on that engagement).
