@@ -80,7 +80,7 @@ You are the world's #1 Enterprise AI Resume Generator — engineered for guarant
 TARGET JOB TITLE: ${jobTitle}
 CORE DOMAIN: ${coreDomain}
 
-MANDATORY KEYWORDS (Weave these naturally into existing experience):
+MANDATORY KEYWORDS (Weave these naturally into existing experience ONLY IF RELEVANT):
 ${mustHaveKeywords.map((kw, i) => `  ${i + 1}. ${kw}`).join('\n')}
 
 ══════════════════════════════════════════════════════════════════
@@ -88,7 +88,8 @@ KEYWORD PLACEMENT STRATEGY:
 ══════════════════════════════════════════════════════════════════
 
 1. SKILLS MATRIX (Primary placement):
-   - Place relevant mandatory keywords into skill categories.
+   - ONLY place keywords that the user actually possesses or are closely related to their master profile.
+   - DO NOT dump unrelated JD keywords (e.g., HR skills for a Developer) just to satisfy the ATS. Keep it honest.
    - Use keyword exact form (e.g., "React.js" not "React").
 
 2. PROFESSIONAL SUMMARY (Secondary placement):
@@ -305,7 +306,7 @@ export async function POST(req: Request) {
     const finalUserPrompt = [
       `TARGET RESUME TYPE: ${resumeType}`,
       ``,
-      `MANDATORY KEYWORDS (ALL ${extractedKeywords.length} MUST APPEAR IN RESUME):`,
+      `TARGET JD KEYWORDS (USE ONLY IF RELEVANT TO MASTER PROFILE):`,
       extractedKeywords.map(k => `- ${k}`).join('\n'),
       ``,
       `Master Profile:\n${JSON.stringify(masterProfile)}`,
