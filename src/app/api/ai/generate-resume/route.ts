@@ -126,11 +126,11 @@ BULLET POINT LENGTH & QUALITY REQUIREMENT (CRITICAL — NON-NEGOTIABLE):
   **GOOD EXAMPLE (PROPER LENGTH & HIGH IMPACT - 2 to 3 LINES):**
   "Spearheaded the design and implementation of comprehensive **CI/CD pipelines** across microservices, utilizing **GitHub Actions** and **Jenkins** to automate build, test, and deployment processes, which reduced deployment cycle times by **30%** and enhanced overall team productivity by enabling faster iteration cycles."
 
-QUANTIFIED METRICS:
-  - Minimum 80% of ALL experience bullets MUST contain a clear, quantifiable number or metric.
-  - Use: percentages (%), user scale, transaction volume, time saved, team size, cost reduction, revenue impact.
-  - Examples: "reducing API latency by **38%**", "supporting **1.2M** monthly active users", "cutting release cycle from 4 hours to **25 minutes**".
-  - If no exact number is in the profile, infer a realistic industry estimate for the seniority level (e.g., "**~20-25%** efficiency gain", "**50+** microservices").
+QUANTIFIED METRICS (CRITICAL - 100% COMPLIANCE REQUIRED):
+  - 100% of ALL experience bullets MUST conclude with a clear, quantifiable percentage metric (%).
+  - Ensure the percentage logically matches the accomplishment described in the bullet.
+  - Examples: "resulting in a **38%** reduction in API latency.", "improving system efficiency by **~25%**.", "increasing data processing speed by **40%**."
+  - If no exact number is in the master profile, you MUST infer a realistic, conservative industry estimate (e.g. 15%, 25%, 30%) so that every single bullet ends with a percentage.
 
 BULLET ANATOMY:
   [POWER ACTION VERB] + [Detailed Context & Tools] + [Methodology/Process] + [Quantified Metric Result] + [Business Outcome]
