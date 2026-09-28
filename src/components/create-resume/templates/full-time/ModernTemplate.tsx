@@ -66,8 +66,8 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
     const PAGE_PADDING_BOTTOM = 32;
     const FOOTER_HEIGHT = getElementHeight('meas-footer') || 30;
     
-    // Safety margin to prevent clipping
-    const SAFETY_MARGIN = 24;
+    // Safety margin to prevent clipping - increased to handle font scaling differences
+    const SAFETY_MARGIN = 56;
     const MAX_CONTENT_HEIGHT = PAGE_HEIGHT - PAGE_PADDING_TOP - PAGE_PADDING_BOTTOM - FOOTER_HEIGHT - SAFETY_MARGIN;
 
     let currentPages: any[] = [];
@@ -475,13 +475,15 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
                       <div className="font-semibold text-slate-700">{exp.company}</div>
                     </div>
                 </div>
-                {exp.bullets?.map((b: string, j: number) => (
-                   <ul key={j} className="list-disc pl-5 space-y-1.5 mt-1 m-0" style={{ fontSize: '9.5pt' }}>
-                     <li id={`meas-exp-${i}-bullet-${j}-${compId}`} className="pl-1 leading-snug text-justify">
-                       {renderWithBold(b)}
-                     </li>
-                   </ul>
-                ))}
+                {exp.bullets && exp.bullets.length > 0 && (
+                  <ul className="list-disc pl-5 space-y-1.5 mt-1 m-0" style={{ fontSize: '9.5pt' }}>
+                    {exp.bullets.map((b: string, j: number) => (
+                      <li id={`meas-exp-${i}-bullet-${j}-${compId}`} key={j} className="pl-1 leading-snug text-justify">
+                        {renderWithBold(b)}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
            ))}
 
