@@ -1,12 +1,13 @@
 'use client'
 
-import { ArrowLeft, Check, Layout, Sparkles, ShieldCheck, FileCheck, ChevronDown, Settings, LogOut } from 'lucide-react'
+import { ArrowLeft, Check, Layout, Sparkles, ShieldCheck, FileCheck, ChevronDown, Settings, LogOut, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/utils/cn'
 import { useState, useRef, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import { isPremiumPlan } from '@/utils/pricingPlans'
+import { HowToGuideModal } from './HowToGuideModal'
 
 interface CreateResumeHeaderProps {
   currentStep?: number
@@ -105,7 +106,11 @@ export function CreateResumeHeader({
   onStepClick,
   onBack,
 }: CreateResumeHeaderProps) {
+  const [guideOpen, setGuideOpen] = useState(false)
+
   return (
+    <>
+    <HowToGuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-[68px] flex items-center gap-4">
 
@@ -188,6 +193,16 @@ export function CreateResumeHeader({
 
         {/* ── Right: badge + user ── */}
         <div className="flex items-center gap-2 shrink-0">
+          {/* How It Works guide button */}
+          <button
+            onClick={() => setGuideOpen(true)}
+            className="hidden sm:flex items-center gap-1.5 h-9 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-emerald-700 hover:border-emerald-300 transition-all text-[12px] font-bold shadow-xs"
+            title="How to generate your resume"
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            <span className="hidden lg:block">How it Works</span>
+          </button>
+
           <div className="hidden lg:flex items-center gap-1.5 text-[12px] font-bold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
             <FileCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
             <span>ATS Certified</span>
@@ -197,5 +212,6 @@ export function CreateResumeHeader({
 
       </div>
     </header>
+    </>
   )
 }
