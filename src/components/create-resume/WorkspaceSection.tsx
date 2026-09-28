@@ -67,12 +67,21 @@ interface WorkspaceSectionProps {
   linkedin?: string
   companyName?: string
   jobTitle?: string
+  parsedJdData?: any
+  generatedResume?: any
+  onPrepRegenerated?: (newPrep: InterviewPrepData) => void
 }
 
-export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateName, email, phone, location, linkedin, companyName, jobTitle }: WorkspaceSectionProps) {
+export function WorkspaceSection({ 
+  interviewPrep, atsData, resumeId, candidateName, email, phone, location, linkedin, companyName, jobTitle,
+  parsedJdData, generatedResume, onPrepRegenerated
+}: WorkspaceSectionProps) {
   const [activeTab, setActiveTab] = useState<'intro' | 'tech' | 'hr' | 'star' | 'ats' | 'company' | 'cover'>('intro')
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const [expandedStarIdx, setExpandedStarIdx] = useState<number | null>(0)
+  
+  const [isRegeneratingPrep, setIsRegeneratingPrep] = useState(false)
+
 
   const [coverLetterRes, setCoverLetterRes] = useState<CoverLetterResponseData | null>(null)
   const [isGeneratingCoverLetter, setIsGeneratingCoverLetter] = useState(false)
@@ -97,6 +106,29 @@ export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateNa
       toast.error(error.message || 'Failed to generate cover letter')
     } finally {
       setIsGeneratingCoverLetter(false)
+    }
+  }
+
+  const handleRegeneratePrep = async () => {
+    if (!resumeId || !parsedJdData || !generatedResume) {
+      toast.error('Missing data required to regenerate prep.')
+      return
+    }
+    setIsRegeneratingPrep(true)
+    try {
+      const res = await fetch('/api/ai/generate-prep', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resumeId, parsedJdData, resumeContent: generatedResume })
+      })
+      const data = await res.json()
+      if (!data.success) throw new Error(data.error || 'Failed to regenerate prep')
+      if (onPrepRegenerated) onPrepRegenerated(data.prep)
+      toast.success('Interview Prep updated!')
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to regenerate prep')
+    } finally {
+      setIsRegeneratingPrep(false)
     }
   }
 
@@ -289,14 +321,26 @@ export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateNa
       {activeTab === 'intro' && (
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-300">
           {/* Self Pitch Header */}
-          <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-              <MessageSquare className="w-5 h-5" />
+          <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-slate-100">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                <MessageSquare className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-[17px] font-black text-slate-900">Self Pitch — Interview Guide</h3>
+                <p className="text-[12px] font-medium text-slate-500 mt-0.5">Your complete personalized interview script tailored to this JD</p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-[17px] font-black text-slate-900">Self Pitch — Interview Guide</h3>
-              <p className="text-[12px] font-medium text-slate-500 mt-0.5">Your complete personalized interview script tailored to this JD</p>
-            </div>
+            
+            <Button
+              onClick={handleRegeneratePrep}
+              disabled={isRegeneratingPrep}
+              variant="outline"
+              className="h-9 px-3 rounded-lg border-primary/20 text-primary hover:bg-primary/5 shadow-xs text-[12.5px] font-bold shrink-0"
+            >
+              {isRegeneratingPrep ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <Sparkles className="w-3.5 h-3.5 mr-1.5" />}
+              {isRegeneratingPrep ? 'Upgrading...' : 'Refresh Pitch'}
+            </Button>
           </div>
 
           {/* Sub-tabs */}
@@ -343,7 +387,7 @@ export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateNa
                     {copiedKey === 'intro-full' ? <><Check className="w-3.5 h-3.5 text-emerald-600" /><span className="text-emerald-700">Copied!</span></> : <><Copy className="w-3.5 h-3.5" /><span>Copy</span></>}
                   </button>
                 </div>
-                {selfIntroFull.split('\n\n').filter(Boolean).map((para, i) => (
+                {selfIntroFull.split('\n\n').filter(Boolean).map((para: string, i: number) => (
                   <div key={i} className="flex items-start gap-3.5 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-primary/20 transition-all">
                     <span className="w-6 h-6 rounded-lg bg-primary/10 text-primary text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
                     <p className="text-[14px] text-slate-800 leading-[1.85] font-medium">{para}</p>
@@ -368,7 +412,7 @@ export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateNa
                     {copiedKey === 'intro-short' ? <><Check className="w-3.5 h-3.5 text-emerald-600" /><span className="text-emerald-700">Copied!</span></> : <><Copy className="w-3.5 h-3.5" /><span>Copy</span></>}
                   </button>
                 </div>
-                {selfIntroShort.split('\n\n').filter(Boolean).map((para, i) => (
+                {selfIntroShort.split('\n\n').filter(Boolean).map((para: string, i: number) => (
                   <div key={i} className="flex items-start gap-3.5 p-4 rounded-xl bg-emerald-50/60 border border-emerald-100 hover:bg-white hover:border-emerald-300 transition-all">
                     <span className="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
                     <p className="text-[14px] text-slate-800 leading-[1.85] font-medium">{para}</p>
@@ -453,7 +497,7 @@ export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateNa
                     {copiedKey === 'whyhire' ? <><Check className="w-3.5 h-3.5 text-emerald-600" /><span className="text-emerald-700">Copied!</span></> : <><Copy className="w-3.5 h-3.5" /><span>Copy</span></>}
                   </button>
                 </div>
-                {selfWhyHire.split('\n\n').filter(Boolean).map((para, i) => (
+                {selfWhyHire.split('\n\n').filter(Boolean).map((para: string, i: number) => (
                   <div key={i} className="p-4 rounded-xl bg-violet-50/60 border border-violet-100 hover:bg-white hover:border-violet-300 transition-all">
                     <p className="text-[14px] text-slate-800 leading-[1.85] font-medium">{para}</p>
                   </div>
