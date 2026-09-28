@@ -176,6 +176,8 @@
     color: #000000 !important;
     margin: 0 !important;
     padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   /* When printing via the PDF Export function, hide the main app and show only the mounted print clone */
