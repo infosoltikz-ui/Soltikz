@@ -7,7 +7,7 @@ import { createClient } from '@/utils/supabase/server';
 const KeyPointSchema = z.object({
   title: z.string(),
   bullets: z.array(z.string()),
-  tip: z.string().optional()
+  tip: z.string().nullable()
 })
 
 const SelfPitchSchema = z.object({
