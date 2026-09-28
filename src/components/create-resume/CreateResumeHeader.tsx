@@ -56,18 +56,18 @@ function CompactUserMenu() {
     <div className="relative shrink-0" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 h-9 pl-1 pr-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all shadow-xs hover:shadow-sm"
+        className="flex items-center gap-2.5 h-10 pl-1.5 pr-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all shadow-xs hover:shadow-sm"
       >
         {/* Avatar circle */}
-        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-[11px] font-black shrink-0 shadow-sm">
+        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-[13px] font-black shrink-0 shadow-sm">
           {initials}
         </div>
         {/* Name + plan */}
         <div className="hidden sm:flex flex-col items-start leading-none">
-          <span className="text-[12px] font-bold text-slate-900 whitespace-nowrap max-w-[110px] truncate">{user.name}</span>
-          <span className="text-[10px] font-medium text-slate-400 mt-0.5">{user.plan}</span>
+          <span className="text-[13px] font-bold text-slate-900 whitespace-nowrap max-w-[130px] truncate">{user.name}</span>
+          <span className="text-[11px] font-medium text-slate-400 mt-0.5">{user.plan}</span>
         </div>
-        <ChevronDown className={cn('w-3 h-3 text-slate-400 transition-transform shrink-0', open && 'rotate-180')} />
+        <ChevronDown className={cn('w-3.5 h-3.5 text-slate-400 transition-transform shrink-0', open && 'rotate-180')} />
       </button>
 
       {open && (
@@ -107,31 +107,31 @@ export function CreateResumeHeader({
 }: CreateResumeHeaderProps) {
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
-      <div className="max-w-[1600px] mx-auto px-3 sm:px-5 lg:px-8 h-[52px] flex items-center gap-3">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-[68px] flex items-center gap-4">
 
         {/* ── Left: back + logo ── */}
         <div className="flex items-center gap-2.5 shrink-0">
           {onBack ? (
             <button
               onClick={onBack}
-              className="flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition-all"
+              className="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition-all shadow-xs"
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
+              <ArrowLeft className="w-4 h-4" />
             </button>
           ) : (
             <Link
               href="/dashboard"
-              className="flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition-all"
+              className="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition-all shadow-xs"
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
+              <ArrowLeft className="w-4 h-4" />
             </Link>
           )}
 
-          <div className="hidden sm:flex items-center gap-1.5">
-            <span className="text-[13px] font-black text-slate-900 tracking-tight">Resume Builder</span>
-            <span className="inline-flex items-center gap-0.5 text-[9.5px] font-extrabold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-full border border-emerald-200">
-              <Sparkles className="w-2 h-2" />
-              AI
+          <div className="hidden sm:flex items-center gap-2">
+            <span className="text-[16px] font-black text-slate-900 tracking-tight">Resume Builder</span>
+            <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+              <Sparkles className="w-2.5 h-2.5" />
+              AI Suite
             </span>
           </div>
         </div>
@@ -155,18 +155,16 @@ export function CreateResumeHeader({
                     onClick={() => clickable && onStepClick?.(item.step)}
                     disabled={upcoming}
                     className={cn(
-                      'flex items-center gap-1.5 h-7 px-3 rounded-lg text-[11px] font-bold transition-all duration-150 border select-none',
+                      'flex items-center gap-2 h-9 px-4 rounded-xl text-[12px] font-bold transition-all duration-150 border select-none',
                       active   && 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-transparent shadow-md shadow-emerald-500/25',
                       done     && 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 cursor-pointer',
                       upcoming && 'bg-transparent text-slate-400 border-slate-200/60 cursor-default opacity-50',
                     )}
                   >
-                    <span className={cn(
-                      'w-3.5 h-3.5 rounded flex items-center justify-center shrink-0',
-                    )}>
+                    <span className="w-4 h-4 rounded flex items-center justify-center shrink-0">
                       {done
-                        ? <Check className="w-2.5 h-2.5 stroke-[3]" />
-                        : <Icon className="w-2.5 h-2.5" />
+                        ? <Check className="w-3 h-3 stroke-[3]" />
+                        : <Icon className="w-3 h-3" />
                       }
                     </span>
                     <span className="hidden md:block">{item.label}</span>
@@ -175,7 +173,7 @@ export function CreateResumeHeader({
 
                   {idx < STEPS.length - 1 && (
                     <div className={cn(
-                      'w-5 h-px mx-0.5',
+                      'w-7 h-px mx-1',
                       currentStep > item.step ? 'bg-emerald-400' : 'bg-slate-200'
                     )} />
                   )}
@@ -190,8 +188,8 @@ export function CreateResumeHeader({
 
         {/* ── Right: badge + user ── */}
         <div className="flex items-center gap-2 shrink-0">
-          <div className="hidden lg:flex items-center gap-1 text-[10.5px] font-bold text-slate-500 bg-slate-50 px-2 py-1 rounded-lg border border-slate-200">
-            <FileCheck className="w-3 h-3 text-emerald-600 shrink-0" />
+          <div className="hidden lg:flex items-center gap-1.5 text-[12px] font-bold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
+            <FileCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
             <span>ATS Certified</span>
           </div>
           <CompactUserMenu />
