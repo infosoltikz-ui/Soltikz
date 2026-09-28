@@ -11,8 +11,9 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
   activeSectionKey,
   onSelectSection
 }, ref) => {
-  const ACCENT = themeColor || '#0f172a'; // slate-900
-  const selectedFont = fontFamily || 'Arial, Helvetica, sans-serif';
+  // Classic Navy/Charcoal accent for an executive/certified look
+  const ACCENT = themeColor || '#1e293b'; 
+  const selectedFont = fontFamily || 'Georgia, "Times New Roman", Times, serif';
 
   const [paginationState, setPaginationState] = useState<{
     pages: any[] | null;
@@ -80,7 +81,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
     currentPage.skills = true;
     remainingHeight -= (headerHeight + summaryHeight + skillsHeight);
 
-    const expSectionHeadingHeight = getElementHeight('meas-exp-section-heading') + 24; // mt-5 (20)
+    const expSectionHeadingHeight = getElementHeight('meas-exp-section-heading') + 16; // mt-3 (12) + mb-1 (4)
     let hasAddedExpSectionHeading = false;
 
     const exps = resumeData.experience || [];
@@ -105,21 +106,21 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
         currentPage.hasExperienceHeading = true;
       }
 
-      let currentExpObj: any = { ...exp, bullets: [], isContinued: false, isSplit: false };
+      let currentExpObj = { ...exp, bullets: [], isSplit: false, isContinued: false };
       let currentExpHeaderH = fullHeaderH;
 
       for (let j = 0; j < bullets.length; j++) {
         const bulletH = getElementHeight(`meas-exp-${i}-bullet-${j}`);
         const isLastBullet = j === bullets.length - 1;
 
-        const UL_MARGIN = 10; // mt-1 (4) + mb-1.5 (6)
+        const UL_MARGIN = 10; // mt-1 + mb-1.5
         let requiredSpace = currentExpObj.bullets.length === 0 ? currentExpHeaderH + bulletH + UL_MARGIN : bulletH;
         if (isLastBullet) requiredSpace += envH;
 
         if (remainingHeight < requiredSpace) {
           if (currentExpObj.bullets.length > 0) {
             currentPage.experiences.push({ ...currentExpObj, isSplit: true });
-            remainingHeight -= 20; // mb-5 gap
+            remainingHeight -= 12; // mb-3 gap
           }
 
           if (currentExpObj.bullets.length > 0 || remainingHeight < MAX_CONTENT_HEIGHT) {
@@ -158,7 +159,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
 
     const edus = resumeData.education || [];
     if (edus.length > 0) {
-      let eduHeadingH = getElementHeight('meas-education-heading') + 24;
+      let eduHeadingH = getElementHeight('meas-education-heading') + 16;
       let hasAddedEduHeading = false;
 
       for (let i = 0; i < edus.length; i++) {
@@ -172,7 +173,8 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
         if (remainingHeight < requiredSpace) {
             if (currentPage.education.length > 0 || remainingHeight < MAX_CONTENT_HEIGHT) {
                 currentPages.push(currentPage);
-                currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: false, hasEducationHeading: false, hasCertificationsHeading: false };
+                const transferHeading = currentPage.hasEducationHeading && currentPage.education.length === 0;
+                currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: false, hasEducationHeading: transferHeading, hasCertificationsHeading: false };
                 remainingHeight = MAX_CONTENT_HEIGHT;
             }
         }
@@ -190,7 +192,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
 
     const certs = resumeData.certifications || [];
     if (certs.length > 0) {
-      let certHeadingH = getElementHeight('meas-certifications-heading') + 24;
+      let certHeadingH = getElementHeight('meas-certifications-heading') + 16;
       let hasAddedCertHeading = false;
 
       for (let i = 0; i < certs.length; i++) {
@@ -204,7 +206,8 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
         if (remainingHeight < requiredSpace) {
             if (currentPage.certifications.length > 0 || remainingHeight < MAX_CONTENT_HEIGHT) {
                 currentPages.push(currentPage);
-                currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: false, hasEducationHeading: false, hasCertificationsHeading: false };
+                const transferHeading = currentPage.hasCertificationsHeading && currentPage.certifications.length === 0;
+                currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: false, hasEducationHeading: false, hasCertificationsHeading: transferHeading };
                 remainingHeight = MAX_CONTENT_HEIGHT;
             }
         }
@@ -256,17 +259,19 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
   const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey?: string }) => {
     const headerColor = sectionStyles?.[sectionKey || '']?.color || ACCENT;
     return (
-      <h2 className="uppercase font-bold border-b-2 pb-1 mb-2 mt-3 tracking-wide break-inside-avoid" style={{ fontSize: '11pt', color: headerColor, borderColor: headerColor }}>
-        {title}
-      </h2>
+      <div className="mb-2 mt-3 break-inside-avoid">
+        <h2 className="uppercase font-bold tracking-wider m-0 border-b-2 inline-block pb-0.5" style={{ fontSize: '11pt', color: headerColor, borderColor: headerColor }}>
+          {title}
+        </h2>
+      </div>
     );
   };
 
-  const pageContainerClass = "resume-page bg-white w-[794px] min-h-[1123px] h-[1123px] max-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:border-none print:break-after-page overflow-hidden";
+  const pageContainerClass = "resume-page bg-white w-[794px] min-h-[1123px] h-[1123px] max-h-[1123px] mx-auto shadow-xl border border-slate-200 text-black relative flex flex-col justify-start mb-8 print:mb-0 print:shadow-none print:border-none print:break-after-page overflow-hidden";
   const pageContainerStyle: React.CSSProperties = {
     boxSizing: 'border-box',
     fontFamily: selectedFont,
-    color: '#1e293b',
+    color: '#334155', // slate-700
     fontSize: '9.5pt',
     lineHeight: '1.4',
     padding: '44px 50px',
@@ -285,60 +290,68 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
         padding: '44px 50px',
         border: '1px solid transparent',
         fontFamily: selectedFont,
-        color: '#1e293b',
+        color: '#334155',
         fontSize: '9.5pt',
         lineHeight: '1.4'
       }}
     >
+      {/* HEADER MEASUREMENT */}
       <div id="meas-header" className={getSectionWrapperClass('header')} style={getSectionStyle('header')}>
-        <div className="flex justify-between items-center border-b-2 pb-3 mb-3 break-inside-avoid" style={{ borderColor: ACCENT }}>
-          <div className="flex-1">
-            <h1 className="font-extrabold uppercase m-0 leading-tight" style={{ fontSize: '24pt', color: sectionStyles?.header?.color || ACCENT }}>
-              {profileData.full_name || 'JOHN DOE'}
-            </h1>
-            {(profileData.work_authorization || profileData.relocation || profileData.availability) && (
-              <div className="mt-2 font-medium" style={{ fontSize: '9.5pt', color: ACCENT }}>
-                {[
-                  profileData.work_authorization && `Auth: ${profileData.work_authorization}`,
-                  profileData.relocation && `Reloc: ${profileData.relocation}`,
-                  profileData.availability && `Avail: ${profileData.availability}`
-                ].filter(Boolean).join(' | ')}
-              </div>
-            )}
+        <div className="flex flex-col items-center justify-center border-b-2 pb-3 mb-3 break-inside-avoid" style={{ borderColor: ACCENT }}>
+          <h1 className="font-bold uppercase m-0 tracking-widest" style={{ fontSize: '22pt', color: sectionStyles?.header?.color || ACCENT }}>
+            {profileData.full_name || 'JOHN DOE'}
+          </h1>
+          
+          <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 mt-1 font-medium text-[9pt]" style={{ color: ACCENT }}>
+            {profileData.location && <span>{profileData.location}</span>}
+            {(profileData.location && (profileData.phone || profileData.email)) && <span>•</span>}
+            {profileData.phone && <span>{profileData.phone}</span>}
+            {(profileData.phone && profileData.email) && <span>•</span>}
+            {profileData.email && <span>{profileData.email}</span>}
+            {(profileData.email && profileData.linkedin) && <span>•</span>}
+            {profileData.linkedin && <span>{profileData.linkedin}</span>}
           </div>
-          <div className="text-right flex flex-col gap-1 border-l-2 pl-4 border-slate-200" style={{ fontSize: '9pt', color: '#475569' }}>
-            {profileData.location && <div className="font-semibold text-slate-700">{profileData.location}</div>}
-            {profileData.phone && <div>{profileData.phone}</div>}
-            {profileData.email && <div>{profileData.email}</div>}
-            {profileData.linkedin && <div>{profileData.linkedin}</div>}
-          </div>
+          
+          {(profileData.work_authorization || profileData.relocation || profileData.availability) && (
+            <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 mt-1 text-[8.5pt] italic" style={{ color: ACCENT }}>
+              {[
+                profileData.work_authorization && `Auth: ${profileData.work_authorization}`,
+                profileData.relocation && `Reloc: ${profileData.relocation}`,
+                profileData.availability && `Avail: ${profileData.availability}`
+              ].filter(Boolean).map((item, idx, arr) => (
+                <React.Fragment key={idx}>
+                  <span>{item}</span>
+                  {idx < arr.length - 1 && <span>|</span>}
+                </React.Fragment>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
+      {/* SUMMARY MEASUREMENT */}
       {getSummaryArray(resumeData.summary).length > 0 && (
         <div id="meas-summary" className={getSectionWrapperClass('summary')} style={getSectionStyle('summary')}>
           <div className="mb-3">
             <SectionHeader title="Professional Summary" sectionKey="summary" />
-            <ul className="list-none m-0 space-y-1 text-justify" style={{ fontSize: '9.5pt' }}>
+            <div className="text-justify" style={{ fontSize: '9.5pt' }}>
               {getSummaryArray(resumeData.summary).map((point: string, i: number) => (
-                <li key={i} className="flex gap-2">
-                  <span className="shrink-0 font-bold" style={{ color: ACCENT }}>•</span>
-                  <span>{renderWithBold(point)}</span>
-                </li>
+                <span key={i}>{renderWithBold(point)} </span>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
       )}
 
+      {/* SKILLS MEASUREMENT */}
       {resumeData.skills && resumeData.skills.length > 0 && (
         <div id="meas-skills" className={getSectionWrapperClass('skills')} style={getSectionStyle('skills')}>
           <div className="mb-3">
             <SectionHeader title="Technical Skills" sectionKey="skills" />
-            <div className="grid grid-cols-1 gap-y-0.5 bg-slate-50 border border-slate-200 p-2 rounded-sm" style={{ fontSize: '9pt' }}>
+            <div className="space-y-1" style={{ fontSize: '9pt' }}>
               {resumeData.skills.map((skillGroup: any, i: number) => (
-                <div key={i} className="leading-snug flex">
-                  <span className="font-bold w-[190px] shrink-0 text-slate-900 border-r border-slate-300 mr-2">{skillGroup.category}:</span>
+                <div key={i} className="leading-snug">
+                  <span className="font-bold text-slate-900 mr-2">{skillGroup.category}:</span>
                   <span className="text-slate-700">{Array.isArray(skillGroup.items) ? skillGroup.items.join(', ') : skillGroup.items}</span>
                 </div>
               ))}
@@ -347,70 +360,66 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
         </div>
       )}
 
+      {/* EXP MEASUREMENT */}
       <div id="meas-exp-section-heading">
         <SectionHeader title="Professional Experience" sectionKey="experience" />
       </div>
 
       {resumeData.experience?.map((exp: any, i: number) => (
         <div key={`exp-meas-${i}`}>
-          <div id={`meas-exp-${i}-header`} className="flex justify-between items-center bg-slate-100 p-2 border border-slate-200 rounded-sm mb-2">
-            <div>
-              <div className="font-extrabold uppercase" style={{ fontSize: '10.5pt', color: ACCENT }}>
-                {exp.company}
-              </div>
-              <div className="font-bold text-slate-700" style={{ fontSize: '9.5pt' }}>{exp.role} {exp.location ? `| ${exp.location}` : ''}</div>
+          <div id={`meas-exp-${i}-header`} className="mb-1">
+            <div className="flex justify-between items-end">
+              <div className="font-bold text-[10.5pt] text-slate-900">{exp.company}</div>
+              <div className="font-semibold text-[9.5pt] text-slate-700">{exp.duration}</div>
             </div>
-            <div className="text-right">
-              <div className="font-bold text-slate-700" style={{ fontSize: '9.5pt' }}>{exp.duration}</div>
+            <div className="flex justify-between items-start mt-0.5">
+              <div className="italic text-slate-800 font-medium">{exp.role}</div>
+              {exp.location && <div className="italic text-slate-600">{exp.location}</div>}
             </div>
           </div>
 
-          <div id={`meas-exp-${i}-header-continued`} className="flex justify-between items-center bg-slate-100 p-2 border border-slate-200 rounded-sm mb-2">
-            <div>
-              <div className="font-extrabold uppercase" style={{ fontSize: '10.5pt', color: ACCENT }}>
-                {exp.company}
-                <span className="italic font-normal text-slate-500 ml-2 normal-case">(Continued)</span>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="font-bold text-slate-700" style={{ fontSize: '9.5pt' }}>{exp.duration}</div>
+          <div id={`meas-exp-${i}-header-continued`} className="mb-1">
+            <div className="flex justify-between items-end">
+              <div className="font-bold text-[10.5pt] text-slate-900">{exp.company} <span className="italic font-normal text-slate-500 normal-case">(Continued)</span></div>
+              <div className="font-semibold text-[9.5pt] text-slate-700">{exp.duration}</div>
             </div>
           </div>
 
           {exp.bullets && exp.bullets.length > 0 && (
-            <ul className="list-none mt-1 mb-1.5 m-0 space-y-1.5" style={{ fontSize: '9.5pt' }}>
+            <ul className="list-none mt-1 mb-1.5 m-0 space-y-1" style={{ fontSize: '9.5pt' }}>
               {exp.bullets.map((b: string, j: number) => (
                 <li id={`meas-exp-${i}-bullet-${j}`} key={`bullet-meas-${j}`} className="flex gap-2">
-                  <span className="shrink-0 font-bold text-slate-500 bg-slate-100 px-1.5 rounded">•</span>
-                  <span className="text-justify text-slate-800">{renderWithBold(b)}</span>
+                  <span className="shrink-0 text-slate-600">•</span>
+                  <span className="text-justify">{renderWithBold(b)}</span>
                 </li>
               ))}
             </ul>
           )}
 
           {exp.environment && exp.environment.length > 0 && (
-            <div id={`meas-exp-${i}-env`} className="mt-2 bg-slate-800 text-white px-2 py-1 rounded-sm flex gap-2" style={{ fontSize: '8.5pt' }}>
-              <span className="font-bold uppercase tracking-wider shrink-0 text-slate-300">Environment: </span>
-              <span>{exp.environment.join(', ')}</span>
+            <div id={`meas-exp-${i}-env`} className="mt-1.5 flex flex-wrap gap-1" style={{ fontSize: '8.5pt' }}>
+              <span className="font-semibold italic text-slate-700 mr-1">Technologies:</span>
+              <span className="text-slate-600">{exp.environment.join(', ')}</span>
             </div>
           )}
         </div>
       ))}
 
+      {/* EDU MEASUREMENT */}
       {resumeData.education && resumeData.education.length > 0 && (
         <div id="meas-education" className={getSectionWrapperClass('education')} style={getSectionStyle('education')}>
-          <div className="mb-4">
+          <div className="mb-3">
             <div id="meas-education-heading">
               <SectionHeader title="Education" sectionKey="education" />
             </div>
             <div className="space-y-2" style={{ fontSize: '9.5pt' }}>
               {resumeData.education.map((edu: any, i: number) => (
-                <div key={i} id={`meas-edu-${i}`} className="flex justify-between items-start border-l-2 pl-3 border-slate-300">
+                <div key={i} id={`meas-edu-${i}`} className="flex justify-between items-start">
                   <div>
                     <div className="font-bold text-slate-900">{edu.degree}</div>
-                    <div className="text-slate-600 font-medium">{edu.institution} {edu.location ? `| ${edu.location}` : ''}</div>
+                    <div className="text-slate-700">{edu.institution} {edu.location ? `| ${edu.location}` : ''}</div>
                   </div>
-                  <div className="font-semibold whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
+                  <div className="font-semibold text-slate-700">{edu.year}</div>
                 </div>
               ))}
             </div>
@@ -418,21 +427,22 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
         </div>
       )}
 
+      {/* CERT MEASUREMENT */}
       {resumeData.certifications && resumeData.certifications.length > 0 && (
         <div id="meas-certifications" className={getSectionWrapperClass('certifications')} style={getSectionStyle('certifications')}>
-          <div className="mb-4">
+          <div className="mb-3">
             <div id="meas-certifications-heading">
               <SectionHeader title="Certifications" sectionKey="certifications" />
             </div>
-            <div className="grid grid-cols-1 gap-2" style={{ fontSize: '9.5pt' }}>
+            <div className="space-y-1.5" style={{ fontSize: '9.5pt' }}>
               {resumeData.certifications.map((cert: any, i: number) => (
-                <div key={i} id={`meas-cert-${i}`} className="flex justify-between items-start border-b border-slate-100 pb-1">
+                <div key={i} id={`meas-cert-${i}`} className="flex justify-between items-start">
                   <div>
                     <span className="font-bold text-slate-900">{cert.name}</span>
-                    <span className="text-slate-400 mx-1.5">|</span>
-                    <span className="text-slate-600 font-medium">{cert.issuer}</span>
+                    <span className="mx-1.5 text-slate-400">|</span>
+                    <span className="text-slate-700">{cert.issuer}</span>
                   </div>
-                  <div className="whitespace-nowrap ml-4 text-slate-500 font-semibold">{cert.year}</div>
+                  <div className="font-semibold text-slate-700">{cert.year}</div>
                 </div>
               ))}
             </div>
@@ -441,7 +451,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
       )}
 
       <div id="meas-footer" className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
-        <span>{profileData.full_name || 'Candidate'} — C2C Certified Professional</span>
+        <span>{profileData.full_name || 'Candidate'} — Certified Resume</span>
         <span>Page 1 of 2</span>
       </div>
     </div>
@@ -461,9 +471,9 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
         </div>
       )}
 
-      {pages.map((page, pIndex) => {
-        const pageNumber = pIndex + 1;
+      {pages.map((page: any, pIndex: number) => {
         const isPage1 = pIndex === 0;
+        const pageNumber = pIndex + 1;
 
         return (
           <div key={pIndex} className={pageContainerClass} style={pageContainerStyle}>
@@ -476,29 +486,35 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
                   className={getSectionWrapperClass('header')}
                   style={getSectionStyle('header')}
                 >
-                  <div className="flex justify-between items-center border-b-2 pb-3 mb-3 break-inside-avoid" style={{ borderColor: ACCENT }}>
-                    <div className="flex-1">
-                      <h1 className="font-extrabold uppercase m-0 leading-tight" style={{ fontSize: '24pt', color: sectionStyles?.header?.color || ACCENT }}>
-                        {profileData.full_name || 'JOHN DOE'}
-                      </h1>
-                      
-                      {(profileData.work_authorization || profileData.relocation || profileData.availability) && (
-                        <div className="mt-2 font-medium" style={{ fontSize: '9.5pt', color: ACCENT }}>
-                          {[
-                            profileData.work_authorization && `Auth: ${profileData.work_authorization}`,
-                            profileData.relocation && `Reloc: ${profileData.relocation}`,
-                            profileData.availability && `Avail: ${profileData.availability}`
-                          ].filter(Boolean).join(' | ')}
-                        </div>
-                      )}
+                  <div className="flex flex-col items-center justify-center border-b-2 pb-3 mb-3 break-inside-avoid" style={{ borderColor: ACCENT }}>
+                    <h1 className="font-bold uppercase m-0 tracking-widest" style={{ fontSize: '22pt', color: sectionStyles?.header?.color || ACCENT }}>
+                      {profileData.full_name || 'JOHN DOE'}
+                    </h1>
+                    
+                    <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 mt-1 font-medium text-[9pt]" style={{ color: ACCENT }}>
+                      {profileData.location && <span>{profileData.location}</span>}
+                      {(profileData.location && (profileData.phone || profileData.email)) && <span>•</span>}
+                      {profileData.phone && <span>{profileData.phone}</span>}
+                      {(profileData.phone && profileData.email) && <span>•</span>}
+                      {profileData.email && <span>{profileData.email}</span>}
+                      {(profileData.email && profileData.linkedin) && <span>•</span>}
+                      {profileData.linkedin && <span>{profileData.linkedin}</span>}
                     </div>
                     
-                    <div className="text-right flex flex-col gap-1 border-l-2 pl-4 border-slate-200" style={{ fontSize: '9pt', color: '#475569' }}>
-                      {profileData.location && <div className="font-semibold text-slate-700">{profileData.location}</div>}
-                      {profileData.phone && <div>{profileData.phone}</div>}
-                      {profileData.email && <div>{profileData.email}</div>}
-                      {profileData.linkedin && <div>{profileData.linkedin}</div>}
-                    </div>
+                    {(profileData.work_authorization || profileData.relocation || profileData.availability) && (
+                      <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 mt-1 text-[8.5pt] italic" style={{ color: ACCENT }}>
+                        {[
+                          profileData.work_authorization && `Auth: ${profileData.work_authorization}`,
+                          profileData.relocation && `Reloc: ${profileData.relocation}`,
+                          profileData.availability && `Avail: ${profileData.availability}`
+                        ].filter(Boolean).map((item, idx, arr) => (
+                          <React.Fragment key={idx}>
+                            <span>{item}</span>
+                            {idx < arr.length - 1 && <span>|</span>}
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -512,14 +528,11 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
                 >
                   <div className="mb-3">
                     <SectionHeader title="Professional Summary" sectionKey="summary" />
-                    <ul className="list-none m-0 space-y-1 text-justify" style={{ fontSize: '9.5pt' }}>
+                    <div className="text-justify" style={{ fontSize: '9.5pt' }}>
                       {getSummaryArray(resumeData.summary).map((point: string, i: number) => (
-                        <li key={i} className="flex gap-2">
-                          <span className="shrink-0 font-bold" style={{ color: ACCENT }}>•</span>
-                          <span>{renderWithBold(point)}</span>
-                        </li>
+                        <span key={i}>{renderWithBold(point)} </span>
                       ))}
-                    </ul>
+                    </div>
                   </div>
                 </div>
               )}
@@ -533,10 +546,10 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
                 >
                   <div className="mb-3">
                     <SectionHeader title="Technical Skills" sectionKey="skills" />
-                    <div className="grid grid-cols-1 gap-y-0.5 bg-slate-50 border border-slate-200 p-2 rounded-sm" style={{ fontSize: '9pt' }}>
+                    <div className="space-y-1" style={{ fontSize: '9pt' }}>
                       {resumeData.skills.map((skillGroup: any, i: number) => (
-                        <div key={i} className="leading-snug flex">
-                          <span className="font-bold w-[190px] shrink-0 text-slate-900 border-r border-slate-300 mr-2">{skillGroup.category}:</span>
+                        <div key={i} className="leading-snug">
+                          <span className="font-bold text-slate-900 mr-2">{skillGroup.category}:</span>
                           <span className="text-slate-700">{Array.isArray(skillGroup.items) ? skillGroup.items.join(', ') : skillGroup.items}</span>
                         </div>
                       ))}
@@ -562,34 +575,35 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
                     
                     {page.experiences.map((exp: any, i: number) => (
                       <div key={i} className="mb-3 break-inside-avoid">
-                        <div className="flex justify-between items-center bg-slate-100 p-2 border border-slate-200 rounded-sm mb-2">
-                          <div>
-                            <div className="font-extrabold uppercase" style={{ fontSize: '10.5pt', color: ACCENT }}>
+                        <div className="mb-1">
+                          <div className="flex justify-between items-end">
+                            <div className="font-bold text-[10.5pt] text-slate-900">
                               {exp.company}
                               {exp.isContinued && <span className="italic font-normal text-slate-500 ml-2 normal-case">(Continued)</span>}
                             </div>
-                            {!exp.isContinued && (
-                              <div className="font-bold text-slate-700" style={{ fontSize: '9.5pt' }}>{exp.role} {exp.location ? `| ${exp.location}` : ''}</div>
-                            )}
+                            <div className="font-semibold text-[9.5pt] text-slate-700">{exp.duration}</div>
                           </div>
-                          <div className="text-right">
-                            <div className="font-bold text-slate-700" style={{ fontSize: '9.5pt' }}>{exp.duration}</div>
-                          </div>
+                          {!exp.isContinued && (
+                            <div className="flex justify-between items-start mt-0.5">
+                              <div className="italic text-slate-800 font-medium">{exp.role}</div>
+                              {exp.location && <div className="italic text-slate-600">{exp.location}</div>}
+                            </div>
+                          )}
                         </div>
 
-                        <ul className="list-none mt-1 mb-1.5 m-0 space-y-1.5" style={{ fontSize: '9.5pt' }}>
+                        <ul className="list-none mt-1 mb-1.5 m-0 space-y-1" style={{ fontSize: '9.5pt' }}>
                           {exp.bullets.map((bullet: string, j: number) => (
                             <li key={j} className="flex gap-2">
-                              <span className="shrink-0 font-bold text-slate-500 bg-slate-100 px-1.5 rounded">•</span>
-                              <span className="text-justify text-slate-800">{renderWithBold(bullet)}</span>
+                              <span className="shrink-0 text-slate-600">•</span>
+                              <span className="text-justify">{renderWithBold(bullet)}</span>
                             </li>
                           ))}
                         </ul>
 
                         {!exp.isSplit && exp.environment && exp.environment.length > 0 && (
-                          <div className="mt-2 bg-slate-800 text-white px-2 py-1 rounded-sm flex gap-2" style={{ fontSize: '8.5pt' }}>
-                            <span className="font-bold uppercase tracking-wider shrink-0 text-slate-300">Environment: </span>
-                            <span>{exp.environment.join(', ')}</span>
+                          <div className="mt-1.5 flex flex-wrap gap-1" style={{ fontSize: '8.5pt' }}>
+                            <span className="font-semibold italic text-slate-700 mr-1">Technologies:</span>
+                            <span className="text-slate-600">{exp.environment.join(', ')}</span>
                           </div>
                         )}
                       </div>
@@ -599,22 +613,24 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
               )}
 
               {/* Education */}
-              {page.education && page.education.length > 0 && (
+              {page.education?.length > 0 && (
                 <div 
                   onClick={() => onSelectSection?.('education')}
                   className={getSectionWrapperClass('education')}
                   style={getSectionStyle('education')}
                 >
-                  <div className="mb-4">
-                    {page.hasEducationHeading && <SectionHeader title="Education" sectionKey="education" />}
+                  <div className="mb-3">
+                    {page.hasEducationHeading && (
+                      <SectionHeader title="Education" sectionKey="education" />
+                    )}
                     <div className="space-y-2" style={{ fontSize: '9.5pt' }}>
                       {page.education.map((edu: any, i: number) => (
-                        <div key={i} className="flex justify-between items-start border-l-2 pl-3 border-slate-300">
+                        <div key={i} className="flex justify-between items-start break-inside-avoid">
                           <div>
                             <div className="font-bold text-slate-900">{edu.degree}</div>
-                            <div className="text-slate-600 font-medium">{edu.institution} {edu.location ? `| ${edu.location}` : ''}</div>
+                            <div className="text-slate-700">{edu.institution} {edu.location ? `| ${edu.location}` : ''}</div>
                           </div>
-                          <div className="font-semibold whitespace-nowrap ml-4 text-[9pt]">{edu.year}</div>
+                          <div className="font-semibold text-slate-700">{edu.year}</div>
                         </div>
                       ))}
                     </div>
@@ -623,36 +639,37 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
               )}
 
               {/* Certifications */}
-              {page.certifications && page.certifications.length > 0 && (
+              {page.certifications?.length > 0 && (
                 <div 
                   onClick={() => onSelectSection?.('certifications')}
                   className={getSectionWrapperClass('certifications')}
                   style={getSectionStyle('certifications')}
                 >
-                  <div className="mb-4">
-                    {page.hasCertificationsHeading && <SectionHeader title="Certifications" sectionKey="certifications" />}
-                    <div className="grid grid-cols-1 gap-2" style={{ fontSize: '9.5pt' }}>
+                  <div className="mb-3">
+                    {page.hasCertificationsHeading && (
+                      <SectionHeader title="Certifications" sectionKey="certifications" />
+                    )}
+                    <div className="space-y-1.5" style={{ fontSize: '9.5pt' }}>
                       {page.certifications.map((cert: any, i: number) => (
-                        <div key={i} className="flex justify-between items-start border-b border-slate-100 pb-1">
+                        <div key={i} className="flex justify-between items-start break-inside-avoid">
                           <div>
                             <span className="font-bold text-slate-900">{cert.name}</span>
-                            <span className="text-slate-400 mx-1.5">|</span>
-                            <span className="text-slate-600 font-medium">{cert.issuer}</span>
+                            <span className="mx-1.5 text-slate-400">|</span>
+                            <span className="text-slate-700">{cert.issuer}</span>
                           </div>
-                          <div className="whitespace-nowrap ml-4 text-slate-500 font-semibold">{cert.year}</div>
+                          <div className="font-semibold text-slate-700">{cert.year}</div>
                         </div>
                       ))}
                     </div>
                   </div>
                 </div>
               )}
-
             </div>
-
+            
             {/* Footer */}
             {(pages.length > 1 || page.education?.length > 0 || page.certifications?.length > 0) && (
               <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
-                <span>{profileData.full_name || 'Candidate'} — C2C Certified Professional</span>
+                <span>{profileData.full_name || 'Candidate'} — Certified Professional Resume</span>
                 <span>Page {pageNumber} of {pages.length}</span>
               </div>
             )}
