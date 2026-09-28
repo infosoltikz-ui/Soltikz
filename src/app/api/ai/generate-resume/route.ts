@@ -352,69 +352,9 @@ export async function POST(req: Request) {
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // STEP 3: Automated Post-Generation Quality & Count Enforcer Guard
-    // Guarantees exact bullet counts (Full-time: Exp 1 & 2 = 8 bullets, Exp 3 & 4 = 5-6 bullets)
+    // STEP 3: Trust the AI's Output (Removed hardcoded fake bullets)
     // ═══════════════════════════════════════════════════════════════
     let finalResumeData = aiResponse.data;
-
-    const enforceBulletQualityAndCount = (data: any, isC2C: boolean, kwList: string[]) => {
-      if (!data || !Array.isArray(data.experience)) return data;
-
-      const kwSample = kwList.length > 0 ? kwList : ['React.js', 'TypeScript', 'Node.js', 'AWS', 'PostgreSQL', 'Docker', 'Microservices', 'CI/CD'];
-
-      // Enforce Experience Bullets
-      data.experience = data.experience.map((exp: any, index: number) => {
-        const targetMinBullets = isC2C ? (index === 0 ? 10 : index === 1 ? 8 : 6) : (index === 0 || index === 1 ? 8 : 5);
-        let bullets = Array.isArray(exp.bullets) ? [...exp.bullets] : [];
-
-        // 1. Expand short bullets to 35-50 words (2-3 full lines)
-        bullets = bullets.map((b: string) => {
-          const words = b.split(/\s+/).filter(Boolean);
-          if (words.length >= 26) return b;
-
-          const kw1 = kwSample[Math.floor(Math.random() * kwSample.length)];
-          const kw2 = kwSample[Math.floor(Math.random() * kwSample.length)];
-          const metric = Math.floor(Math.random() * 25) + 22;
-
-          return `${b.replace(/\.$/, '')}, leveraging **${kw1}** and **${kw2}** to streamline workflow execution and optimize system performance, which improved throughput by **${metric}%** and ensured zero-downtime deployments.`;
-        });
-
-        // 2. Add missing bullets if count is less than targetMinBullets
-        while (bullets.length < targetMinBullets) {
-          const bulletNum = bullets.length + 1;
-          const kw1 = kwSample[(bulletNum * 2) % kwSample.length];
-          const kw2 = kwSample[(bulletNum * 2 + 1) % kwSample.length];
-          const metric = Math.floor(Math.random() * 30) + 25;
-
-          bullets.push(
-            `Engineered and optimized scalable enterprise components for **${exp.company || 'Client Organization'}**, incorporating **${kw1}** and **${kw2}** best practices to streamline automated deployment pipelines, resulting in a **${metric}%** reduction in processing latency and ensuring 100% SLA compliance.`
-          );
-        }
-
-        return {
-          ...exp,
-          bullets,
-        };
-      });
-
-      // Enforce C2C Summary 10 Bullets
-      if (isC2C) {
-        let summary = Array.isArray(data.summary) ? [...data.summary] : [];
-        while (summary.length < 10) {
-          const idx = summary.length;
-          const kw = kwSample[idx % kwSample.length];
-          const metric = Math.floor(Math.random() * 25) + 25;
-          summary.push(
-            `Proven technical expertise in architecting high-availability enterprise applications utilizing **${kw}**, improving performance by **${metric}%** across deployments.`
-          );
-        }
-        data.summary = summary.slice(0, 10);
-      }
-
-      return data;
-    };
-
-    finalResumeData = enforceBulletQualityAndCount(finalResumeData, isC2CMode, extractedKeywords);
 
     // ─── Save Resume Record ───────────────────────────────────────
     const { data: resumeRecord, error: resumeError } = await supabase
