@@ -11,6 +11,7 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
   activeSectionKey,
   onSelectSection
 }, ref) => {
+  const compId = React.useId().replace(/:/g, '');
   const BANNER = themeColor || '#1e3a8a';
   const selectedFont = fontFamily || 'Georgia, "Times New Roman", serif';
 
@@ -47,7 +48,7 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
     const trueScale = measRect.width / 794;
 
     const getElementHeight = (id: string) => {
-      const el = document.getElementById(id);
+      const el = document.getElementById(`${id}-${compId}`);
       if (!el) return 0;
       const rect = el.getBoundingClientRect();
       const style = window.getComputedStyle(el);
@@ -63,6 +64,7 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
     const PAGE_PADDING_TOP = 44;
     const PAGE_PADDING_BOTTOM = 44;
     const FOOTER_HEIGHT = getElementHeight('meas-footer') || 30;
+    // compId namespaced — IDs are unique per instance
 
     const SAFETY_MARGIN = 24;
     const MAX_CONTENT_HEIGHT = PAGE_HEIGHT - PAGE_PADDING_TOP - PAGE_PADDING_BOTTOM - FOOTER_HEIGHT - SAFETY_MARGIN;
@@ -74,6 +76,7 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
     const headerHeight = getElementHeight('meas-header');
     const summaryHeight = getElementHeight('meas-summary');
     const skillsHeight = getElementHeight('meas-skills');
+    // Note: getElementHeight auto-appends compId via the function above
 
     currentPage.header = true;
     currentPage.summary = true;
@@ -285,7 +288,7 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
         lineHeight: '1.4'
       }}
     >
-      <div id="meas-header"
+      <div id={`meas-header-${compId}`}
         style={{ 
           backgroundColor: sectionStyles?.header?.color || BANNER, 
           margin: '-44px -50px 24px -50px', 
@@ -322,7 +325,7 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
       </div>
 
       {getSummaryArray(resumeData.summary).length > 0 && (
-        <div id="meas-summary" className={getSectionWrapperClass('summary')} style={getSectionStyle('summary')}>
+        <div id={`meas-summary-${compId}`} className={getSectionWrapperClass('summary')} style={getSectionStyle('summary')}>
           <div className="mb-4">
             <SectionHeader title="Professional Summary" sectionKey="summary" />
             <ul className="list-none m-0 space-y-1 text-justify text-[9.5pt]">
@@ -338,7 +341,7 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
       )}
 
       {resumeData.skills && resumeData.skills.length > 0 && (
-        <div id="meas-skills" className={getSectionWrapperClass('skills')} style={getSectionStyle('skills')}>
+        <div id={`meas-skills-${compId}`} className={getSectionWrapperClass('skills')} style={getSectionStyle('skills')}>
           <div className="mb-4">
             <SectionHeader title="Technical Skills" sectionKey="skills" />
             <div className="space-y-0.5 text-[9.5pt]">
@@ -353,13 +356,13 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
         </div>
       )}
 
-      <div id="meas-exp-section-heading">
+      <div id={`meas-exp-section-heading-${compId}`}>
         <SectionHeader title="Professional Experience" sectionKey="experience" />
       </div>
 
       {resumeData.experience?.map((exp: any, i: number) => (
         <div key={`exp-meas-${i}`}>
-          <div id={`meas-exp-${i}-header`}>
+          <div id={`meas-exp-${i}-header-${compId}`}>
             <div className="flex justify-between items-start font-bold text-[10pt] text-black">
               <div>
                 {exp.company} {exp.location ? `| ${exp.location}` : ''}
@@ -369,7 +372,7 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
             <div className="mb-1.5 font-semibold text-slate-800 text-[10pt]">{exp.role}</div>
           </div>
 
-          <div id={`meas-exp-${i}-header-continued`}>
+          <div id={`meas-exp-${i}-header-continued-${compId}`}>
             <div className="flex justify-between items-start font-bold text-[10pt] text-black">
               <div>
                 {exp.company} {exp.location ? `| ${exp.location}` : ''}
@@ -382,7 +385,7 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
           {exp.bullets && exp.bullets.length > 0 && (
             <ul className="list-none mt-1 mb-1.5 m-0 space-y-1 text-[9.5pt]">
               {exp.bullets.map((b: string, j: number) => (
-                <li id={`meas-exp-${i}-bullet-${j}`} key={`bullet-meas-${j}`} className="flex gap-2">
+                <li id={`meas-exp-${i}-bullet-${j}-${compId}`} key={`bullet-meas-${j}`} className="flex gap-2">
                   <span className="shrink-0 font-bold text-slate-500">•</span>
                   <span className="text-justify text-slate-800">{renderWithBold(b)}</span>
                 </li>
@@ -391,7 +394,7 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
           )}
 
           {exp.environment && exp.environment.length > 0 && (
-            <div id={`meas-exp-${i}-env`} className="mt-2 text-[9pt]">
+            <div id={`meas-exp-${i}-env-${compId}`} className="mt-2 text-[9pt]">
               <span className="font-bold text-black italic">Environment: </span>
               <span className="text-slate-700">{exp.environment.join(', ')}</span>
             </div>
@@ -400,14 +403,14 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
       ))}
 
       {resumeData.education && resumeData.education.length > 0 && (
-        <div id="meas-education" className={getSectionWrapperClass('education')} style={getSectionStyle('education')}>
+        <div id={`meas-education-${compId}`} className={getSectionWrapperClass('education')} style={getSectionStyle('education')}>
           <div className="mb-4">
-            <div id="meas-education-heading">
+            <div id={`meas-education-heading-${compId}`}>
               <SectionHeader title="Education" sectionKey="education" />
             </div>
             <div className="space-y-1.5 text-[9.5pt]">
               {resumeData.education.map((edu: any, i: number) => (
-                <div key={i} id={`meas-edu-${i}`} className="flex flex-col">
+                <div key={i} id={`meas-edu-${i}-${compId}`} className="flex flex-col">
                   <div>
                     <span className="font-bold text-slate-800">{edu.degree}</span> 
                     <span className="mx-1 text-slate-400">|</span> 
@@ -425,14 +428,14 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
       )}
 
       {resumeData.certifications && resumeData.certifications.length > 0 && (
-        <div id="meas-certifications" className={getSectionWrapperClass('certifications')} style={getSectionStyle('certifications')}>
+        <div id={`meas-certifications-${compId}`} className={getSectionWrapperClass('certifications')} style={getSectionStyle('certifications')}>
           <div className="mb-4">
-            <div id="meas-certifications-heading">
+            <div id={`meas-certifications-heading-${compId}`}>
               <SectionHeader title="Certifications" sectionKey="certifications" />
             </div>
             <div className="space-y-1 text-[9.5pt]">
               {resumeData.certifications.map((cert: any, i: number) => (
-                <div key={i} id={`meas-cert-${i}`} className="flex">
+                <div key={i} id={`meas-cert-${i}-${compId}`} className="flex">
                   <span className="font-bold text-slate-800">{cert.name}</span>
                   <span className="mx-1.5 text-slate-400">|</span>
                   <span className="text-slate-700">{cert.issuer}</span>
@@ -445,7 +448,7 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
         </div>
       )}
 
-      <div id="meas-footer" className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
+      <div id={`meas-footer-${compId}`} className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
         <span>{profileData.full_name || 'Candidate'} — C2C Professional Banner</span>
         <span>Page 1 of 2</span>
       </div>

@@ -78,7 +78,7 @@ const SidebarTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplate
     const PAGE_PADDING_BOTTOM = 24;
     const FOOTER_HEIGHT = getElementHeight('meas-footer') || 30;
 
-    const SAFETY_MARGIN = 5;
+    const SAFETY_MARGIN = 20;
     const MAX_CONTENT_HEIGHT = PAGE_HEIGHT - PAGE_PADDING_TOP - PAGE_PADDING_BOTTOM - FOOTER_HEIGHT - SAFETY_MARGIN;
 
     let currentPages: any[] = [];

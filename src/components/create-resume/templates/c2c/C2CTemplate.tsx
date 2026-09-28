@@ -11,6 +11,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
   activeSectionKey,
   onSelectSection
 }, ref) => {
+  const compId = React.useId().replace(/:/g, '');
   const selectedFont = fontFamily || 'Arial, Calibri, sans-serif';
   const accentColor = themeColor || '#000000';
 
@@ -43,21 +44,16 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
   useLayoutEffect(() => {
     if (!measRef.current) return;
 
+    const measRect = measRef.current.getBoundingClientRect();
+    const trueScale = measRect.width / 794;
+
     const getElementHeight = (id: string) => {
-      const el = document.getElementById(id);
+      const el = document.getElementById(`${id}-${compId}`);
       if (!el) return 0;
       const rect = el.getBoundingClientRect();
       const style = window.getComputedStyle(el);
 
-      let scale = 1;
-      const transform = style.transform;
-      if (transform && transform !== 'none') {
-        const matrix = transform.match(/^matrix\((.+)\)$/);
-        if (matrix) {
-          scale = parseFloat(matrix[1].split(',')[0]);
-        }
-      }
-      const unscaledHeight = scale > 0 ? rect.height / scale : (el as HTMLElement).offsetHeight;
+      const unscaledHeight = trueScale > 0 ? rect.height / trueScale : (el as HTMLElement).offsetHeight;
 
       const mt = parseFloat(style.marginTop) || 0;
       const mb = parseFloat(style.marginBottom) || 0;
@@ -69,7 +65,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
     const PAGE_PADDING_BOTTOM = 44;
     const FOOTER_HEIGHT = getElementHeight('meas-footer') || 30;
 
-    const SAFETY_MARGIN = 5;
+    const SAFETY_MARGIN = 24;
     const MAX_CONTENT_HEIGHT = PAGE_HEIGHT - PAGE_PADDING_TOP - PAGE_PADDING_BOTTOM - FOOTER_HEIGHT - SAFETY_MARGIN;
 
     let currentPages: any[] = [];
@@ -288,7 +284,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
         lineHeight: '1.4'
       }}
     >
-      <div id="meas-header" className="text-center mb-3.5 break-inside-avoid">
+      <div id={`meas-header-${compId}`} className="text-center mb-3.5 break-inside-avoid">
         <h1 className="font-bold text-black m-0" style={{ fontSize: '15pt', color: sectionStyles?.header?.color || '#000000' }}>
           {profileData.full_name || 'JOHN DOE'}
         </h1>
@@ -307,7 +303,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
       </div>
 
       {getSummaryArray(resumeData.summary).length > 0 && (
-        <div id="meas-summary" className={getSectionWrapperClass('summary')} style={getSectionStyle('summary')}>
+        <div id={`meas-summary-${compId}`} className={getSectionWrapperClass('summary')} style={getSectionStyle('summary')}>
           <div className="mb-3">
             <SectionHeader title="Professional Summary" sectionKey="summary" />
             <ul className="list-none m-0 space-y-1">
@@ -323,7 +319,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
       )}
 
       {resumeData.skills && resumeData.skills.length > 0 && (
-        <div id="meas-skills" className={getSectionWrapperClass('skills')} style={getSectionStyle('skills')}>
+        <div id={`meas-skills-${compId}`} className={getSectionWrapperClass('skills')} style={getSectionStyle('skills')}>
           <div className="mb-3">
             <SectionHeader title="Technical Skills" sectionKey="skills" />
             <div className="space-y-0.5">
@@ -338,20 +334,20 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
         </div>
       )}
 
-      <div id="meas-exp-section-heading">
+      <div id={`meas-exp-section-heading-${compId}`}>
         <SectionHeader title="Professional Experience" sectionKey="experience" />
       </div>
 
       {resumeData.experience?.map((exp: any, i: number) => (
         <div key={`exp-meas-${i}`}>
-          <div id={`meas-exp-${i}-header`}>
+          <div id={`meas-exp-${i}-header-${compId}`}>
             <div className="font-bold">
               {exp.company} {exp.location ? `| ${exp.location}` : ''} | {exp.duration}
             </div>
             <div className="mb-1 font-semibold text-slate-800">{exp.role}</div>
           </div>
 
-          <div id={`meas-exp-${i}-header-continued`}>
+          <div id={`meas-exp-${i}-header-continued-${compId}`}>
             <div className="font-bold">
               {exp.company} {exp.location ? `| ${exp.location}` : ''} | {exp.duration}
               <span className="italic font-normal text-slate-500 ml-2 normal-case">(Continued)</span>
@@ -361,7 +357,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
           {exp.bullets && exp.bullets.length > 0 && (
             <ul className="list-none mt-0.5 mb-1.5 m-0 space-y-1">
               {exp.bullets.map((b: string, j: number) => (
-                <li id={`meas-exp-${i}-bullet-${j}`} key={`bullet-meas-${j}`} className="flex gap-2">
+                <li id={`meas-exp-${i}-bullet-${j}-${compId}`} key={`bullet-meas-${j}`} className="flex gap-2">
                   <span className="shrink-0 font-medium">•</span>
                   <span className="text-justify">{renderWithBold(b)}</span>
                 </li>
@@ -370,7 +366,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
           )}
 
           {exp.environment && exp.environment.length > 0 && (
-            <div id={`meas-exp-${i}-env`} className="mt-1">
+            <div id={`meas-exp-${i}-env-${compId}`} className="mt-1">
               <span className="font-bold">Environment: </span>
               <span>{exp.environment.join(', ')}</span>
             </div>
@@ -379,14 +375,14 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
       ))}
 
       {resumeData.education && resumeData.education.length > 0 && (
-        <div id="meas-education" className={getSectionWrapperClass('education')} style={getSectionStyle('education')}>
+        <div id={`meas-education-${compId}`} className={getSectionWrapperClass('education')} style={getSectionStyle('education')}>
           <div className="mb-4">
-            <div id="meas-education-heading">
+            <div id={`meas-education-heading-${compId}`}>
               <SectionHeader title="Education" sectionKey="education" />
             </div>
             <div className="space-y-1">
               {resumeData.education.map((edu: any, i: number) => (
-                <div key={i} id={`meas-edu-${i}`}>
+                <div key={i} id={`meas-edu-${i}-${compId}`}>
                   <span className="font-bold">{edu.degree}</span> | {edu.institution} | {edu.year}
                 </div>
               ))}
@@ -396,14 +392,14 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
       )}
 
       {resumeData.certifications && resumeData.certifications.length > 0 && (
-        <div id="meas-certifications" className={getSectionWrapperClass('certifications')} style={getSectionStyle('certifications')}>
+        <div id={`meas-certifications-${compId}`} className={getSectionWrapperClass('certifications')} style={getSectionStyle('certifications')}>
           <div className="mb-4">
-            <div id="meas-certifications-heading">
+            <div id={`meas-certifications-heading-${compId}`}>
               <SectionHeader title="Certifications" sectionKey="certifications" />
             </div>
             <div className="space-y-1">
               {resumeData.certifications.map((cert: any, i: number) => (
-                <div key={i} id={`meas-cert-${i}`}>
+                <div key={i} id={`meas-cert-${i}-${compId}`}>
                   <span className="font-bold">{cert.name}</span> | {cert.issuer} | Earned {cert.year}
                 </div>
               ))}
@@ -412,7 +408,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
         </div>
       )}
 
-      <div id="meas-footer" className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
+      <div id={`meas-footer-${compId}`} className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
         <span>{profileData.full_name || 'Candidate'} — C2C Classic Resume</span>
         <span>Page 1 of 2</span>
       </div>
