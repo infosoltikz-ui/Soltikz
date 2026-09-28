@@ -26,6 +26,19 @@
 
   --animate-fade-in-up: fade-in-up 0.5s ease-out forwards;
   --animate-marquee: scroll-left 60s linear infinite;
+  --animate-shimmer: shimmer 1.5s infinite;
+  --animate-scan: scan 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes scan {
+  0%, 100% { top: 0; opacity: 0; }
+  10%, 90% { opacity: 1; }
+  50% { top: 100%; }
 }
 
 :root {
