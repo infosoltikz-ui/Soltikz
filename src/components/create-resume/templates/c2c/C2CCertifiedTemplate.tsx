@@ -124,12 +124,17 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
 
           if (currentExpObj.bullets.length > 0 || remainingHeight < MAX_CONTENT_HEIGHT) {
             currentPages.push(currentPage);
-            currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: false, hasEducationHeading: false, hasCertificationsHeading: false };
+            const transferExpHeading = currentPage.hasExperienceHeading && currentPage.experiences.length === 0;
+
+            currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: transferExpHeading, hasEducationHeading: false, hasCertificationsHeading: false };
             remainingHeight = MAX_CONTENT_HEIGHT;
 
             const isActuallyContinued = currentExpObj.bullets.length > 0;
             currentExpObj = { ...exp, bullets: [], isContinued: isActuallyContinued, isSplit: false };
             currentExpHeaderH = getElementHeight(isActuallyContinued ? `meas-exp-${i}-header-continued` : `meas-exp-${i}-header`);
+            if (transferExpHeading) {
+              currentExpHeaderH += expSectionHeadingHeight;
+            }
           }
         }
 
@@ -462,7 +467,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
 
         return (
           <div key={pIndex} className={pageContainerClass} style={pageContainerStyle}>
-            <div className={`flex-1 flex flex-col ${pIndex !== pages.length - 1 ? 'justify-between' : 'justify-start'}`}>
+            <div className="flex-1 flex flex-col justify-start">
               
               {/* Header */}
               {isPage1 && (
