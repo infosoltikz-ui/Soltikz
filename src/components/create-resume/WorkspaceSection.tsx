@@ -441,7 +441,7 @@ export function WorkspaceSection({
             {selfSubTab === 'keypoints' && (
               <div className="space-y-3">
                 <p className="text-[12px] text-slate-500 font-medium mb-4">Don't memorize every sentence. Remember these <strong>{selfKeyPoints.length} key points</strong>:</p>
-                {selfKeyPoints.map((point, i) => (
+                {selfKeyPoints.map((point: any, i: number) => (
                   <div key={i} className="border border-slate-200 rounded-xl overflow-hidden">
                     <div className="flex items-center gap-3 px-4 py-3 bg-slate-50">
                       <span className="w-7 h-7 rounded-lg bg-primary text-white text-[12px] font-black flex items-center justify-center shrink-0">{i + 1}</span>
@@ -454,7 +454,7 @@ export function WorkspaceSection({
                       </button>
                     </div>
                     <div className="px-4 py-3 space-y-1.5">
-                      {point.bullets.map((b, bi) => (
+                      {point.bullets.map((b: string, bi: number) => (
                         <div key={bi} className="flex items-start gap-2">
                           <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
                           <p className="text-[13px] text-slate-700 font-medium">{b}</p>
@@ -591,7 +591,7 @@ export function WorkspaceSection({
           </div>
 
           <div className="space-y-3.5">
-            {techQuestions.map((q, idx) => (
+            {techQuestions.map((q: string, idx: number) => (
               <div 
                 key={idx} 
                 className="p-4 sm:p-5 rounded-xl border border-slate-200/80 bg-slate-50/50 hover:bg-white hover:border-blue-300 hover:shadow-sm transition-all group"
@@ -639,7 +639,7 @@ export function WorkspaceSection({
           </div>
 
           <div className="space-y-3.5">
-            {hrQuestions.map((q, idx) => (
+            {hrQuestions.map((q: string, idx: number) => (
               <div 
                 key={idx} 
                 className="p-4 sm:p-5 rounded-xl border border-slate-200/80 bg-slate-50/50 hover:bg-white hover:border-purple-300 hover:shadow-sm transition-all"
@@ -692,7 +692,7 @@ export function WorkspaceSection({
           </div>
 
           <div className="space-y-4">
-            {starAnswers.map((item, idx) => {
+            {starAnswers.map((item: any, idx: number) => {
               const isExpanded = expandedStarIdx === idx
               const fullStory = `Question: ${item.question}\n\nSituation: ${item.situation}\n\nTask: ${item.task}\n\nAction: ${item.action}\n\nResult: ${item.result}`
 
