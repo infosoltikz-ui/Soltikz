@@ -444,14 +444,14 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
       {/* MEASUREMENT DOM (HIDDEN) */}
       <div aria-hidden="true" className="absolute opacity-0 pointer-events-none select-none z-[-9999] top-0 left-0 w-[794px]" ref={measRef}>
         <div style={pageContainerStyle}>
-           <div id={`meas-header-${compId}`}>{renderHeader()}</div>
-           <div id={`meas-summary-${compId}`}>{renderSummary()}</div>
-           <div id={`meas-skills-${compId}`}>{renderSkills()}</div>
-           <div id={`meas-exp-section-heading-${compId}`}><SectionHeader title="Professional Experience" /></div>
+           <div id={`meas-header-${compId}`} className="overflow-hidden">{renderHeader()}</div>
+           <div id={`meas-summary-${compId}`} className="overflow-hidden">{renderSummary()}</div>
+           <div id={`meas-skills-${compId}`} className="overflow-hidden">{renderSkills()}</div>
+           <div id={`meas-exp-section-heading-${compId}`} className="overflow-hidden"><SectionHeader title="Professional Experience" /></div>
            
            {resumeData.experience?.map((exp, i) => (
-              <div key={i}>
-                <div id={`meas-exp-${i}-header-${compId}`}>
+              <div key={i} className="overflow-hidden">
+                <div id={`meas-exp-${i}-header-${compId}`} className="overflow-hidden">
                     <div className="flex justify-between items-start leading-tight" style={{ fontSize: '11pt' }}>
                       <div className="font-bold text-black">{exp.role}</div>
                       <div className="font-bold text-black whitespace-nowrap ml-4">{exp.duration}</div>
@@ -466,7 +466,7 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
                       </div>
                     )}
                 </div>
-                <div id={`meas-exp-${i}-header-continued-${compId}`}>
+                <div id={`meas-exp-${i}-header-continued-${compId}`} className="overflow-hidden">
                     <div className="flex justify-between items-start leading-tight" style={{ fontSize: '11pt' }}>
                       <div className="font-bold text-black">{exp.role} <span className="italic font-normal text-slate-500 text-[9.5pt]">(Continued)</span></div>
                       <div className="font-bold text-black whitespace-nowrap ml-4">{exp.duration}</div>
@@ -487,9 +487,9 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
               </div>
            ))}
 
-           <div id={`meas-education-${compId}`}>{renderEducation()}</div>
-           <div id={`meas-certifications-${compId}`}>{renderCertifications()}</div>
-           <div id={`meas-footer-${compId}`}>
+           <div id={`meas-education-${compId}`} className="overflow-hidden">{renderEducation()}</div>
+           <div id={`meas-certifications-${compId}`} className="overflow-hidden">{renderCertifications()}</div>
+           <div id={`meas-footer-${compId}`} className="overflow-hidden">
              <div className="pt-2 flex justify-between items-center text-[9pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
                 <span>{profileData.full_name || 'Candidate'} — Modern Resume</span>
                 <span>Page 1 of 2</span>
