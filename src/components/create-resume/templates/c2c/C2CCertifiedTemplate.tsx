@@ -62,7 +62,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
     const PAGE_HEIGHT = 1123;
     const PAGE_PADDING_TOP = 48; 
     const PAGE_PADDING_BOTTOM = 48;
-    const FOOTER_HEIGHT = getElementHeight('meas-footer') || 30;
+    const FOOTER_HEIGHT = getElementHeight('meas-cert-footer') || 30;
 
     const SAFETY_MARGIN = 24;
     const MAX_CONTENT_HEIGHT = PAGE_HEIGHT - PAGE_PADDING_TOP - PAGE_PADDING_BOTTOM - FOOTER_HEIGHT - SAFETY_MARGIN;
@@ -71,16 +71,16 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
     let currentPage: any = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: false, hasEducationHeading: false, hasCertificationsHeading: false };
     let remainingHeight = MAX_CONTENT_HEIGHT;
 
-    const headerHeight = getElementHeight('meas-header');
-    const summaryHeight = getElementHeight('meas-summary');
-    const skillsHeight = getElementHeight('meas-skills');
+    const headerHeight = getElementHeight('meas-cert-header');
+    const summaryHeight = getElementHeight('meas-cert-summary');
+    const skillsHeight = getElementHeight('meas-cert-skills');
 
     currentPage.header = true;
     currentPage.summary = true;
     currentPage.skills = true;
     remainingHeight -= (headerHeight + summaryHeight + skillsHeight);
 
-    const expSectionHeadingHeight = getElementHeight('meas-exp-section-heading') + 12; // mb-3 gap
+    const expSectionHeadingHeight = getElementHeight('meas-cert-exp-section-heading') + 12; // mb-3 gap
     let hasAddedExpSectionHeading = false;
 
     const exps = resumeData.experience || [];
@@ -88,11 +88,11 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
       const exp = exps[i];
       const bullets = exp.bullets || [];
 
-      let expHeaderH = getElementHeight(`meas-exp-${i}-header`);
+      let expHeaderH = getElementHeight(`meas-cert-exp-${i}-header`);
       let needsSectionHeading = !hasAddedExpSectionHeading;
       let fullHeaderH = expHeaderH + (needsSectionHeading ? expSectionHeadingHeight : 0);
 
-      const envH = (exp.environment && exp.environment.length > 0) ? getElementHeight(`meas-exp-${i}-env`) : 0;
+      const envH = (exp.environment && exp.environment.length > 0) ? getElementHeight(`meas-cert-exp-${i}-env`) : 0;
 
       if (remainingHeight < fullHeaderH && remainingHeight < MAX_CONTENT_HEIGHT) {
         currentPages.push(currentPage);
@@ -109,7 +109,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
       let currentExpHeaderH = fullHeaderH;
 
       for (let j = 0; j < bullets.length; j++) {
-        const bulletH = getElementHeight(`meas-exp-${i}-bullet-${j}`);
+        const bulletH = getElementHeight(`meas-cert-exp-${i}-bullet-${j}`);
         const isLastBullet = j === bullets.length - 1;
 
         const UL_MARGIN = 6;
@@ -131,7 +131,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
 
             const isActuallyContinued = currentExpObj.bullets.length > 0;
             currentExpObj = { ...exp, bullets: [], isContinued: isActuallyContinued, isSplit: false };
-            currentExpHeaderH = getElementHeight(isActuallyContinued ? `meas-exp-${i}-header-continued` : `meas-exp-${i}-header`);
+            currentExpHeaderH = getElementHeight(isActuallyContinued ? `meas-cert-exp-${i}-header-continued` : `meas-cert-exp-${i}-header`);
             if (transferExpHeading) {
               currentExpHeaderH += expSectionHeadingHeight;
             }
@@ -158,11 +158,11 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
 
     const edus = resumeData.education || [];
     if (edus.length > 0) {
-      let eduHeadingH = getElementHeight('meas-education-heading') + 12;
+      let eduHeadingH = getElementHeight('meas-cert-education-heading') + 12;
       let hasAddedEduHeading = false;
 
       for (let i = 0; i < edus.length; i++) {
-        const eduItemH = getElementHeight(`meas-edu-${i}`);
+        const eduItemH = getElementHeight(`meas-cert-edu-${i}`);
 
         let requiredSpace = eduItemH;
         if (!hasAddedEduHeading) {
@@ -190,11 +190,11 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
 
     const certs = resumeData.certifications || [];
     if (certs.length > 0) {
-      let certHeadingH = getElementHeight('meas-certifications-heading') + 12;
+      let certHeadingH = getElementHeight('meas-cert-certifications-heading') + 12;
       let hasAddedCertHeading = false;
 
       for (let i = 0; i < certs.length; i++) {
-        const certItemH = getElementHeight(`meas-cert-${i}`);
+        const certItemH = getElementHeight(`meas-cert-cert-${i}`);
 
         let requiredSpace = certItemH;
         if (!hasAddedCertHeading) {
@@ -305,7 +305,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
         lineHeight: '1.4'
       }}
     >
-      <div id="meas-header" className={getSectionWrapperClass('header')} style={getSectionStyle('header')}>
+      <div id="meas-cert-header" className={getSectionWrapperClass('header')} style={getSectionStyle('header')}>
         <div className="w-full h-5 mb-5" style={{ backgroundColor: ACCENT }} />
         <div className="mb-5 text-center break-inside-avoid">
           <h1 className="uppercase mb-1 tracking-wide" style={{ fontSize: '24pt', color: sectionStyles?.header?.color || '#000' }}>
@@ -337,22 +337,22 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
       </div>
 
       {getSummaryArray(resumeData.summary).length > 0 && (
-        <div id="meas-summary" className={getSectionWrapperClass('summary')} style={getSectionStyle('summary')}>
+        <div id="meas-cert-summary" className={getSectionWrapperClass('summary')} style={getSectionStyle('summary')}>
           <div className="mb-4">
             <SectionHeader title="Professional Summary" sectionKey="summary" />
             <div className={CONTENT_INDENT}>
-              <div className="text-justify" style={{ fontSize: '9.5pt' }}>
+              <ul className="list-disc pl-4 mt-1 mb-1 m-0 space-y-1" style={{ fontSize: '9.5pt' }}>
                 {getSummaryArray(resumeData.summary).map((point: string, i: number) => (
-                  <span key={i}>{renderWithBold(point)} </span>
+                  <li key={i} className="text-justify text-black">{renderWithBold(point)}</li>
                 ))}
-              </div>
+              </ul>
             </div>
           </div>
         </div>
       )}
 
       {resumeData.skills && resumeData.skills.length > 0 && (
-        <div id="meas-skills" className={getSectionWrapperClass('skills')} style={getSectionStyle('skills')}>
+        <div id="meas-cert-skills" className={getSectionWrapperClass('skills')} style={getSectionStyle('skills')}>
           <div className="mb-4">
             <SectionHeader title="Technical Skills" sectionKey="skills" />
             <div className={`${CONTENT_INDENT}`}>
@@ -369,13 +369,13 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
         </div>
       )}
 
-      <div id="meas-exp-section-heading" className="mb-3">
+      <div id="meas-cert-exp-section-heading" className="mb-3">
         <SectionHeader title="Experience" sectionKey="experience" />
       </div>
 
       {resumeData.experience?.map((exp: any, i: number) => (
         <div key={`exp-meas-${i}`} className={CONTENT_INDENT}>
-          <div id={`meas-exp-${i}-header`} className="mb-1">
+          <div id={`meas-cert-exp-${i}-header`} className="mb-1">
             <div className="flex justify-between items-start font-bold text-black" style={{ fontSize: '9.5pt' }}>
               <div>{exp.role}</div>
               <div className="font-normal">{exp.duration}</div>
@@ -385,7 +385,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
             </div>
           </div>
 
-          <div id={`meas-exp-${i}-header-continued`} className="mb-1">
+          <div id={`meas-cert-exp-${i}-header-continued`} className="mb-1">
             <div className="flex justify-between items-start font-bold text-black" style={{ fontSize: '9.5pt' }}>
               <div>{exp.role} <span className="font-normal italic text-slate-500">(Continued)</span></div>
               <div className="font-normal">{exp.duration}</div>
@@ -398,7 +398,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
           {exp.bullets && exp.bullets.length > 0 && (
             <ul className="list-disc pl-4 mt-1 mb-1.5 m-0 space-y-1" style={{ fontSize: '9.5pt' }}>
               {exp.bullets.map((b: string, j: number) => (
-                <li id={`meas-exp-${i}-bullet-${j}`} key={`bullet-meas-${j}`} className="text-justify text-black">
+                <li id={`meas-cert-exp-${i}-bullet-${j}`} key={`bullet-meas-${j}`} className="text-justify text-black">
                   {renderWithBold(b)}
                 </li>
               ))}
@@ -406,7 +406,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
           )}
 
           {exp.environment && exp.environment.length > 0 && (
-            <div id={`meas-exp-${i}-env`} className="mt-1.5 pt-1 border-t border-slate-100" style={{ fontSize: '9pt' }}>
+            <div id={`meas-cert-exp-${i}-env`} className="mt-1.5 pt-1 border-t border-slate-100" style={{ fontSize: '9pt' }}>
               <span className="font-bold text-black italic">Environment: </span>
               <span className="text-slate-600">{exp.environment.join(', ')}</span>
             </div>
@@ -415,14 +415,14 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
       ))}
 
       {resumeData.education && resumeData.education.length > 0 && (
-        <div id="meas-education" className={getSectionWrapperClass('education')} style={getSectionStyle('education')}>
+        <div id="meas-cert-education" className={getSectionWrapperClass('education')} style={getSectionStyle('education')}>
           <div className="mb-4">
-            <div id="meas-education-heading" className="mb-2">
+            <div id="meas-cert-education-heading" className="mb-2">
               <SectionHeader title="Education and Training" sectionKey="education" />
             </div>
             <div className={`${CONTENT_INDENT} space-y-2`} style={{ fontSize: '9.5pt' }}>
               {resumeData.education.map((edu: any, i: number) => (
-                <div key={i} id={`meas-edu-${i}`}>
+                <div key={i} id={`meas-cert-edu-${i}`}>
                   <div className="flex justify-between items-start font-semibold text-black">
                     <span>{edu.degree}</span>
                     <span className="font-normal">{edu.year}</span>
@@ -438,14 +438,14 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
       )}
 
       {resumeData.certifications && resumeData.certifications.length > 0 && (
-        <div id="meas-certifications" className={getSectionWrapperClass('certifications')} style={getSectionStyle('certifications')}>
+        <div id="meas-cert-certifications" className={getSectionWrapperClass('certifications')} style={getSectionStyle('certifications')}>
           <div className="mb-4">
-            <div id="meas-certifications-heading" className="mb-2">
+            <div id="meas-cert-certifications-heading" className="mb-2">
               <SectionHeader title="Certifications" sectionKey="certifications" />
             </div>
             <div className={`${CONTENT_INDENT} space-y-1`} style={{ fontSize: '9.5pt' }}>
               {resumeData.certifications.map((cert: any, i: number) => (
-                <div key={i} id={`meas-cert-${i}`} className="flex justify-between items-start">
+                <div key={i} id={`meas-cert-cert-${i}`} className="flex justify-between items-start">
                   <div className="font-semibold text-black">{cert.name}</div>
                   <div className="font-normal text-black">{cert.year}</div>
                 </div>
@@ -455,7 +455,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
         </div>
       )}
 
-      <div id="meas-footer" className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 mt-auto select-none shrink-0">
+      <div id="meas-cert-footer" className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 mt-auto select-none shrink-0">
         <span></span>
         <span>Page 1 of 2</span>
       </div>
@@ -530,11 +530,11 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
                   <div className="mb-4">
                     <SectionHeader title="Professional Summary" sectionKey="summary" />
                     <div className={CONTENT_INDENT}>
-                      <div className="text-justify" style={{ fontSize: '9.5pt' }}>
+                      <ul className="list-disc pl-4 mt-1 mb-1 m-0 space-y-1" style={{ fontSize: '9.5pt' }}>
                         {getSummaryArray(resumeData.summary).map((point: string, i: number) => (
-                          <span key={i}>{renderWithBold(point)} </span>
+                          <li key={i} className="text-justify text-black">{renderWithBold(point)}</li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
                   </div>
                 </div>
