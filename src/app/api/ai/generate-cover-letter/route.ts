@@ -4,25 +4,36 @@ import { zodResponseFormat } from 'openai/helpers/zod';
 import { generateAIResponse } from '@/utils/ai-gateway';
 import { createClient } from '@/utils/supabase/server';
 
-const GeneratedCoverLetterFormat = z.object({
+const CoverLetterVariationFormat = z.object({
+  id: z.string().describe("A short unique id for this variation, e.g., 'traditional', 'modern', 'story-driven'"),
+  name: z.string().describe("The name of the tone/template, e.g., 'The Traditional Professional', 'The Impact-Driven Innovator', 'The Passionate Storyteller'"),
   salutation: z.string().describe("e.g. 'Dear Hiring Manager,' — use the company name if it fits naturally."),
   paragraphs: z.array(z.string()).describe("3-4 paragraphs: opening hook referencing the role/company, 1-2 body paragraphs connecting the candidate's real experience to the job's requirements using its own keywords, and a closing paragraph with a call to action."),
   sign_off: z.string().describe("e.g. 'Sincerely,'"),
+});
+
+const GeneratedCoverLetterFormat = z.object({
+  variations: z.array(CoverLetterVariationFormat).describe("Exactly 3 distinct variations of the cover letter with different tones and structural templates.")
 });
 
 const SYSTEM_PROMPT = `
 You are an expert cover letter writer for technical and professional hires.
 You will receive the candidate's Master Profile and the Parsed Job Description for the role they're applying to.
 
+CRITICAL REQUIREMENT: You MUST generate EXACTLY 3 distinct variations of the cover letter:
+1. The Traditional Professional (Standard, formal corporate tone, highly professional)
+2. The Impact-Driven Innovator (Bold, metric-focused, aggressive, startup-friendly tone)
+3. The Passionate Storyteller (Narrative-driven, focuses on culture fit, enthusiasm, and passion for the product)
+
 RULES:
 - Write in first person, as the candidate.
 - Reference the actual company name and job title from the JD naturally in the opening paragraph.
 - Ground every claim in the candidate's real, provided experience. NEVER invent employers, projects, metrics, or skills that are not present in the Master Profile.
 - Use the JD's own keywords/terminology where the candidate genuinely has that skill, to help with ATS keyword matching.
-- Keep it concise: 3-4 short paragraphs total, not a full page. No filler like "I am a hard worker" without concrete backing.
+- Keep it concise: 3-4 short paragraphs per variation. No filler like "I am a hard worker" without concrete backing.
 - Do not repeat the resume verbatim — this should read as a genuine, focused pitch for why this specific role is a fit.
 
-Return a perfect JSON object mapping exactly to the schema.
+Return a perfect JSON object mapping exactly to the schema, containing the 3 variations.
 `;
 
 export async function POST(req: Request) {

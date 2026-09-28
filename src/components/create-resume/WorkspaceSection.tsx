@@ -25,7 +25,7 @@ import { cn } from '@/utils/cn'
 import { Button } from '@/components/ui/Button'
 import { CoverLetterViewer } from './CoverLetterViewer'
 import { ATSScoreMeter } from './ATSScoreMeter'
-import type { CoverLetterData } from './coverLetterTypes'
+import type { CoverLetterResponseData } from './coverLetterTypes'
 
 export interface InterviewPrepData {
   hr_questions?: string[]
@@ -68,7 +68,7 @@ export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateNa
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const [expandedStarIdx, setExpandedStarIdx] = useState<number | null>(0)
 
-  const [coverLetter, setCoverLetter] = useState<CoverLetterData | null>(null)
+  const [coverLetterRes, setCoverLetterRes] = useState<CoverLetterResponseData | null>(null)
   const [isGeneratingCoverLetter, setIsGeneratingCoverLetter] = useState(false)
 
   const handleGenerateCoverLetter = async () => {
@@ -85,8 +85,8 @@ export function WorkspaceSection({ interviewPrep, atsData, resumeId, candidateNa
       })
       const data = await res.json()
       if (!data.success) throw new Error(data.error || 'Failed to generate cover letter')
-      setCoverLetter(data.cover_letter)
-      toast.success('Cover letter generated!')
+      setCoverLetterRes(data.cover_letter)
+      toast.success('Cover letters generated!')
     } catch (error: any) {
       toast.error(error.message || 'Failed to generate cover letter')
     } finally {
