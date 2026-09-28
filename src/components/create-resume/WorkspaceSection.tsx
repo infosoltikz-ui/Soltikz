@@ -79,14 +79,14 @@ interface WorkspaceSectionProps {
   onPrepRegenerated?: (newPrep: InterviewPrepData) => void
 }
 
-export function WorkspaceSection({ 
+export function WorkspaceSection({
   interviewPrep, atsData, resumeId, candidateName, email, phone, location, linkedin, companyName, jobTitle,
   parsedJdData, generatedResume, onPrepRegenerated
 }: WorkspaceSectionProps) {
   const [activeTab, setActiveTab] = useState<'intro' | 'tech' | 'hr' | 'star' | 'ats' | 'company' | 'cover'>('intro')
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const [expandedStarIdx, setExpandedStarIdx] = useState<number | null>(0)
-  
+
   const [isRegeneratingPrep, setIsRegeneratingPrep] = useState(false)
 
 
@@ -122,7 +122,7 @@ export function WorkspaceSection({
       return
     }
     const jdData = parsedJdData || { job_title: jobTitle || 'Software Engineer', company_name: companyName || 'the company' }
-    
+
     setIsRegeneratingPrep(true)
     try {
       const res = await fetch('/api/ai/generate-prep', {
@@ -152,7 +152,7 @@ export function WorkspaceSection({
   const prepAny = interviewPrep as any
   let selfPitch: any = prepAny?.selfPitch || null
   const rawSelfIntro = prepAny?.self_introduction || prepAny?.selfIntroduction || ''
-  
+
   if (!selfPitch && rawSelfIntro) {
     try { selfPitch = typeof rawSelfIntro === 'string' ? JSON.parse(rawSelfIntro) : rawSelfIntro } catch { selfPitch = null }
   }
@@ -173,36 +173,36 @@ export function WorkspaceSection({
   const techQuestions = techQuestionsData.length > 0
     ? techQuestionsData
     : [
-        "How do you approach designing scalable and maintainable system architectures?",
-        "Can you describe your experience with performance optimization and caching strategies?",
-        "How do you manage state and asynchronous operations in high-concurrency environments?",
-        "What strategies do you use for automated testing and CI/CD pipelines?",
-        "How do you handle technical debt while keeping product delivery on schedule?"
-      ]
+      "How do you approach designing scalable and maintainable system architectures?",
+      "Can you describe your experience with performance optimization and caching strategies?",
+      "How do you manage state and asynchronous operations in high-concurrency environments?",
+      "What strategies do you use for automated testing and CI/CD pipelines?",
+      "How do you handle technical debt while keeping product delivery on schedule?"
+    ]
 
   const hrQuestionsData = prepAny?.hrQuestions || prepAny?.hr_questions || []
   const hrQuestions = hrQuestionsData.length > 0
     ? hrQuestionsData
     : [
-        "Tell me about a time you had a technical disagreement with a team member and how you resolved it.",
-        "How do you prioritize competing deadlines when multiple critical tasks arise?",
-        "Why are you interested in joining our company and what makes you a great fit for this role?"
-      ]
+      "Tell me about a time you had a technical disagreement with a team member and how you resolved it.",
+      "How do you prioritize competing deadlines when multiple critical tasks arise?",
+      "Why are you interested in joining our company and what makes you a great fit for this role?"
+    ]
 
   const starAnswersData = prepAny?.starAnswers || prepAny?.star_answers || []
   const starAnswers = starAnswersData.length > 0
     ? starAnswersData
     : [
-        {
-          question: "Describe a high-impact technical project you led.",
-          situation: "Our legacy system was experiencing significant latency spikes during peak user traffic.",
-          task: "I was tasked with identifying the core performance bottleneck and redesigning the architecture without downtime.",
-          action: "I analyzed query metrics, decoupled monolithic services into targeted microservices, and implemented multi-tiered caching.",
-          result: "Reduced response latency by 45%, eliminated downtime, and improved end-user satisfaction scores by 30%."
-        }
-      ]
+      {
+        question: "Describe a high-impact technical project you led.",
+        situation: "Our legacy system was experiencing significant latency spikes during peak user traffic.",
+        task: "I was tasked with identifying the core performance bottleneck and redesigning the architecture without downtime.",
+        action: "I analyzed query metrics, decoupled monolithic services into targeted microservices, and implemented multi-tiered caching.",
+        result: "Reduced response latency by 45%, eliminated downtime, and improved end-user satisfaction scores by 30%."
+      }
+    ]
 
-  const companyNotes = prepAny?.companyNotes || prepAny?.company_notes || 
+  const companyNotes = prepAny?.companyNotes || prepAny?.company_notes ||
     "This organization values candidates who demonstrate strong ownership, transparent communication, and data-backed decision making. Be prepared to showcase concrete metrics and how your past work created tangible business value."
 
   // Calculate estimated speaking time for full intro (approx 130 words per minute)
@@ -231,8 +231,8 @@ export function WorkspaceSection({
             onClick={() => setActiveTab('intro')}
             className={cn(
               "flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer",
-              activeTab === 'intro' 
-                ? "bg-primary text-white shadow-sm shadow-primary/30" 
+              activeTab === 'intro'
+                ? "bg-primary text-white shadow-sm shadow-primary/30"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
             )}
           >
@@ -244,8 +244,8 @@ export function WorkspaceSection({
             onClick={() => setActiveTab('tech')}
             className={cn(
               "flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer",
-              activeTab === 'tech' 
-                ? "bg-primary text-white shadow-sm shadow-primary/30" 
+              activeTab === 'tech'
+                ? "bg-primary text-white shadow-sm shadow-primary/30"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
             )}
           >
@@ -263,8 +263,8 @@ export function WorkspaceSection({
             onClick={() => setActiveTab('hr')}
             className={cn(
               "flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer",
-              activeTab === 'hr' 
-                ? "bg-primary text-white shadow-sm shadow-primary/30" 
+              activeTab === 'hr'
+                ? "bg-primary text-white shadow-sm shadow-primary/30"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
             )}
           >
@@ -282,8 +282,8 @@ export function WorkspaceSection({
             onClick={() => setActiveTab('star')}
             className={cn(
               "flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer",
-              activeTab === 'star' 
-                ? "bg-primary text-white shadow-sm shadow-primary/30" 
+              activeTab === 'star'
+                ? "bg-primary text-white shadow-sm shadow-primary/30"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
             )}
           >
@@ -302,8 +302,8 @@ export function WorkspaceSection({
               onClick={() => setActiveTab('ats')}
               className={cn(
                 "flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer",
-                activeTab === 'ats' 
-                  ? "bg-primary text-white shadow-sm shadow-primary/30" 
+                activeTab === 'ats'
+                  ? "bg-primary text-white shadow-sm shadow-primary/30"
                   : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
               )}
             >
@@ -347,7 +347,7 @@ export function WorkspaceSection({
                 <p className="text-[12px] font-medium text-slate-500 mt-0.5">Your complete personalized interview script tailored to this JD</p>
               </div>
             </div>
-            
+
             <Button
               onClick={handleRegeneratePrep}
               disabled={isRegeneratingPrep}
@@ -592,8 +592,8 @@ export function WorkspaceSection({
 
           <div className="space-y-3.5">
             {techQuestions.map((q: string, idx: number) => (
-              <div 
-                key={idx} 
+              <div
+                key={idx}
                 className="p-4 sm:p-5 rounded-xl border border-slate-200/80 bg-slate-50/50 hover:bg-white hover:border-blue-300 hover:shadow-sm transition-all group"
               >
                 <div className="flex items-start justify-between gap-3">
@@ -640,8 +640,8 @@ export function WorkspaceSection({
 
           <div className="space-y-3.5">
             {hrQuestions.map((q: string, idx: number) => (
-              <div 
-                key={idx} 
+              <div
+                key={idx}
                 className="p-4 sm:p-5 rounded-xl border border-slate-200/80 bg-slate-50/50 hover:bg-white hover:border-purple-300 hover:shadow-sm transition-all"
               >
                 <div className="flex items-start justify-between gap-3">
@@ -697,11 +697,11 @@ export function WorkspaceSection({
               const fullStory = `Question: ${item.question}\n\nSituation: ${item.situation}\n\nTask: ${item.task}\n\nAction: ${item.action}\n\nResult: ${item.result}`
 
               return (
-                <div 
-                  key={idx} 
+                <div
+                  key={idx}
                   className="rounded-xl border border-slate-200 overflow-hidden bg-slate-50/50 transition-all"
                 >
-                  <div 
+                  <div
                     onClick={() => setExpandedStarIdx(isExpanded ? null : idx)}
                     className="p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-100/60 transition-colors"
                   >
@@ -834,16 +834,16 @@ export function WorkspaceSection({
             </div>
           ) : (
             <CoverLetterViewer
-                content={coverLetterRes}
-                candidateName={candidateName}
-                email={email}
-                phone={phone}
-                location={location}
-                linkedin={linkedin}
-                companyName={companyName}
-                jobTitle={jobTitle}
-                documentTitle="Cover_Letter"
-              />
+              content={coverLetterRes}
+              candidateName={candidateName}
+              email={email}
+              phone={phone}
+              location={location}
+              linkedin={linkedin}
+              companyName={companyName}
+              jobTitle={jobTitle}
+              documentTitle="Cover_Letter"
+            />
           )}
         </div>
       )}

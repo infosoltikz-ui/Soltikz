@@ -34,7 +34,12 @@ import { useUIStore } from '@/store/useUIStore'
 import Link from 'next/link'
 
 export default function CreateResumePage() {
+  const searchParams = useSearchParams()
+  const resumeIdParam = searchParams?.get('id')
+
+  // Always start at 1 (SSR safe). Client corrects from URL in a one-time mount effect.
   const [step, setStep] = useState(1)
+
   const [isGenerating, setIsGenerating] = useState(false)
   const [orchestratorState, setOrchestratorState] = useState<string>('')
   const [resumeZoom, setResumeZoom] = useState(1)
@@ -51,6 +56,7 @@ export default function CreateResumePage() {
   const [interviewPrep, setInterviewPrep] = useState<any>(null)
   const [atsData, setAtsData] = useState<any>(null)
   const [currentResumeId, setCurrentResumeId] = useState<string | null>(null)
+  const [savedParsedJdData, setSavedParsedJdData] = useState<any>(null)
 
   const [isRegenerateSummaryModalOpen, setIsRegenerateSummaryModalOpen] = useState(false)
   const [isManualEditModalOpen, setIsManualEditModalOpen] = useState(false)
@@ -62,9 +68,18 @@ export default function CreateResumePage() {
   const resumeRef = useRef<HTMLDivElement>(null)
   const canvasContainerRef = useRef<HTMLDivElement>(null)
 
-  // Scroll to top when step changes
+  // ONE-TIME client-only mount: read step from URL (runs after hydration, no SSR mismatch)
+  useEffect(() => {
+    const s = parseInt(new URLSearchParams(window.location.search).get('step') || '1', 10)
+    if (!isNaN(s) && s >= 1 && s <= 3) setStep(s)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Write-only: persist step to URL on change (never reads back → no loop)
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    const url = new URL(window.location.href)
+    url.searchParams.set('step', step.toString())
+    window.history.replaceState({}, '', url.toString())
   }, [step])
 
   useEffect(() => {
@@ -80,7 +95,7 @@ export default function CreateResumePage() {
     }
     const timeoutId = setTimeout(updateScale, 60)
     window.addEventListener('resize', updateScale)
-    
+
     let ro: ResizeObserver | null = null
     if (canvasContainerRef.current) {
       ro = new ResizeObserver(updateScale)
@@ -134,8 +149,6 @@ export default function CreateResumePage() {
     }
   }
 
-  const searchParams = useSearchParams()
-  const resumeIdParam = searchParams?.get('id')
 
   useEffect(() => {
     // Fetch user profile on mount
@@ -188,6 +201,17 @@ export default function CreateResumePage() {
           .from('resume_sections')
           .select('section_type, content')
           .eq('resume_id', resume.id)
+
+        if (resume.parsed_jd_id) {
+          const { data: jdData } = await supabase
+            .from('job_description_analyses')
+            .select('parsed_data')
+            .eq('id', resume.parsed_jd_id)
+            .single()
+          if (jdData?.parsed_data) {
+            setSavedParsedJdData(jdData.parsed_data)
+          }
+        }
 
         if (sections && sections.length > 0) {
           const reconstructed: any = {
@@ -281,6 +305,8 @@ export default function CreateResumePage() {
       const parseData = await parseRes.json()
       if (!parseData.success) throw new Error(parseData.error || 'Failed to parse JD')
 
+      setSavedParsedJdData(parseData.parsed_data)
+
       setOrchestratorState('Building Resume Strategy...')
       // 2. Generate Strategy
       const strategyRes = await fetch('/api/ai/generate-strategy', {
@@ -318,6 +344,9 @@ export default function CreateResumePage() {
 
       setCurrentResumeId(resumeGenData.resume_id)
       setGeneratedResume(resumeGenData.generated_resume)
+
+      // Update URL so a page refresh doesn't lose state
+      window.history.pushState(null, '', `?id=${resumeGenData.resume_id}&step=2`)
 
       setOrchestratorState('Finalizing ATS Analysis & Prep...')
       // 4. Generate ATS & Prep concurrently
@@ -507,7 +536,7 @@ export default function CreateResumePage() {
               <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200/80 shadow-xl shadow-slate-200/20 p-8 relative overflow-hidden group hover:shadow-2xl hover:border-emerald-200 transition-all duration-500">
                 {/* Ambient Glow */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl opacity-50 -mr-20 -mt-20 pointer-events-none group-hover:bg-emerald-100 transition-colors duration-500" />
-                
+
                 <div className="mb-8 flex justify-between items-center relative z-10">
                   <div>
                     <h2 className="text-[20px] font-black text-slate-900 tracking-tight mb-1">Resume Details</h2>
@@ -534,7 +563,12 @@ export default function CreateResumePage() {
 
             <div className="flex justify-end pt-4">
               <Button
-                onClick={() => setStep(2)}
+                onClick={() => {
+                  setStep(2)
+                  if (currentResumeId) {
+                    window.history.pushState(null, '', `?id=${currentResumeId}&step=2`)
+                  }
+                }}
                 className="relative h-14 px-10 text-[16px] font-black rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xl shadow-emerald-600/30 flex items-center gap-3 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-600/50 hover:-translate-y-1 overflow-hidden group/btn cursor-pointer"
               >
                 {/* Shimmer Effect */}
@@ -588,32 +622,32 @@ export default function CreateResumePage() {
                   </div>
 
                   <div className="flex items-center gap-2.5 flex-wrap w-full md:w-auto justify-end">
-                    <Button 
-                      onClick={() => setIsRegenerateSummaryModalOpen(true)} 
-                      variant="outline" 
+                    <Button
+                      onClick={() => setIsRegenerateSummaryModalOpen(true)}
+                      variant="outline"
                       className="h-10 px-3.5 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-slate-50 text-[12px] font-bold shadow-2xs"
                     >
                       Refine Summary
                     </Button>
-                    <Button 
-                      onClick={() => setIsManualEditModalOpen(true)} 
-                      variant="outline" 
+                    <Button
+                      onClick={() => setIsManualEditModalOpen(true)}
+                      variant="outline"
                       className="h-10 px-3.5 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-slate-50 text-[12px] font-bold shadow-2xs"
                     >
                       Edit Skills
                     </Button>
-                    
-                    <Button 
-                      onClick={handlePrint} 
+
+                    <Button
+                      onClick={handlePrint}
                       className="h-10 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md shadow-emerald-600/20 text-[13px] font-black cursor-pointer flex items-center gap-2"
                     >
                       <Download className="w-4 h-4" />
                       <span>Download PDF</span>
                     </Button>
-                    <Button 
-                      onClick={handleDownloadDocx} 
+                    <Button
+                      onClick={handleDownloadDocx}
                       disabled={isDownloadingDocx}
-                      variant="outline" 
+                      variant="outline"
                       className="h-10 px-3.5 rounded-xl border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12px] font-bold flex items-center gap-2"
                     >
                       {isDownloadingDocx ? <Loader2 className="w-4 h-4 animate-spin text-emerald-600" /> : <FileText className="w-4 h-4 text-slate-500" />}
@@ -624,7 +658,7 @@ export default function CreateResumePage() {
 
                 {/* DUAL-COLUMN INTERACTIVE WORKBENCH GRID */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                  
+
                   {/* LEFT COLUMN: FULL BOLD ATS SCORE METER DASHBOARD (Col-span-5) */}
                   <div className="lg:col-span-5 space-y-6">
                     <ATSScoreMeter atsData={atsData} variant="full" />
@@ -665,7 +699,7 @@ export default function CreateResumePage() {
                     </div>
 
                     {/* Document Sheet Container */}
-                    <div 
+                    <div
                       ref={canvasContainerRef}
                       className="bg-slate-200/80 p-4 sm:p-6 rounded-3xl border border-slate-300/80 flex flex-col items-center justify-start overflow-y-auto overflow-x-hidden h-[82vh] min-h-[620px] shadow-inner scrollbar-thin"
                     >
@@ -674,9 +708,9 @@ export default function CreateResumePage() {
                         const horizontalMargin = (794 * effectiveScale - 794) / 2
                         return (
                           <div className="flex justify-center transition-all duration-200 py-2 w-full">
-                            <div 
-                              style={{ 
-                                transform: `scale(${effectiveScale})`, 
+                            <div
+                              style={{
+                                transform: `scale(${effectiveScale})`,
                                 transformOrigin: 'top center',
                                 width: '794px',
                                 marginLeft: `${horizontalMargin}px`,
@@ -695,10 +729,10 @@ export default function CreateResumePage() {
 
                     {/* Proceed to Step 3 Callout Card */}
                     <div className="relative bg-slate-900 overflow-hidden text-white rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl border border-slate-700/50 group/card transition-all duration-500 hover:border-emerald-500/50 hover:shadow-emerald-900/20">
-                      
+
                       {/* Animated Glow Background */}
                       <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl opacity-50 pointer-events-none group-hover/card:bg-emerald-500/20 transition-colors duration-700 -mr-32 -mt-32" />
-                      
+
                       <div className="flex items-center gap-4 relative z-10">
                         <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shrink-0 shadow-lg shadow-emerald-900/50">
                           <Sparkles className="w-7 h-7 animate-pulse" />
@@ -760,10 +794,10 @@ export default function CreateResumePage() {
                   <Download className="w-4 h-4" />
                   Download PDF
                 </Button>
-                <Button 
-                  onClick={handleDownloadDocx} 
+                <Button
+                  onClick={handleDownloadDocx}
                   disabled={isDownloadingDocx}
-                  variant="outline" 
+                  variant="outline"
                   className="h-9 px-3.5 rounded-lg border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12.5px] font-semibold cursor-pointer flex items-center gap-1.5"
                 >
                   {isDownloadingDocx ? <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" /> : <FileText className="w-3.5 h-3.5 text-slate-500" />}
@@ -774,11 +808,20 @@ export default function CreateResumePage() {
 
             {/* Dedicated Full-Width Interview & Application Strategy Workspace */}
             <div className="w-full">
-              <WorkspaceSection 
-                interviewPrep={interviewPrep} 
-                atsData={atsData} 
-                resumeId={currentResumeId} 
-                candidateName={profileData?.full_name} 
+              <WorkspaceSection
+                interviewPrep={interviewPrep}
+                atsData={atsData}
+                resumeId={currentResumeId}
+                candidateName={profileData?.full_name}
+                email={profileData?.email}
+                phone={profileData?.phone}
+                location={profileData?.location}
+                linkedin={profileData?.linkedin}
+                companyName={profileData?.parsedJd?.company_name || profileData?.company_name}
+                jobTitle={profileData?.parsedJd?.job_title || profileData?.job_title}
+                parsedJdData={savedParsedJdData || profileData?.parsedJd}
+                generatedResume={generatedResume}
+                onPrepRegenerated={(newPrep) => setInterviewPrep(newPrep)}
               />
             </div>
           </div>
@@ -799,7 +842,7 @@ export default function CreateResumePage() {
 
         {/* Dedicated Always-Mounted Print Target for 100% Reliable PDF Download across Steps 2 & 3 */}
         {generatedResume && (
-          <div 
+          <div
             aria-hidden="true"
             style={{
               position: 'absolute',
@@ -815,9 +858,9 @@ export default function CreateResumePage() {
               const PrintTemplate = getTemplateById(selectedTemplateId).component
               return (
                 <div ref={resumeRef}>
-                  <PrintTemplate 
-                    resumeData={generatedResume} 
-                    profileData={profileData} 
+                  <PrintTemplate
+                    resumeData={generatedResume}
+                    profileData={profileData}
                   />
                 </div>
               )

@@ -64,7 +64,7 @@ Return a perfect JSON object matching the schema exactly.
 export async function POST(req: Request) {
   try {
     const supabase = await createClient();
-    
+
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
@@ -74,7 +74,7 @@ export async function POST(req: Request) {
     const aiResponse = await generateAIResponse<any>({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt: `Job Description:\n${JSON.stringify(parsedJdData)}\n\nCandidate Resume:\n${JSON.stringify(resumeContent)}`,
-      model: 'gpt-4o', 
+      model: 'gpt-4o',
       temperature: 0.6,
       responseFormat: zodResponseFormat(InterviewPrepFormat, 'interview_prep'),
     });

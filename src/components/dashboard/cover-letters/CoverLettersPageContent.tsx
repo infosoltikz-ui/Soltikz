@@ -9,7 +9,7 @@ import { toast } from 'react-hot-toast'
 import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Input'
 import { CoverLetterViewer } from '@/components/create-resume/CoverLetterViewer'
-import type { CoverLetterData } from '@/components/create-resume/coverLetterTypes'
+import type { CoverLetterData, CoverLetterResponseData } from '@/components/create-resume/coverLetterTypes'
 
 interface EligibleResume {
   id: string
@@ -20,7 +20,7 @@ interface EligibleResume {
 
 interface CoverLetterRow {
   id: string
-  content: CoverLetterData
+  content: CoverLetterResponseData
   created_at: string
   resume_title: string
   company_name?: string
@@ -195,7 +195,7 @@ export function CoverLettersPageContent() {
                 </div>
               )}
               <p className="text-[12px] text-slate-500 line-clamp-2 mb-4 flex-1">
-                {letter.content.paragraphs?.[0]}
+                {letter.content.variations?.[0]?.paragraphs?.[0] || 'No preview available.'}
               </p>
               <div className="flex items-center justify-between pt-3 border-t border-slate-100">
                 <span className="text-[11px] font-bold text-slate-400">
