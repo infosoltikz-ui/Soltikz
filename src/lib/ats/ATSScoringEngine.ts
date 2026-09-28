@@ -136,7 +136,7 @@ export class ATSScoringEngine {
     // Confidence
     // Confidence drops if JD is very sparse or Resume is very sparse
     let confidence = 100;
-    if (requiredSkills.length === 0) confidence -= 20;
+    if (finalRequired.length === 0) confidence -= 20;
     if (expAnalysis.requiredYears === 0) confidence -= 10;
     if (!resume.experience || resume.experience.length === 0) confidence -= 20;
 
