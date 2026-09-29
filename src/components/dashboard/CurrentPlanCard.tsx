@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Crown, Sparkles, ArrowUpRight, Check, Zap, Infinity } from 'lucide-react'
+import { Crown, Sparkles, ArrowUpRight, Check, Zap, Infinity, CalendarDays } from 'lucide-react'
 import { createClient } from '@/utils/supabase/client'
 import { isPremiumPlan, FREE_TIER_CREDITS } from '@/utils/pricingPlans'
+import { format } from 'date-fns'
 
 interface CurrentPlanCardProps {
   initialPlanId?: string
@@ -19,6 +20,9 @@ export function CurrentPlanCard({
 }: CurrentPlanCardProps) {
   const [planId, setPlanId] = useState(initialPlanId)
   const [resumesCount, setResumesCount] = useState(totalResumes)
+  const [planStart, setPlanStart] = useState<string | null>(null)
+  const [planExpiry, setPlanExpiry] = useState<string | null>(null)
+  const [isExpiringSoon, setIsExpiringSoon] = useState(false)
 
   useEffect(() => {
     async function loadData() {
@@ -29,7 +33,7 @@ export function CurrentPlanCard({
       // Fetch latest profile
       const { data: profile } = await supabase
         .from('profiles')
-        .select('plan_id, credits_remaining, resumes_generated')
+        .select('plan_id, credits_remaining, resumes_generated, created_at')
         .eq('id', user.id)
         .single()
 
@@ -39,8 +43,43 @@ export function CurrentPlanCard({
         .select('id', { count: 'exact', head: true })
         .eq('user_id', user.id)
 
+      // Fetch latest subscription/payment
+      const { data: payment } = await supabase
+        .from('payments_and_subscriptions')
+        .select('created_at, valid_until')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+
       if (profile) {
         setPlanId(profile.plan_id || 'FREE')
+        
+        // For FREE plan, start is profile creation, no expiry
+        if (!profile.plan_id || profile.plan_id === 'FREE') {
+          setPlanStart(profile.created_at)
+          setPlanExpiry(null) // Lifetime
+          setIsExpiringSoon(false)
+        } else if (payment) {
+          // For PRO plan, use payment dates
+          setPlanStart(payment.created_at)
+          setPlanExpiry(payment.valid_until)
+          
+          if (payment.valid_until) {
+            const expiryDate = new Date(payment.valid_until)
+            const today = new Date()
+            const diffTime = expiryDate.getTime() - today.getTime()
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+            setIsExpiringSoon(diffDays <= 5 && diffDays >= 0)
+          } else {
+            setIsExpiringSoon(false)
+          }
+        } else {
+          // Fallback if payment record is missing but plan is PRO
+          setPlanStart(profile.created_at)
+          setPlanExpiry(null)
+          setIsExpiringSoon(false)
+        }
       }
 
       if (typeof count === 'number' && count > 0) {
@@ -85,6 +124,29 @@ export function CurrentPlanCard({
           }`}>
             {isPremium ? 'Active Plan' : 'Free Tier'}
           </span>
+        </div>
+
+        {/* Plan Dates Info */}
+        <div className={`mb-4 rounded-lg p-3 border flex items-center justify-between ${isExpiringSoon ? 'bg-red-50/50 border-red-200' : 'bg-slate-50/80 border-slate-100'}`}>
+          <div className="flex flex-col">
+            <span className={`text-[11px] font-bold uppercase tracking-wider mb-1 flex items-center gap-1 ${isExpiringSoon ? 'text-red-500' : 'text-slate-500'}`}>
+              <CalendarDays className="w-3 h-3" /> Plan Started
+            </span>
+            <span className="text-[13px] font-bold text-slate-800">
+              {planStart ? format(new Date(planStart), 'MMM d, yyyy') : 'N/A'}
+            </span>
+          </div>
+          <div className={`w-px h-8 ${isExpiringSoon ? 'bg-red-200' : 'bg-slate-200'}`}></div>
+          <div className="flex flex-col text-right">
+            <span className={`text-[11px] font-bold uppercase tracking-wider mb-1 flex items-center justify-end gap-1 ${isExpiringSoon ? 'text-red-500' : 'text-slate-500'}`}>
+              <CalendarDays className="w-3 h-3" /> Valid Until
+            </span>
+            <span className={`text-[13px] font-bold ${
+              isExpiringSoon ? 'text-red-600' : (isPremium ? 'text-emerald-700' : 'text-slate-800')
+            }`}>
+              {planExpiry ? format(new Date(planExpiry), 'MMM d, yyyy') : 'Lifetime'}
+            </span>
+          </div>
         </div>
 
         {/* 2-Bar Comparison Layout */}
