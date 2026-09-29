@@ -1,15 +1,78 @@
 'use client'
 
-import { Search, Download, ExternalLink, CheckCircle2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Search, Download, ExternalLink, CheckCircle2, Loader2 } from 'lucide-react'
+import { createClient } from '@/utils/supabase/client'
 
-const PAYMENTS = [
-  { user: 'Tech Corp LLC', email: 'billing@techcorp.com', plan: 'Enterprise', amount: '$499.00', method: '•••• 4242', date: 'Oct 24, 2023', status: 'Paid', invoice: 'INV-2023-089' },
-  { user: 'Sarah Jenkins', email: 'sarah.j@example.com', plan: 'Pro', amount: '$29.00', method: '•••• 8821', date: 'Oct 24, 2023', status: 'Paid', invoice: 'INV-2023-090' },
-  { user: 'David Smith', email: 'david.smith@example.com', plan: 'Pro', amount: '$29.00', method: '•••• 1123', date: 'Oct 23, 2023', status: 'Paid', invoice: 'INV-2023-091' },
-  { user: 'Global Solutions', email: 'admin@globalsol.com', plan: 'Enterprise', amount: '$499.00', method: '•••• 5590', date: 'Oct 23, 2023', status: 'Paid', invoice: 'INV-2023-092' },
-]
+interface PaymentRecord {
+  id: string
+  user_id: string
+  razorpay_payment_id: string | null
+  amount_paid: number
+  status: string
+  created_at: string
+  profiles?: any
+}
 
 export function RecentPaymentsTable() {
+  const [payments, setPayments] = useState<PaymentRecord[]>([])
+  const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
+
+  useEffect(() => {
+    const fetchPayments = async () => {
+      const supabase = createClient()
+      const { data } = await supabase
+        .from('payments_and_subscriptions')
+        .select(`
+          id,
+          user_id,
+          razorpay_payment_id,
+          amount_paid,
+          status,
+          created_at,
+          profiles (
+            full_name,
+            email,
+            plan_id
+          )
+        `)
+        .order('created_at', { ascending: false })
+        .limit(10)
+      
+      if (data) {
+        setPayments(data as unknown as PaymentRecord[])
+      }
+      setLoading(false)
+    }
+    fetchPayments()
+  }, [])
+
+  const filteredPayments = payments.filter(p => {
+    const profile = Array.isArray(p.profiles) ? p.profiles[0] : p.profiles || {}
+    return (profile.full_name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) || 
+           (profile.email?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+           (p.razorpay_payment_id?.toLowerCase() || '').includes(searchTerm.toLowerCase())
+  })
+
+  const getPlanStyle = (plan: string | null) => {
+    if (!plan || plan === 'FREE') return 'bg-slate-100 text-slate-600'
+    if (plan.includes('PRO')) return 'bg-primary/10 text-primary'
+    return 'bg-orange-100 text-orange-600'
+  }
+
+  const getPlanName = (plan: string | null) => {
+    if (!plan) return 'Free'
+    if (plan === 'PRO_MONTHLY') return 'Pro Monthly'
+    if (plan === 'PRO_YEARLY') return 'Pro Yearly'
+    return plan
+  }
+
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return 'N/A'
+    return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+  }
+
   return (
     <div className="bg-white border border-slate-200 rounded-[18px] shadow-sm overflow-hidden mt-6">
       
@@ -24,7 +87,9 @@ export function RecentPaymentsTable() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input 
               type="text" 
-              placeholder="Search payments..." 
+              placeholder="Search payments..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)} 
               className="pl-9 h-10 w-48 bg-[#FAFAF8] border border-slate-200 rounded-xl text-[13px] focus:outline-none focus:border-primary transition-colors"
             />
           </div>
@@ -45,50 +110,66 @@ export function RecentPaymentsTable() {
               <th className="px-6 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider">Method</th>
               <th className="px-6 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider">Date</th>
               <th className="px-6 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider text-right">Invoice</th>
+              <th className="px-6 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider text-right">Invoice ID</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {PAYMENTS.map((payment, i) => (
-              <tr key={i} className="hover:bg-slate-50/50 transition-colors group">
-                <td className="px-6 py-4">
-                  <div>
-                    <div className="text-[14px] font-bold text-slate-900">{payment.user}</div>
-                    <div className="text-[12px] font-medium text-slate-500">{payment.email}</div>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-black uppercase tracking-wider
-                    ${payment.plan === 'Pro' ? 'bg-primary/10 text-primary' : 'bg-orange-100 text-orange-600'}`}
-                  >
-                    {payment.plan}
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <span className="text-[14px] font-black text-slate-900">{payment.amount}</span>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-2 text-[13px] font-bold text-slate-600">
-                    <div className="w-8 h-5 bg-slate-200 rounded flex items-center justify-center text-[8px] font-black text-slate-500">VISA</div>
-                    {payment.method}
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <span className="text-[13px] font-medium text-slate-600">{payment.date}</span>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-green-500" />
-                    <span className="text-[13px] font-bold text-slate-700">{payment.status}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <button className="inline-flex items-center gap-1 text-[13px] font-bold text-primary hover:text-orange-500 transition-colors">
-                    {payment.invoice} <ExternalLink className="w-3.5 h-3.5" />
-                  </button>
+            {loading ? (
+              <tr>
+                <td colSpan={7} className="py-12 text-center">
+                  <Loader2 className="w-6 h-6 animate-spin text-primary mx-auto mb-2" />
+                  <p className="text-[13px] text-slate-500">Loading payments...</p>
                 </td>
               </tr>
-            ))}
+            ) : filteredPayments.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="py-12 text-center">
+                  <p className="text-[13px] text-slate-500">No payments found.</p>
+                </td>
+              </tr>
+            ) : (
+              filteredPayments.map((payment) => {
+                const profile = Array.isArray(payment.profiles) ? payment.profiles[0] : payment.profiles || {}
+                return (
+                  <tr key={payment.id} className="hover:bg-slate-50/50 transition-colors group">
+                    <td className="px-6 py-4">
+                      <div>
+                        <div className="text-[14px] font-bold text-slate-900">{profile.full_name || 'Anonymous User'}</div>
+                        <div className="text-[12px] font-medium text-slate-500">{profile.email || '-'}</div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-black uppercase tracking-wider ${getPlanStyle(profile.plan_id)}`}>
+                        {getPlanName(profile.plan_id)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-[14px] font-black text-slate-900">₹{payment.amount_paid}</span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2 text-[13px] font-bold text-slate-600">
+                        <div className="w-8 h-5 bg-slate-200 rounded flex items-center justify-center text-[8px] font-black text-slate-500">PAY</div>
+                        Razorpay
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-[13px] font-medium text-slate-600">{formatDate(payment.created_at)}</span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-4 h-4 text-green-500" />
+                        <span className="text-[13px] font-bold text-slate-700">{payment.status || 'Paid'}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <button className="inline-flex items-center gap-1 text-[13px] font-bold text-primary hover:text-orange-500 transition-colors" title={payment.razorpay_payment_id || payment.id}>
+                        {(payment.razorpay_payment_id || payment.id).substring(0, 10)}... <ExternalLink className="w-3.5 h-3.5" />
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })
+            )}
           </tbody>
         </table>
       </div>

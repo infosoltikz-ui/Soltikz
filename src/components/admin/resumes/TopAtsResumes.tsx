@@ -11,64 +11,83 @@ export function TopAtsResumes() {
 
   useEffect(() => {
     async function fetchResumes() {
-      const { data } = await supabase
-        .from('resumes_v2')
-        .select(`
-          id, title, resume_type, created_at,
-          profiles ( full_name, email ),
-          ats_analyses ( overall_score ),
-          parsed_job_descriptions ( company_name )
-        `)
-        .order('created_at', { ascending: false })
-        .limit(50)
+      // 1. Fetch top ATS scores
+      const { data: atsData } = await supabase
+        .from('ats_analyses')
+        .select('resume_id, overall_score')
+        .order('overall_score', { ascending: false })
+        .limit(10)
 
-      if (!data) {
+      if (!atsData || atsData.length === 0) {
         setIsLoading(false)
         return
       }
 
-      // ats_analyses is a to-many join; sort client-side by score (1:1 in practice)
-      // to get the true top scorers rather than just the most recent resumes.
-      const withScore = data
-        .map((resume: any) => ({
-          ...resume,
-          score: resume.ats_analyses?.[0]?.overall_score ?? null,
-        }))
-        .filter((r) => r.score != null)
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 4)
+      // 2. Fetch those resumes
+      const resumeIds = atsData.map(a => a.resume_id)
+      const { data: resumes } = await supabase
+        .from('resumes_v2')
+        .select('id, title, resume_type, user_id, parsed_jd_id')
+        .in('id', resumeIds)
 
-      const resumeIds = withScore.map((r) => r.id)
-      const downloadCounts: Record<string, number> = {}
-      if (resumeIds.length > 0) {
-        const { data: events } = await supabase
-          .from('usage_events')
-          .select('resume_id')
-          .in('event_type', ['pdf_download', 'docx_download'])
-          .in('resume_id', resumeIds)
-
-        events?.forEach((e: any) => {
-          downloadCounts[e.resume_id] = (downloadCounts[e.resume_id] || 0) + 1
-        })
+      if (!resumes || resumes.length === 0) {
+        setIsLoading(false)
+        return
       }
 
-      const mapped = withScore.map((resume: any) => {
-        const profile = Array.isArray(resume.profiles) ? resume.profiles[0] : resume.profiles
-        const jd = Array.isArray(resume.parsed_job_descriptions) ? resume.parsed_job_descriptions[0] : resume.parsed_job_descriptions
+      const userIds = [...new Set(resumes.map(r => r.user_id).filter(Boolean))]
+      const jdIds = [...new Set(resumes.map(r => r.parsed_jd_id).filter(Boolean))]
+
+      // 3. Fetch profiles
+      const { data: profiles } = userIds.length > 0 ? await supabase
+        .from('profiles')
+        .select('id, full_name, email')
+        .in('id', userIds) : { data: [] }
+
+      // 4. Fetch JDs
+      const { data: jds } = jdIds.length > 0 ? await supabase
+        .from('parsed_job_descriptions')
+        .select('id, company_name')
+        .in('id', jdIds) : { data: [] }
+        
+      // 5. Fetch downloads (usage events)
+      const { data: events } = await supabase
+        .from('usage_events')
+        .select('resume_id')
+        .in('event_type', ['pdf_download', 'docx_download'])
+        .in('resume_id', resumeIds)
+
+      const downloadCounts: Record<string, number> = {}
+      events?.forEach((e: any) => {
+        downloadCounts[e.resume_id] = (downloadCounts[e.resume_id] || 0) + 1
+      })
+
+      const profileMap = new Map((profiles || []).map(p => [p.id, p]))
+      const jdMap = new Map((jds || []).map(j => [j.id, j]))
+
+      // 6. Merge
+      const mapped = resumes.map(resume => {
+        const ats = atsData.find(a => a.resume_id === resume.id)
+        const profile = profileMap.get(resume.user_id)
+        const jd = jdMap.get(resume.parsed_jd_id)
+        
         const user = profile?.full_name || profile?.email?.split('@')[0] || 'Unknown User'
 
         return {
           id: resume.id,
           name: resume.title || 'Untitled Resume',
           user,
-          score: `${resume.score}%`,
+          score: `${ats?.overall_score || 0}%`,
+          rawScore: ats?.overall_score || 0,
           company: jd?.company_name || 'General',
           template: resume.resume_type || 'Standard',
           downloads: downloadCounts[resume.id] || 0,
         }
       })
+      
+      mapped.sort((a, b) => b.rawScore - a.rawScore)
 
-      setTopResumes(mapped)
+      setTopResumes(mapped.slice(0, 4))
       setIsLoading(false)
     }
     fetchResumes()
@@ -111,13 +130,13 @@ export function TopAtsResumes() {
                 </div>
               </div>
 
-              <h4 className="text-[14px] font-black text-slate-900 mb-1 group-hover:text-primary transition-colors line-clamp-1">{resume.name}</h4>
+              <h4 className="text-[14px] font-black text-slate-900 mb-1 group-hover:text-primary transition-colors leading-snug">{resume.name}</h4>
               <p className="text-[12px] font-medium text-slate-500 mb-4 flex-1">By {resume.user}</p>
 
               <div className="space-y-2 pt-4 border-t border-slate-100">
-                <div className="flex justify-between items-center text-[12px]">
-                  <span className="text-slate-500 font-bold">Target</span>
-                  <span className="text-slate-900 font-black truncate max-w-[100px]" title={resume.company}>{resume.company}</span>
+                <div className="flex justify-between items-center text-[12px] gap-2">
+                  <span className="text-slate-500 font-bold shrink-0">Target</span>
+                  <span className="text-slate-900 font-black text-right">{resume.company}</span>
                 </div>
                 <div className="flex justify-between items-center text-[12px]">
                   <span className="text-slate-500 font-bold">Type</span>

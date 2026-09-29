@@ -1,10 +1,6 @@
 import { AnalyticsCards } from '@/components/admin/dashboard/AnalyticsCards'
-import { MainCharts } from '@/components/admin/dashboard/MainCharts'
-import { SecondaryCharts } from '@/components/admin/dashboard/SecondaryCharts'
 import { RecentUsersTable } from '@/components/admin/dashboard/RecentUsersTable'
 import { ActivityTimeline } from '@/components/admin/dashboard/ActivityTimeline'
-import { QuickActions } from '@/components/admin/dashboard/QuickActions'
-import { SystemHealth } from '@/components/admin/dashboard/SystemHealth'
 import { RecentPaymentsTable } from '@/components/admin/dashboard/RecentPaymentsTable'
 import { LoginSuccessToast } from '@/components/admin/LoginSuccessToast'
 import { Suspense } from 'react'
@@ -18,9 +14,6 @@ export default function AdminDashboardPage() {
       {/* Main Center Content */}
       <div className="flex-1 p-8 overflow-x-hidden">
         <AnalyticsCards />
-        
-        <MainCharts />
-        <SecondaryCharts />
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           <div className="xl:col-span-2">
@@ -30,10 +23,6 @@ export default function AdminDashboardPage() {
             <ActivityTimeline />
           </div>
         </div>
-
-        <QuickActions />
-        
-        <SystemHealth />
 
         <RecentPaymentsTable />
 

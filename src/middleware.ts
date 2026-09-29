@@ -28,12 +28,14 @@ export async function middleware(request: NextRequest) {
       url.pathname = isAdmin ? '/admin' : '/dashboard'
       return Response.redirect(url)
     }
-    if (isAdminAuthRoute) {
-      // Admin auth route -> admin dashboard
+    if (isAdminAuthRoute && isAdmin) {
+      // If they are an admin visiting admin login, take them to admin dashboard
       const url = request.nextUrl.clone()
-      url.pathname = isAdmin ? '/admin' : '/dashboard'
+      url.pathname = '/admin'
       return Response.redirect(url)
     }
+    // If they are NOT an admin, we actually DO want to let them see /admin/login
+    // so they have a chance to log in with their admin credentials.
   }
 
   // 2. Protect User Dashboard
@@ -45,15 +47,11 @@ export async function middleware(request: NextRequest) {
 
   // 3. Protect Admin Dashboard
   if (isAdminDashboard) {
-    if (!user) {
+    if (!user || !isAdmin) {
+      // If not logged in, or logged in as a NORMAL user -> redirect to admin login
+      // This forces them to log in with an admin account if they want access.
       const url = request.nextUrl.clone()
       url.pathname = '/admin/login'
-      return Response.redirect(url)
-    }
-    if (!isAdmin) {
-      // Logged in but not an admin -> redirect to normal dashboard
-      const url = request.nextUrl.clone()
-      url.pathname = '/dashboard'
       return Response.redirect(url)
     }
   }
