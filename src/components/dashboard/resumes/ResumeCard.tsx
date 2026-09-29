@@ -2,6 +2,7 @@ import React, { Suspense } from 'react'
 import { FileText, Building2, Target, Calendar, CheckCircle2, Eye, Edit3, Trash2, Copy, GitBranch, Loader2, Share2, Download } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/utils/cn'
+import { differenceInDays } from 'date-fns'
 import { getTemplateById } from '@/components/create-resume/templates/registry'
 
 export interface ResumeData {
@@ -13,6 +14,7 @@ export interface ResumeData {
   template: string;
   atsScore: number;
   lastUpdated: string;
+  createdAt?: string;
   status: 'Completed' | 'Draft' | string;
   versionNumber?: number;
   isPublic?: boolean;
@@ -51,6 +53,9 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
   const skillsToRender = (data.skillsList && data.skillsList.length > 0)
     ? data.skillsList.slice(0, 4)
     : ['React', 'Node.js', 'AWS', 'TypeScript']
+
+  const daysOld = data.createdAt ? differenceInDays(new Date(), new Date(data.createdAt)) : 0
+  const daysRemaining = 20 - daysOld
 
   return (
     <div className="group bg-[#FAFAF8] rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col">
@@ -202,9 +207,21 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
         </div>
 
         <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between">
-          <div className="flex items-center gap-1.5 text-[10.5px] font-bold text-slate-400 truncate">
-            <Calendar className="w-3 h-3 shrink-0" />
-            <span className="truncate">{data.lastUpdated}</span>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1.5 text-[10.5px] font-bold text-slate-400 truncate">
+              <Calendar className="w-3 h-3 shrink-0" />
+              <span className="truncate">{data.lastUpdated}</span>
+            </div>
+            {data.createdAt && daysRemaining <= 5 && daysRemaining > 0 && (
+              <span className="text-[10px] font-bold text-amber-500 mt-0.5">
+                Deletes in {daysRemaining} {daysRemaining === 1 ? 'day' : 'days'}
+              </span>
+            )}
+            {data.createdAt && daysRemaining <= 0 && (
+              <span className="text-[10px] font-bold text-red-500 mt-0.5">
+                Pending deletion
+              </span>
+            )}
           </div>
           
           <div className="flex items-center gap-2 shrink-0">

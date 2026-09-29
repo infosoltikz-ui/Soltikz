@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { FileSignature, Loader2, Sparkles, Trash2, Eye, X, Building2 } from 'lucide-react'
-import { formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNow, differenceInDays } from 'date-fns'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'react-hot-toast'
 import { Button } from '@/components/ui/Button'
@@ -26,16 +26,30 @@ interface CoverLetterRow {
   company_name?: string
 }
 
+function extractCompanyFromTitle(title?: string): string {
+  if (!title) return 'Target Employer'
+  const parts = title.split('-').map(s => s.trim())
+  if (parts.length > 1) {
+    const rawComp = parts.slice(1).join(' - ').trim()
+    if (rawComp && !rawComp.toLowerCase().includes('unknown') && rawComp !== 'Draft') {
+      return rawComp
+    }
+  }
+  return 'Target Employer'
+}
+
 export function CoverLettersPageContent() {
   const [loading, setLoading] = useState(true)
   const [coverLetters, setCoverLetters] = useState<CoverLetterRow[]>([])
   const [eligibleResumes, setEligibleResumes] = useState<EligibleResume[]>([])
   const [candidateName, setCandidateName] = useState('')
+  const [candidateContact, setCandidateContact] = useState({ email: '', phone: '', location: '', linkedin: '' })
 
   const [selectedResumeId, setSelectedResumeId] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
   const [viewing, setViewing] = useState<CoverLetterRow | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
 
   const fetchData = async () => {
     const supabase = createClient()
@@ -43,10 +57,10 @@ export function CoverLettersPageContent() {
     if (!user) return
 
     const [{ data: profile }, { data: letters }, { data: resumes }] = await Promise.all([
-      supabase.from('profiles').select('full_name').eq('id', user.id).single(),
+      supabase.from('profiles').select('full_name, master_resume_data').eq('id', user.id).single(),
       supabase
         .from('cover_letters')
-        .select('id, content, created_at, resumes_v2 ( title, parsed_job_descriptions ( company_name ) )')
+        .select('id, content, created_at, resumes_v2 ( title, parsed_job_descriptions ( company_name, job_title ) )')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false }),
       supabase
@@ -58,25 +72,44 @@ export function CoverLettersPageContent() {
     ])
 
     setCandidateName(profile?.full_name || '')
+    const contact = (profile?.master_resume_data as any)?.contact || {}
+    setCandidateContact({
+      email: contact.email || '',
+      phone: contact.phone || '',
+      location: contact.location || '',
+      linkedin: contact.linkedin || '',
+    })
 
     setCoverLetters((letters || []).map((l: any) => {
       const resume = Array.isArray(l.resumes_v2) ? l.resumes_v2[0] : l.resumes_v2
       const jd = Array.isArray(resume?.parsed_job_descriptions) ? resume.parsed_job_descriptions[0] : resume?.parsed_job_descriptions
+      
+      let compName = jd?.company_name
+      if (!compName || compName.toLowerCase().includes('unknown') || compName === 'N/A' || compName === 'Draft') {
+        compName = extractCompanyFromTitle(resume?.title)
+      }
+
       return {
         id: l.id,
         content: l.content,
         created_at: l.created_at,
         resume_title: resume?.title || 'Untitled Resume',
-        company_name: jd?.company_name,
+        company_name: compName,
       }
     }))
 
     setEligibleResumes((resumes || []).map((r: any) => {
       const jd = Array.isArray(r.parsed_job_descriptions) ? r.parsed_job_descriptions[0] : r.parsed_job_descriptions
+      
+      let compName = jd?.company_name
+      if (!compName || compName.toLowerCase().includes('unknown') || compName === 'N/A' || compName === 'Draft') {
+        compName = extractCompanyFromTitle(r.title)
+      }
+
       return {
         id: r.id,
         title: r.title,
-        company_name: jd?.company_name,
+        company_name: compName,
         job_title: jd?.job_title,
       }
     }))
@@ -113,13 +146,13 @@ export function CoverLettersPageContent() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Delete this cover letter?')) return
     setDeletingId(id)
     const supabase = createClient()
     await supabase.from('cover_letters').delete().eq('id', id)
     if (viewing?.id === id) setViewing(null)
     await fetchData()
     setDeletingId(null)
+    setDeleteConfirmId(null)
   }
 
   if (loading) {
@@ -184,8 +217,15 @@ export function CoverLettersPageContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {coverLetters.map((letter) => (
             <div key={letter.id} className="bg-[#FAFAF8] rounded-2xl border border-slate-200 p-5 flex flex-col hover:shadow-lg transition-all duration-300">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-4">
-                <FileSignature className="w-5 h-5" />
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                  <FileSignature className="w-5 h-5" />
+                </div>
+                {candidateName && (
+                  <div className="text-[11px] font-bold text-slate-500 bg-white border border-slate-200 px-2.5 py-1 rounded-full shadow-sm">
+                    {candidateName}
+                  </div>
+                )}
               </div>
               <h3 className="text-[15px] font-black text-slate-900 mb-1 line-clamp-1">{letter.resume_title}</h3>
               {letter.company_name && (
@@ -198,14 +238,35 @@ export function CoverLettersPageContent() {
                 {letter.content.variations?.[0]?.paragraphs?.[0] || 'No preview available.'}
               </p>
               <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-                <span className="text-[11px] font-bold text-slate-400">
-                  {formatDistanceToNow(new Date(letter.created_at), { addSuffix: true })}
-                </span>
+                <div className="flex flex-col">
+                  <span className="text-[11px] font-bold text-slate-400">
+                    {formatDistanceToNow(new Date(letter.created_at), { addSuffix: true })}
+                  </span>
+                  {(() => {
+                    const daysOld = differenceInDays(new Date(), new Date(letter.created_at))
+                    const daysRemaining = 20 - daysOld
+                    if (daysRemaining <= 5 && daysRemaining > 0) {
+                      return (
+                        <span className="text-[10px] font-bold text-amber-500 mt-0.5">
+                          Deletes in {daysRemaining} {daysRemaining === 1 ? 'day' : 'days'}
+                        </span>
+                      )
+                    }
+                    if (daysRemaining <= 0) {
+                      return (
+                        <span className="text-[10px] font-bold text-red-500 mt-0.5">
+                          Pending deletion
+                        </span>
+                      )
+                    }
+                    return null
+                  })()}
+                </div>
                 <div className="flex items-center gap-3">
                   <button onClick={() => setViewing(letter)} className="text-slate-400 hover:text-slate-900 transition-colors" title="View">
                     <Eye className="w-4 h-4" />
                   </button>
-                  <button onClick={() => handleDelete(letter.id)} disabled={deletingId === letter.id} className="text-slate-400 hover:text-red-500 transition-colors disabled:opacity-50" title="Delete">
+                  <button onClick={() => setDeleteConfirmId(letter.id)} disabled={deletingId === letter.id} className="text-slate-400 hover:text-red-500 transition-colors disabled:opacity-50" title="Delete">
                     {deletingId === letter.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
                   </button>
                 </div>
@@ -217,19 +278,61 @@ export function CoverLettersPageContent() {
 
       {/* Viewer Modal */}
       {viewing && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setViewing(null)} />
-          <div className="relative bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-2xl max-h-[85vh] overflow-y-auto z-10 p-6">
-            <div className="flex items-center justify-between mb-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 py-8">
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setViewing(null)} />
+          <div className="relative bg-[#FAFAF8] rounded-2xl shadow-xl border border-slate-200 w-full max-w-4xl max-h-full overflow-y-auto z-10 p-6 flex flex-col">
+            <div className="flex items-center justify-between mb-5 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
               <div>
                 <h3 className="text-[16px] font-black text-slate-900">{viewing.resume_title}</h3>
-                {viewing.company_name && <p className="text-[12px] font-medium text-slate-500">{viewing.company_name}</p>}
+                {viewing.company_name && <p className="text-[13px] font-bold text-primary mt-0.5">{viewing.company_name}</p>}
               </div>
-              <button onClick={() => setViewing(null)} className="text-slate-400 hover:text-slate-900 p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
+              <button onClick={() => setViewing(null)} className="text-slate-400 hover:text-slate-900 p-2 rounded-xl hover:bg-slate-100 transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <CoverLetterViewer content={viewing.content} candidateName={candidateName} documentTitle={`Cover_Letter_${viewing.resume_title}`} />
+            <CoverLetterViewer 
+              content={viewing.content} 
+              candidateName={candidateName} 
+              email={candidateContact.email}
+              phone={candidateContact.phone}
+              location={candidateContact.location}
+              linkedin={candidateContact.linkedin}
+              companyName={viewing.company_name}
+              documentTitle={`Cover_Letter_${viewing.resume_title}`} 
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmId && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setDeleteConfirmId(null)} />
+          <div className="relative bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-sm p-6 text-center animate-in zoom-in-95 duration-200">
+            <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Trash2 className="w-6 h-6 text-red-500" />
+            </div>
+            <h3 className="text-[17px] font-black text-slate-900 mb-2">Delete Cover Letter?</h3>
+            <p className="text-[13px] text-slate-500 font-medium mb-6">
+              This action cannot be undone. Are you sure you want to permanently delete this cover letter?
+            </p>
+            <div className="flex items-center justify-center gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setDeleteConfirmId(null)}
+                className="h-10 px-6 rounded-xl font-bold"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => handleDelete(deleteConfirmId)}
+                disabled={!!deletingId}
+                className="h-10 px-6 rounded-xl font-bold bg-red-600 hover:bg-red-700 text-white border-transparent"
+              >
+                {deletingId === deleteConfirmId ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                {deletingId === deleteConfirmId ? 'Deleting...' : 'Delete'}
+              </Button>
+            </div>
           </div>
         </div>
       )}

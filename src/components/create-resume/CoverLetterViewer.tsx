@@ -166,9 +166,9 @@ export function CoverLetterViewer({
       </div>
 
       {/* Preview Area */}
-      <div className="rounded-2xl border border-slate-200 overflow-hidden shadow-sm bg-slate-50">
-        <div className="overflow-auto" style={{ maxHeight: '680px' }}>
-          <div ref={letterRef} style={{ transformOrigin: 'top left' }}>
+      <div className="rounded-2xl border border-slate-200 overflow-hidden shadow-sm bg-slate-100/50 p-4 sm:p-8 flex justify-center">
+        <div className="overflow-x-auto w-full max-w-[794px] bg-white shadow-md border border-slate-200 rounded-sm">
+          <div ref={letterRef} style={{ transformOrigin: 'top left', width: '100%' }}>
             {activeTemplateId === 'classic' && <ClassicCoverLetterTemplate {...sharedProps} />}
             {activeTemplateId === 'modern-dark' && <ModernDarkCoverLetterTemplate {...sharedProps} />}
             {activeTemplateId === 'minimal' && <MinimalCoverLetterTemplate {...sharedProps} />}
