@@ -102,7 +102,7 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
                                   role: jobTitle,
                                   company: companyName !== 'Target Employer' ? companyName : 'Tech Innovators Inc.',
                                   location: 'Remote',
-                                  date: '2020 - Present',
+                                  duration: '2020 - Present',
                                   bullets: [
                                     'Spearheaded cross-functional teams to deliver key projects ahead of schedule, improving client satisfaction by 40%.',
                                     'Engineered core features and automated workflows, resulting in a 35% increase in operational efficiency.'
@@ -112,7 +112,7 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
                                   role: `Associate ${jobTitle}`,
                                   company: 'Global Solutions LLC',
                                   location: 'New York, NY',
-                                  date: '2017 - 2020',
+                                  duration: '2017 - 2020',
                                   bullets: [
                                     'Analyzed market trends to identify new revenue streams, directly contributing to a 15% increase in Q4 profits.',
                                     'Collaborated closely with stakeholders to refine product requirements and ensure successful deployment.'
@@ -122,9 +122,9 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
                               education: [
                                 {
                                   degree: 'Bachelor of Science',
-                                  school: 'State University',
+                                  institution: 'State University',
                                   location: 'San Francisco, CA',
-                                  date: '2013 - 2017'
+                                  year: '2013 - 2017'
                                 }
                               ],
                               certifications: []
@@ -135,7 +135,7 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
                                 <Suspense fallback={<div className="w-full h-full bg-slate-50" />}>
                                   <TemplateComponent 
                                     resumeData={mockResumeData}
-                                    profileData={{ full_name: userName, email: 'candidate@example.com', phone: '+1 234 567 8900', linkedin: 'linkedin.com/in/candidate', location: 'Remote', firstName: '', lastName: '' }}
+                                    profileData={{ full_name: userName, email: 'candidate@example.com', phone: '+1 234 567 8900', linkedin: 'linkedin.com/in/candidate', location: 'Remote' }}
                                     isPdfMode={false}
                                   />
                                 </Suspense>
