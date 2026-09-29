@@ -83,12 +83,52 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
                           const templateId = resume.template_id || (resume.resume_type?.toLowerCase().includes('c2c') ? 'c2c-modern' : 'modern');
                           const TemplateComponent = getTemplateById(templateId)?.component;
                           if (TemplateComponent) {
+                            
+                            const mockResumeData = {
+                              summary: ['Results-driven professional with a proven track record of delivering high-quality solutions and driving business growth through innovative strategies.'],
+                              skills: [
+                                { category: 'Core Competencies', items: ['Strategic Planning', 'Agile Methodology', 'Team Leadership'] },
+                                { category: 'Technical Skills', items: ['Data Analysis', 'Cloud Infrastructure', 'Process Automation'] }
+                              ],
+                              experience: [
+                                {
+                                  role: jobTitle,
+                                  company: companyName !== 'Target Employer' ? companyName : 'Tech Innovators Inc.',
+                                  location: 'Remote',
+                                  date: '2020 - Present',
+                                  bullets: [
+                                    'Spearheaded cross-functional teams to deliver key projects ahead of schedule, improving client satisfaction by 40%.',
+                                    'Engineered core features and automated workflows, resulting in a 35% increase in operational efficiency.'
+                                  ]
+                                },
+                                {
+                                  role: `Associate ${jobTitle}`,
+                                  company: 'Global Solutions LLC',
+                                  location: 'New York, NY',
+                                  date: '2017 - 2020',
+                                  bullets: [
+                                    'Analyzed market trends to identify new revenue streams, directly contributing to a 15% increase in Q4 profits.',
+                                    'Collaborated closely with stakeholders to refine product requirements and ensure successful deployment.'
+                                  ]
+                                }
+                              ],
+                              education: [
+                                {
+                                  degree: 'Bachelor of Science',
+                                  school: 'State University',
+                                  location: 'San Francisco, CA',
+                                  date: '2013 - 2017'
+                                }
+                              ],
+                              certifications: []
+                            };
+
                             return (
                               <div style={{ pointerEvents: 'none' }}>
                                 <Suspense fallback={<div className="w-full h-full bg-slate-50" />}>
                                   <TemplateComponent 
-                                    resumeData={{ summary: [], skills: [], experience: [], education: [], certifications: [] }}
-                                    profileData={{ full_name: userName, email: 'candidate@example.com', phone: '', linkedin: '', location: '', firstName: '', lastName: '' }}
+                                    resumeData={mockResumeData}
+                                    profileData={{ full_name: userName, email: 'candidate@example.com', phone: '+1 234 567 8900', linkedin: 'linkedin.com/in/candidate', location: 'Remote', firstName: '', lastName: '' }}
                                     isPdfMode={false}
                                   />
                                 </Suspense>
