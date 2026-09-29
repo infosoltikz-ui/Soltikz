@@ -82,11 +82,14 @@ export function CurrentPlanCard({
         }
       }
 
-      if (typeof count === 'number' && count > 0) {
-        setResumesCount(count)
-      } else if (profile?.resumes_generated) {
-        setResumesCount(profile.resumes_generated)
-      }
+      // Calculate the maximum possible generated count
+      const spentFreeCredits = profile?.plan_id === 'FREE' ? Math.max(0, 10 - (profile.credits_remaining ?? 10)) : 0;
+      const permanentCount = Math.max(
+        profile?.resumes_generated ?? 0,
+        (typeof count === 'number' ? count : 0),
+        spentFreeCredits
+      );
+      setResumesCount(permanentCount);
     }
     loadData()
   }, [])

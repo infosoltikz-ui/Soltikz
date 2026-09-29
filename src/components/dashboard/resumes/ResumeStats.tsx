@@ -21,6 +21,18 @@ export function ResumeStats() {
 
       try {
         let resumes: any[] = []
+        let resumesGenerated = 0;
+
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('resumes_generated')
+          .eq('id', user.id)
+          .single();
+        
+        if (profile?.resumes_generated) {
+          resumesGenerated = profile.resumes_generated;
+        }
+
         const { data, error } = await supabase
           .from('resumes_v2')
           .select('id, resume_type, ats_analyses ( overall_score )')
@@ -92,7 +104,7 @@ export function ResumeStats() {
         }
 
         setStats({
-          totalResumes: resumes.length,
+          totalResumes: Math.max(resumes.length, resumesGenerated),
           fullTimeCount,
           c2cCount,
           avgAtsScore: atsCount > 0 ? Math.round(totalAts / atsCount) : 0,
