@@ -42,9 +42,17 @@ export async function GET() {
           }
         }
 
+        // Calculate the maximum possible generated count to prevent count dropping on deletion
+        const spentFreeCredits = profile.plan_id === 'FREE' ? Math.max(0, 10 - (profile.credits_remaining ?? 10)) : 0;
+        const permanentCount = Math.max(
+          profile.resumes_generated ?? 0,
+          resumeCount ?? 0,
+          spentFreeCredits
+        );
+
         return {
           ...profile,
-          resume_count: resumeCount ?? 0,
+          resume_count: permanentCount,
           avg_ats_score: avgAts, // null means no analyses yet
         }
       })

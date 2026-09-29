@@ -247,7 +247,7 @@ export async function POST(req: Request) {
     // --- PAYWALL / QUOTA CHECK ---
     const { data: profile } = await supabase
       .from('profiles')
-      .select('plan_id, credits_remaining')
+      .select('plan_id, credits_remaining, resumes_generated')
       .eq('id', user.id)
       .single();
 
@@ -384,12 +384,22 @@ export async function POST(req: Request) {
       event_type: 'resume_generated',
     });
 
-    // ─── Deduct Quota ────────────────────────────────────────────
+    // ─── Deduct Quota & Track Generations ─────────────────────────
+    const currentGenerated = profile?.resumes_generated ?? 0;
+    
     if (profile?.plan_id === 'FREE') {
       const remaining = profile?.credits_remaining ?? 10;
       await supabase
         .from('profiles')
-        .update({ credits_remaining: Math.max(0, remaining - 1) })
+        .update({ 
+          credits_remaining: Math.max(0, remaining - 1),
+          resumes_generated: currentGenerated + 1
+        })
+        .eq('id', user.id);
+    } else {
+      await supabase
+        .from('profiles')
+        .update({ resumes_generated: currentGenerated + 1 })
         .eq('id', user.id);
     }
 
