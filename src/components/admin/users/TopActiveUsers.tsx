@@ -1,47 +1,58 @@
 'use client'
 
-import { FileText, Download, Target, Loader2 } from 'lucide-react'
+import { FileText, Zap, Target, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
+const FREE_LIMIT = 20
+
 const COLORS = [
-  'bg-orange-100 text-orange-600',
-  'bg-blue-100 text-blue-600',
-  'bg-purple-100 text-purple-600',
-  'bg-green-100 text-green-600',
+  { avatar: 'bg-orange-100 text-orange-600', bar: 'bg-orange-500' },
+  { avatar: 'bg-blue-100 text-blue-600',   bar: 'bg-blue-500'   },
+  { avatar: 'bg-purple-100 text-purple-600', bar: 'bg-purple-500' },
+  { avatar: 'bg-green-100 text-green-600',  bar: 'bg-green-500'  },
 ]
 
 export function TopActiveUsers() {
   const [topUsers, setTopUsers] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [maxResumes, setMaxResumes] = useState(1) // for relative bar scaling
 
   useEffect(() => {
-    // Reuse the users-with-resumes API (service role, bypasses RLS)
     fetch('/api/admin/users-with-resumes')
       .then(res => res.json())
       .then((data: any[]) => {
         if (Array.isArray(data)) {
-          // Sort by resume_count descending, take top 4
-          const top = [...data]
-            .sort((a, b) => (b.resume_count ?? 0) - (a.resume_count ?? 0))
-            .slice(0, 4)
-            .map((user, index) => {
-              const name = user.full_name || user.email?.split('@')[0] || 'Unknown User'
-              const initials = name.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase()
-              const planId = user.plan_id || 'FREE'
-              const plan = planId.includes('PRO') ? 'Pro' : planId === 'ENTERPRISE' ? 'Enterprise' : 'Free'
-              return {
-                name,
-                plan,
-                resumes: user.resume_count ?? 0,
-                credits: user.credits_remaining ?? 0,
-                atsScore: user.avg_ats_score !== null && user.avg_ats_score !== undefined
-                  ? `${user.avg_ats_score}%`
-                  : 'N/A',
-                color: COLORS[index % COLORS.length],
-                initials,
-              }
-            })
-          setTopUsers(top)
+          const sorted = [...data].sort((a, b) => (b.resume_count ?? 0) - (a.resume_count ?? 0))
+          const top = sorted.slice(0, 4)
+          const highest = top[0]?.resume_count ?? 1
+          setMaxResumes(Math.max(highest, 1))
+
+          setTopUsers(top.map((user, index) => {
+            const name = user.full_name || user.email?.split('@')[0] || 'Unknown User'
+            const initials = name.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase()
+            const planId = user.plan_id || 'FREE'
+            const isPro = planId.includes('PRO')
+            const plan = isPro ? 'Pro' : planId === 'ENTERPRISE' ? 'Enterprise' : 'Free'
+            const resumes = user.resume_count ?? 0
+            // For free users cap is FREE_LIMIT, for pro show relative to top user
+            const limit = isPro ? highest : FREE_LIMIT
+            const pct = Math.min(100, Math.round((resumes / Math.max(limit, 1)) * 100))
+
+            return {
+              name,
+              plan,
+              isPro,
+              resumes,
+              limit,
+              pct,
+              credits: user.credits_remaining ?? 0,
+              atsScore: (user.avg_ats_score !== null && user.avg_ats_score !== undefined)
+                ? `${user.avg_ats_score}%`
+                : 'N/A',
+              color: COLORS[index % COLORS.length],
+              initials,
+            }
+          }))
         }
         setIsLoading(false)
       })
@@ -67,34 +78,55 @@ export function TopActiveUsers() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {topUsers.map((user, i) => (
-            <div key={i} className="p-5 rounded-2xl bg-[#FAFAF8] border border-slate-100 hover:border-slate-300 transition-colors group cursor-pointer">
-              <div className="flex items-start justify-between gap-2 mb-4">
-                <div className={`w-12 h-12 shrink-0 rounded-full flex items-center justify-center text-[15px] font-black ${user.color}`}>
+            <div key={i} className="p-5 rounded-2xl bg-[#FAFAF8] border border-slate-100 hover:border-slate-300 transition-colors group cursor-pointer flex flex-col gap-4">
+
+              {/* Header: avatar + plan badge */}
+              <div className="flex items-start justify-between gap-2">
+                <div className={`w-12 h-12 shrink-0 rounded-full flex items-center justify-center text-[15px] font-black ${user.color.avatar}`}>
                   {user.initials}
                 </div>
                 <span className={`inline-flex shrink-0 items-center px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider
-                    ${user.plan === 'Pro' ? 'bg-primary/10 text-primary' : (user.plan === 'Free' ? 'bg-slate-200 text-slate-600' : 'bg-orange-100 text-orange-600')}`}
+                    ${user.plan === 'Pro' ? 'bg-primary/10 text-primary' : 'bg-slate-200 text-slate-600'}`}
                 >
                   {user.plan}
                 </span>
               </div>
-              
-              <h4 className="text-[15px] font-black text-slate-900 mb-4 group-hover:text-primary transition-colors truncate">{user.name}</h4>
-              
-              <div className="space-y-3">
-                <div className="flex items-center justify-between gap-2 text-[13px]">
-                  <span className="font-bold text-slate-500 flex items-center gap-1.5 whitespace-nowrap"><FileText className="w-3.5 h-3.5 shrink-0" /> Resumes</span>
-                  <span className="font-black text-slate-900 shrink-0">{user.resumes}</span>
+
+              {/* Name */}
+              <h4 className="text-[15px] font-black text-slate-900 group-hover:text-primary transition-colors truncate -mt-1">{user.name}</h4>
+
+              {/* Resume progress bar */}
+              <div>
+                <div className="flex items-center justify-between text-[12px] mb-1.5">
+                  <span className="font-bold text-slate-500 flex items-center gap-1"><FileText className="w-3.5 h-3.5" /> Resumes</span>
+                  <span className="font-black text-slate-900">
+                    {user.resumes}
+                    <span className="font-semibold text-slate-400">
+                      {user.isPro ? ' (Pro)' : ` / ${user.limit}`}
+                    </span>
+                  </span>
                 </div>
-                <div className="flex items-center justify-between gap-2 text-[13px]">
-                  <span className="font-bold text-slate-500 flex items-center gap-1.5 whitespace-nowrap"><Download className="w-3.5 h-3.5 shrink-0" /> Credits Left</span>
-                  <span className="font-black text-slate-900 shrink-0">{user.credits}</span>
+                <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-700 ${user.color.bar}`}
+                    style={{ width: `${user.pct}%` }}
+                  />
                 </div>
-                <div className="flex items-center justify-between gap-2 text-[13px]">
-                  <span className="font-bold text-slate-500 flex items-center gap-1.5 whitespace-nowrap"><Target className="w-3.5 h-3.5 shrink-0" /> ATS Score</span>
-                  <span className={`font-black shrink-0 ${user.atsScore === 'N/A' ? 'text-slate-400' : 'text-primary'}`}>{user.atsScore}</span>
+                <p className="text-[10px] font-semibold text-slate-400 mt-1 text-right">{user.pct}% used</p>
+              </div>
+
+              {/* Stats row */}
+              <div className="space-y-2 pt-1 border-t border-slate-100">
+                <div className="flex items-center justify-between text-[12px]">
+                  <span className="font-bold text-slate-500 flex items-center gap-1.5"><Zap className="w-3.5 h-3.5 shrink-0" /> Credits Left</span>
+                  <span className="font-black text-slate-900">{user.credits}</span>
+                </div>
+                <div className="flex items-center justify-between text-[12px]">
+                  <span className="font-bold text-slate-500 flex items-center gap-1.5"><Target className="w-3.5 h-3.5 shrink-0" /> Avg ATS</span>
+                  <span className={`font-black ${user.atsScore === 'N/A' ? 'text-slate-400' : 'text-primary'}`}>{user.atsScore}</span>
                 </div>
               </div>
+
             </div>
           ))}
         </div>

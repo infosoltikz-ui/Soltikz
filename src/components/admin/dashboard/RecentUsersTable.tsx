@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
-import { Search, Filter, Download, MoreHorizontal, CheckCircle2, Ban, Loader2, ChevronUp, ChevronDown, Edit, Trash2, Eye, Mail, UserX } from 'lucide-react'
+import { Search, Filter, Download, MoreHorizontal, CheckCircle2, Ban, Loader2, ChevronUp, ChevronDown, Edit, Trash2, Eye, Mail, UserX, FileText } from 'lucide-react'
 import { createClient } from '@/utils/supabase/client'
 import toast from 'react-hot-toast'
 
@@ -12,6 +12,7 @@ interface UserProfile {
   plan_id: string | null
   created_at: string | null
   payments_and_subscriptions?: { created_at: string, valid_until: string | null }[]
+  resume_count?: number
 }
 
 type SortColumn = 'name' | 'plan' | 'date'
@@ -35,18 +36,21 @@ export function RecentUsersTable() {
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set())
   const [openActionId, setOpenActionId] = useState<string | null>(null)
+  
+  // Calculate highest resumes for PRO users bar scaling
+  const [highestResumes, setHighestResumes] = useState(1)
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const supabase = createClient()
-      const { data } = await supabase
-        .from('profiles')
-        .select('*, payments_and_subscriptions(created_at, valid_until)')
-        .order('created_at', { ascending: false })
-        .limit(50) // Increased limit for better demonstration
-
-      if (data) {
-        setUsers(data as UserProfile[])
+      try {
+        const res = await fetch('/api/admin/users-with-resumes')
+        const data = await res.json()
+        if (Array.isArray(data)) {
+          setUsers(data)
+          setHighestResumes(Math.max(...data.map(u => u.resume_count ?? 0), 1))
+        }
+      } catch (err) {
+        console.error(err)
       }
       setLoading(false)
     }
@@ -243,6 +247,7 @@ export function RecentUsersTable() {
                 <div className="flex items-center">Plan <SortIcon column="plan" /></div>
               </th>
               <th className="px-6 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Plan Duration</th>
+              <th className="px-6 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider">Stats</th>
               <th 
                 className="px-6 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider cursor-pointer group hover:text-slate-700 transition-colors select-none whitespace-nowrap"
                 onClick={() => handleSort('date')}
@@ -256,14 +261,14 @@ export function RecentUsersTable() {
           <tbody className="divide-y divide-slate-100">
             {loading ? (
               <tr>
-                <td colSpan={7} className="py-12 text-center">
+                <td colSpan={8} className="py-12 text-center">
                   <Loader2 className="w-6 h-6 animate-spin text-primary mx-auto mb-2" />
                   <p className="text-[13px] text-slate-500">Loading users...</p>
                 </td>
               </tr>
             ) : processedUsers.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-12 text-center">
+                <td colSpan={8} className="py-12 text-center">
                   <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-slate-50 mb-3">
                     <UserX className="w-6 h-6 text-slate-400" />
                   </div>
@@ -318,6 +323,36 @@ export function RecentUsersTable() {
                           }>{getPlanDates(user).expiry}</span>
                         </span>
                       </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      {(() => {
+                        const isPro = user.plan_id && (user.plan_id.includes('PRO') || user.plan_id === 'PREMIUM' || user.plan_id === 'ENTERPRISE')
+                        const FREE_LIMIT = 20
+                        const limit = isPro ? highestResumes : FREE_LIMIT
+                        const resumes = user.resume_count ?? 0
+                        const pct = Math.min(100, Math.round((resumes / Math.max(limit, 1)) * 100))
+                        const barColor = !isPro ? 'bg-orange-500' : 'bg-primary'
+                        
+                        return (
+                          <div className="w-32">
+                            <div className="flex items-center justify-between text-[12px] mb-1">
+                              <span className="font-bold text-slate-900 flex items-center gap-1">
+                                <FileText className="w-3 h-3 text-slate-400" /> {resumes}
+                                <span className="font-semibold text-slate-400 text-[10px]">
+                                  {isPro ? '(Pro)' : `/${limit}`}
+                                </span>
+                              </span>
+                              <span className="text-[10px] font-bold text-slate-400">{pct}%</span>
+                            </div>
+                            <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                              <div
+                                className={`h-full rounded-full transition-all duration-700 ${barColor}`}
+                                style={{ width: `${pct}%` }}
+                              />
+                            </div>
+                          </div>
+                        )
+                      })()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="text-[13px] font-medium text-slate-600">{formatDate(user.created_at)}</span>

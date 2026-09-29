@@ -27,6 +27,9 @@ export function UserTable({ onRowClick }: UserTableProps) {
     return <div className="mt-6 p-8 text-center text-slate-500 font-bold bg-white border border-slate-200 rounded-[18px]">Loading users...</div>
   }
 
+  const highestResumes = Math.max(...users.map(u => u.resume_count ?? 0), 1)
+  const FREE_LIMIT = 20
+
   return (
     <div className="bg-white border border-slate-200 rounded-[18px] shadow-sm mt-6 overflow-hidden flex flex-col">
       <div className="overflow-x-auto">
@@ -75,10 +78,34 @@ export function UserTable({ onRowClick }: UserTableProps) {
                     </span>
                   </td>
                   <td className="px-5 py-3">
-                    <div className="text-[13px] font-bold text-slate-900 mb-0.5 flex items-center gap-1">
-                      <FileText className="w-3.5 h-3.5 text-slate-400" /> {user.resume_count ?? 0} Resumes
-                    </div>
-                    <div className="text-[11px] font-bold text-slate-400">Credits: {user.credits_remaining || 0}</div>
+                    {(() => {
+                      const isPro = plan.includes('PRO') || plan === 'PREMIUM' || plan === 'ENTERPRISE'
+                      const limit = isPro ? highestResumes : FREE_LIMIT
+                      const resumes = user.resume_count ?? 0
+                      const pct = Math.min(100, Math.round((resumes / Math.max(limit, 1)) * 100))
+                      const barColor = plan === 'FREE' ? 'bg-orange-500' : 'bg-primary'
+                      
+                      return (
+                        <div className="w-40">
+                          <div className="flex items-center justify-between text-[12px] mb-1">
+                            <span className="font-bold text-slate-900 flex items-center gap-1">
+                              <FileText className="w-3 h-3 text-slate-400" /> {resumes}
+                              <span className="font-semibold text-slate-400">
+                                {isPro ? ' (Pro)' : ` / ${limit}`}
+                              </span>
+                            </span>
+                            <span className="text-[10px] font-bold text-slate-400">{pct}%</span>
+                          </div>
+                          <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden mb-1">
+                            <div
+                              className={`h-full rounded-full transition-all duration-700 ${barColor}`}
+                              style={{ width: `${pct}%` }}
+                            />
+                          </div>
+                          <div className="text-[11px] font-bold text-slate-400">Credits: {user.credits_remaining || 0}</div>
+                        </div>
+                      )
+                    })()}
                   </td>
                   <td className="px-5 py-3">
                     <div className="text-[12px] font-medium text-slate-900 mb-0.5">Join: {format(new Date(user.created_at), 'MMM dd, yyyy')}</div>

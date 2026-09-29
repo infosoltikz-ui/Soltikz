@@ -12,7 +12,7 @@ export async function GET() {
     // 1. Fetch all profiles
     const { data: profiles, error: profileError } = await supabase
       .from('profiles')
-      .select('*')
+      .select('*, payments_and_subscriptions(created_at, valid_until)')
       .order('created_at', { ascending: false })
 
     if (profileError) throw profileError
