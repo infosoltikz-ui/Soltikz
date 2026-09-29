@@ -14,6 +14,8 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [resumes, setResumes] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const rowsPerPage = 10
 
   useEffect(() => {
     async function fetchResumes() {
@@ -38,6 +40,11 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
     return <div className="mt-6 p-8 text-center text-slate-500 font-bold bg-white border border-slate-200 rounded-[18px]">Loading resumes...</div>
   }
 
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentResumes = resumes.slice(indexOfFirstRow, indexOfLastRow);
+  const totalPages = Math.ceil(resumes.length / rowsPerPage);
+
   return (
     <div className="bg-white border border-slate-200 rounded-[18px] shadow-sm mt-6 overflow-hidden flex flex-col">
       <div className="overflow-x-auto">
@@ -55,7 +62,7 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {resumes.map((resume) => {
+            {currentResumes.map((resume) => {
               const userName = resume.profiles?.full_name || 'Unknown User'
               const status = resume.status?.toLowerCase() || 'draft'
               
@@ -206,10 +213,32 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
       </div>
 
       {/* Pagination Footer */}
-      <div className="p-4 border-t border-slate-100 flex items-center justify-between bg-[#FAFAF8]">
+      <div className="p-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between bg-[#FAFAF8] gap-4">
         <div className="flex items-center gap-4 text-[13px] font-bold text-slate-600">
-          <span>Total resumes: {resumes.length}</span>
+          <span>Showing {resumes.length > 0 ? indexOfFirstRow + 1 : 0} to {Math.min(indexOfLastRow, resumes.length)} of {resumes.length} resumes</span>
         </div>
+        
+        {totalPages > 1 && (
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 text-[13px] font-bold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              Previous
+            </button>
+            <div className="px-4 py-2 text-[13px] font-bold text-primary bg-primary/5 rounded-xl border border-primary/10">
+              Page {currentPage} of {totalPages}
+            </div>
+            <button 
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 text-[13px] font-bold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
