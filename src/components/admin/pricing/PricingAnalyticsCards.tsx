@@ -61,39 +61,36 @@ export function PricingAnalyticsCards() {
     { title: 'Conversion Rate', value: `${stats.conversionRate}%`, isCircular: true, icon: Target, color: 'text-primary', bg: 'bg-primary/10' },
   ]
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 mb-6">
       {CARDS.map((card, i) => {
         const Icon = card.icon
         return (
-          <div key={i} className="bg-white border border-slate-200 rounded-[18px] p-5 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group flex flex-col">
+          <div key={i} className="bg-white border border-slate-200 rounded-2xl px-4 py-3.5 shadow-sm hover:shadow-md transition-all flex flex-col gap-2.5">
             
-            <div className="flex justify-between items-start mb-4">
-              <div className={`w-10 h-10 rounded-xl border border-slate-100 flex items-center justify-center ${card.bg}`}>
-                <Icon className={`w-5 h-5 ${card.color}`} strokeWidth={2} />
+            <div className="flex justify-between items-center">
+              <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${card.bg}`}>
+                <Icon className={`w-4 h-4 ${card.color}`} strokeWidth={2.2} />
               </div>
               
               {card.growth && (
-                <div className="px-2 py-0.5 bg-green-50 text-primary text-[11px] font-black rounded-lg border border-green-100">
+                <div className="px-1.5 py-0.5 bg-green-50 text-green-700 text-[10px] font-black rounded-md border border-green-100">
                   {card.growth}
                 </div>
               )}
             </div>
 
-            <div className="flex flex-col mt-auto">
+            <div>
+              <p className="text-[11px] font-bold text-slate-500 mb-0.5">{card.title}</p>
               <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <p className="text-[12px] font-bold text-slate-500 mb-1 min-h-[36px] flex items-end">{card.title}</p>
-                  <h3 className="text-[22px] font-black text-slate-900 tracking-tight">{card.value}</h3>
-                </div>
+                <h3 className="text-[18px] font-black text-slate-900 tracking-tight">{card.value}</h3>
 
                 {/* Circular Progress */}
                 {card.isCircular && (
-                  <div className="w-10 h-10 relative flex items-center justify-center shrink-0 mb-1">
+                  <div className="w-6 h-6 relative flex items-center justify-center shrink-0">
                     <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
                       <circle cx="18" cy="18" r="16" fill="none" className="stroke-slate-100" strokeWidth="4" />
-                      <circle cx="18" cy="18" r="16" fill="none" className="stroke-primary" strokeWidth="4" strokeDasharray="100" strokeDashoffset="72" />
+                      <circle cx="18" cy="18" r="16" fill="none" className="stroke-primary" strokeWidth="4" strokeDasharray="100" strokeDashoffset={`${100 - stats.conversionRate}`} />
                     </svg>
-                    <span className="absolute text-[10px] font-black text-slate-700">28</span>
                   </div>
                 )}
               </div>
