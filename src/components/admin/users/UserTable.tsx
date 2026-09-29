@@ -1,8 +1,7 @@
 'use client'
 
-import { MoreHorizontal, FileText, CheckCircle2, Ban, Mail } from 'lucide-react'
+import { MoreHorizontal, FileText } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import { createClient } from '@/utils/supabase/client'
 import { format } from 'date-fns'
 
 interface UserTableProps {
@@ -15,13 +14,10 @@ export function UserTable({ onRowClick }: UserTableProps) {
 
   useEffect(() => {
     async function fetchUsers() {
-      const supabase = createClient()
-      const { data } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false })
-      
-      if (data) setUsers(data)
+      // Use server-side API (service role) to bypass RLS and get real resume counts
+      const res = await fetch('/api/admin/users-with-resumes')
+      const data = await res.json()
+      if (Array.isArray(data)) setUsers(data)
       setIsLoading(false)
     }
     fetchUsers()
@@ -80,7 +76,7 @@ export function UserTable({ onRowClick }: UserTableProps) {
                   </td>
                   <td className="px-5 py-3">
                     <div className="text-[13px] font-bold text-slate-900 mb-0.5 flex items-center gap-1">
-                      <FileText className="w-3.5 h-3.5 text-slate-400" /> {user.resumes_generated || 0} Resumes
+                      <FileText className="w-3.5 h-3.5 text-slate-400" /> {user.resume_count ?? 0} Resumes
                     </div>
                     <div className="text-[11px] font-bold text-slate-400">Credits: {user.credits_remaining || 0}</div>
                   </td>

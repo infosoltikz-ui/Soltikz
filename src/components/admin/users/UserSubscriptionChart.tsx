@@ -1,51 +1,33 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createClient } from '@/utils/supabase/client'
 import { Loader2 } from 'lucide-react'
 
 export function UserSubscriptionChart() {
-  const supabase = createClient()
-  const [data, setData] = useState({
-    free: 0,
-    pro: 0,
-    enterprise: 0,
-    total: 0
-  })
+  const [data, setData] = useState({ free: 0, pro: 0, enterprise: 0, total: 1 })
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    async function fetchData() {
-      const { data: profiles } = await supabase.from('profiles').select('plan_id')
-      if (profiles) {
-        let free = 0
-        let pro = 0
-        let enterprise = 0
-        
-        profiles.forEach(p => {
-          if (p.plan_id === 'PREMIUM') pro++
-          else if (p.plan_id === 'ENTERPRISE') enterprise++
-          else free++
-        })
-        
+    // Use the service role API which bypasses RLS
+    fetch('/api/admin/user-stats')
+      .then(res => res.json())
+      .then(stats => {
+        const total = stats.total || 1
         setData({
-          free,
-          pro,
-          enterprise,
-          total: profiles.length || 1
+          free: stats.free ?? 0,
+          pro: stats.premium ?? 0,        // premium = PRO_MONTHLY + PRO_YEARLY
+          enterprise: 0,                  // no enterprise plan currently
+          total,
         })
-      }
-      setIsLoading(false)
-    }
-    fetchData()
+        setIsLoading(false)
+      })
+      .catch(() => setIsLoading(false))
   }, [])
 
   const proPercentage = Math.round((data.pro / data.total) * 100)
   const enterprisePercentage = Math.round((data.enterprise / data.total) * 100)
   
-  // Circumference for r=40 is 2 * pi * 40 ≈ 251.2
-  const C = 251.2
-  // Offsets
+  const C = 251.2 // circumference for r=40
   const proOffset = C - (C * (data.pro / data.total))
   const entOffset = C - (C * (data.enterprise / data.total))
 
@@ -65,10 +47,10 @@ export function UserSubscriptionChart() {
               {/* Free (Background/Full Ring) */}
               <circle cx="50" cy="50" r="40" fill="none" stroke="#F1F5F9" strokeWidth="20" />
               
-              {/* Enterprise (Draws on top of free) */}
+              {/* Enterprise */}
               <circle cx="50" cy="50" r="40" fill="none" stroke="#EA580C" strokeWidth="20" strokeDasharray={C} strokeDashoffset={entOffset} />
               
-              {/* Pro (Draws on top of everything) */}
+              {/* Pro */}
               <circle cx="50" cy="50" r="40" fill="none" stroke="#16A34A" strokeWidth="20" strokeDasharray={C} strokeDashoffset={proOffset} />
             </svg>
             <div className="absolute text-center flex flex-col items-center justify-center">
@@ -79,11 +61,11 @@ export function UserSubscriptionChart() {
 
           <div className="mt-8 flex justify-center gap-6">
             <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-primary"></span>
+              <span className="w-3 h-3 rounded-full bg-green-600"></span>
               <span className="text-[12px] font-bold text-slate-700">Pro ({data.pro})</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-slate-100"></span>
+              <span className="w-3 h-3 rounded-full bg-slate-200"></span>
               <span className="text-[12px] font-bold text-slate-700">Free ({data.free})</span>
             </div>
             <div className="flex items-center gap-2">

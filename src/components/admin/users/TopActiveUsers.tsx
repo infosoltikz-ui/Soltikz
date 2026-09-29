@@ -2,50 +2,50 @@
 
 import { FileText, Download, Target, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { createClient } from '@/utils/supabase/client'
+
+const COLORS = [
+  'bg-orange-100 text-orange-600',
+  'bg-blue-100 text-blue-600',
+  'bg-purple-100 text-purple-600',
+  'bg-green-100 text-green-600',
+]
 
 export function TopActiveUsers() {
-  const supabase = createClient()
   const [topUsers, setTopUsers] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    async function fetchTopUsers() {
-      // Order by resumes_generated to find "most active"
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('resumes_generated', { ascending: false, nullsFirst: false })
-        .limit(4)
-
-      if (data) {
-        // Map to display structure
-        const mappedUsers = data.map((user: any, index: number) => {
-          const colors = [
-            'bg-orange-100 text-orange-600',
-            'bg-blue-100 text-blue-600',
-            'bg-purple-100 text-purple-600',
-            'bg-green-100 text-green-600'
-          ]
-          const name = user.full_name || user.email?.split('@')[0] || 'Unknown User'
-          const initials = name.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase()
-          
-          return {
-            name,
-            plan: user.plan_id === 'PREMIUM' ? 'Pro' : (user.plan_id === 'ENTERPRISE' ? 'Enterprise' : 'Free'),
-            resumes: user.resumes_generated || 0,
-            downloads: Math.round((user.resumes_generated || 0) * 1.5), // Estimate since we don't track downloads
-            score: 'N/A', // We can't easily join avg score here without a complex RPC
-            color: colors[index % colors.length],
-            initials
-          }
-        })
-        setTopUsers(mappedUsers)
-      }
-      setIsLoading(false)
-    }
-    
-    fetchTopUsers()
+    // Reuse the users-with-resumes API (service role, bypasses RLS)
+    fetch('/api/admin/users-with-resumes')
+      .then(res => res.json())
+      .then((data: any[]) => {
+        if (Array.isArray(data)) {
+          // Sort by resume_count descending, take top 4
+          const top = [...data]
+            .sort((a, b) => (b.resume_count ?? 0) - (a.resume_count ?? 0))
+            .slice(0, 4)
+            .map((user, index) => {
+              const name = user.full_name || user.email?.split('@')[0] || 'Unknown User'
+              const initials = name.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase()
+              const planId = user.plan_id || 'FREE'
+              const plan = planId.includes('PRO') ? 'Pro' : planId === 'ENTERPRISE' ? 'Enterprise' : 'Free'
+              return {
+                name,
+                plan,
+                resumes: user.resume_count ?? 0,
+                credits: user.credits_remaining ?? 0,
+                atsScore: user.avg_ats_score !== null && user.avg_ats_score !== undefined
+                  ? `${user.avg_ats_score}%`
+                  : 'N/A',
+                color: COLORS[index % COLORS.length],
+                initials,
+              }
+            })
+          setTopUsers(top)
+        }
+        setIsLoading(false)
+      })
+      .catch(() => setIsLoading(false))
   }, [])
 
   return (
@@ -63,9 +63,7 @@ export function TopActiveUsers() {
           <Loader2 className="w-8 h-8 animate-spin text-primary/50" />
         </div>
       ) : topUsers.length === 0 ? (
-        <div className="flex justify-center items-center h-32 text-slate-500 font-medium text-sm">
-          No users found.
-        </div>
+        <div className="flex justify-center items-center h-32 text-slate-500 font-medium text-sm">No users found.</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {topUsers.map((user, i) => (
@@ -76,8 +74,8 @@ export function TopActiveUsers() {
                 </div>
                 <span className={`inline-flex shrink-0 items-center px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider
                     ${user.plan === 'Pro' ? 'bg-primary/10 text-primary' : (user.plan === 'Free' ? 'bg-slate-200 text-slate-600' : 'bg-orange-100 text-orange-600')}`}
-                  >
-                    {user.plan}
+                >
+                  {user.plan}
                 </span>
               </div>
               
@@ -89,12 +87,12 @@ export function TopActiveUsers() {
                   <span className="font-black text-slate-900 shrink-0">{user.resumes}</span>
                 </div>
                 <div className="flex items-center justify-between gap-2 text-[13px]">
-                  <span className="font-bold text-slate-500 flex items-center gap-1.5 whitespace-nowrap"><Download className="w-3.5 h-3.5 shrink-0" /> Downloads</span>
-                  <span className="font-black text-slate-900 shrink-0">{user.downloads}</span>
+                  <span className="font-bold text-slate-500 flex items-center gap-1.5 whitespace-nowrap"><Download className="w-3.5 h-3.5 shrink-0" /> Credits Left</span>
+                  <span className="font-black text-slate-900 shrink-0">{user.credits}</span>
                 </div>
                 <div className="flex items-center justify-between gap-2 text-[13px]">
                   <span className="font-bold text-slate-500 flex items-center gap-1.5 whitespace-nowrap"><Target className="w-3.5 h-3.5 shrink-0" /> ATS Score</span>
-                  <span className="font-black text-primary shrink-0">{user.score}</span>
+                  <span className={`font-black shrink-0 ${user.atsScore === 'N/A' ? 'text-slate-400' : 'text-primary'}`}>{user.atsScore}</span>
                 </div>
               </div>
             </div>
