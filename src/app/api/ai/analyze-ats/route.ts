@@ -29,6 +29,7 @@ export async function POST(req: Request) {
       resume_id: resumeId,
       overall_score: matchResult.overallScore,
       category_scores: {
+        ...matchResult, // Inject full new deterministic data for reloading
         keywordMatch: matchResult.breakdown.requiredSkills,
         formatting: matchResult.breakdown.formatting,
         readability: matchResult.jobMatch.score, // mapped for legacy

@@ -123,12 +123,15 @@ export function ATSScoreMeter({
   const [showAllKeywords, setShowAllKeywords] = useState(false)
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const [displayScore, setDisplayScore] = useState(0)
+  const [activeTab, setActiveTab] = useState<'metrics' | 'missing' | 'evidence'>('metrics')
 
   // Map new data structure or fallback
   const targetScore = atsData?.overallScore ?? atsData?.overall_score ?? 0;
   
-  const atsCompatibility = atsData?.atsCompatibility?.score ?? 0;
-  const jobMatchScore = atsData?.jobMatch?.score ?? 0;
+  const categoryScores = (atsData as any)?.categoryScores || (atsData as any)?.category_scores || {};
+
+  const atsCompatibility = atsData?.atsCompatibility?.score ?? categoryScores?.keywordMatch ?? categoryScores?.atsCompatibility ?? 0;
+  const jobMatchScore = atsData?.jobMatch?.score ?? categoryScores?.jobMatch ?? categoryScores?.experienceRelevance ?? 0;
   
   const missingKw = [
     ...(atsData?.missingRequiredRequirements || []),
@@ -139,12 +142,12 @@ export function ATSScoreMeter({
   const evidence = atsData?.evidence || atsData?.improvement_suggestions || [];
 
   const breakdown = atsData?.breakdown || {
-    requiredSkills: 0,
-    preferredSkills: 0,
-    semanticSkills: 0,
-    experience: 0,
-    title: 0,
-    formatting: 0,
+    requiredSkills: categoryScores?.requiredSkills ?? categoryScores?.skillsCoverage ?? 0,
+    preferredSkills: categoryScores?.preferredSkills ?? 0,
+    semanticSkills: categoryScores?.semanticSkills ?? 0,
+    experience: categoryScores?.experience ?? categoryScores?.experienceRelevance ?? 0,
+    title: categoryScores?.title ?? 0,
+    formatting: categoryScores?.formatting ?? 0,
   };
 
   useEffect(() => {
@@ -279,115 +282,158 @@ export function ATSScoreMeter({
         </div>
       </div>
 
-      <div className="p-5 sm:p-6 space-y-5 bg-slate-50/50 dark:bg-slate-900/40">
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <h4 className="text-[13px] font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <Layers className="w-4 h-4 text-emerald-600" />
-              <span>Diagnostic Metric Breakdown</span>
-            </h4>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {Object.entries(breakdown).map(([key, val]) => {
-              const displayLabel = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-              return (
-                <div key={key} className="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
-                  <div className="flex items-center justify-between text-[12px] font-bold text-slate-800 dark:text-slate-200 mb-1.5 gap-2">
-                    <span className="truncate" title={displayLabel}>{displayLabel}</span>
-                    <span className="font-extrabold text-emerald-600 dark:text-emerald-400 shrink-0">
-                      {val}%
-                    </span>
-                  </div>
-                  <div className="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-1000 ease-out"
-                      style={{ width: `${Math.min(100, val)}%` }}
-                    />
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+      <div className="p-4 sm:p-5 bg-slate-50/50 dark:bg-slate-900/40">
+        
+        {/* Navigation Tabs */}
+        <div className="flex bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl shadow-inner mb-4">
+          <button 
+            onClick={() => setActiveTab('metrics')}
+            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'metrics' ? "bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+          >
+            Diagnostic Metrics
+          </button>
+          <button 
+            onClick={() => setActiveTab('missing')}
+            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'missing' ? "bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+          >
+            Missing Requirements ({missingKw.length})
+          </button>
+          <button 
+            onClick={() => setActiveTab('evidence')}
+            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'evidence' ? "bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+          >
+            Scoring Evidence Log
+          </button>
         </div>
 
-        {missingKw.length > 0 && (
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700/80 p-4 shadow-2xs space-y-2.5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Target className="w-4 h-4 text-rose-500" />
-                <h4 className="text-[13px] font-extrabold text-slate-900 dark:text-slate-100">
-                  Missing Requirements
-                </h4>
-              </div>
+        {activeTab === 'metrics' && (
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="text-[13px] font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <Layers className="w-4 h-4 text-emerald-600" />
+                <span>Diagnostic Breakdown</span>
+              </h4>
             </div>
 
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {(showAllKeywords ? missingKw : missingKw.slice(0, 10)).map((kw, i) => (
-                <button
-                  key={i}
-                  onClick={() => handleCopy(kw, `kw-${i}`)}
-                  className="inline-flex items-center gap-1.5 text-[11.5px] font-bold px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-950/50 text-rose-900 dark:text-rose-200 border border-rose-200/80 dark:border-rose-800 hover:bg-rose-100 transition-all cursor-pointer"
-                  title="Click to copy keyword"
-                >
-                  <span>{kw}</span>
-                  {copiedKey === `kw-${i}` ? (
-                    <Check className="w-3 h-3 text-rose-600 shrink-0" />
-                  ) : (
-                    <Copy className="w-3 h-3 text-rose-600/60 shrink-0" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {Object.entries(breakdown).map(([key, val]) => {
+                const displayLabel = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+                return (
+                  <div key={key} className="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
+                    <div className="flex items-center justify-between text-[12px] font-bold text-slate-800 dark:text-slate-200 mb-1.5 gap-2">
+                      <span className="truncate" title={displayLabel}>{displayLabel}</span>
+                      <span className="font-extrabold text-emerald-600 dark:text-emerald-400 shrink-0">
+                        {val}%
+                      </span>
+                    </div>
+                    <div className="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-1000 ease-out"
+                        style={{ width: `${Math.min(100, val)}%` }}
+                      />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'missing' && (
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 space-y-4">
+            {missingKw.length > 0 ? (
+              <>
+                <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700/80 p-4 shadow-2xs space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Target className="w-4 h-4 text-rose-500" />
+                      <h4 className="text-[13px] font-extrabold text-slate-900 dark:text-slate-100">
+                        Missing Requirements
+                      </h4>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {(showAllKeywords ? missingKw : missingKw.slice(0, 10)).map((kw, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handleCopy(kw, `kw-${i}`)}
+                        className="inline-flex items-center gap-1.5 text-[11.5px] font-bold px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-950/50 text-rose-900 dark:text-rose-200 border border-rose-200/80 dark:border-rose-800 hover:bg-rose-100 transition-all cursor-pointer"
+                        title="Click to copy keyword"
+                      >
+                        <span>{kw}</span>
+                        {copiedKey === `kw-${i}` ? (
+                          <Check className="w-3 h-3 text-rose-600 shrink-0" />
+                        ) : (
+                          <Copy className="w-3 h-3 text-rose-600/60 shrink-0" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+
+                  {missingKw.length > 10 && (
+                    <button
+                      onClick={() => setShowAllKeywords(!showAllKeywords)}
+                      className="text-[11.5px] font-bold text-rose-600 hover:underline flex items-center gap-1 mt-1 cursor-pointer"
+                    >
+                      {showAllKeywords ? (
+                        <>Show Less <ChevronUp className="w-3.5 h-3.5" /></>
+                      ) : (
+                        <>Show {missingKw.length - 10} more keywords <ChevronDown className="w-3.5 h-3.5" /></>
+                      )}
+                    </button>
                   )}
-                </button>
-              ))}
-            </div>
+                </div>
 
-            {missingKw.length > 10 && (
-              <button
-                onClick={() => setShowAllKeywords(!showAllKeywords)}
-                className="text-[11.5px] font-bold text-rose-600 hover:underline flex items-center gap-1 mt-1 cursor-pointer"
-              >
-                {showAllKeywords ? (
-                  <>Show Less <ChevronUp className="w-3.5 h-3.5" /></>
-                ) : (
-                  <>Show {missingKw.length - 10} more keywords <ChevronDown className="w-3.5 h-3.5" /></>
-                )}
-              </button>
+                <div className="bg-emerald-50 dark:bg-emerald-950/20 rounded-xl border border-emerald-200/80 dark:border-emerald-800/50 p-4 shadow-2xs space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-emerald-600" />
+                    <h4 className="text-[13px] font-extrabold text-emerald-900 dark:text-emerald-100">
+                      Action Plan
+                    </h4>
+                  </div>
+                  <p className="text-[12px] text-emerald-800 dark:text-emerald-200/80 leading-relaxed font-medium">
+                    To increase your ATS score to 95%+, add these exact keywords to your profile. If you don't have experience with them, consider learning the basics of these technologies!
+                  </p>
+                </div>
+              </>
+            ) : (
+              <div className="bg-white dark:bg-slate-800 rounded-xl border border-emerald-200/80 p-6 flex flex-col items-center justify-center text-center shadow-2xs">
+                <CheckCircle2 className="w-8 h-8 text-emerald-500 mb-2" />
+                <h4 className="text-[14px] font-bold text-slate-800 dark:text-slate-200">No Missing Keywords!</h4>
+                <p className="text-[12px] text-slate-500 mt-1">Your resume includes all required and preferred skills.</p>
+              </div>
             )}
           </div>
         )}
 
-        {/* Action Plan for Missing Keywords */}
-        {missingKw.length > 0 && (
-          <div className="bg-emerald-50 dark:bg-emerald-950/20 rounded-xl border border-emerald-200/80 dark:border-emerald-800/50 p-4 shadow-2xs space-y-2">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-emerald-600" />
-              <h4 className="text-[13px] font-extrabold text-emerald-900 dark:text-emerald-100">
-                Action Plan to Boost Your Score
-              </h4>
+        {activeTab === 'evidence' && (
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 space-y-4">
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700/80 p-4 shadow-2xs space-y-2.5">
+              <div className="flex items-center gap-2 mb-2">
+                <Sparkles className="w-4 h-4 text-emerald-600" />
+                <h4 className="text-[13px] font-extrabold text-slate-900 dark:text-slate-100">
+                  Scoring Evidence Log
+                </h4>
+              </div>
+
+              {evidence.length > 0 ? (
+                <div className="space-y-3">
+                  {evidence.map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-2.5 text-[12.5px] font-medium text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700/50">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <span className="leading-relaxed">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center p-4">
+                  <p className="text-[12px] text-slate-500">No scoring evidence available.</p>
+                </div>
+              )}
             </div>
-            <p className="text-[12px] text-emerald-800 dark:text-emerald-200/80 leading-relaxed font-medium">
-              To increase your ATS score to 95%+, click <strong>Edit Target Job & Details</strong> and add these exact keywords to your profile. If you don't have experience with them, consider learning the basics of these technologies!
-            </p>
           </div>
         )}
-
-        {/* Evidence Analysis Box */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700/80 p-4 shadow-2xs space-y-2.5">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-emerald-600" />
-            <h4 className="text-[13px] font-extrabold text-slate-900 dark:text-slate-100">
-              Scoring Evidence Log
-            </h4>
-          </div>
-
-          <div className="space-y-2 pt-1">
-            {evidence.map((item, idx) => (
-              <div key={idx} className="flex items-start gap-2 text-[12px] font-medium text-slate-700 dark:text-slate-300">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span>{item}</span>
-              </div>
-            ))}
-          </div>
-        </div>
 
       </div>
     </div>

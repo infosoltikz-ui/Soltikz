@@ -77,11 +77,11 @@ const FEATURES = [
     border: 'border-cyan-200',
     title: 'ATS Score Analysis',
     step: '05',
-    desc: 'After generation, get your ATS compatibility score across 6 dimensions — keyword match, formatting, readability, grammar, skills coverage and experience relevance.',
+    desc: 'Get an instant deterministic ATS compatibility score verified against the job description with a detailed diagnostic breakdown.',
     bullets: [
-      'Overall ATS score out of 100',
-      'Category-level breakdown with improvement tips',
-      'Missing keywords highlighted with suggestions',
+      'Overall deterministic ATS score out of 100',
+      'Category-level metric breakdown (Formatting, Experience, Skills)',
+      'Actionable Missing Requirements & Evidence logs',
     ],
   },
   {

@@ -194,7 +194,7 @@ export default function CreateResumePage() {
         setCurrentResumeId(resume.id)
         const isC2C = String(resume.resume_type || '').toLowerCase().includes('c2c')
         setResumeType(isC2C ? 'c2c' : 'fulltime')
-        setSelectedTemplateId(isC2C ? 'c2c' : 'modern')
+        setSelectedTemplateId(resume.template_id || (isC2C ? 'c2c' : 'modern'))
 
         // Fetch resume sections
         const { data: sections } = await supabase
@@ -238,12 +238,18 @@ export default function CreateResumePage() {
           .maybeSingle()
 
         if (ats) {
-          setAtsData({
-            overallScore: ats.overall_score,
-            categoryScores: ats.category_scores,
-            missingKeywords: ats.missing_keywords,
-            improvementSuggestions: ats.improvement_suggestions
-          })
+          if (ats.category_scores && ats.category_scores.breakdown) {
+            // New deterministic ATS data is saved entirely inside category_scores
+            setAtsData(ats.category_scores)
+          } else {
+            // Legacy fallback
+            setAtsData({
+              overallScore: ats.overall_score,
+              categoryScores: ats.category_scores,
+              missingKeywords: ats.missing_keywords,
+              improvementSuggestions: ats.improvement_suggestions
+            })
+          }
         } else {
           let hash = 0
           for (let i = 0; i < (resume.id || '').length; i++) {
@@ -705,16 +711,12 @@ export default function CreateResumePage() {
                     >
                       {(() => {
                         const effectiveScale = Number((autoScale * resumeZoom).toFixed(2))
-                        const horizontalMargin = (794 * effectiveScale - 794) / 2
                         return (
                           <div className="flex justify-center transition-all duration-200 py-2 w-full">
                             <div
                               style={{
-                                transform: `scale(${effectiveScale})`,
-                                transformOrigin: 'top center',
+                                zoom: effectiveScale,
                                 width: '794px',
-                                marginLeft: `${horizontalMargin}px`,
-                                marginRight: `${horizontalMargin}px`,
                               }}
                             >
                               {(() => {
