@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
-import { Search, Filter, Download, MoreHorizontal, CheckCircle2, Ban, Loader2, ChevronUp, ChevronDown, Edit, Trash2, Eye, Mail, UserX, FileText } from 'lucide-react'
+import { Search, Filter, Download, MoreHorizontal, CheckCircle2, Ban, Loader2, ChevronUp, ChevronDown, Edit, Trash2, Eye, Mail, UserX, FileText, Crown } from 'lucide-react'
 import { createClient } from '@/utils/supabase/client'
 import toast from 'react-hot-toast'
 
@@ -36,6 +36,7 @@ export function RecentUsersTable() {
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set())
   const [openActionId, setOpenActionId] = useState<string | null>(null)
+  const [upgradingId, setUpgradingId] = useState<string | null>(null)
   
   // Calculate highest resumes for PRO users bar scaling
   const [highestResumes, setHighestResumes] = useState(1)
@@ -175,6 +176,38 @@ export function RecentUsersTable() {
     return sortDirection === 'asc' 
       ? <ChevronUp className="w-4 h-4 ml-1 text-primary" />
       : <ChevronDown className="w-4 h-4 ml-1 text-primary" />
+  }
+
+  const handleUpgradeToPro = async (userId: string, userName: string | null) => {
+    const confirmMessage = userName ? `Are you sure you want to upgrade ${userName} to PRO?` : 'Are you sure you want to upgrade this user to PRO?';
+    if (!window.confirm(confirmMessage)) return;
+
+    setUpgradingId(userId);
+    setOpenActionId(null);
+    try {
+      const res = await fetch('/api/admin/upgrade-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, targetPlan: 'PRO' })
+      });
+      const data = await res.json();
+      
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to upgrade user');
+      }
+      
+      toast.success(data.message || 'User upgraded successfully');
+      
+      // Update local state to reflect the upgrade
+      setUsers(prevUsers => prevUsers.map(u => 
+        u.id === userId ? { ...u, plan_id: 'PRO' } : u
+      ));
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.message || 'Something went wrong');
+    } finally {
+      setUpgradingId(null);
+    }
   }
 
   return (
@@ -398,6 +431,16 @@ export function RecentUsersTable() {
                             <Mail className="w-4 h-4" /> Send Email
                           </button>
                           <div className="h-px bg-slate-100 my-1"></div>
+                          {user.plan_id === 'FREE' && (
+                            <button 
+                              onClick={() => handleUpgradeToPro(user.id, user.full_name)}
+                              disabled={upgradingId === user.id}
+                              className="w-full px-4 py-2 text-left text-[13px] font-bold text-amber-600 hover:bg-amber-50 hover:text-amber-700 transition-colors flex items-center gap-2 disabled:opacity-50"
+                            >
+                              {upgradingId === user.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Crown className="w-4 h-4" />} 
+                              {upgradingId === user.id ? 'Upgrading...' : 'Upgrade to Pro'}
+                            </button>
+                          )}
                           <button 
                             onClick={() => { toast.error('User suspended'); setOpenActionId(null); }}
                             className="w-full px-4 py-2 text-left text-[13px] font-medium text-orange-600 hover:bg-orange-50 transition-colors flex items-center gap-2"
