@@ -1,9 +1,10 @@
 'use client'
 
 import { MoreHorizontal, FileText, CheckCircle2, Archive, Pencil, Download, Copy, Trash2, Eye } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { format } from 'date-fns'
+import { getTemplateById } from '@/components/create-resume/templates/registry'
 
 interface ResumeTableProps {
   onRowClick: (resumeId: string) => void;
@@ -45,6 +46,7 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
             <tr className="bg-[#FAFAF8] border-b border-slate-100">
               <th className="px-5 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider">Preview</th>
               <th className="px-5 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider">Resume Details</th>
+              <th className="px-5 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider">User</th>
               <th className="px-5 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider">Target</th>
               <th className="px-5 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider">ATS Score</th>
               <th className="px-5 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider">Timeline</th>
@@ -57,6 +59,17 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
               const userName = resume.profiles?.full_name || 'Unknown User'
               const status = resume.status?.toLowerCase() || 'draft'
               
+              let companyName = (resume.parsed_job_descriptions as any)?.company_name
+              if (!companyName && resume.title && resume.title.includes(' - ')) {
+                companyName = resume.title.split(' - ').slice(1).join(' - ').trim()
+              }
+              if (!companyName || companyName.toLowerCase().includes('unknown')) {
+                companyName = 'Target Employer'
+              }
+
+              let jobTitle = (resume.parsed_job_descriptions as any)?.job_title
+              if (!jobTitle) jobTitle = resume.resume_type?.toLowerCase().includes('c2c') ? 'Contractor' : 'Professional'
+
               return (
                 <tr 
                   key={resume.id} 
@@ -64,12 +77,26 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
                   onClick={() => onRowClick(resume.id)}
                 >
                   <td className="px-5 py-3">
-                    <div className="w-12 h-16 bg-white border border-slate-200 shadow-sm rounded-md overflow-hidden relative">
-                      <div className="absolute inset-0 bg-slate-50 opacity-50 p-1.5 flex flex-col gap-1">
-                        <div className="w-1/2 h-1 bg-slate-200 rounded-full"></div>
-                        <div className="w-full h-0.5 bg-slate-200 rounded-full mt-1"></div>
-                        <div className="w-3/4 h-0.5 bg-slate-200 rounded-full"></div>
-                        <div className="w-full h-0.5 bg-slate-200 rounded-full"></div>
+                    <div className="w-12 h-16 bg-white border border-slate-200 shadow-sm rounded-md overflow-hidden relative select-none">
+                      <div className="absolute inset-0 transform scale-[0.06] origin-top-left w-[1666.66%] h-[1666.66%] pointer-events-none">
+                        {(() => {
+                          const templateId = resume.template_id || (resume.resume_type?.toLowerCase().includes('c2c') ? 'c2c-modern' : 'modern');
+                          const TemplateComponent = getTemplateById(templateId)?.component;
+                          if (TemplateComponent) {
+                            return (
+                              <div style={{ pointerEvents: 'none' }}>
+                                <Suspense fallback={<div className="w-full h-full bg-slate-50" />}>
+                                  <TemplateComponent 
+                                    resumeData={{ summary: [], skills: [], experience: [], education: [], certifications: [] }}
+                                    profileData={{ full_name: userName, email: 'candidate@example.com', phone: '', linkedin: '', location: '', firstName: '', lastName: '' }}
+                                    isPdfMode={false}
+                                  />
+                                </Suspense>
+                              </div>
+                            )
+                          }
+                          return <div className="w-full h-full bg-slate-50" />;
+                        })()}
                       </div>
                     </div>
                   </td>
@@ -77,11 +104,19 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
                     <div className="text-[14px] font-bold text-slate-900 group-hover:text-primary transition-colors mb-0.5 flex items-center gap-1.5">
                       {resume.title || 'Untitled Resume'}
                     </div>
-                    <div className="text-[12px] font-medium text-slate-500">By {userName}</div>
+                    <div className="text-[12px] font-medium text-slate-500">{(resume.resume_type || 'Full-Time').toUpperCase()}</div>
                   </td>
                   <td className="px-5 py-3">
-                    <div className="text-[13px] font-bold text-slate-900 mb-0.5">{(resume.parsed_job_descriptions as any)?.company_name || '-'}</div>
-                    <div className="text-[11px] font-bold text-slate-400">{(resume.parsed_job_descriptions as any)?.job_title || '-'}</div>
+                    <div className="text-[13px] font-bold text-slate-900 flex items-center gap-1.5">
+                      <div className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px] font-black">
+                        {userName.charAt(0).toUpperCase()}
+                      </div>
+                      {userName}
+                    </div>
+                  </td>
+                  <td className="px-5 py-3">
+                    <div className="text-[13px] font-bold text-slate-900 mb-0.5">{companyName}</div>
+                    <div className="text-[11px] font-bold text-slate-400">{jobTitle}</div>
                   </td>
                   <td className="px-5 py-3">
                     <div className="text-[13px] font-black text-slate-900 flex items-center gap-1">
