@@ -37,6 +37,7 @@ export function RecentUsersTable() {
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set())
   const [openActionId, setOpenActionId] = useState<string | null>(null)
   const [upgradingId, setUpgradingId] = useState<string | null>(null)
+  const [confirmUpgradeUser, setConfirmUpgradeUser] = useState<{id: string, name: string | null} | null>(null)
   
   // Calculate highest resumes for PRO users bar scaling
   const [highestResumes, setHighestResumes] = useState(1)
@@ -178,11 +179,9 @@ export function RecentUsersTable() {
       : <ChevronDown className="w-4 h-4 ml-1 text-primary" />
   }
 
-  const handleUpgradeToPro = async (userId: string, userName: string | null) => {
-    const confirmMessage = userName ? `Are you sure you want to upgrade ${userName} to PRO?` : 'Are you sure you want to upgrade this user to PRO?';
-    if (!window.confirm(confirmMessage)) return;
-
+  const executeUpgradeToPro = async (userId: string) => {
     setUpgradingId(userId);
+    setConfirmUpgradeUser(null);
     setOpenActionId(null);
     try {
       const res = await fetch('/api/admin/upgrade-user', {
@@ -433,7 +432,7 @@ export function RecentUsersTable() {
                           <div className="h-px bg-slate-100 my-1"></div>
                           {user.plan_id === 'FREE' && (
                             <button 
-                              onClick={() => handleUpgradeToPro(user.id, user.full_name)}
+                              onClick={() => { setConfirmUpgradeUser({ id: user.id, name: user.full_name }); setOpenActionId(null); }}
                               disabled={upgradingId === user.id}
                               className="w-full px-4 py-2 text-left text-[13px] font-bold text-amber-600 hover:bg-amber-50 hover:text-amber-700 transition-colors flex items-center gap-2 disabled:opacity-50"
                             >
@@ -477,6 +476,40 @@ export function RecentUsersTable() {
             <button className="px-3 py-1.5 text-[13px] font-bold text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
               Next
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Upgrade to Pro Modal */}
+      {confirmUpgradeUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-6">
+              <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-4">
+                <Crown className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-black text-slate-900 mb-2">Upgrade to Pro</h3>
+              <p className="text-[14px] text-slate-600 mb-6">
+                Are you sure you want to upgrade <span className="font-bold text-slate-900">{confirmUpgradeUser.name || 'this user'}</span> to the PRO plan? This will grant them lifetime access to all premium features.
+              </p>
+              
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setConfirmUpgradeUser(null)}
+                  className="px-4 py-2.5 rounded-xl text-[14px] font-bold text-slate-600 hover:bg-slate-100 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => executeUpgradeToPro(confirmUpgradeUser.id)}
+                  disabled={upgradingId === confirmUpgradeUser.id}
+                  className="px-5 py-2.5 rounded-xl text-[14px] font-bold text-white bg-amber-500 hover:bg-amber-600 transition-colors flex items-center gap-2 shadow-sm shadow-amber-500/20 disabled:opacity-50"
+                >
+                  {upgradingId === confirmUpgradeUser.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Crown className="w-4 h-4" />}
+                  {upgradingId === confirmUpgradeUser.id ? 'Upgrading...' : 'Yes, Upgrade to Pro'}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
