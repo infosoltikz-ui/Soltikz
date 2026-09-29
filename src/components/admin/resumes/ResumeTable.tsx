@@ -16,13 +16,18 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
 
   useEffect(() => {
     async function fetchResumes() {
-      const supabase = createClient()
-      const { data } = await supabase
-        .from('resumes_v2')
-        .select('*, profiles(full_name), parsed_job_descriptions(company_name, job_title), ats_analyses(overall_score)')
-        .order('updated_at', { ascending: false })
-      
-      if (data) setResumes(data)
+      try {
+        const res = await fetch('/api/admin/resumes')
+        const { resumes, error } = await res.json()
+        
+        if (error) {
+          console.error('Fetch resumes error:', error);
+        } else if (resumes) {
+          setResumes(resumes)
+        }
+      } catch (err) {
+        console.error('Failed to fetch resumes', err)
+      }
       setIsLoading(false)
     }
     fetchResumes()
