@@ -21,7 +21,8 @@ export function ModernDarkCoverLetterTemplate({ content, candidateName, email, p
     <div
       style={{
         fontFamily: '"Inter", "Segoe UI", system-ui, sans-serif',
-        width: '794px',
+        width: '100%',
+        maxWidth: '794px',
         minHeight: '1123px',
         backgroundColor: '#ffffff',
         display: 'flex',

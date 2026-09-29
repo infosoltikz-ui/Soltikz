@@ -20,7 +20,8 @@ export function ClassicCoverLetterTemplate({ content, candidateName, email, phon
     <div
       style={{
         fontFamily: '"Georgia", "Times New Roman", serif',
-        width: '794px',
+        width: '100%',
+        maxWidth: '794px',
         minHeight: '1123px',
         backgroundColor: '#ffffff',
         color: '#1a1a2e',

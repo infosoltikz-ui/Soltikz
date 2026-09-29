@@ -8,7 +8,8 @@ import {
   Star,
   ShieldCheck,
   Building,
-  FileSignature
+  FileSignature,
+  ChevronRight
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { cn } from '@/utils/cn'
@@ -78,7 +79,7 @@ export function WorkspaceSection({
   interviewPrep, atsData, resumeId, candidateName, email, phone, location, linkedin, companyName, jobTitle,
   parsedJdData, generatedResume, onPrepRegenerated
 }: WorkspaceSectionProps) {
-  const [activeTab, setActiveTab] = useState<'intro' | 'tech' | 'hr' | 'star' | 'ats' | 'company' | 'cover'>('intro')
+  const [activeTab, setActiveTab] = useState<'intro' | 'tech' | 'hr' | 'star' | 'ats' | 'company' | 'cover'>('cover')
   const [isRegeneratingPrep, setIsRegeneratingPrep] = useState(false)
 
   const handleRegeneratePrep = async () => {
@@ -145,171 +146,206 @@ export function WorkspaceSection({
     "This organization values candidates who demonstrate strong ownership, transparent communication, and data-backed decision making. Be prepared to showcase concrete metrics and how your past work created tangible business value."
 
   return (
-    <div className="space-y-6">
-      {/* Interactive Tabs Header */}
-      <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-slate-200/80 shadow-md p-2">
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
-          <button
-            onClick={() => setActiveTab('cover')}
-            className={cn(
-              "flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer",
-              activeTab === 'cover'
-                ? "bg-primary text-white shadow-sm shadow-primary/30"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-            )}
-          >
-            <FileSignature className="w-4 h-4" />
-            <span>Cover Letter</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('intro')}
-            className={cn(
-              "flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer",
-              activeTab === 'intro'
-                ? "bg-primary text-white shadow-sm shadow-primary/30"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-            )}
-          >
-            <MessageSquare className="w-4 h-4" />
-            <span>Self Pitch</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('tech')}
-            className={cn(
-              "flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer",
-              activeTab === 'tech'
-                ? "bg-primary text-white shadow-sm shadow-primary/30"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-            )}
-          >
-            <Code2 className="w-4 h-4" />
-            <span>Tech Q&A</span>
-            <span className={cn(
-              "px-1.5 py-0.2 rounded-full text-[10px] font-black",
-              activeTab === 'tech' ? "bg-white/20 text-white" : "bg-slate-200 text-slate-700"
-            )}>
-              {techQuestions.length}
-            </span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('hr')}
-            className={cn(
-              "flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer",
-              activeTab === 'hr'
-                ? "bg-primary text-white shadow-sm shadow-primary/30"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-            )}
-          >
-            <Users2 className="w-4 h-4" />
-            <span>HR Q&A</span>
-            <span className={cn(
-              "px-1.5 py-0.2 rounded-full text-[10px] font-black",
-              activeTab === 'hr' ? "bg-white/20 text-white" : "bg-slate-200 text-slate-700"
-            )}>
-              {hrQuestions.length}
-            </span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('star')}
-            className={cn(
-              "flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer",
-              activeTab === 'star'
-                ? "bg-primary text-white shadow-sm shadow-primary/30"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-            )}
-          >
-            <Star className="w-4 h-4" />
-            <span>STAR Stories</span>
-            <span className={cn(
-              "px-1.5 py-0.2 rounded-full text-[10px] font-black",
-              activeTab === 'star' ? "bg-white/20 text-white" : "bg-slate-200 text-slate-700"
-            )}>
-              {starAnswers.length}
-            </span>
-          </button>
-
-          {atsData && (
+    <div className="flex flex-col lg:flex-row gap-6 w-full max-w-full items-start">
+      {/* Sidebar Navigation */}
+      <div className="w-full lg:w-72 shrink-0 relative z-10">
+        <div className="bg-slate-900 rounded-3xl p-5 shadow-2xl border border-slate-800 sticky top-24">
+          <div className="mb-5 px-1">
+            <h3 className="text-[11px] font-black text-slate-500 uppercase tracking-widest mb-1">Workspace Menu</h3>
+            <p className="text-[12px] text-slate-400 font-medium leading-tight">Tailored tools & prep materials</p>
+          </div>
+          
+          <div className="flex flex-col gap-1.5">
             <button
-              onClick={() => setActiveTab('ats')}
+              onClick={() => setActiveTab('cover')}
               className={cn(
-                "flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer",
-                activeTab === 'ats'
-                  ? "bg-primary text-white shadow-sm shadow-primary/30"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                "flex items-center justify-between px-3.5 py-3 rounded-xl text-[13px] font-bold transition-all w-full text-left cursor-pointer group",
+                activeTab === 'cover'
+                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-inner"
+                  : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
               )}
             >
-              <ShieldCheck className="w-4 h-4" />
-              <span>ATS Score</span>
-              <span className={cn(
-                "px-1.5 py-0.2 rounded-full text-[10px] font-black",
-                activeTab === 'ats' ? "bg-white/20 text-white" : "bg-emerald-100 text-emerald-700"
-              )}>
-                {atsData.overall_score || 90}%
-              </span>
+              <div className="flex items-center gap-3">
+                <FileSignature className={cn("w-4 h-4", activeTab === 'cover' ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-400")} />
+                <span>Cover Letter</span>
+              </div>
+              {activeTab === 'cover' && <ChevronRight className="w-4 h-4 opacity-70" />}
             </button>
-          )}
 
-          <button
-            onClick={() => setActiveTab('company')}
-            className={cn(
-              "flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer",
-              activeTab === 'company'
-                ? "bg-primary text-white shadow-sm shadow-primary/30"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+            <button
+              onClick={() => setActiveTab('intro')}
+              className={cn(
+                "flex items-center justify-between px-3.5 py-3 rounded-xl text-[13px] font-bold transition-all w-full text-left cursor-pointer group",
+                activeTab === 'intro'
+                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-inner"
+                  : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <MessageSquare className={cn("w-4 h-4", activeTab === 'intro' ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-400")} />
+                <span>Self Pitch</span>
+              </div>
+              {activeTab === 'intro' && <ChevronRight className="w-4 h-4 opacity-70" />}
+            </button>
+
+            <button
+              onClick={() => setActiveTab('tech')}
+              className={cn(
+                "flex items-center justify-between px-3.5 py-3 rounded-xl text-[13px] font-bold transition-all w-full text-left cursor-pointer group",
+                activeTab === 'tech'
+                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-inner"
+                  : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <Code2 className={cn("w-4 h-4", activeTab === 'tech' ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-400")} />
+                <span>Tech Q&A</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className={cn(
+                  "px-2 py-0.5 rounded-full text-[10px] font-black",
+                  activeTab === 'tech' ? "bg-emerald-500/30 text-emerald-300" : "bg-slate-800 text-slate-400"
+                )}>
+                  {techQuestions.length}
+                </span>
+                {activeTab === 'tech' && <ChevronRight className="w-4 h-4 opacity-70" />}
+              </div>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('hr')}
+              className={cn(
+                "flex items-center justify-between px-3.5 py-3 rounded-xl text-[13px] font-bold transition-all w-full text-left cursor-pointer group",
+                activeTab === 'hr'
+                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-inner"
+                  : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <Users2 className={cn("w-4 h-4", activeTab === 'hr' ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-400")} />
+                <span>HR Q&A</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className={cn(
+                  "px-2 py-0.5 rounded-full text-[10px] font-black",
+                  activeTab === 'hr' ? "bg-emerald-500/30 text-emerald-300" : "bg-slate-800 text-slate-400"
+                )}>
+                  {hrQuestions.length}
+                </span>
+                {activeTab === 'hr' && <ChevronRight className="w-4 h-4 opacity-70" />}
+              </div>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('star')}
+              className={cn(
+                "flex items-center justify-between px-3.5 py-3 rounded-xl text-[13px] font-bold transition-all w-full text-left cursor-pointer group",
+                activeTab === 'star'
+                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-inner"
+                  : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <Star className={cn("w-4 h-4", activeTab === 'star' ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-400")} />
+                <span>STAR Stories</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className={cn(
+                  "px-2 py-0.5 rounded-full text-[10px] font-black",
+                  activeTab === 'star' ? "bg-emerald-500/30 text-emerald-300" : "bg-slate-800 text-slate-400"
+                )}>
+                  {starAnswers.length}
+                </span>
+                {activeTab === 'star' && <ChevronRight className="w-4 h-4 opacity-70" />}
+              </div>
+            </button>
+
+            <div className="h-px bg-slate-800/50 my-2 mx-2" />
+
+            {atsData && (
+              <button
+                onClick={() => setActiveTab('ats')}
+                className={cn(
+                  "flex items-center justify-between px-3.5 py-3 rounded-xl text-[13px] font-bold transition-all w-full text-left cursor-pointer group",
+                  activeTab === 'ats'
+                    ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-inner"
+                    : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
+                )}
+              >
+                <div className="flex items-center gap-3">
+                  <ShieldCheck className={cn("w-4 h-4", activeTab === 'ats' ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-400")} />
+                  <span>ATS Score Report</span>
+                </div>
+                {activeTab === 'ats' && <ChevronRight className="w-4 h-4 opacity-70" />}
+              </button>
             )}
-          >
-            <Building className="w-4 h-4" />
-            <span>Company Notes</span>
-          </button>
+
+            <button
+              onClick={() => setActiveTab('company')}
+              className={cn(
+                "flex items-center justify-between px-3.5 py-3 rounded-xl text-[13px] font-bold transition-all w-full text-left cursor-pointer group",
+                activeTab === 'company'
+                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-inner"
+                  : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <Building className={cn("w-4 h-4", activeTab === 'company' ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-400")} />
+                <span>Company Notes</span>
+              </div>
+              {activeTab === 'company' && <ChevronRight className="w-4 h-4 opacity-70" />}
+            </button>
+          </div>
         </div>
       </div>
 
-      {activeTab === 'intro' && (
-        <SelfPitchSection
-          interviewPrep={interviewPrep}
-          isRegeneratingPrep={isRegeneratingPrep}
-          onRegeneratePrep={handleRegeneratePrep}
-        />
-      )}
+      {/* Main Content Area */}
+      <div className="flex-1 min-w-0 relative">
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200/80 shadow-sm p-4 sm:p-6 lg:p-8 min-h-[600px]">
+          {activeTab === 'intro' && (
+            <SelfPitchSection
+              interviewPrep={interviewPrep}
+              isRegeneratingPrep={isRegeneratingPrep}
+              onRegeneratePrep={handleRegeneratePrep}
+            />
+          )}
 
-      {activeTab === 'tech' && (
-        <TechQuestionsSection questions={techQuestions} />
-      )}
+          {activeTab === 'tech' && (
+            <TechQuestionsSection questions={techQuestions} />
+          )}
 
-      {activeTab === 'hr' && (
-        <HRQuestionsSection questions={hrQuestions} />
-      )}
+          {activeTab === 'hr' && (
+            <HRQuestionsSection questions={hrQuestions} />
+          )}
 
-      {activeTab === 'star' && (
-        <StarStoriesSection stories={starAnswers} />
-      )}
+          {activeTab === 'star' && (
+            <StarStoriesSection stories={starAnswers} />
+          )}
 
-      {activeTab === 'ats' && (
-        <div className="animate-in fade-in duration-300">
-          <ATSScoreMeter atsData={atsData} />
+          {activeTab === 'ats' && (
+            <div className="animate-in fade-in duration-300">
+              <ATSScoreMeter atsData={atsData} />
+            </div>
+          )}
+
+          {activeTab === 'company' && (
+            <CompanyNotesSection companyNotes={companyNotes} />
+          )}
+
+          {activeTab === 'cover' && (
+            <CoverLetterSection
+              resumeId={resumeId || null}
+              candidateName={candidateName}
+              email={email}
+              phone={phone}
+              location={location}
+              linkedin={linkedin}
+              companyName={companyName}
+              jobTitle={jobTitle}
+            />
+          )}
         </div>
-      )}
-
-      {activeTab === 'company' && (
-        <CompanyNotesSection companyNotes={companyNotes} />
-      )}
-
-      {activeTab === 'cover' && (
-        <CoverLetterSection
-          resumeId={resumeId || null}
-          candidateName={candidateName}
-          email={email}
-          phone={phone}
-          location={location}
-          linkedin={linkedin}
-          companyName={companyName}
-          jobTitle={jobTitle}
-        />
-      )}
+      </div>
     </div>
   )
 }

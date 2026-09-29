@@ -20,7 +20,8 @@ export function MinimalCoverLetterTemplate({ content, candidateName, email, phon
     <div
       style={{
         fontFamily: '"Inter", "Helvetica Neue", system-ui, sans-serif',
-        width: '794px',
+        width: '100%',
+        maxWidth: '794px',
         minHeight: '1123px',
         backgroundColor: '#ffffff',
         padding: '0',
