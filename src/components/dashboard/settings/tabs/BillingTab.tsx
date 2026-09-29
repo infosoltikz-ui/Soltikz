@@ -14,6 +14,7 @@ export function BillingTab({ initialYearly = false }: { initialYearly?: boolean 
   const [profile, setProfile] = useState<any>(null)
   const [isProcessing, setIsProcessing] = useState(false)
   const [isYearly, setIsYearly] = useState(initialYearly)
+  const [currency, setCurrency] = useState<'INR' | 'USD'>('USD')
 
   const selectedPlan = getPlan(isYearly)
 
@@ -29,6 +30,14 @@ export function BillingTab({ initialYearly = false }: { initialYearly?: boolean 
 
   useEffect(() => {
     fetchProfile()
+    
+    // Determine currency based on timezone
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (tz === 'Asia/Calcutta' || tz === 'Asia/Kolkata') {
+      setCurrency('INR');
+    } else {
+      setCurrency('USD');
+    }
   }, [])
 
   const handleUpgrade = async () => {
@@ -38,7 +47,7 @@ export function BillingTab({ initialYearly = false }: { initialYearly?: boolean 
       const res = await fetch('/api/razorpay/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ planId: selectedPlan.id })
+        body: JSON.stringify({ planId: selectedPlan.id, currency })
       });
       const data = await res.json();
 
@@ -155,7 +164,7 @@ export function BillingTab({ initialYearly = false }: { initialYearly?: boolean 
                 className="h-11 px-6 text-[13px] font-bold rounded-xl bg-white text-slate-900 hover:bg-slate-50 shadow-sm"
               >
                 {isProcessing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Zap className="w-4 h-4 mr-2 text-amber-500" />}
-                Upgrade for ₹{selectedPlan.amountInr}/{isYearly ? 'yr' : 'mo'}
+                Upgrade for {currency === 'INR' ? '₹' : '$'}{currency === 'INR' ? selectedPlan.amountInr : selectedPlan.amountUsd}/{isYearly ? 'yr' : 'mo'}
               </Button>
             </div>
           )}

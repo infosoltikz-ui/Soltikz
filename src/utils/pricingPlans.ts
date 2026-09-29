@@ -2,6 +2,7 @@ export interface PricingPlan {
   id: 'PRO_MONTHLY' | 'PRO_YEARLY'
   label: string
   amountInr: number
+  amountUsd: number
   period: 'month' | 'year'
 }
 
@@ -10,14 +11,16 @@ export const FREE_TIER_CREDITS = 10
 export const PRO_MONTHLY: PricingPlan = {
   id: 'PRO_MONTHLY',
   label: 'Pro Monthly',
-  amountInr: 499,
+  amountInr: 749,
+  amountUsd: 9,
   period: 'month',
 }
 
 export const PRO_YEARLY: PricingPlan = {
   id: 'PRO_YEARLY',
   label: 'Pro Yearly',
-  amountInr: 4790, // ~20% off 499 * 12
+  amountInr: 7490, // ~20% off or standard
+  amountUsd: 90,
   period: 'year',
 }
 

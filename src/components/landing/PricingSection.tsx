@@ -1,16 +1,113 @@
 "use client";
-import { Check, Minus } from 'lucide-react'
-import { useState } from 'react'
+import { Check, Minus, Loader2 } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { PRO_MONTHLY, PRO_YEARLY, getPlan } from '@/utils/pricingPlans'
+import Script from 'next/script'
+import { toast } from 'react-hot-toast'
+import { createClient } from '@/utils/supabase/client'
 
 export function PricingSection() {
   const [isYearly, setIsYearly] = useState(true)
+  const [currency, setCurrency] = useState<'INR' | 'USD'>('USD')
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [profile, setProfile] = useState<any>(null)
+
+  useEffect(() => {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (tz === 'Asia/Calcutta' || tz === 'Asia/Kolkata') {
+      setCurrency('INR');
+    } else {
+      setCurrency('USD');
+    }
+
+    const fetchProfile = async () => {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+        setProfile(data)
+      }
+    }
+    fetchProfile()
+  }, [])
+
+  const handleUpgrade = async () => {
+    setIsProcessing(true)
+    try {
+      const selectedPlan = getPlan(isYearly)
+      
+      const res = await fetch('/api/razorpay/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ planId: selectedPlan.id, currency })
+      });
+      const data = await res.json();
+
+      if (res.status === 401 || data.error === 'Unauthorized') {
+        window.location.href = '/login';
+        return;
+      }
+
+      if (!data.success) throw new Error(data.error);
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: data.amount,
+        currency: data.currency,
+        name: "Resume Builder One",
+        description: `Upgrade to ${selectedPlan.label}`,
+        order_id: data.orderId,
+        handler: async function (response: any) {
+          const verifyRes = await fetch('/api/razorpay/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+              planId: selectedPlan.id
+            })
+          });
+
+          const verifyData = await verifyRes.json();
+          if (verifyData.success) {
+            toast.success('Payment successful! You are now on the Pro Plan. 🎉');
+            window.location.href = '/dashboard';
+          } else {
+            toast.error('Payment verification failed. Please contact support.');
+          }
+        },
+        prefill: {
+          name: profile?.full_name || "User",
+          email: profile?.email || "email@example.com",
+        },
+        theme: {
+          color: "#22c55e"
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to initiate payment. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  }
+
+  const monthlyPrice = currency === 'INR' ? PRO_MONTHLY.amountInr : PRO_MONTHLY.amountUsd;
+  const yearlyPrice = currency === 'INR' ? PRO_YEARLY.amountInr : PRO_YEARLY.amountUsd;
+  const symbol = currency === 'INR' ? '₹' : '$';
 
   return (
     <section className="py-24 bg-slate-50">
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
-            Free until you're serious. Then<br className="hidden md:block" /> $9.
+            Free until you're serious. Then<br className="hidden md:block" /> {symbol}{monthlyPrice}.
           </h2>
           <p className="text-lg text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
             About the price of one coffee a fortnight, for the month you're actually job hunting. Cancel from settings in two clicks.
@@ -42,7 +139,7 @@ export function PricingSection() {
           <div className="bg-white border border-slate-200 rounded-2xl p-8 lg:p-10 flex flex-col">
             <h3 className="text-xl font-medium text-slate-900 mb-4">Free</h3>
             <div className="flex items-baseline gap-1 mb-4">
-              <span className="text-6xl font-black text-slate-900 tracking-tighter">$0</span>
+              <span className="text-6xl font-black text-slate-900 tracking-tighter">{symbol}0</span>
             </div>
             <p className="text-slate-500 mb-8 leading-relaxed">
               Enough to build a real résumé and judge the scoring for yourself.
@@ -79,14 +176,19 @@ export function PricingSection() {
             </div>
             <h3 className="text-xl font-medium text-slate-900 mb-4">Pro</h3>
             <div className="flex items-baseline gap-1 mb-4">
-              <span className="text-6xl font-black text-slate-900 tracking-tighter">${isYearly ? '90' : '9'}</span>
+              <span className="text-6xl font-black text-slate-900 tracking-tighter">{symbol}{isYearly ? yearlyPrice : monthlyPrice}</span>
               <span className="text-slate-500 font-medium">/{isYearly ? 'year' : 'month'}</span>
             </div>
             <p className="text-slate-500 mb-8 leading-relaxed">
               For an active search - when every application needs its own version and you want to know why a score is what it is.
             </p>
-            <button className="w-full py-3.5 px-6 rounded-xl bg-[#12734C] text-white font-bold hover:bg-[#0f603f] transition-colors mb-10">
-              Start free, upgrade any time
+            <button 
+              onClick={handleUpgrade}
+              disabled={isProcessing}
+              className="w-full py-3.5 px-6 rounded-xl bg-[#12734C] text-white font-bold hover:bg-[#0f603f] transition-colors mb-10 flex items-center justify-center gap-2"
+            >
+              {isProcessing && <Loader2 className="w-4 h-4 animate-spin" />}
+              {isProcessing ? 'Processing...' : 'Upgrade to Pro'}
             </button>
 
             <ul className="space-y-4 mt-auto">

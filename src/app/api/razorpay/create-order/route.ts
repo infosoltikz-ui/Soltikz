@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { planId } = await req.json();
+    const { planId, currency = 'USD' } = await req.json();
 
     // The charged amount is derived server-side from the known plan, never trusted
     // from the client - otherwise a request could set its own (lower) amountInr.
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     if (!plan) {
       return NextResponse.json({ error: 'Unknown plan' }, { status: 400 });
     }
-    const amountInr = plan.amountInr;
+    const amount = currency === 'INR' ? plan.amountInr : plan.amountUsd;
 
     // 2. Initialize Razorpay
     if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
@@ -35,10 +35,10 @@ export async function POST(req: Request) {
     });
 
     // 3. Create Order
-    // Amount must be in paise (multiply INR by 100)
+    // Amount must be in paise/cents (multiply by 100)
     const options = {
-      amount: Math.round(amountInr * 100),  
-      currency: "INR",
+      amount: Math.round(amount * 100),  
+      currency: currency,
       receipt: `rcpt_${user.id}_${Date.now()}`.substring(0, 40),
       notes: {
         userId: user.id,

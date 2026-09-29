@@ -18,6 +18,7 @@ export function PricingCTA() {
         
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
           <Button 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="w-full sm:w-auto h-14 px-8 text-[15px] font-bold rounded-xl bg-white text-primary hover:bg-slate-50 shadow-sm"
           >
             Upgrade Now
