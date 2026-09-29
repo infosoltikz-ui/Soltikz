@@ -136,7 +136,6 @@ export function ResumeTable({ onRowClick }: ResumeTableProps) {
                                   <TemplateComponent 
                                     resumeData={mockResumeData}
                                     profileData={{ full_name: userName, email: 'candidate@example.com', phone: '+1 234 567 8900', linkedin: 'linkedin.com/in/candidate', location: 'Remote' }}
-                                    isPdfMode={false}
                                   />
                                 </Suspense>
                               </div>
