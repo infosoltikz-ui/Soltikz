@@ -499,7 +499,7 @@ export default function CreateResumePage() {
           </div>
           <h3 className="text-xl font-bold text-slate-900 mb-2">You've reached your limit!</h3>
           <p className="text-[13px] text-slate-500 mb-6 leading-relaxed">
-            You have used all 60 of your free AI resume generations. Upgrade to our Pro plan to unlock unlimited resumes, cover letters, and advanced ATS optimization.
+            You have used all 10 of your free AI resume generations. Upgrade to our Pro plan to unlock unlimited resumes, cover letters, and advanced ATS optimization.
           </p>
           <div className="flex gap-3 w-full">
             <Button variant="outline" className="flex-1" onClick={() => closeModal('paywall-modal')}>

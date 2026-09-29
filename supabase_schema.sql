@@ -19,7 +19,7 @@ CREATE TABLE profiles (
     location TEXT,
     plan_id TEXT DEFAULT 'FREE',
     resumes_generated INTEGER DEFAULT 0,
-    credits_remaining INTEGER DEFAULT 5,
+    credits_remaining INTEGER DEFAULT 10,
     master_resume_data JSONB DEFAULT '{}'::jsonb,
     settings JSONB DEFAULT '{"theme": "light", "email_notifications": true}'::jsonb,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL

@@ -3,7 +3,7 @@
 import { FileText, Zap, Target, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-const FREE_LIMIT = 20
+const FREE_LIMIT = 10
 
 const COLORS = [
   { avatar: 'bg-orange-100 text-orange-600', bar: 'bg-orange-500' },

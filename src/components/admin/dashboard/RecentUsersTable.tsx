@@ -327,7 +327,7 @@ export function RecentUsersTable() {
                     <td className="px-6 py-4">
                       {(() => {
                         const isPro = user.plan_id && (user.plan_id.includes('PRO') || user.plan_id === 'PREMIUM' || user.plan_id === 'ENTERPRISE')
-                        const FREE_LIMIT = 20
+                        const FREE_LIMIT = 10
                         const limit = isPro ? highestResumes : FREE_LIMIT
                         const resumes = user.resume_count ?? 0
                         const pct = Math.min(100, Math.round((resumes / Math.max(limit, 1)) * 100))

@@ -28,7 +28,7 @@ export function UserTable({ onRowClick }: UserTableProps) {
   }
 
   const highestResumes = Math.max(...users.map(u => u.resume_count ?? 0), 1)
-  const FREE_LIMIT = 20
+  const FREE_LIMIT = 10
 
   return (
     <div className="bg-white border border-slate-200 rounded-[18px] shadow-sm mt-6 overflow-hidden flex flex-col">

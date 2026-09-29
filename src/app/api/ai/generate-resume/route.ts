@@ -251,10 +251,10 @@ export async function POST(req: Request) {
       .eq('id', user.id)
       .single();
 
-    // TEMPORARY BYPASS: Allow unlimited generations for local testing
-    // if (profile?.plan_id === 'FREE' && (profile?.credits_remaining ?? 0) <= 0) {
-    //   return NextResponse.json({ error: 'Paywall', message: 'Upgrade to Pro to continue.' }, { status: 403 });
-    // }
+    // --- PAYWALL / QUOTA CHECK ---
+    if (profile?.plan_id === 'FREE' && (profile?.credits_remaining ?? 0) <= 0) {
+      return NextResponse.json({ error: 'Paywall', message: 'Upgrade to Pro to continue.' }, { status: 403 });
+    }
 
     // ═══════════════════════════════════════════════════════════════
     // STEP 1: Aggregate ALL keywords from already parsed JD Data
@@ -386,7 +386,7 @@ export async function POST(req: Request) {
 
     // ─── Deduct Quota ────────────────────────────────────────────
     if (profile?.plan_id === 'FREE') {
-      const remaining = profile?.credits_remaining ?? 20;
+      const remaining = profile?.credits_remaining ?? 10;
       await supabase
         .from('profiles')
         .update({ credits_remaining: Math.max(0, remaining - 1) })
