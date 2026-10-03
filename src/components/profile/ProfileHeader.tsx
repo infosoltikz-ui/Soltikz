@@ -39,54 +39,45 @@ export function ProfileHeader({
     <div className="mb-4">
 
       {/* Compact Profile Hero Card */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-3.5 sm:p-4 overflow-hidden relative">
-        <div className="flex items-center justify-between gap-4">
-          {/* Avatar & Candidate Identity */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-sm">
+      <div className="bg-white rounded-lg border border-slate-200 shadow-xs p-2.5 overflow-hidden">
+        <div className="flex items-center justify-between gap-3">
+          {/* Avatar & Identity */}
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm">
               {initials}
             </div>
-
             <div>
-              <div className="flex items-center gap-1.5">
-                <h2 className="text-[15px] font-bold text-slate-900 tracking-tight">
-                  {fullName}
-                </h2>
-                <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
+              <div className="flex items-center gap-1">
+                <span className="text-[13px] font-bold text-slate-900 tracking-tight">{fullName}</span>
+                <CheckCircle2 className="w-3 h-3 text-primary shrink-0" />
               </div>
-
-              <p className="text-[12px] font-medium text-slate-500">
+              <p className="text-[11px] font-medium text-slate-500 leading-none mt-0.5">
                 {pi.location ? `${pi.location} • ` : ''}{email || 'Primary Candidate Record'}
               </p>
-
-              <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
-                <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
-                  {jobCount} {jobCount === 1 ? 'Work Experience' : 'Work Experiences'}
+              <div className="flex flex-wrap items-center gap-1 mt-1">
+                <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-px rounded">
+                  {jobCount} Experiences
                 </span>
-                <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
-                  {skillCount} {skillCount === 1 ? 'Skill Category' : 'Skill Categories'}
+                <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-px rounded">
+                  {skillCount} Skills
                 </span>
-                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md flex items-center gap-1">
-                  <Sparkles className="w-2.5 h-2.5 text-emerald-600" />
-                  ATS 90+ Ready
+                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-px rounded flex items-center gap-0.5">
+                  <Sparkles className="w-2 h-2 text-emerald-600" />
+                  ATS 90+
                 </span>
               </div>
             </div>
           </div>
-
-          {/* Quick Action */}
-          <div className="flex items-center gap-2 shrink-0">
-            {onPreviewModal && (
-              <button
-                onClick={onPreviewModal}
-                className="h-8 px-3.5 text-[12px] font-semibold bg-slate-900 hover:bg-slate-800 text-white rounded-lg shadow-sm inline-flex items-center gap-1.5 transition-colors cursor-pointer"
-              >
-                <FileText className="w-3 h-3" />
-                Preview Master CV
-              </button>
-            )}
-          </div>
-
+          {/* Action */}
+          {onPreviewModal && (
+            <button
+              onClick={onPreviewModal}
+              className="h-7 px-3 text-[11px] font-semibold bg-slate-900 hover:bg-slate-800 text-white rounded-md shadow-sm inline-flex items-center gap-1 transition-colors cursor-pointer shrink-0"
+            >
+              <FileText className="w-3 h-3" />
+              Preview CV
+            </button>
+          )}
         </div>
       </div>
     </div>
