@@ -11,6 +11,7 @@ import { OnboardingSteps } from '@/components/dashboard/OnboardingSteps'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { FREE_TIER_CREDITS } from '@/utils/pricingPlans'
+import { ModuleHowItWorks } from '@/components/dashboard/ModuleHowItWorks'
 
 export const dynamic = 'force-dynamic'
 
@@ -93,12 +94,20 @@ export default async function DashboardPage() {
   const userSkills = Array.isArray(masterData?.skills) ? masterData.skills : []
   const targetRole = personalInfo?.targetRole || 'Software Engineer'
 
+  const steps = [
+    { title: 'Update Profile', description: 'Ensure your base profile is 100% complete.', iconName: 'Target' as const },
+    { title: 'Track Activity', description: 'Monitor your tailored resumes and application progress.', iconName: 'LayoutDashboard' as const },
+    { title: 'Fill Gaps', description: 'Use the Skills Gap Health Check to improve your profile.', iconName: 'SearchCheck' as const },
+  ]
+
   return (
     <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-12 max-w-[1600px] mx-auto bg-slate-50/50 min-h-screen">
       <LoginToast />
       <DashboardHeader title="Dashboard" greeting />
 
       <main className="space-y-6">
+        <ModuleHowItWorks steps={steps} />
+
         {/* Onboarding Steps */}
         <OnboardingSteps
           profileCompletion={profileCompletion}

@@ -55,15 +55,6 @@ export function ProfileHeader({
         </div>
 
         <div className="flex items-center gap-3 self-end sm:self-auto">
-          {onOpenImport && (
-            <button
-              onClick={onOpenImport}
-              className="h-9 px-3.5 text-[12.5px] font-semibold text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg shadow-2xs inline-flex items-center gap-1.5 transition-colors cursor-pointer"
-            >
-              <UploadCloud className="w-3.5 h-3.5 text-primary" />
-              Import LinkedIn
-            </button>
-          )}
 
           {onToggleViewMode && (
             <button
