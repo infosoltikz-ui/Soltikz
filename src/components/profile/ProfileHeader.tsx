@@ -25,12 +25,12 @@ export function ProfileHeader({
   const handleDownloadExcel = () => {
     import('xlsx').then((XLSX) => {
       // Define headers for each sheet matching the UI tabs exactly
-      const personalDetailsHeaders = [["First Name", "Last Name", "Email", "Phone", "Location", "Website/Portfolio", "LinkedIn URL", "Summary"]]
-      const experienceHeaders = [["Job Title", "Company", "Location", "Start Date (MM/YYYY)", "End Date (MM/YYYY)", "Is Current (Yes/No)", "Responsibilities"]]
-      const educationHeaders = [["Degree", "Field of Study", "Institution", "Location", "Start Date (MM/YYYY)", "End Date (MM/YYYY)", "GPA"]]
-      const projectsHeaders = [["Project Name", "Role", "Date", "Project URL", "Description"]]
-      const certificationsHeaders = [["Certification Name", "Issuer", "Issue Date (MM/YYYY)", "Expiration Date (MM/YYYY)", "Credential ID", "Credential URL"]]
-      const skillsTechHeaders = [["Skill Name", "Category", "Proficiency (Beginner/Intermediate/Advanced)"]]
+      const personalDetailsHeaders = [["First Name", "Middle Name", "Last Name", "Email", "Phone", "City", "State/Province", "Country", "Zip/Postal Code", "LinkedIn Profile URL", "GitHub / Portfolio URL", "Work Authorization", "Relocation Status", "Availability / Notice Period", "Profile Summary"]]
+      const experienceHeaders = [["Job Title", "Company / Organization", "Employment Type", "Industry", "Country", "Location", "Start Date (MM/YYYY)", "End Date (MM/YYYY)", "Is Current Role? (Yes/No)", "Responsibilities & Measurable Achievements"]]
+      const educationHeaders = [["Degree / Credential", "Field of Study / Major", "Institution Name", "Location", "Start Date (MM/YYYY)", "End Date (MM/YYYY)", "GPA / Score"]]
+      const projectsHeaders = [["Project Name", "Role / Title", "Live Link / Repository", "Start Date (MM/YYYY)", "End Date (MM/YYYY)", "Project Overview & Architecture"]]
+      const certificationsHeaders = [["Certification Name", "Issuing Organization", "Issue Date (MM/YYYY)", "Expiration Date (MM/YYYY)", "Credential ID", "Credential URL"]]
+      const skillsTechHeaders = [["Skill Name", "Category (Frontend/Backend/etc)", "Proficiency (Beginner/Intermediate/Advanced)"]]
 
       // Create worksheets
       const wsPersonal = XLSX.utils.aoa_to_sheet(personalDetailsHeaders)
