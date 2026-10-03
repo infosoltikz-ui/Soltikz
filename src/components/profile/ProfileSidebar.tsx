@@ -65,15 +65,27 @@ export function ProfileSidebar({
   const linkedin = personalInfo?.linkedin || profile?.linkedin_url || null
   const phone = profile?.phone || personalInfo?.phone || null
 
-  // Calculate real profile completion accurately
-  let completedPoints = 0
-  const totalPoints = 5
+  // 6-section scoring — one point per tab
+  const totalPoints = 6
 
-  if (profile?.full_name || personalInfo?.firstName) completedPoints++
-  if (email && phone) completedPoints++
-  if (personalInfo?.summary || personalInfo?.targetRole) completedPoints++
-  if ((masterData?.employment && masterData.employment.length > 0) || (masterData?.experience && masterData.experience.length > 0)) completedPoints++
-  if (masterData?.education?.length > 0 && masterData?.skills?.length > 0) completedPoints++
+  const hasPersonalDetails = !!(
+    (profile?.full_name || personalInfo?.firstName) &&
+    email && phone
+  )
+  const hasExperience = (masterData?.employment?.length > 0 || masterData?.experience?.length > 0)
+  const hasEducation = (masterData?.education?.length > 0)
+  const hasProjects = (masterData?.projects?.length > 0)
+  const hasCertifications = (masterData?.certifications?.length > 0)
+  const hasSkills = (masterData?.skills?.length > 0)
+
+  const completedPoints = [
+    hasPersonalDetails,
+    hasExperience,
+    hasEducation,
+    hasProjects,
+    hasCertifications,
+    hasSkills,
+  ].filter(Boolean).length
 
   const completion = Math.round((completedPoints / totalPoints) * 100)
 
@@ -84,11 +96,12 @@ export function ProfileSidebar({
   const strokeColor = completion >= 80 ? '#059669' : completion >= 40 ? '#d97706' : '#2563eb'
 
   const checklist = [
-    { text: 'Full Name & Verified Contact Channels', done: !!(profile?.full_name && email && phone), tab: 'personal' },
-    { text: 'Executive Career Summary', done: !!personalInfo?.summary, tab: 'personal' },
-    { text: 'Employment History with Quantified Metrics', done: (masterData?.employment?.length > 0 || masterData?.experience?.length > 0), tab: 'employment' },
-    { text: 'Academic Degrees & Institutions', done: masterData?.education?.length > 0, tab: 'education' },
-    { text: 'Categorized Technical Skills & Tools', done: masterData?.skills?.length > 0, tab: 'skills' },
+    { text: 'Personal Details & Contact Info', done: hasPersonalDetails, tab: 'personal' },
+    { text: 'Employment History & Experience', done: hasExperience, tab: 'employment' },
+    { text: 'Academic Degrees & Institutions', done: hasEducation, tab: 'education' },
+    { text: 'Projects & Portfolio', done: hasProjects, tab: 'projects' },
+    { text: 'Certifications & Licenses', done: hasCertifications, tab: 'certifications' },
+    { text: 'Technical Skills & Tools', done: hasSkills, tab: 'skills' },
   ]
 
   return (
