@@ -66,6 +66,26 @@ export function ProfileContent({ initialProfile }: { initialProfile: any }) {
     setImportVersion(v => v + 1)
   }
 
+  // Excel Import handler
+  const handleExcelImport = (parsedData: any) => {
+    setProfile((prev: any) => ({
+      ...prev,
+      full_name: [parsedData.personal_info?.firstName, parsedData.personal_info?.lastName].filter(Boolean).join(' ') || prev.full_name,
+      master_resume_data: {
+        ...prev.master_resume_data,
+        personal_info: { ...prev.master_resume_data?.personal_info, ...parsedData.personal_info },
+        employment: parsedData.employment?.length > 0 ? parsedData.employment : prev.master_resume_data?.employment,
+        education: parsedData.education?.length > 0 ? parsedData.education : prev.master_resume_data?.education,
+        projects: parsedData.projects?.length > 0 ? parsedData.projects : prev.master_resume_data?.projects,
+        certifications: parsedData.certifications?.length > 0 ? parsedData.certifications : prev.master_resume_data?.certifications,
+        skills: parsedData.skills?.length > 0 ? parsedData.skills : prev.master_resume_data?.skills,
+      }
+    }))
+    setViewMode(false)
+    setActiveTab('personal')
+    setImportVersion(v => v + 1)
+  }
+
   const handleQuickImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     e.target.value = ''
@@ -134,6 +154,7 @@ export function ProfileContent({ initialProfile }: { initialProfile: any }) {
         onToggleViewMode={() => setViewMode(!viewMode)}
         onOpenImport={() => hiddenFileInputRef.current?.click()}
         onPreviewModal={() => setShowPreviewModal(true)}
+        onExcelImport={handleExcelImport}
       />
 
       {!viewMode && (

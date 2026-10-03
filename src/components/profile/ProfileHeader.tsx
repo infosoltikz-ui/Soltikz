@@ -1,7 +1,7 @@
 'use client'
 
 import { ShieldCheck, Sparkles, UploadCloud, Eye, CheckCircle2, User, FileText, FileSpreadsheet, Download } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { toast } from 'react-hot-toast'
 import { ExcelTemplateModal } from './ExcelTemplateModal'
 
@@ -11,6 +11,7 @@ interface ProfileHeaderProps {
   onToggleViewMode?: () => void
   onOpenImport?: () => void
   onPreviewModal?: () => void
+  onExcelImport?: (data: any) => void
 }
 
 export function ProfileHeader({
@@ -18,9 +19,11 @@ export function ProfileHeader({
   viewMode,
   onToggleViewMode,
   onOpenImport,
-  onPreviewModal
+  onPreviewModal,
+  onExcelImport
 }: ProfileHeaderProps) {
   const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
+  const excelInputRef = useRef<HTMLInputElement>(null)
 
   const handleDownloadExcel = () => {
     import('xlsx').then((XLSX) => {
@@ -65,6 +68,124 @@ export function ProfileHeader({
       console.error("Error generating Excel template:", err)
       toast.error("Failed to generate Excel template. Please try again.")
     })
+  }
+
+  const handleExcelUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = '' // Reset input
+    if (!file) return
+
+    try {
+      const XLSX = await import('xlsx')
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        try {
+          const data = event.target?.result
+          const workbook = XLSX.read(data, { type: 'binary' })
+          
+          const parsedData: any = {
+            personal_info: {},
+            employment: [],
+            education: [],
+            projects: [],
+            certifications: [],
+            skills: []
+          }
+
+          // Helper to get sheet data
+          const getSheetData = (sheetName: string) => {
+            const sheet = workbook.Sheets[sheetName]
+            if (!sheet) return []
+            return XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(1) // skip header
+          }
+
+          // Parse Personal Details
+          const personalData = getSheetData("Personal Details")
+          if (personalData.length > 0) {
+            const row: any = personalData[0]
+            parsedData.personal_info = {
+              firstName: row[0] || "",
+              middleName: row[1] || "",
+              lastName: row[2] || "",
+              email: row[3] || "",
+              phone: row[4] || "",
+              location: row[5] || "",
+              linkedin: row[6] || "",
+              summary: row[7] || ""
+            }
+          }
+
+          // Parse Experience
+          const expData = getSheetData("Experience")
+          parsedData.employment = expData.filter((r: any) => r.length > 0).map((row: any) => ({
+            jobTitle: row[0] || "",
+            company: row[1] || "",
+            employmentType: row[2] || "",
+            industry: row[3] || "",
+            country: row[4] || "",
+            location: row[5] || "",
+            startDate: row[6] || "",
+            endDate: row[7] || "",
+            isCurrent: String(row[8] || "").toLowerCase() === 'yes',
+            responsibilities: row[9] || ""
+          }))
+
+          // Parse Education
+          const eduData = getSheetData("Education")
+          parsedData.education = eduData.filter((r: any) => r.length > 0).map((row: any) => ({
+            degree: row[0] || "",
+            fieldOfStudy: row[1] || "",
+            institution: row[2] || "",
+            location: row[3] || "",
+            startDate: row[4] || "",
+            endDate: row[5] || "",
+            gpa: row[6] || ""
+          }))
+
+          // Parse Projects
+          const projData = getSheetData("Projects")
+          parsedData.projects = projData.filter((r: any) => r.length > 0).map((row: any) => ({
+            projectName: row[0] || "",
+            role: row[1] || "",
+            projectUrl: row[2] || "",
+            startDate: row[3] || "",
+            endDate: row[4] || "",
+            description: row[5] || ""
+          }))
+
+          // Parse Certifications
+          const certData = getSheetData("Certifications")
+          parsedData.certifications = certData.filter((r: any) => r.length > 0).map((row: any) => ({
+            name: row[0] || "",
+            issuer: row[1] || "",
+            issueDate: row[2] || "",
+            expirationDate: row[3] || "",
+            credentialId: row[4] || "",
+            credentialUrl: row[5] || ""
+          }))
+
+          // Parse Skills & Tech
+          const skillsData = getSheetData("Skills & Tech")
+          parsedData.skills = skillsData.filter((r: any) => r.length > 0).map((row: any) => ({
+            name: row[0] || "",
+            category: row[1] || "",
+            proficiency: row[2] || ""
+          }))
+
+          if (onExcelImport) {
+            onExcelImport(parsedData)
+            toast.success("Excel data imported successfully!")
+          }
+        } catch (err) {
+          console.error("Failed to parse Excel file:", err)
+          toast.error("Failed to parse Excel file. Ensure it matches the template.")
+        }
+      }
+      reader.readAsBinaryString(file)
+    } catch (err) {
+      console.error("Error importing xlsx:", err)
+      toast.error("Failed to load excel parser.")
+    }
   }
 
   const masterData = profile?.master_resume_data || {}
@@ -134,6 +255,13 @@ export function ProfileHeader({
         </div>
         
         <div className="flex flex-col gap-2 shrink-0">
+          <input 
+            type="file" 
+            ref={excelInputRef}
+            className="hidden" 
+            accept=".xlsx,.xls,.csv"
+            onChange={handleExcelUpload}
+          />
           <button
             onClick={() => setIsExcelModalOpen(true)}
             className="w-28 h-8 px-3 text-[11px] font-semibold border border-slate-200 hover:border-slate-300 bg-white text-slate-700 rounded-md flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-sm"
@@ -142,11 +270,11 @@ export function ProfileHeader({
             <span>Download</span>
           </button>
           <button
-            onClick={() => toast.error("Excel upload is coming soon!")}
+            onClick={() => excelInputRef.current?.click()}
             className="w-28 h-8 px-3 text-[11px] font-semibold border border-transparent bg-slate-900 hover:bg-slate-800 text-white rounded-md flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-sm"
           >
             <UploadCloud className="w-3.5 h-3.5" />
-            <span>Upload CSV</span>
+            <span>Upload Excel</span>
           </button>
         </div>
       </div>
