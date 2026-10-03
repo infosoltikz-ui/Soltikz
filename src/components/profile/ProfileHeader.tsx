@@ -1,7 +1,9 @@
 'use client'
 
-import { ShieldCheck, Sparkles, UploadCloud, Eye, CheckCircle2, User, FileText } from 'lucide-react'
-import { UserMenu } from '@/components/dashboard/UserMenu'
+import { ShieldCheck, Sparkles, UploadCloud, Eye, CheckCircle2, User, FileText, FileSpreadsheet } from 'lucide-react'
+import { useState } from 'react'
+import { toast } from 'react-hot-toast'
+import { ExcelTemplateModal } from './ExcelTemplateModal'
 
 interface ProfileHeaderProps {
   profile?: any
@@ -16,8 +18,24 @@ export function ProfileHeader({
   viewMode,
   onToggleViewMode,
   onOpenImport,
+  onOpenImport,
   onPreviewModal
 }: ProfileHeaderProps) {
+  const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
+
+  const handleDownloadExcel = () => {
+    // Generate a simple CSV for now as a placeholder for the actual Excel
+    const headers = "First Name,Last Name,Email,Phone,Summary,Job Title,Company,Start Date,End Date,Responsibilities\n"
+    const blob = new Blob([headers], { type: 'text/csv' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = "Soltikz_Profile_Template.csv"
+    a.click()
+    window.URL.revokeObjectURL(url)
+    toast.success('Template downloaded successfully!')
+  }
+
   const masterData = profile?.master_resume_data || {}
   const pi = masterData?.personal_info || {}
   const fullName = [pi.firstName, pi.middleName, pi.lastName].filter(Boolean).join(' ') || profile?.full_name || 'Candidate Master Profile'
@@ -69,17 +87,43 @@ export function ProfileHeader({
             </div>
           </div>
           {/* Action */}
-          {onPreviewModal && (
+          <div className="flex items-center gap-2 shrink-0">
+            {onPreviewModal && (
+              <button
+                onClick={onPreviewModal}
+                className="h-8 px-3 text-[12px] font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-md shadow-sm inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                Preview CV
+              </button>
+            )}
+            
             <button
-              onClick={onPreviewModal}
-              className="h-7 px-3 text-[11px] font-semibold bg-slate-900 hover:bg-slate-800 text-white rounded-md shadow-sm inline-flex items-center gap-1 transition-colors cursor-pointer shrink-0"
+              onClick={() => setIsExcelModalOpen(true)}
+              className="h-8 px-3 text-[12px] font-semibold border border-emerald-200 hover:border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-md flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+              title="Download Excel Template"
             >
-              <FileText className="w-3 h-3" />
-              Preview CV
+              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Download Excel</span>
             </button>
-          )}
+            
+            <button
+              onClick={() => toast.error("Excel upload is coming soon!")}
+              className="h-8 px-3 text-[12px] font-semibold border border-transparent bg-slate-900 hover:bg-slate-800 text-white rounded-md flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+            >
+              <UploadCloud className="w-3.5 h-3.5" />
+              <span>Upload Excel</span>
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Excel Instructions Modal */}
+      <ExcelTemplateModal 
+        open={isExcelModalOpen} 
+        onClose={() => setIsExcelModalOpen(false)} 
+        onDownload={handleDownloadExcel}
+      />
     </div>
   )
 }
