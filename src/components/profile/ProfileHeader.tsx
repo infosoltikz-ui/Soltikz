@@ -25,7 +25,7 @@ export function ProfileHeader({
   const handleDownloadExcel = () => {
     import('xlsx').then((XLSX) => {
       // Define headers for each sheet matching the UI tabs exactly
-      const personalDetailsHeaders = [["First Name", "Middle Name", "Last Name", "Email", "Phone", "City", "State/Province", "Country", "Zip/Postal Code", "LinkedIn Profile URL", "GitHub / Portfolio URL", "Work Authorization", "Relocation Status", "Availability / Notice Period", "Profile Summary"]]
+      const personalDetailsHeaders = [["First Name", "Middle Name", "Last Name", "Email", "Phone", "Current Location", "LinkedIn Profile URL", "Executive Paragraph"]]
       const experienceHeaders = [["Job Title", "Company / Organization", "Employment Type", "Industry", "Country", "Location", "Start Date (MM/YYYY)", "End Date (MM/YYYY)", "Is Current Role? (Yes/No)", "Responsibilities & Measurable Achievements"]]
       const educationHeaders = [["Degree / Credential", "Field of Study / Major", "Institution Name", "Location", "Start Date (MM/YYYY)", "End Date (MM/YYYY)", "GPA / Score"]]
       const projectsHeaders = [["Project Name", "Role / Title", "Live Link / Repository", "Start Date (MM/YYYY)", "End Date (MM/YYYY)", "Project Overview & Architecture"]]

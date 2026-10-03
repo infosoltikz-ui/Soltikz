@@ -116,60 +116,6 @@ export function PersonalInfoForm({
 
       {/* Form Body */}
       <div className="px-6 py-6 space-y-6">
-        {resumeType === 'c2c' && (
-          <div className="p-4 rounded-lg border border-slate-200 bg-slate-50/60">
-            <h3 className="text-[12px] font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-              <span className="w-4 h-4 rounded bg-primary text-white text-[10px] font-bold flex items-center justify-center">C</span>
-              C2C / Contract Work Clearance
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Work Authorization</label>
-                <select
-                  name="workAuthorization"
-                  value={formData.workAuthorization}
-                  onChange={handleChange}
-                  className="w-full h-10 px-3 rounded-lg border border-slate-200 text-[13px] font-medium text-slate-900 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                >
-                  <option value="">Select status...</option>
-                  <option value="US Citizen">US Citizen</option>
-                  <option value="Green Card">Green Card</option>
-                  <option value="H1B">H1B</option>
-                  <option value="H4 EAD">H4 EAD</option>
-                  <option value="OPT EAD">OPT EAD</option>
-                  <option value="CPT">CPT</option>
-                  <option value="TN Visa">TN Visa</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Relocation Status</label>
-                <select
-                  name="relocation"
-                  value={formData.relocation}
-                  onChange={handleChange}
-                  className="w-full h-10 px-3 rounded-lg border border-slate-200 text-[13px] font-medium text-slate-900 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                >
-                  <option value="">Select option...</option>
-                  <option value="Yes">Open to Relocate</option>
-                  <option value="No">No Relocation</option>
-                  <option value="Remote Only">Remote Only</option>
-                  <option value="Hybrid Only">Hybrid Only</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Availability / Notice</label>
-                <input 
-                  type="text" 
-                  name="availability"
-                  value={formData.availability} 
-                  onChange={handleChange}
-                  placeholder="e.g. Immediate, 2 Weeks"
-                  className="w-full h-10 px-3 rounded-lg border border-slate-200 text-[13px] font-medium text-slate-900 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-slate-400"
-                />
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Name Row */}
         <div>
@@ -292,37 +238,20 @@ export function PersonalInfoForm({
         {/* Executive Summary */}
         <div>
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Professional Executive Summary</span>
-          {resumeType === 'c2c' ? (
-            <div>
-              <label className="block text-[12px] font-semibold text-slate-700 mb-1">
-                Capability Bullets (8–10 items)
-              </label>
-              <p className="text-[11px] text-slate-500 mb-2">Each bullet should follow: [ACTION VERB] + [technical action] + [tools] + [outcome].</p>
-              <textarea
-                name="summary"
-                value={formData.summary}
-                onChange={handleChange}
-                rows={7}
-                placeholder="• Architected scalable microservices using Node.js and AWS, reducing latency by 35%&#10;• Spearheaded CI/CD pipeline automation with Docker and GitHub Actions..."
-                className="w-full p-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors leading-relaxed"
-              ></textarea>
-            </div>
-          ) : (
-            <div>
-              <label className="block text-[12px] font-semibold text-slate-700 mb-1">
-                Executive Paragraph (4–5 lines)
-              </label>
-              <p className="text-[11px] text-slate-500 mb-2">Concise summary highlighting years of experience, core technical stack, and specialized focus.</p>
-              <textarea
-                name="summary"
-                value={formData.summary}
-                onChange={handleChange}
-                rows={4}
-                placeholder="Results-driven Senior Software Engineer with 6+ years specializing in modern cloud architectures, React ecosystem, and enterprise scalability."
-                className="w-full p-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors leading-relaxed"
-              ></textarea>
-            </div>
-          )}
+          <div>
+            <label className="block text-[12px] font-semibold text-slate-700 mb-1">
+              Executive Paragraph (4–5 lines)
+            </label>
+            <p className="text-[11px] text-slate-500 mb-2">Concise summary highlighting years of experience, core technical stack, and specialized focus.</p>
+            <textarea
+              name="summary"
+              value={formData.summary}
+              onChange={handleChange}
+              rows={4}
+              placeholder="Results-driven Senior DevOps Engineer with 8+ years of experience designing and maintaining CI/CD pipelines..."
+              className="w-full p-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors leading-relaxed resize-y"
+            ></textarea>
+          </div>
         </div>
       </div>
 
