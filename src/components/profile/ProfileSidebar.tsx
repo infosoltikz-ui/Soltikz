@@ -15,7 +15,8 @@ import {
   Sparkles,
   ArrowRight,
   FileSpreadsheet,
-  Upload
+  Upload,
+  Download
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { cn } from '@/utils/cn'
