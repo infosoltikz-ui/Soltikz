@@ -23,15 +23,45 @@ export function ProfileHeader({
   const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
 
   const handleDownloadExcel = () => {
-    const headers = "First Name,Last Name,Email,Phone,Summary,Job Title,Company,Start Date,End Date,Responsibilities\n"
-    const blob = new Blob([headers], { type: 'text/csv' })
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = "Soltikz_Profile_Template.csv"
-    a.click()
-    window.URL.revokeObjectURL(url)
-    toast.success('Template downloaded successfully!')
+    import('xlsx').then((XLSX) => {
+      // Define headers for each sheet
+      const personalInfoHeaders = [["First Name", "Last Name", "Email", "Phone", "Location", "Website/Portfolio", "Summary"]]
+      const experienceHeaders = [["Job Title", "Company", "Location", "Start Date (MM/YYYY)", "End Date (MM/YYYY)", "Is Current (Yes/No)", "Responsibilities"]]
+      const educationHeaders = [["Degree", "Field of Study", "Institution", "Location", "Start Date (MM/YYYY)", "End Date (MM/YYYY)", "GPA"]]
+      const projectsHeaders = [["Project Name", "Role", "Date", "Project URL", "Description"]]
+      const skillsHeaders = [["Skill Name", "Category", "Proficiency (Beginner/Intermediate/Advanced)"]]
+      const socialLinksHeaders = [["Platform Name (e.g., LinkedIn)", "URL"]]
+
+      // Create worksheets
+      const wsPersonalInfo = XLSX.utils.aoa_to_sheet(personalInfoHeaders)
+      const wsExperience = XLSX.utils.aoa_to_sheet(experienceHeaders)
+      const wsEducation = XLSX.utils.aoa_to_sheet(educationHeaders)
+      const wsProjects = XLSX.utils.aoa_to_sheet(projectsHeaders)
+      const wsSkills = XLSX.utils.aoa_to_sheet(skillsHeaders)
+      const wsSocialLinks = XLSX.utils.aoa_to_sheet(socialLinksHeaders)
+
+      // Auto-size columns loosely for better UX
+      const wscols = [{ wch: 20 }, { wch: 20 }, { wch: 25 }, { wch: 15 }, { wch: 20 }, { wch: 20 }, { wch: 50 }]
+      wsPersonalInfo['!cols'] = wscols
+      wsExperience['!cols'] = wscols
+      wsEducation['!cols'] = wscols
+
+      // Create a workbook and append the worksheets
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, wsPersonalInfo, "Personal Info")
+      XLSX.utils.book_append_sheet(wb, wsExperience, "Experience")
+      XLSX.utils.book_append_sheet(wb, wsEducation, "Education")
+      XLSX.utils.book_append_sheet(wb, wsProjects, "Projects")
+      XLSX.utils.book_append_sheet(wb, wsSkills, "Skills")
+      XLSX.utils.book_append_sheet(wb, wsSocialLinks, "Social Links")
+
+      // Write the workbook and trigger download
+      XLSX.writeFile(wb, "Soltikz_Master_Profile_Template.xlsx")
+      toast.success('Excel Template downloaded successfully!')
+    }).catch((err) => {
+      console.error("Error generating Excel template:", err)
+      toast.error("Failed to generate Excel template. Please try again.")
+    })
   }
 
   const masterData = profile?.master_resume_data || {}
