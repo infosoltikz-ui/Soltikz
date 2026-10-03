@@ -54,22 +54,22 @@ export function ProfileHeader({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
       {/* Left column: Compact Profile Hero Card */}
-      <div className="bg-white rounded-lg border border-slate-200 shadow-xs p-2.5 overflow-hidden flex items-center">
+      <div className="bg-white rounded-lg border border-slate-200 shadow-xs p-4 overflow-hidden flex items-center">
         <div className="flex items-center justify-between gap-3 w-full">
           {/* Avatar & Identity */}
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white font-bold text-[14px] flex items-center justify-center shrink-0 shadow-sm">
               {initials}
             </div>
             <div>
-              <div className="flex items-center gap-1">
-                <span className="text-[13px] font-bold text-slate-900 tracking-tight">{fullName}</span>
-                <CheckCircle2 className="w-3 h-3 text-primary shrink-0" />
+              <div className="flex items-center gap-1.5">
+                <span className="text-[14px] font-bold text-slate-900 tracking-tight">{fullName}</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
               </div>
-              <p className="text-[11px] font-medium text-slate-500 leading-none mt-0.5">
+              <p className="text-[11.5px] font-medium text-slate-500 leading-none mt-1">
                 {pi.location ? `${pi.location} • ` : ''}{email || 'Primary Candidate Record'}
               </p>
-              <div className="flex flex-wrap items-center gap-1 mt-1">
+              <div className="flex flex-wrap items-center gap-1.5 mt-2">
                 <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-px rounded">
                   {jobCount} Experiences
                 </span>
@@ -77,7 +77,7 @@ export function ProfileHeader({
                   {skillCount} Skills
                 </span>
                 <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-px rounded flex items-center gap-0.5">
-                  <Sparkles className="w-2 h-2 text-emerald-600" />
+                  <Sparkles className="w-2.5 h-2.5 text-emerald-600" />
                   ATS 90+
                 </span>
               </div>
@@ -87,31 +87,33 @@ export function ProfileHeader({
       </div>
 
       {/* Right column: Excel Import Card */}
-      <div className="bg-white rounded-lg border border-slate-200 shadow-xs p-2.5 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
-            <FileSpreadsheet className="w-4 h-4" />
+      <div className="bg-white rounded-lg border border-slate-200 shadow-xs p-4 flex items-center justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
+            <FileSpreadsheet className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-[12.5px] font-bold text-slate-900 leading-tight">Excel Data Import</h3>
-            <p className="text-[10px] text-slate-500">Auto-fill your profile</p>
+            <h3 className="text-[13px] font-bold text-slate-900 leading-tight">Excel Data Import</h3>
+            <p className="text-[11.5px] text-slate-500 mt-1 leading-relaxed pr-2">
+              Don't want to fill out forms manually? Download our standard template, fill it locally, and upload it to auto-populate your entire profile data at once.
+            </p>
           </div>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-2 shrink-0">
           <button
             onClick={() => setIsExcelModalOpen(true)}
-            className="h-7 px-3 text-[11px] font-semibold border border-slate-200 hover:border-slate-300 bg-white text-slate-700 rounded-md flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+            className="w-28 h-8 px-3 text-[11px] font-semibold border border-slate-200 hover:border-slate-300 bg-white text-slate-700 rounded-md flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-sm"
           >
-            <Download className="w-3 h-3 text-slate-500" />
+            <Download className="w-3.5 h-3.5 text-slate-500" />
             <span>Download</span>
           </button>
           <button
             onClick={() => toast.error("Excel upload is coming soon!")}
-            className="h-7 px-3 text-[11px] font-semibold border border-transparent bg-slate-900 hover:bg-slate-800 text-white rounded-md flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+            className="w-28 h-8 px-3 text-[11px] font-semibold border border-transparent bg-slate-900 hover:bg-slate-800 text-white rounded-md flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-sm"
           >
-            <UploadCloud className="w-3 h-3" />
-            <span>Upload</span>
+            <UploadCloud className="w-3.5 h-3.5" />
+            <span>Upload CSV</span>
           </button>
         </div>
       </div>
