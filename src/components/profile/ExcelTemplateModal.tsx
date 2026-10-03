@@ -33,56 +33,61 @@ export function ExcelTemplateModal({ open, onClose, onDownload }: ExcelTemplateM
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="w-full sm:max-w-[600px] overflow-hidden bg-white rounded-2xl shadow-2xl relative animate-in fade-in zoom-in duration-200">
         {/* Header */}
-        <div className="bg-slate-900 p-6 text-white relative">
+        <div className="bg-white border-b border-slate-100 p-6 pb-5 relative">
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
+            className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30">
-              <FileSpreadsheet className="w-5 h-5" />
+          
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100 shadow-sm">
+              <FileSpreadsheet className="w-6 h-6" strokeWidth={2} />
             </div>
-            <h2 className="text-xl font-bold">Download Excel Template</h2>
+            <div>
+              <h2 className="text-xl font-bold text-slate-900 tracking-tight">Download Excel Template</h2>
+              <p className="text-slate-500 text-[13px] mt-1.5 leading-relaxed pr-6">
+                Please follow these instructions carefully before downloading to ensure our system can read your data perfectly upon upload.
+              </p>
+            </div>
           </div>
-          <p className="text-slate-300 text-[13px] ml-13">
-            Please read these instructions carefully before downloading to ensure our system can read your data perfectly.
-          </p>
         </div>
 
         {/* Content */}
         <div className="p-6">
-          <div className="space-y-4 mb-6">
-            <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center shrink-0 mt-0.5">
-                <span className="text-[12px] font-bold text-slate-700">1</span>
+          <div className="grid gap-3 mb-6">
+            
+            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
+              <div className="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm">
+                <span className="text-[13px] font-bold text-slate-700">1</span>
               </div>
               <div>
-                <h4 className="text-[14px] font-bold text-slate-900">Do not rename column headers</h4>
-                <p className="text-[13px] text-slate-500 mt-0.5">Our system relies on exact column names (like "Job Title" or "Start Date"). If you change them, the upload will fail.</p>
+                <h4 className="text-[13.5px] font-bold text-slate-900">Do not alter template structure</h4>
+                <p className="text-[12.5px] text-slate-500 mt-0.5 leading-relaxed">Do not rename column headers, add/remove columns, or change sheet names. Our system relies on the exact template format.</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center shrink-0 mt-0.5">
-                <span className="text-[12px] font-bold text-slate-700">2</span>
+            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
+              <div className="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm">
+                <span className="text-[13px] font-bold text-slate-700">2</span>
               </div>
               <div>
-                <h4 className="text-[14px] font-bold text-slate-900">Use multiple sheets for different sections</h4>
-                <p className="text-[13px] text-slate-500 mt-0.5">The Excel file has different tabs at the bottom (Personal Info, Experience, Education). Fill the data in their respective tabs.</p>
+                <h4 className="text-[13.5px] font-bold text-slate-900">Use respective sheets</h4>
+                <p className="text-[12.5px] text-slate-500 mt-0.5 leading-relaxed">The Excel file has different tabs at the bottom (Personal Info, Experience, Education, Projects). Fill data in specific tabs.</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center shrink-0 mt-0.5">
-                <span className="text-[12px] font-bold text-slate-700">3</span>
+            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
+              <div className="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm">
+                <span className="text-[13px] font-bold text-slate-700">3</span>
               </div>
               <div>
-                <h4 className="text-[14px] font-bold text-slate-900">Date Formats</h4>
-                <p className="text-[13px] text-slate-500 mt-0.5">Please use MM/YYYY format for dates (e.g., 05/2020) to ensure perfect ATS parsing.</p>
+                <h4 className="text-[13.5px] font-bold text-slate-900">Date Formatting</h4>
+                <p className="text-[12.5px] text-slate-500 mt-0.5 leading-relaxed">Please use the MM/YYYY format for all dates (e.g., 05/2020) to ensure perfect ATS parsing and sorting.</p>
               </div>
             </div>
+
           </div>
 
           {/* Checkbox Area */}
