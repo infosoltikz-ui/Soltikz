@@ -11,20 +11,28 @@ import {
   Link2,
   Loader2,
   UploadCloud,
+  ShieldCheck,
+  Sparkles,
+  ArrowRight,
+  FileSpreadsheet,
+  Upload,
+  Download
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { cn } from '@/utils/cn'
+import { ExcelTemplateModal } from './ExcelTemplateModal'
 
-export function ProfileSidebar({ 
-  profile, 
+export function ProfileSidebar({
+  profile,
   onImport,
   onNavigateTab
-}: { 
-  profile?: any; 
+}: {
+  profile?: any;
   onImport?: (parsedData: any) => void;
   onNavigateTab?: (tab: string) => void;
 }) {
   const [isImporting, setIsImporting] = useState(false)
+  const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +59,19 @@ export function ProfileSidebar({
     } finally {
       setIsImporting(false)
     }
+  }
+
+  const handleDownloadExcel = () => {
+    // Generate a simple CSV for now as a placeholder for the actual Excel
+    const headers = "First Name,Last Name,Email,Phone,Summary,Job Title,Company,Start Date,End Date,Responsibilities\n"
+    const blob = new Blob([headers], { type: 'text/csv' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = "Soltikz_Profile_Template.csv"
+    a.click()
+    window.URL.revokeObjectURL(url)
+    toast.success('Template downloaded successfully!')
   }
 
   const masterData = profile?.master_resume_data || {}
@@ -113,11 +134,11 @@ export function ProfileSidebar({
           </div>
           <span className={cn(
             "text-[11px] font-bold px-2 py-0.5 rounded-full border",
-            completion >= 80 
-              ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+            completion >= 80
+              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
               : completion >= 40
-              ? 'bg-amber-50 text-amber-700 border-amber-200'
-              : 'bg-slate-50 text-slate-600 border-slate-200'
+                ? 'bg-amber-50 text-amber-700 border-amber-200'
+                : 'bg-slate-50 text-slate-600 border-slate-200'
           )}>
             {completion}% Ready
           </span>
@@ -166,8 +187,8 @@ export function ProfileSidebar({
         {/* Optimization Checklist */}
         <div className="space-y-2">
           {checklist.map((item, idx) => (
-            <div 
-              key={idx} 
+            <div
+              key={idx}
               onClick={() => onNavigateTab?.(item.tab)}
               className={cn(
                 "flex items-center justify-between p-2 rounded-lg text-[11.5px] transition-colors",
@@ -195,6 +216,47 @@ export function ProfileSidebar({
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Excel Data Import Card */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 hover:border-slate-300 transition-colors mt-4">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-6 h-6 rounded bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
+            <FileSpreadsheet className="w-3.5 h-3.5" strokeWidth={2.5} />
+          </div>
+          <h3 className="text-[13px] font-bold text-slate-900">Excel Data Import</h3>
+        </div>
+
+        <p className="text-[11.5px] font-normal text-slate-500 mb-3 leading-relaxed">
+          Don't want to fill out forms manually? Download our standard template, fill it locally, and upload it to auto-populate your profile.
+        </p>
+
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            onClick={() => setIsExcelModalOpen(true)}
+            className="w-full h-9 text-[12px] font-semibold border border-slate-200 hover:border-slate-300 bg-white text-slate-700 rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+          >
+            <Download className="w-3.5 h-3.5 text-slate-500" />
+            <span>Download</span>
+          </button>
+
+          <button
+            onClick={() => toast.error("Excel upload is coming soon!")}
+            className="w-full h-9 text-[12px] font-semibold border border-transparent bg-slate-900 hover:bg-slate-800 text-white rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+          >
+            <Upload className="w-3.5 h-3.5" />
+            <span>Upload</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Excel Instructions Modal */}
+      <ExcelTemplateModal
+        open={isExcelModalOpen}
+        onClose={() => setIsExcelModalOpen(false)}
+        onDownload={handleDownloadExcel}
+      />
+
     </div>
   )
 }
