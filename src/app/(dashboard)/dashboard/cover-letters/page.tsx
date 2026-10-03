@@ -38,14 +38,14 @@ export default function CoverLettersPage() {
 
   return (
     <div className="p-8 max-w-[1600px] mx-auto min-h-screen">
-      <DashboardHeader
-        title="Cover Letters"
-        subtitle="AI-written cover letters, tailored to the job description behind each resume."
-      />
       <ModuleHowItWorks
         moduleTitle="Cover Letters"
         tagline="Select a resume — AI writes a matching cover letter in seconds."
         steps={steps}
+      />
+      <DashboardHeader
+        title="Cover Letters"
+        subtitle="AI-written cover letters, tailored to the job description behind each resume."
       />
       <CoverLettersPageContent />
     </div>

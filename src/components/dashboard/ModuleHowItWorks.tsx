@@ -121,32 +121,32 @@ export function ModuleHowItWorks({ moduleTitle, tagline, steps }: ModuleHowItWor
     <>
       <GuideModal open={open} onClose={() => setOpen(false)} moduleTitle={moduleTitle} steps={steps} />
 
-      {/* Dark horizontal bar — same style as CreateResumeHeader sub-bar */}
+      {/* Dark horizontal bar */}
       <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/50 rounded-xl shadow-lg mb-6">
-        <div className="px-4 sm:px-5 h-11 flex items-center justify-between gap-4">
+        <div className="px-5 sm:px-6 h-14 flex items-center justify-between gap-4">
 
           {/* Left: pulsing dot + sparkle + tagline */}
-          <div className="flex items-center gap-2.5 min-w-0 flex-1 overflow-hidden">
-            <span className="relative flex h-2 w-2 shrink-0">
+          <div className="flex items-center gap-3 min-w-0 flex-1 overflow-hidden">
+            <span className="relative flex h-2.5 w-2.5 shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
             </span>
-            <Sparkles className="w-3 h-3 text-emerald-400 shrink-0" style={{ animation: 'spin 5s linear infinite' }} />
-            <p className="text-[11.5px] font-semibold text-slate-400 whitespace-nowrap overflow-hidden text-ellipsis">
-              <span className="text-emerald-400 font-bold">{moduleTitle}</span>
+            <Sparkles className="w-4 h-4 text-emerald-400 shrink-0" style={{ animation: 'spin 5s linear infinite' }} />
+            <p className="text-[13px] font-semibold text-slate-400 whitespace-nowrap overflow-hidden text-ellipsis">
+              <span className="text-emerald-400 font-extrabold">{moduleTitle}</span>
               <span className="mx-2 text-slate-600">·</span>
               {tagline}
             </p>
           </div>
 
           {/* Right: arrow + How it Works button */}
-          <div className="flex items-center gap-2 shrink-0">
-            <ChevronRight className="w-4 h-4 text-emerald-400 animate-pulse" />
+          <div className="flex items-center gap-2.5 shrink-0">
+            <ChevronRight className="w-5 h-5 text-emerald-400 animate-pulse" />
             <button
               onClick={() => setOpen(true)}
-              className="flex items-center gap-1.5 h-7 px-3.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white text-[11.5px] font-bold transition-all shadow-md shadow-emerald-500/30 hover:shadow-emerald-400/40 hover:scale-[1.03] active:scale-[0.97] select-none"
+              className="flex items-center gap-2 h-9 px-5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white text-[13px] font-bold transition-all shadow-md shadow-emerald-500/30 hover:shadow-emerald-400/40 hover:scale-[1.03] active:scale-[0.97] select-none"
             >
-              <BookOpen className="w-3 h-3 shrink-0" />
+              <BookOpen className="w-4 h-4 shrink-0" />
               How it Works
             </button>
           </div>
