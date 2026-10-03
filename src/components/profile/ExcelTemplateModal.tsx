@@ -1,8 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Download, AlertCircle, FileSpreadsheet, Check, X } from 'lucide-react'
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/Dialog'
+import { useState, useEffect } from 'react'
+import { Download, FileSpreadsheet, Check, X } from 'lucide-react'
 
 interface ExcelTemplateModalProps {
   open: boolean;
@@ -13,6 +12,13 @@ interface ExcelTemplateModalProps {
 export function ExcelTemplateModal({ open, onClose, onDownload }: ExcelTemplateModalProps) {
   const [agreed, setAgreed] = useState(false)
 
+  // Prevent background scrolling when open
+  useEffect(() => {
+    if (open) document.body.style.overflow = 'hidden'
+    else document.body.style.overflow = 'unset'
+    return () => { document.body.style.overflow = 'unset' }
+  }, [open])
+
   const handleDownload = () => {
     if (agreed) {
       onDownload()
@@ -21,9 +27,11 @@ export function ExcelTemplateModal({ open, onClose, onDownload }: ExcelTemplateM
     }
   }
 
+  if (!open) return null
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden bg-white rounded-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div className="w-full sm:max-w-[600px] overflow-hidden bg-white rounded-2xl shadow-2xl relative animate-in fade-in zoom-in duration-200">
         {/* Header */}
         <div className="bg-slate-900 p-6 text-white relative">
           <button 
@@ -36,7 +44,7 @@ export function ExcelTemplateModal({ open, onClose, onDownload }: ExcelTemplateM
             <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30">
               <FileSpreadsheet className="w-5 h-5" />
             </div>
-            <DialogTitle className="text-xl font-bold">Download Excel Template</DialogTitle>
+            <h2 className="text-xl font-bold">Download Excel Template</h2>
           </div>
           <p className="text-slate-300 text-[13px] ml-13">
             Please read these instructions carefully before downloading to ensure our system can read your data perfectly.
@@ -115,7 +123,7 @@ export function ExcelTemplateModal({ open, onClose, onDownload }: ExcelTemplateM
             </button>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   )
 }
