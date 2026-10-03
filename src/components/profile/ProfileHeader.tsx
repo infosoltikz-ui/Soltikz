@@ -37,38 +37,6 @@ export function ProfileHeader({
 
   return (
     <div className="mb-6 space-y-4">
-      {/* Top Bar with Title & User Menu */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-[22px] sm:text-[24px] font-bold text-slate-900 tracking-tight leading-tight">
-              Master Career Profile
-            </h1>
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
-              <ShieldCheck className="w-3 h-3 text-emerald-600" />
-              Verified &amp; Encrypted
-            </span>
-          </div>
-          <p className="text-[13px] font-medium text-slate-500">
-            Your centralized master career repository powering 90+ ATS AI resume generation.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3 self-end sm:self-auto">
-
-          {onToggleViewMode && (
-            <button
-              onClick={onToggleViewMode}
-              className="h-9 px-3.5 text-[12.5px] font-semibold text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg shadow-2xs inline-flex items-center gap-1.5 transition-colors cursor-pointer"
-            >
-              <Eye className="w-3.5 h-3.5 text-slate-500" />
-              {viewMode ? 'Switch to Edit Forms' : 'View Full Dossier'}
-            </button>
-          )}
-
-          <UserMenu />
-        </div>
-      </div>
 
       {/* Executive Candidate Profile Hero Card */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 overflow-hidden relative">

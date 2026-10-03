@@ -1,3 +1,4 @@
+import { DashboardHeader } from '@/components/dashboard/DashboardHeader'
 import { ResumesPageContent } from '@/components/dashboard/resumes/ResumesPageContent'
 import { ModuleHowItWorks, ModuleStep } from '@/components/dashboard/ModuleHowItWorks'
 
@@ -36,15 +37,17 @@ export default function MyResumesPage() {
   ]
 
   return (
-    <div className="min-h-screen">
+    <div className="p-6 md:p-8 max-w-[1800px] mx-auto min-h-screen">
       <ModuleHowItWorks
         moduleTitle="My Resumes"
         tagline="All your AI-tailored resumes in one place — review, export, and apply instantly."
         steps={steps}
       />
-      <div className="p-6 md:p-8 max-w-[1800px] mx-auto">
-        <ResumesPageContent />
-      </div>
+      <DashboardHeader
+        title="My Resumes"
+        subtitle="Manage, organize, optimize, and download all your resumes from one place."
+      />
+      <ResumesPageContent />
     </div>
   )
 }
