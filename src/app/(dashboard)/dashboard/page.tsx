@@ -11,7 +11,7 @@ import { OnboardingSteps } from '@/components/dashboard/OnboardingSteps'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { FREE_TIER_CREDITS } from '@/utils/pricingPlans'
-import { ModuleHowItWorks } from '@/components/dashboard/ModuleHowItWorks'
+import { ModuleHowItWorks, ModuleStep } from '@/components/dashboard/ModuleHowItWorks'
 
 export const dynamic = 'force-dynamic'
 
@@ -94,10 +94,37 @@ export default async function DashboardPage() {
   const userSkills = Array.isArray(masterData?.skills) ? masterData.skills : []
   const targetRole = personalInfo?.targetRole || 'Software Engineer'
 
-  const steps = [
-    { title: 'Update Profile', description: 'Ensure your base profile is 100% complete.', iconName: 'Target' as const },
-    { title: 'Track Activity', description: 'Monitor your tailored resumes and application progress.', iconName: 'LayoutDashboard' as const },
-    { title: 'Fill Gaps', description: 'Use the Skills Gap Health Check to improve your profile.', iconName: 'SearchCheck' as const },
+  const steps: ModuleStep[] = [
+    {
+      iconName: 'Target',
+      title: 'Complete Your Profile',
+      description: 'Your master profile is the foundation for all AI-generated resumes.',
+      bullets: [
+        'Fill in all work experience, skills, and education',
+        'Aim for 100% Profile Health for the best resume quality',
+        'Update your profile anytime — resumes reflect new data',
+      ],
+    },
+    {
+      iconName: 'LayoutDashboard',
+      title: 'Track Your Activity',
+      description: 'Monitor all your tailored resumes, ATS scores, and application progress.',
+      bullets: [
+        'See all generated resumes with their ATS scores',
+        'Track which companies you have applied to',
+        'View your credits usage and plan details',
+      ],
+    },
+    {
+      iconName: 'SearchCheck',
+      title: 'Close Your Skills Gaps',
+      description: 'Use the Skills Gap Health Check to identify missing skills for your target role.',
+      bullets: [
+        'Compares your profile skills against target role requirements',
+        'Shows exactly which skills are missing',
+        'Add the skills to your profile to improve future resumes',
+      ],
+    },
   ]
 
   return (
@@ -106,7 +133,11 @@ export default async function DashboardPage() {
       <DashboardHeader title="Dashboard" greeting />
 
       <main className="space-y-6">
-        <ModuleHowItWorks steps={steps} />
+        <ModuleHowItWorks
+          moduleTitle="Dashboard"
+          tagline="Complete your profile, create tailored resumes, and track your job search — all in one place."
+          steps={steps}
+        />
 
         {/* Onboarding Steps */}
         <OnboardingSteps
