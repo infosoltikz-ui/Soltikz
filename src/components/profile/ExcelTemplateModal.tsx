@@ -74,7 +74,7 @@ export function ExcelTemplateModal({ open, onClose, onDownload }: ExcelTemplateM
               </div>
               <div>
                 <h4 className="text-[13px] font-bold text-slate-900 group-hover:text-emerald-900 transition-colors">Use respective sheets</h4>
-                <p className="text-[12px] text-slate-600 mt-0.5 leading-relaxed">Fill data in the specific tabs provided (e.g. Personal Info, Experience, Education).</p>
+                <p className="text-[12px] text-slate-600 mt-0.5 leading-relaxed">Fill data in specific tabs (e.g. Personal Details, Experience, Education, Certifications, Skills & Tech).</p>
               </div>
             </div>
 

@@ -24,36 +24,39 @@ export function ProfileHeader({
 
   const handleDownloadExcel = () => {
     import('xlsx').then((XLSX) => {
-      // Define headers for each sheet
-      const personalInfoHeaders = [["First Name", "Last Name", "Email", "Phone", "Location", "Website/Portfolio", "Summary"]]
+      // Define headers for each sheet matching the UI tabs exactly
+      const personalDetailsHeaders = [["First Name", "Last Name", "Email", "Phone", "Location", "Website/Portfolio", "LinkedIn URL", "Summary"]]
       const experienceHeaders = [["Job Title", "Company", "Location", "Start Date (MM/YYYY)", "End Date (MM/YYYY)", "Is Current (Yes/No)", "Responsibilities"]]
       const educationHeaders = [["Degree", "Field of Study", "Institution", "Location", "Start Date (MM/YYYY)", "End Date (MM/YYYY)", "GPA"]]
       const projectsHeaders = [["Project Name", "Role", "Date", "Project URL", "Description"]]
-      const skillsHeaders = [["Skill Name", "Category", "Proficiency (Beginner/Intermediate/Advanced)"]]
-      const socialLinksHeaders = [["Platform Name (e.g., LinkedIn)", "URL"]]
+      const certificationsHeaders = [["Certification Name", "Issuer", "Issue Date (MM/YYYY)", "Expiration Date (MM/YYYY)", "Credential ID", "Credential URL"]]
+      const skillsTechHeaders = [["Skill Name", "Category", "Proficiency (Beginner/Intermediate/Advanced)"]]
 
       // Create worksheets
-      const wsPersonalInfo = XLSX.utils.aoa_to_sheet(personalInfoHeaders)
+      const wsPersonal = XLSX.utils.aoa_to_sheet(personalDetailsHeaders)
       const wsExperience = XLSX.utils.aoa_to_sheet(experienceHeaders)
       const wsEducation = XLSX.utils.aoa_to_sheet(educationHeaders)
       const wsProjects = XLSX.utils.aoa_to_sheet(projectsHeaders)
-      const wsSkills = XLSX.utils.aoa_to_sheet(skillsHeaders)
-      const wsSocialLinks = XLSX.utils.aoa_to_sheet(socialLinksHeaders)
+      const wsCertifications = XLSX.utils.aoa_to_sheet(certificationsHeaders)
+      const wsSkills = XLSX.utils.aoa_to_sheet(skillsTechHeaders)
 
       // Auto-size columns loosely for better UX
       const wscols = [{ wch: 20 }, { wch: 20 }, { wch: 25 }, { wch: 15 }, { wch: 20 }, { wch: 20 }, { wch: 50 }]
-      wsPersonalInfo['!cols'] = wscols
+      wsPersonal['!cols'] = wscols
       wsExperience['!cols'] = wscols
       wsEducation['!cols'] = wscols
+      wsProjects['!cols'] = wscols
+      wsCertifications['!cols'] = wscols
+      wsSkills['!cols'] = wscols
 
-      // Create a workbook and append the worksheets
+      // Create a workbook and append the worksheets with exact UI tab names
       const wb = XLSX.utils.book_new()
-      XLSX.utils.book_append_sheet(wb, wsPersonalInfo, "Personal Info")
+      XLSX.utils.book_append_sheet(wb, wsPersonal, "Personal Details")
       XLSX.utils.book_append_sheet(wb, wsExperience, "Experience")
       XLSX.utils.book_append_sheet(wb, wsEducation, "Education")
       XLSX.utils.book_append_sheet(wb, wsProjects, "Projects")
-      XLSX.utils.book_append_sheet(wb, wsSkills, "Skills")
-      XLSX.utils.book_append_sheet(wb, wsSocialLinks, "Social Links")
+      XLSX.utils.book_append_sheet(wb, wsCertifications, "Certifications")
+      XLSX.utils.book_append_sheet(wb, wsSkills, "Skills & Tech")
 
       // Write the workbook and trigger download
       XLSX.writeFile(wb, "Soltikz_Master_Profile_Template.xlsx")
