@@ -118,7 +118,7 @@ export function ProfileHeader({
           // Parse Experience
           const expData = getSheetData("Experience")
           parsedData.employment = expData.filter((r: any) => r.length > 0).map((row: any) => ({
-            jobTitle: row[0] || "",
+            title: row[0] || "",
             company: row[1] || "",
             employmentType: row[2] || "",
             industry: row[3] || "",
@@ -126,7 +126,7 @@ export function ProfileHeader({
             location: row[5] || "",
             startDate: row[6] || "",
             endDate: row[7] || "",
-            isCurrent: String(row[8] || "").toLowerCase() === 'yes',
+            current: String(row[8] || "").toLowerCase() === 'yes',
             responsibilities: row[9] || ""
           }))
 
@@ -139,15 +139,15 @@ export function ProfileHeader({
             location: row[3] || "",
             startDate: row[4] || "",
             endDate: row[5] || "",
-            gpa: row[6] || ""
+            grade: row[6] || ""
           }))
 
           // Parse Projects
           const projData = getSheetData("Projects")
           parsedData.projects = projData.filter((r: any) => r.length > 0).map((row: any) => ({
-            projectName: row[0] || "",
+            name: row[0] || "",
             role: row[1] || "",
-            projectUrl: row[2] || "",
+            link: row[2] || "",
             startDate: row[3] || "",
             endDate: row[4] || "",
             description: row[5] || ""
@@ -157,20 +157,25 @@ export function ProfileHeader({
           const certData = getSheetData("Certifications")
           parsedData.certifications = certData.filter((r: any) => r.length > 0).map((row: any) => ({
             name: row[0] || "",
-            issuer: row[1] || "",
+            organization: row[1] || "",
             issueDate: row[2] || "",
-            expirationDate: row[3] || "",
+            expiryDate: row[3] || "",
             credentialId: row[4] || "",
             credentialUrl: row[5] || ""
           }))
 
           // Parse Skills & Tech
           const skillsData = getSheetData("Skills & Tech")
-          parsedData.skills = skillsData.filter((r: any) => r.length > 0).map((row: any) => ({
-            name: row[0] || "",
-            category: row[1] || "",
-            proficiency: row[2] || ""
-          }))
+          const groupedSkills: Record<string, string[]> = {}
+          skillsData.filter((r: any) => r.length > 0).forEach((row: any) => {
+            const skillName = row[0]
+            const category = row[1] || "Other Skills"
+            if (skillName) {
+              if (!groupedSkills[category]) groupedSkills[category] = []
+              groupedSkills[category].push(skillName)
+            }
+          })
+          parsedData.skills = Object.keys(groupedSkills).map(cat => ({ category: cat, items: groupedSkills[cat] }))
 
           if (onExcelImport) {
             onExcelImport(parsedData)
