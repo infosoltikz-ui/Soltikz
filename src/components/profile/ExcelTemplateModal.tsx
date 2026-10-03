@@ -58,63 +58,63 @@ export function ExcelTemplateModal({ open, onClose, onDownload }: ExcelTemplateM
         <div className="p-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
             
-            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
-              <div className="w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
-                <span className="text-[12px] font-bold text-slate-700">1</span>
+            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-rose-200/60 bg-rose-50/50 backdrop-blur-sm">
+              <div className="w-6 h-6 rounded-full bg-white border border-rose-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <span className="text-[12px] font-bold text-rose-700">1</span>
               </div>
               <div>
                 <h4 className="text-[13px] font-bold text-slate-900">Don't alter structure</h4>
-                <p className="text-[12px] text-slate-500 mt-0.5 leading-relaxed">No renaming, adding, or deleting columns/sheets. We rely on this exact format.</p>
+                <p className="text-[12px] text-slate-600 mt-0.5 leading-relaxed">No renaming, adding, or deleting columns/sheets. We rely on this exact format.</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
-              <div className="w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
-                <span className="text-[12px] font-bold text-slate-700">2</span>
+            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-emerald-200/60 bg-emerald-50/50 backdrop-blur-sm">
+              <div className="w-6 h-6 rounded-full bg-white border border-emerald-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <span className="text-[12px] font-bold text-emerald-700">2</span>
               </div>
               <div>
                 <h4 className="text-[13px] font-bold text-slate-900">Use respective sheets</h4>
-                <p className="text-[12px] text-slate-500 mt-0.5 leading-relaxed">Fill data in the specific tabs provided (e.g. Personal Info, Experience, Education).</p>
+                <p className="text-[12px] text-slate-600 mt-0.5 leading-relaxed">Fill data in the specific tabs provided (e.g. Personal Info, Experience, Education).</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
-              <div className="w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
-                <span className="text-[12px] font-bold text-slate-700">3</span>
+            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-blue-200/60 bg-blue-50/50 backdrop-blur-sm">
+              <div className="w-6 h-6 rounded-full bg-white border border-blue-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <span className="text-[12px] font-bold text-blue-700">3</span>
               </div>
               <div>
                 <h4 className="text-[13px] font-bold text-slate-900">Date Formatting</h4>
-                <p className="text-[12px] text-slate-500 mt-0.5 leading-relaxed">Use the MM/YYYY format for dates (e.g., 05/2020) for perfect ATS parsing.</p>
+                <p className="text-[12px] text-slate-600 mt-0.5 leading-relaxed">Use the MM/YYYY format for dates (e.g., 05/2020) for perfect ATS parsing.</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
-              <div className="w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
-                <span className="text-[12px] font-bold text-slate-700">4</span>
+            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-amber-200/60 bg-amber-50/50 backdrop-blur-sm">
+              <div className="w-6 h-6 rounded-full bg-white border border-amber-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <span className="text-[12px] font-bold text-amber-700">4</span>
               </div>
               <div>
                 <h4 className="text-[13px] font-bold text-slate-900">Mandatory Fields</h4>
-                <p className="text-[12px] text-slate-500 mt-0.5 leading-relaxed">Don't leave crucial fields blank (e.g., Company, Job Title, Degree, Email).</p>
+                <p className="text-[12px] text-slate-600 mt-0.5 leading-relaxed">Don't leave crucial fields blank (e.g., Company, Job Title, Degree, Email).</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
-              <div className="w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
-                <span className="text-[12px] font-bold text-slate-700">5</span>
+            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-purple-200/60 bg-purple-50/50 backdrop-blur-sm">
+              <div className="w-6 h-6 rounded-full bg-white border border-purple-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <span className="text-[12px] font-bold text-purple-700">5</span>
               </div>
               <div>
                 <h4 className="text-[13px] font-bold text-slate-900">No Custom Formatting</h4>
-                <p className="text-[12px] text-slate-500 mt-0.5 leading-relaxed">Keep data as plain text. Avoid merged cells, colors, or Excel formulas.</p>
+                <p className="text-[12px] text-slate-600 mt-0.5 leading-relaxed">Keep data as plain text. Avoid merged cells, colors, or Excel formulas.</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
-              <div className="w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
-                <span className="text-[12px] font-bold text-slate-700">6</span>
+            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-cyan-200/60 bg-cyan-50/50 backdrop-blur-sm">
+              <div className="w-6 h-6 rounded-full bg-white border border-cyan-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <span className="text-[12px] font-bold text-cyan-700">6</span>
               </div>
               <div>
                 <h4 className="text-[13px] font-bold text-slate-900">Bullet Points</h4>
-                <p className="text-[12px] text-slate-500 mt-0.5 leading-relaxed">Use a hyphen (-) for lists and "Alt + Enter" for new lines within a cell.</p>
+                <p className="text-[12px] text-slate-600 mt-0.5 leading-relaxed">Use a hyphen (-) for lists and "Alt + Enter" for new lines within a cell.</p>
               </div>
             </div>
 
