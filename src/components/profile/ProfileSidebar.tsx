@@ -200,45 +200,7 @@ export function ProfileSidebar({
         </div>
       </div>
 
-      {/* LinkedIn 1-Click Fast Import Card */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 hover:border-slate-300 transition-colors">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-6 h-6 rounded bg-[#0A66C2]/10 text-[#0A66C2] flex items-center justify-center shrink-0">
-            <Link2 className="w-3.5 h-3.5" strokeWidth={2.5} />
-          </div>
-          <h3 className="text-[13px] font-bold text-slate-900">LinkedIn Fast Import</h3>
-        </div>
-        
-        <p className="text-[11.5px] font-normal text-slate-500 mb-3 leading-relaxed">
-          Export your LinkedIn profile as PDF (&quot;More &gt; Save to PDF&quot;) and upload here to auto-populate your master record.
-        </p>
 
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="application/pdf"
-          className="hidden"
-          onChange={handleFileSelected}
-        />
-        
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          disabled={isImporting}
-          className="w-full h-9 text-[12.5px] font-semibold border border-slate-200 hover:border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-800 rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-60 cursor-pointer shadow-2xs"
-        >
-          {isImporting ? (
-            <>
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-primary" />
-              <span>Parsing LinkedIn Data...</span>
-            </>
-          ) : (
-            <>
-              <UploadCloud className="w-3.5 h-3.5 text-slate-500" />
-              <span>Upload LinkedIn PDF</span>
-            </>
-          )}
-        </button>
-      </div>
 
     </div>
   )
