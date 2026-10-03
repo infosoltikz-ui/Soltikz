@@ -1,4 +1,3 @@
-import { DashboardHeader } from '@/components/dashboard/DashboardHeader'
 import { CoverLettersPageContent } from '@/components/dashboard/cover-letters/CoverLettersPageContent'
 import { ModuleHowItWorks, ModuleStep } from '@/components/dashboard/ModuleHowItWorks'
 
@@ -37,17 +36,15 @@ export default function CoverLettersPage() {
   ]
 
   return (
-    <div className="p-8 max-w-[1600px] mx-auto min-h-screen">
+    <div className="min-h-screen">
       <ModuleHowItWorks
         moduleTitle="Cover Letters"
         tagline="Select a resume — AI writes a matching cover letter in seconds."
         steps={steps}
       />
-      <DashboardHeader
-        title="Cover Letters"
-        subtitle="AI-written cover letters, tailored to the job description behind each resume."
-      />
-      <CoverLettersPageContent />
+      <div className="p-8 max-w-[1600px] mx-auto">
+        <CoverLettersPageContent />
+      </div>
     </div>
   )
 }

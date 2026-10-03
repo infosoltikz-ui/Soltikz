@@ -1,7 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { ProfileContent } from '@/components/profile/ProfileContent'
-import { DashboardHeader } from '@/components/dashboard/DashboardHeader'
 import { ModuleHowItWorks, ModuleStep } from '@/components/dashboard/ModuleHowItWorks'
 
 export const dynamic = 'force-dynamic'
@@ -41,7 +40,7 @@ export default async function ProfilePage() {
       title: 'This is Your AI Source of Truth',
       description: 'Every resume AI generates is based 100% on your master profile data — no hallucinations.',
       bullets: [
-        'AI never invents experience you haven\'t listed here',
+        'AI never invents experience you have not listed here',
         'Keep your profile updated to get the most accurate resumes',
         'Profile data is securely stored and encrypted',
       ],
@@ -59,17 +58,15 @@ export default async function ProfilePage() {
   ]
 
   return (
-    <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-14 max-w-[1600px] mx-auto bg-slate-50/50 min-h-screen">
-      <DashboardHeader
-        title="Master Profile"
-        subtitle="Your centralized master career data. AI generates all resumes from this profile."
-      />
+    <div className="min-h-screen bg-slate-50/50">
       <ModuleHowItWorks
         moduleTitle="Master Profile"
         tagline="Complete your profile once — AI uses it to generate unlimited tailored resumes."
         steps={steps}
       />
-      <ProfileContent initialProfile={profile} />
+      <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-14 max-w-[1600px] mx-auto">
+        <ProfileContent initialProfile={profile} />
+      </div>
     </div>
   )
 }
