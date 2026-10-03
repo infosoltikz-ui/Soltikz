@@ -126,12 +126,16 @@ export function ExcelTemplateModal({ open, onClose, onDownload }: ExcelTemplateM
               <div className="relative flex items-center justify-center mt-0.5 shrink-0">
                 <input 
                   type="checkbox" 
-                  className="peer sr-only"
+                  className="sr-only"
                   checked={agreed}
                   onChange={(e) => setAgreed(e.target.checked)}
                 />
-                <div className="w-5 h-5 rounded border-2 border-amber-300 bg-white group-hover:border-amber-400 peer-checked:bg-amber-500 peer-checked:border-amber-500 transition-colors flex items-center justify-center">
-                  <Check className="w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100" />
+                <div className={`w-5 h-5 rounded border-2 transition-all duration-200 flex items-center justify-center ${
+                  agreed 
+                    ? 'bg-amber-500 border-amber-500 scale-105' 
+                    : 'bg-white border-amber-300 group-hover:border-amber-400'
+                }`}>
+                  <Check className={`w-3.5 h-3.5 text-white transition-opacity duration-200 ${agreed ? 'opacity-100' : 'opacity-0'}`} strokeWidth={3.5} />
                 </div>
               </div>
               <span className="text-[13px] font-medium text-amber-900 select-none">
