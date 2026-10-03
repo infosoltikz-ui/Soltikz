@@ -8,7 +8,7 @@ import { createClient } from '@/utils/supabase/server';
 // ─── STEP 2: Resume Generation Schema ────────────────────────────────────────
 const GeneratedResumeFormat = z.object({
   summary: z.array(z.string()).describe(
-    'C2C: EXACTLY 10 bullet points (1-2 lines / 15-18 words each) with bolded **keywords** and metrics. Full-Time: EXACTLY 5 sentences that join into one flowing prose paragraph — NO bullets, NO bold, NO "I".'
+    'C2C: EXACTLY 10 bullet points (EXACTLY 2 full lines / minimum 25-30 words each) with bolded **keywords** and metrics. Full-Time: EXACTLY 5 sentences that join into one flowing prose paragraph — NO bullets, NO bold, NO "I".'
   ),
   skills: z.array(z.object({
     category: z.string(),
@@ -126,7 +126,7 @@ ACTION VERB BANK:
 ══════════════════════════════════════════════════════════════════
 
 PROFESSIONAL SUMMARY — C2C (BULLETS, NOT PROSE):
-  - EXACTLY 10 bullet points. Each bullet MUST be 1 to 2 lines long (15 to 18 words per bullet point).
+  - EXACTLY 10 bullet points. Each bullet MUST be EXACTLY 2 full lines long (minimum 25-30 words per bullet point).
   - Every bullet MUST include quantified metrics (%, scale, time saved, volume).
   - Bold ALL critical JD keywords with **keyword** syntax.
   - Exact 10-bullet sequence:
@@ -299,7 +299,7 @@ export async function POST(req: Request) {
       `══════════════════════════════════════════════════════════════════`,
       isC2CMode ? `
       FOR C2C RESUMES (CONTRACT TO HIRE VENDOR SUBMISSION):
-      - PROFESSIONAL SUMMARY: EXACTLY 10 bullet points. Every bullet MUST be 1 to 2 lines long (15 to 18 words per point) with bold **keywords** and quantified metrics (%).
+      - PROFESSIONAL SUMMARY: EXACTLY 10 bullet points. Every bullet MUST be EXACTLY 2 full lines long (minimum 25-30 words per point) with bold **keywords** and quantified metrics (%).
       - SKILLS MATRIX: EXACTLY 10 categories, each with 5-7 items.
       - ONLY generate Experience entries for companies that exist in the Master Profile. NEVER invent or hallucinate extra companies.
       - EXPERIENCE 1 (Most Recent Role): EXACTLY 10 BULLET POINTS (STRICT MINIMUM 10 BULLETS).

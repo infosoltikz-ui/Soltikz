@@ -79,7 +79,7 @@ export async function POST(req: Request) {
     const aiResponse = await generateAIResponse<any>({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt: `Master Profile:\n${JSON.stringify(profile.master_resume_data || {})}\n\nCandidate Name: ${profile.full_name}\n\nJob Title: ${parsedJd.job_title}\nCompany: ${parsedJd.company_name}\nParsed JD:\n${JSON.stringify(parsedJd.parsed_data)}`,
-      model: 'gpt-4o',
+      model: 'gpt-6-luna',
       temperature: 0.5,
       responseFormat: zodResponseFormat(GeneratedCoverLetterFormat, 'generated_cover_letter'),
     });

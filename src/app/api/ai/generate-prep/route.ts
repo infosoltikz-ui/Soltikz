@@ -74,7 +74,7 @@ export async function POST(req: Request) {
     const aiResponse = await generateAIResponse<any>({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt: `Job Description:\n${JSON.stringify(parsedJdData)}\n\nCandidate Resume:\n${JSON.stringify(resumeContent)}`,
-      model: 'gpt-4o',
+      model: 'gpt-6-luna',
       temperature: 0.6,
       responseFormat: zodResponseFormat(InterviewPrepFormat, 'interview_prep'),
     });
