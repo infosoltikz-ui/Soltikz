@@ -37,18 +37,18 @@ export function DashboardHeader({ title, subtitle, greeting }: DashboardHeaderPr
   }, [])
 
   return (
-    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pl-12 md:pl-0 pb-5 border-b border-slate-200">
+    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3 pl-12 md:pl-0 pb-3 border-b border-slate-200">
       <div>
-        <h1 className="text-[22px] sm:text-[24px] font-bold text-slate-900 tracking-tight leading-tight">
+        <h1 className="text-[18px] sm:text-[20px] font-bold text-slate-900 tracking-tight leading-tight">
           {title}
         </h1>
         {greeting && (
-          <p className="text-[13px] font-medium text-slate-500 mt-1">
+          <p className="text-[12px] font-medium text-slate-500 mt-0.5">
             Welcome back, <span className="font-semibold text-slate-800">{fullName}</span>
           </p>
         )}
         {!greeting && subtitle && (
-          <p className="text-[13px] font-medium text-slate-500 mt-1">{subtitle}</p>
+          <p className="text-[12px] font-medium text-slate-500 mt-0.5">{subtitle}</p>
         )}
       </div>
 

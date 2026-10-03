@@ -59,7 +59,7 @@ export default async function ProfilePage() {
   ]
 
   return (
-    <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-14 max-w-[1600px] mx-auto bg-slate-50/50 min-h-screen">
+    <div className="px-6 sm:px-8 pt-4 pb-14 max-w-[1600px] mx-auto bg-slate-50/50 min-h-screen">
       <DashboardHeader
         title="Master Profile"
         subtitle="Your centralized master career data. AI generates all resumes from this profile."

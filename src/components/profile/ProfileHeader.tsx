@@ -36,7 +36,7 @@ export function ProfileHeader({
   const skillCount = Array.isArray(masterData?.skills) ? masterData.skills.length : 0
 
   return (
-    <div className="mb-6 space-y-4">
+    <div className="mb-4">
 
       {/* Compact Profile Hero Card */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-3.5 sm:p-4 overflow-hidden relative">

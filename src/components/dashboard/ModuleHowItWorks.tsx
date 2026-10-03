@@ -122,7 +122,7 @@ export function ModuleHowItWorks({ moduleTitle, tagline, steps }: ModuleHowItWor
       <GuideModal open={open} onClose={() => setOpen(false)} moduleTitle={moduleTitle} steps={steps} />
 
       {/* Dark horizontal bar */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/50 rounded-xl shadow-lg mb-6">
+      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/50 rounded-xl shadow-lg mb-3">
         <div className="px-5 sm:px-6 h-14 flex items-center justify-between gap-4">
 
           {/* Left: pulsing dot + sparkle + tagline */}
