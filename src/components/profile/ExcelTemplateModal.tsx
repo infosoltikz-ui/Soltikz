@@ -31,7 +31,7 @@ export function ExcelTemplateModal({ open, onClose, onDownload }: ExcelTemplateM
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="w-full sm:max-w-[600px] overflow-hidden bg-white rounded-2xl shadow-2xl relative animate-in fade-in zoom-in duration-200">
+      <div className="w-full sm:max-w-[700px] overflow-hidden bg-white rounded-2xl shadow-2xl relative animate-in fade-in zoom-in duration-200">
         {/* Header */}
         <div className="bg-white border-b border-slate-100 p-6 pb-5 relative">
           <button 
@@ -56,35 +56,65 @@ export function ExcelTemplateModal({ open, onClose, onDownload }: ExcelTemplateM
 
         {/* Content */}
         <div className="p-6">
-          <div className="grid gap-3 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
             
             <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
-              <div className="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm">
-                <span className="text-[13px] font-bold text-slate-700">1</span>
+              <div className="w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <span className="text-[12px] font-bold text-slate-700">1</span>
               </div>
               <div>
-                <h4 className="text-[13.5px] font-bold text-slate-900">Do not alter template structure</h4>
-                <p className="text-[12.5px] text-slate-500 mt-0.5 leading-relaxed">Do not rename column headers, add/remove columns, or change sheet names. Our system relies on the exact template format.</p>
+                <h4 className="text-[13px] font-bold text-slate-900">Don't alter structure</h4>
+                <p className="text-[12px] text-slate-500 mt-0.5 leading-relaxed">No renaming, adding, or deleting columns/sheets. We rely on this exact format.</p>
               </div>
             </div>
 
             <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
-              <div className="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm">
-                <span className="text-[13px] font-bold text-slate-700">2</span>
+              <div className="w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <span className="text-[12px] font-bold text-slate-700">2</span>
               </div>
               <div>
-                <h4 className="text-[13.5px] font-bold text-slate-900">Use respective sheets</h4>
-                <p className="text-[12.5px] text-slate-500 mt-0.5 leading-relaxed">The Excel file has different tabs at the bottom (Personal Info, Experience, Education, Projects). Fill data in specific tabs.</p>
+                <h4 className="text-[13px] font-bold text-slate-900">Use respective sheets</h4>
+                <p className="text-[12px] text-slate-500 mt-0.5 leading-relaxed">Fill data in the specific tabs provided (e.g. Personal Info, Experience, Education).</p>
               </div>
             </div>
 
             <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
-              <div className="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm">
-                <span className="text-[13px] font-bold text-slate-700">3</span>
+              <div className="w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <span className="text-[12px] font-bold text-slate-700">3</span>
               </div>
               <div>
-                <h4 className="text-[13.5px] font-bold text-slate-900">Date Formatting</h4>
-                <p className="text-[12.5px] text-slate-500 mt-0.5 leading-relaxed">Please use the MM/YYYY format for all dates (e.g., 05/2020) to ensure perfect ATS parsing and sorting.</p>
+                <h4 className="text-[13px] font-bold text-slate-900">Date Formatting</h4>
+                <p className="text-[12px] text-slate-500 mt-0.5 leading-relaxed">Use the MM/YYYY format for dates (e.g., 05/2020) for perfect ATS parsing.</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
+              <div className="w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <span className="text-[12px] font-bold text-slate-700">4</span>
+              </div>
+              <div>
+                <h4 className="text-[13px] font-bold text-slate-900">Mandatory Fields</h4>
+                <p className="text-[12px] text-slate-500 mt-0.5 leading-relaxed">Don't leave crucial fields blank (e.g., Company, Job Title, Degree, Email).</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
+              <div className="w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <span className="text-[12px] font-bold text-slate-700">5</span>
+              </div>
+              <div>
+                <h4 className="text-[13px] font-bold text-slate-900">No Custom Formatting</h4>
+                <p className="text-[12px] text-slate-500 mt-0.5 leading-relaxed">Keep data as plain text. Avoid merged cells, colors, or Excel formulas.</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
+              <div className="w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <span className="text-[12px] font-bold text-slate-700">6</span>
+              </div>
+              <div>
+                <h4 className="text-[13px] font-bold text-slate-900">Bullet Points</h4>
+                <p className="text-[12px] text-slate-500 mt-0.5 leading-relaxed">Use a hyphen (-) for lists and "Alt + Enter" for new lines within a cell.</p>
               </div>
             </div>
 
