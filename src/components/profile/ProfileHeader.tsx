@@ -38,51 +38,50 @@ export function ProfileHeader({
   return (
     <div className="mb-6 space-y-4">
 
-      {/* Executive Candidate Profile Hero Card */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 overflow-hidden relative">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
-          
+      {/* Compact Profile Hero Card */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-3.5 sm:p-4 overflow-hidden relative">
+        <div className="flex items-center justify-between gap-4">
           {/* Avatar & Candidate Identity */}
-          <div className="flex items-start sm:items-center gap-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white font-bold text-lg sm:text-xl flex items-center justify-center shrink-0 shadow-md border-2 border-white ring-2 ring-slate-100">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-sm">
               {initials}
             </div>
 
             <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-[18px] sm:text-[20px] font-bold text-slate-900 tracking-tight">
+              <div className="flex items-center gap-1.5">
+                <h2 className="text-[15px] font-bold text-slate-900 tracking-tight">
                   {fullName}
                 </h2>
-                <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
               </div>
 
-              <p className="text-[13px] font-medium text-slate-500 mt-0.5">
+              <p className="text-[12px] font-medium text-slate-500">
                 {pi.location ? `${pi.location} • ` : ''}{email || 'Primary Candidate Record'}
               </p>
 
-              <div className="flex flex-wrap items-center gap-2 mt-2">
-                <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-md">
+              <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
                   {jobCount} {jobCount === 1 ? 'Work Experience' : 'Work Experiences'}
                 </span>
-                <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-md">
+                <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
                   {skillCount} {skillCount === 1 ? 'Skill Category' : 'Skill Categories'}
                 </span>
-                <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-emerald-600" />
+                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md flex items-center gap-1">
+                  <Sparkles className="w-2.5 h-2.5 text-emerald-600" />
                   ATS 90+ Ready
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Quick Action Badges */}
-          <div className="flex items-center gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-slate-100">
+          {/* Quick Action */}
+          <div className="flex items-center gap-2 shrink-0">
             {onPreviewModal && (
               <button
                 onClick={onPreviewModal}
-                className="h-9 px-4 text-[12.5px] font-semibold bg-slate-900 hover:bg-slate-800 text-white rounded-lg shadow-sm inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="h-8 px-3.5 text-[12px] font-semibold bg-slate-900 hover:bg-slate-800 text-white rounded-lg shadow-sm inline-flex items-center gap-1.5 transition-colors cursor-pointer"
               >
-                <FileText className="w-3.5 h-3.5" />
+                <FileText className="w-3 h-3" />
                 Preview Master CV
               </button>
             )}
