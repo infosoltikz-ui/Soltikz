@@ -139,7 +139,7 @@ export default function CreateResumePage() {
     setIsDownloadingDocx(true)
     try {
       const fileName = `${(profileData?.full_name || 'Resume').replace(/\s+/g, '_')}_Resume.docx`
-      await downloadResumeDocx(generatedResume, profileData, fileName)
+      await downloadResumeDocx(generatedResume, profileData, fileName, selectedTemplateId)
       logUsageEvent(currentResumeId, 'docx_download')
     } catch (error) {
       console.error('DOCX export failed:', error)

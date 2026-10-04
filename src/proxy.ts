@@ -6,7 +6,7 @@ const ADMIN_EMAILS = [
   'balajiprojects049@gmail.com'
 ]
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // Update the Supabase session
   const { supabaseResponse, user } = await updateSession(request)
 
