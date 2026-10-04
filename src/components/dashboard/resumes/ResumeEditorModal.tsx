@@ -49,7 +49,6 @@ import { Button } from '@/components/ui/Button'
 import { createClient } from '@/utils/supabase/client'
 import { exportToPdf } from '@/utils/exportPdf'
 import { getTemplateById, RESUME_TEMPLATES } from '@/components/create-resume/templates/registry'
-import { downloadResumeDocx } from '@/components/create-resume/exportDocx'
 import { ResumeRow } from './ResumeGrid'
 import { SectionStyleConfig } from '@/components/create-resume/templates/types'
 import { toast } from 'react-hot-toast'
@@ -104,12 +103,11 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
   const [activeTab, setActiveTab] = useState<EditorTab>('style')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [isDownloadingDocx, setIsDownloadingDocx] = useState(false)
 
   // Styling state
   const [selectedTemplateId, setSelectedTemplateId] = useState('modern')
   const [selectedFontFamily, setSelectedFontFamily] = useState('Calibri, Arial, sans-serif')
-  const [themeColor, setThemeColor] = useState('#2E8B57')
+  const [themeColor, setThemeColor] = useState('')
   const [customColor, setCustomColor] = useState('#2E8B57')
 
   // Section-specific style customization
@@ -254,7 +252,7 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
         }
 
         const initialTemplate = (resume as any).templateId || (resume as any).template_id || (isC2C ? 'c2c-modern' : 'modern')
-        const initialColor = (resume as any).theme_color || '#2E8B57'
+        const initialColor = (resume as any).theme_color || ''
         const initialFont = (resume as any).font_family || 'Calibri, Arial, sans-serif'
         const initialSectionStyles = (resume as any).section_styles || {}
 
@@ -264,7 +262,7 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
           setResumeTitle(resume!.title || 'Tailored Resume')
           setSelectedTemplateId(initialTemplate)
           setThemeColor(initialColor)
-          setCustomColor(initialColor)
+          setCustomColor(initialColor || '#2E8B57')
           setSelectedFontFamily(initialFont)
           setSectionStyles(initialSectionStyles)
           setAtsScore(score)
@@ -349,20 +347,6 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
     }
   }
 
-  const handleDownloadDocx = async () => {
-    if (!resumeData) return
-    setIsDownloadingDocx(true)
-    try {
-      const fileName = `${(profileData?.full_name || 'Resume').replace(/\s+/g, '_')}_Resume.docx`
-      await downloadResumeDocx(resumeData, profileData, fileName)
-      toast.success('Word document downloaded!')
-    } catch (err) {
-      console.error('Docx export error:', err)
-      toast.error('Failed to export DOCX')
-    } finally {
-      setIsDownloadingDocx(false)
-    }
-  }
 
   // Floating Section Style Helpers
   const currentSectionStyle: SectionStyleConfig = selectedSectionKey
@@ -610,21 +594,10 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
 
           {/* Action Buttons */}
           <div className="flex items-center gap-2 shrink-0">
-            {/* Download Word DOCX */}
-            <Button
-              onClick={handleDownloadDocx}
-              disabled={isDownloadingDocx || loading}
-              variant="outline"
-              className="h-9 px-3.5 rounded-xl border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs"
-            >
-              {isDownloadingDocx ? <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" /> : <FileText className="w-3.5 h-3.5 text-slate-500" />}
-              <span className="hidden md:inline">Word</span>
-            </Button>
-
             {/* Download PDF */}
             <Button
               onClick={handlePrint}
-              disabled={isExportingPdf || isDownloadingDocx}
+              disabled={isExportingPdf}
               className="gap-2 h-9 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold"
             >
               {isExportingPdf ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
@@ -847,7 +820,7 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
                         <Palette className="w-4 h-4 text-emerald-600" />
                         <span>Font / Theme Accent Colour</span>
                       </label>
-                      <span className="text-[11px] font-mono font-bold text-slate-600 dark:text-slate-400">{themeColor}</span>
+                      <span className="text-[11px] font-mono font-bold text-slate-600 dark:text-slate-400">{themeColor || 'Template Default'}</span>
                     </div>
 
                     {/* Color Swatch Grid */}
@@ -879,7 +852,7 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
                     <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/70 rounded-xl border border-slate-200 dark:border-slate-700">
                       <input
                         type="color"
-                        value={customColor}
+                        value={customColor || '#000000'}
                         onChange={(e) => {
                           setCustomColor(e.target.value)
                           setThemeColor(e.target.value)

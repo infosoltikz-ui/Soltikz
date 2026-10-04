@@ -24,7 +24,6 @@ import { TemplateSelector } from '@/components/create-resume/TemplateSelector'
 import { ATSScoreMeter } from '@/components/create-resume/ATSScoreMeter'
 import { AIGenerationLoadingHUD } from '@/components/create-resume/AIGenerationLoadingHUD'
 import { getTemplateById, DEFAULT_TEMPLATE_ID } from '@/components/create-resume/templates/registry'
-import { downloadResumeDocx } from '@/components/create-resume/exportDocx'
 import { isPremiumPlan } from '@/utils/pricingPlans'
 import { createClient } from '@/utils/supabase/client'
 import { logUsageEvent } from '@/utils/logUsageEvent'
@@ -60,7 +59,6 @@ export default function CreateResumePage() {
 
   const [isRegenerateSummaryModalOpen, setIsRegenerateSummaryModalOpen] = useState(false)
   const [isManualEditModalOpen, setIsManualEditModalOpen] = useState(false)
-  const [isDownloadingDocx, setIsDownloadingDocx] = useState(false)
 
   const openModal = useUIStore((s) => s.openModal)
   const closeModal = useUIStore((s) => s.closeModal)
@@ -131,23 +129,6 @@ export default function CreateResumePage() {
     }
   }
 
-  const handleDownloadDocx = async () => {
-    if (!generatedResume) {
-      toast.error('No resume data to export yet.')
-      return
-    }
-    setIsDownloadingDocx(true)
-    try {
-      const fileName = `${(profileData?.full_name || 'Resume').replace(/\s+/g, '_')}_Resume.docx`
-      await downloadResumeDocx(generatedResume, profileData, fileName, selectedTemplateId)
-      logUsageEvent(currentResumeId, 'docx_download')
-    } catch (error) {
-      console.error('DOCX export failed:', error)
-      toast.error('Failed to generate DOCX. Please try again.')
-    } finally {
-      setIsDownloadingDocx(false)
-    }
-  }
 
 
   useEffect(() => {
@@ -650,15 +631,6 @@ export default function CreateResumePage() {
                       <Download className="w-4 h-4" />
                       <span>Download PDF</span>
                     </Button>
-                    <Button
-                      onClick={handleDownloadDocx}
-                      disabled={isDownloadingDocx}
-                      variant="outline"
-                      className="h-10 px-3.5 rounded-xl border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12px] font-bold flex items-center gap-2"
-                    >
-                      {isDownloadingDocx ? <Loader2 className="w-4 h-4 animate-spin text-emerald-600" /> : <FileText className="w-4 h-4 text-slate-500" />}
-                      <span>Word (DOCX)</span>
-                    </Button>
                   </div>
                 </div>
 
@@ -795,15 +767,6 @@ export default function CreateResumePage() {
                 <Button onClick={handlePrint} className="h-9 px-5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm text-[13px] font-bold cursor-pointer flex items-center gap-1.5">
                   <Download className="w-4 h-4" />
                   Download PDF
-                </Button>
-                <Button
-                  onClick={handleDownloadDocx}
-                  disabled={isDownloadingDocx}
-                  variant="outline"
-                  className="h-9 px-3.5 rounded-lg border-slate-200 text-slate-700 bg-white shadow-2xs hover:bg-slate-50 text-[12.5px] font-semibold cursor-pointer flex items-center gap-1.5"
-                >
-                  {isDownloadingDocx ? <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" /> : <FileText className="w-3.5 h-3.5 text-slate-500" />}
-                  Word (DOCX)
                 </Button>
               </div>
             </div>

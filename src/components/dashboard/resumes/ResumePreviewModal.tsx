@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/Button'
 import { createClient } from '@/utils/supabase/client'
 import { exportToPdf } from '@/utils/exportPdf'
 import { getTemplateById, DEFAULT_TEMPLATE_ID } from '@/components/create-resume/templates/registry'
-import { downloadResumeDocx } from '@/components/create-resume/exportDocx'
 import { ResumeRow } from './ResumeGrid'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
@@ -26,7 +25,6 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
   const [atsScore, setAtsScore] = useState<number>(0)
   const [zoom, setZoom] = useState(1)
   const [autoScale, setAutoScale] = useState(0.75)
-  const [isDownloadingDocx, setIsDownloadingDocx] = useState(false)
 
   const printRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -177,21 +175,6 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
   const savedFontFamily = resume.font_family || undefined
   const savedSectionStyles = resume.section_styles || undefined
 
-  const handleDownloadDocx = async () => {
-    if (!resumeData) return
-    setIsDownloadingDocx(true)
-    try {
-      const fileName = `${(profileData?.full_name || 'Resume').replace(/\s+/g, '_')}_Resume.docx`
-      await downloadResumeDocx(resumeData, profileData, fileName)
-      toast.success('Word document downloaded!')
-    } catch (err) {
-      console.error('Docx export error:', err)
-      toast.error('Failed to export DOCX')
-    } finally {
-      setIsDownloadingDocx(false)
-    }
-  }
-
   const effectiveScale = Number((autoScale * zoom).toFixed(2))
   const horizontalMargin = (794 * effectiveScale - 794) / 2
 
@@ -257,17 +240,6 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
                 <ZoomIn className="w-3.5 h-3.5" />
               </button>
             </div>
-
-            {/* Download DOCX */}
-            <Button
-              onClick={handleDownloadDocx}
-              disabled={isDownloadingDocx || loading}
-              variant="outline"
-              className="h-8.5 px-3 rounded-lg border-slate-200 text-slate-700 bg-white hover:bg-slate-50 text-[12px] font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs"
-            >
-              {isDownloadingDocx ? <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" /> : <FileText className="w-3.5 h-3.5 text-slate-500" />}
-              <span className="hidden sm:inline">Word</span>
-            </Button>
 
             {/* Download PDF */}
             <Button
