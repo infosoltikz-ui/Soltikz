@@ -319,13 +319,30 @@ export async function POST(req: Request) {
       `CRITICAL: DO NOT SHORTEN OR COMPRESS BULLET POINTS. GENERATE LONG DETAILED 3-LINE BULLETS WITH METRICS AND BOLD KEYWORDS.`
     ].join('\n');
 
+    // Currently using GPT-4o. 
+    // WHEN CLAUDE API KEY IS READY: Comment out the openai call and uncomment the claude call below.
     const aiResponse = await generateAIResponse<any>({
       systemPrompt: dynamicSystemPrompt,
       userPrompt: finalUserPrompt,
+      provider: 'openai',
       model: 'gpt-4o',
       temperature: 0.15, // Precise enough for keyword placement, natural enough for writing
       responseFormat: zodResponseFormat(GeneratedResumeFormat, 'generated_resume'),
     });
+
+    /*
+    // --- CLAUDE 3.5 SONNET IMPLEMENTATION (Uncomment when ready) ---
+    const aiResponse = await generateAIResponse<any>({
+      systemPrompt: dynamicSystemPrompt,
+      userPrompt: finalUserPrompt,
+      provider: 'claude',
+      model: 'claude-3-5-sonnet-20240620',
+      temperature: 0.15,
+      // Note: ai-gateway will need to be updated to handle zodResponseFormat for Claude, 
+      // or you can switch to using Vercel's 'generateObject' from 'ai' package which natively handles both.
+      responseFormat: GeneratedResumeFormat, 
+    });
+    */
 
     if (aiResponse.error || !aiResponse.data) {
       throw new Error(aiResponse.error || 'Failed to generate resume');

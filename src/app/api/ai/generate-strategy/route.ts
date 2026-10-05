@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     const aiResponse = await generateAIResponse<any>({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt: `Master Profile:\n${JSON.stringify(masterProfile)}\n\nParsed Job Description:\n${JSON.stringify(parsedJdData)}`,
-      model: 'gpt-4o', // Using the smarter model for complex strategic reasoning
+      model: 'gpt-4o-mini', // Switched to mini for massive cost reduction (Strategy generation is easy)
       temperature: 0.3,
       responseFormat: zodResponseFormat(StrategyFormat, 'resume_strategy'),
     });
