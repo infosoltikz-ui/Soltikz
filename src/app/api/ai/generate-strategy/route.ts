@@ -40,12 +40,23 @@ export async function POST(req: Request) {
     }
 
     // Call the AI Gateway
+    /*
     const aiResponse = await generateAIResponse<any>({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt: `Master Profile:\n${JSON.stringify(masterProfile)}\n\nParsed Job Description:\n${JSON.stringify(parsedJdData)}`,
       model: 'gpt-4o-mini', // Switched to mini for massive cost reduction (Strategy generation is easy)
       temperature: 0.3,
       responseFormat: zodResponseFormat(StrategyFormat, 'resume_strategy'),
+    });
+    */
+
+    const aiResponse = await generateAIResponse<any>({
+      systemPrompt: SYSTEM_PROMPT,
+      userPrompt: `Master Profile:\n${JSON.stringify(masterProfile)}\n\nParsed Job Description:\n${JSON.stringify(parsedJdData)}`,
+      provider: 'claude',
+      model: 'claude-3-5-sonnet-20241022',
+      temperature: 0.3,
+      responseFormat: StrategyFormat,
     });
 
     if (aiResponse.error || !aiResponse.data) {
