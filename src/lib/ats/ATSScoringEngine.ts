@@ -22,7 +22,7 @@ export class ATSScoringEngine {
   private experienceMatcher = new ExperienceMatcher();
   private formatAnalyzer = new FormatAnalyzer();
 
-  public evaluate(jd: ParsedJobDescription, resume: ResumeData): ATSMatchResult {
+  public evaluate(jd: ParsedJobDescription, resume: ResumeData, masterProfile?: any): ATSMatchResult {
     const evidence: string[] = [];
     const partialMatches: string[] = [];
 
@@ -111,33 +111,64 @@ export class ATSScoringEngine {
       evidence.push(`Semantic core density: ${semMatched}/${semanticTargets.length} domain & priority markers verified.`);
     }
 
+    // 4b. Master Profile Grounding Check (Verify real candidate profile backing)
+    const masterText = this.extractMasterProfileText(masterProfile);
+    if (masterText && finalRequired.length > 0) {
+      const groundedCount = finalRequired.filter(req => this.keywordMatcher.hasKeyword(req, masterText)).length;
+      const groundingRatio = groundedCount / finalRequired.length;
+
+      if (groundingRatio < 0.20) {
+        // Severe candidate domain mismatch (e.g. Software/DevOps candidate applying for HR/Nursing)
+        evidence.unshift(`⚠️ Severe Career Domain Mismatch: Master profile foundation matches only ${groundedCount}/${finalRequired.length} core JD requirements. (Candidate profile does not substantiate target role).`);
+        requiredScore = Math.min(requiredScore, Math.max(15, Math.round(requiredScore * (0.15 + (groundingRatio * 0.85)))));
+        semanticScore = Math.min(semanticScore, Math.max(15, Math.round(semanticScore * (0.15 + (groundingRatio * 0.85)))));
+      } else if (groundingRatio < 0.45) {
+        evidence.push(`Partial Foundation: Master profile provides ~${Math.round(groundingRatio * 100)}% foundational backing for required competencies.`);
+        requiredScore = Math.round(requiredScore * (0.40 + (groundingRatio * 0.60)));
+      } else {
+        evidence.push(`Strong Profile Backing: Master profile provides direct evidence for target JD qualifications.`);
+      }
+    }
+
     // 5. Experience Match
     const expAnalysis = this.experienceMatcher.analyzeExperience(jd, resume);
     evidence.push(...expAnalysis.evidence);
 
-    // 6. Title Match
-    let titleScore = 75; // reasonable baseline for transferable skill sets
+    // 6. Title Match (Domain aware)
+    let titleScore = 20; // baseline low for mismatched professions
     if (jd.jobTitle && resume.experience && resume.experience.length > 0) {
       const jdTitleLower = jd.jobTitle.toLowerCase();
       const coreJdRole = jdTitleLower.replace(/\b(senior|junior|lead|staff|principal|sr\.|jr\.)\b/g, '').trim();
       const recentRoles = resume.experience.slice(0, 3).map(r => (r.role || '').toLowerCase());
       
       let titleMatched = false;
+      let partialFamilyMatch = false;
+      const jdRoleWords = coreJdRole.split(/\s+/).filter(w => w.length > 2 && !['and', 'for', 'the', 'with', 'lead', 'senior'].includes(w));
+
       for (const r of recentRoles) {
         const cleanR = r.replace(/\b(senior|junior|lead|staff|principal|sr\.|jr\.)\b/g, '').trim();
         if (r.includes(jdTitleLower) || jdTitleLower.includes(r) || (coreJdRole && cleanR.includes(coreJdRole)) || (cleanR && coreJdRole.includes(cleanR))) {
           titleMatched = true;
           break;
         }
+        const rWords = cleanR.split(/\s+/).filter(w => w.length > 2);
+        if (jdRoleWords.some(w => rWords.includes(w))) {
+          partialFamilyMatch = true;
+        }
       }
-      titleScore = titleMatched ? 100 : 70;
+
       if (titleMatched) {
+        titleScore = 100;
         evidence.push(`Candidate recent job title strongly matches target JD title "${jd.jobTitle}".`);
+      } else if (partialFamilyMatch) {
+        titleScore = 65; // Same technical/professional family (e.g. Software Engineer applying for DevOps Engineer)
+        evidence.push(`Candidate past titles show transferable background for "${jd.jobTitle}".`);
       } else {
-        evidence.push(`Candidate past titles show transferable experience for "${jd.jobTitle}".`);
+        titleScore = 15; // Completely different profession (e.g. DevOps Engineer applying for HR Manager)
+        evidence.push(`Domain Title Mismatch: Past roles do not match target field "${jd.jobTitle}".`);
       }
     } else {
-      titleScore = 85;
+      titleScore = 50;
     }
 
     // ============================================
@@ -235,5 +266,40 @@ export class ATSScoringEngine {
       });
     }
     return parts.join('\n').replace(/\*\*/g, '');
+  }
+
+  private extractMasterProfileText(masterProfile: any): string {
+    if (!masterProfile) return '';
+    const parts: string[] = [];
+    const master = masterProfile.master_resume_data || masterProfile;
+    
+    // Skills
+    if (Array.isArray(master.skills)) {
+      master.skills.forEach((s: any) => {
+        if (typeof s === 'string') parts.push(s);
+        else if (s?.name) parts.push(s.name);
+        else if (Array.isArray(s?.items)) parts.push(...s.items);
+      });
+    }
+
+    // Employment
+    const employment = master.employment || master.experience || [];
+    if (Array.isArray(employment)) {
+      employment.forEach((e: any) => {
+        if (e.title || e.role) parts.push(e.title || e.role);
+        if (e.company) parts.push(e.company);
+        if (Array.isArray(e.responsibilities)) parts.push(...e.responsibilities);
+        else if (typeof e.responsibilities === 'string') parts.push(e.responsibilities);
+        if (Array.isArray(e.bullets)) parts.push(...e.bullets);
+        if (Array.isArray(e.environment)) parts.push(...e.environment);
+      });
+    }
+
+    // Summary
+    const summary = master.personal_info?.summary || master.summary;
+    if (typeof summary === 'string') parts.push(summary);
+    else if (Array.isArray(summary)) parts.push(...summary);
+
+    return parts.join('\n').replace(/\*\*/g, '').toLowerCase();
   }
 }

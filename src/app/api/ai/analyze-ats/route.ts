@@ -15,11 +15,21 @@ export async function POST(req: Request) {
     const resumeContent = body.resumeContent || body.generatedResume;
     if (!resumeId || !parsedJdData || !resumeContent) return NextResponse.json({ error: 'Missing payload data' }, { status: 400 });
 
+    let masterProfile = body.masterProfile;
+    if (!masterProfile) {
+      const { data: userProfile } = await supabase
+        .from('profiles')
+        .select('master_resume_data')
+        .eq('id', user.id)
+        .single();
+      masterProfile = userProfile?.master_resume_data;
+    }
+
     // Initialize the new deterministic ATS engine
     const engine = new ATSScoringEngine();
     
-    // Evaluate resume against JD
-    const matchResult = engine.evaluate(parsedJdData, resumeContent);
+    // Evaluate resume against JD with master profile evidence grounding
+    const matchResult = engine.evaluate(parsedJdData, resumeContent, masterProfile);
 
     // Prepare legacy compatible format for DB if needed, but ideally we save the whole result
     const missingKw = [...matchResult.missingRequiredRequirements, ...matchResult.missingPreferredRequirements];

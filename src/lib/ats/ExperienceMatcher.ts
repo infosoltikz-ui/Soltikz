@@ -55,20 +55,45 @@ export class ExperienceMatcher {
        evidence.push(`Calculated exactly ${candidateYears} years of experience from resume dates.`);
     }
 
+    // Check domain relevance of experience
+    let domainFactor = 1.0;
+    if (jd.jobTitle && resume.experience && resume.experience.length > 0) {
+      const coreJdTitle = (jd.jobTitle || '').toLowerCase().replace(/\b(senior|junior|lead|staff|principal|sr\.|jr\.)\b/g, '').trim();
+      const jdKeywords = [
+        coreJdTitle,
+        ...(jd.requiredSkills || []).slice(0, 10).map(s => s.toLowerCase()),
+        ...(jd.industry ? [jd.industry.toLowerCase()] : [])
+      ].filter(k => k.length > 2);
+
+      const expText = resume.experience.map(e => `${e.role || ''} ${e.company || ''} ${(e.bullets || []).join(' ')}`).join(' ').toLowerCase();
+
+      const matchedJdKeywords = jdKeywords.filter(k => expText.includes(k));
+      const matchRatio = jdKeywords.length > 0 ? matchedJdKeywords.length / jdKeywords.length : 1;
+
+      if (matchRatio < 0.15) {
+        // Severe domain disconnect (e.g. Software/DevOps applying for HR/Nursing/Sales)
+        domainFactor = 0.30;
+        evidence.push(`Domain Experience Disconnect: Historical employment lacks domain-specific background for "${jd.jobTitle}" (crediting baseline tenure only).`);
+      } else if (matchRatio < 0.35) {
+        domainFactor = 0.65;
+        evidence.push(`Moderate Domain Alignment: Candidate exhibits partial transferable experience for "${jd.jobTitle}".`);
+      }
+    }
+
     // Calculate Score (0-100)
     let score = 0;
     if (requiredYears === 0) {
-      // JD doesn't specify strictly, give full marks if they have any experience
-      score = hasExperience ? 100 : 70;
-      evidence.push(`JD does not strictly specify numeric years; granting standard baseline.`);
+      // JD doesn't specify strictly, give marks scaled by domain relevance
+      score = hasExperience ? Math.round(100 * domainFactor) : 50;
+      evidence.push(`JD does not strictly specify numeric years; granting domain-scaled baseline.`);
     } else {
       evidence.push(`JD requires ${requiredYears} years of experience.`);
       if (candidateYears >= requiredYears) {
-        score = 100;
-        evidence.push(`Candidate meets or exceeds required experience (${candidateYears} >= ${requiredYears}).`);
+        score = Math.round(100 * domainFactor);
+        evidence.push(`Candidate meets or exceeds career tenure (${candidateYears} >= ${requiredYears}), domain factor: ${Math.round(domainFactor * 100)}%.`);
       } else if (candidateYears > 0) {
-        score = Math.floor((candidateYears / requiredYears) * 100);
-        evidence.push(`Candidate falls short of required experience (${candidateYears} < ${requiredYears}).`);
+        score = Math.round(((candidateYears / requiredYears) * 100) * domainFactor);
+        evidence.push(`Candidate falls short of required tenure (${candidateYears} < ${requiredYears}).`);
       } else {
         score = 0;
         evidence.push(`No valid experience dates found to satisfy ${requiredYears} years requirement.`);

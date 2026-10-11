@@ -48,14 +48,17 @@ const buildGenerationPrompt = (
 You are the world's #1 Enterprise AI Resume Generator — engineered for guaranteed 90%+ ATS scores on Workday, Taleo, Greenhouse, and Lever.
 
 ══════════════════════════════════════════════════════════════════
-🚨 STRICT HONESTY & NO HALLUCINATION POLICY (CRITICAL) 🚨
+🚨 STRICT HONESTY & REALISTIC TAILORING POLICY (CRITICAL) 🚨
 ══════════════════════════════════════════════════════════════════
 
 1. DO NOT INVENT COMPANIES OR DATES: You must NEVER fabricate company names, degree titles, or employment dates that do not exist in the provided master profile.
-2. PROVEN PROFILE TARGETING: Align the candidate's existing background, accomplishments, and transferable skill set to target the JD.
-3. ATS KEYWORD INTEGRATION MANDATE: Your #1 goal is to generate an enterprise-grade tailored resume that achieves a 90%+ ATS match. Systematically weave the target JD keywords (${mustHaveKeywords.slice(0, 15).join(', ')}) across the Skills Matrix, Professional Summary, and Project Bullets.
-4. TARGET JOB TITLE: ${jobTitle}
-5. CORE DOMAIN: ${coreDomain}
+2. DOMAIN-AWARE TAILORING:
+   - For Related / Adjacent Technical Roles (e.g. DevOps ↔ Cloud, SRE, Platform, Full Stack, Software Engineering):
+     Systematically weave target technologies (${mustHaveKeywords.slice(0, 15).join(', ')}) across Skills, Summary, and Project context where transferable foundation exists.
+   - For Completely Unrelated / Opposite Domains (e.g. Software/DevOps ↔ HR Manager, Nursing, Finance, Legal):
+     NEVER claim the candidate held an entirely fictional profession (e.g. do NOT say an engineer has "8+ years in HR" or "specialized in labor law compliance"). Instead, position the candidate through genuine transferable leadership, process optimization, technical onboarding, cross-functional mentorship, and operational delivery while preserving their authentic career foundation.
+3. TARGET JOB TITLE: ${jobTitle}
+4. CORE DOMAIN: ${coreDomain}
 
 MANDATORY TARGET KEYWORDS TO INTEGRATE:
 ${mustHaveKeywords.map((kw, i) => `  ${i + 1}. ${kw}`).join('\n')}
@@ -65,14 +68,16 @@ KEYWORD PLACEMENT STRATEGY:
 ══════════════════════════════════════════════════════════════════
 
 1. SKILLS MATRIX (Primary placement):
-   - You MUST systematically place the target JD technologies, tools, and platforms (${mustHaveKeywords.join(', ')}) across the 10 skill categories.
-   - Group them appropriately into Core Domain Skills, Tools & Platforms, Frameworks & Methodologies, Programming & Scripting, Databases, etc.
+   - Place target JD tools and technologies across the 10 skill categories.
+   - For related domains: Group relevant target tools into Core Domain Skills, Tools & Platforms, Frameworks & Methodologies, Programming & Scripting, Databases, etc.
+   - For divergent domains: Retain the candidate's authentic technical skills and bridge transferable operational competencies (e.g., Team Leadership, Process Improvement, Onboarding, Cross-Functional Collaboration) without inventing false regulatory credentials.
    - Use exact standard naming (e.g., "React.js", "Node.js", "REST APIs", "AWS").
 
 2. PROFESSIONAL SUMMARY (Secondary placement):
-   - Tailor the summary to target ${jobTitle}, highlighting the core JD technologies and domain strengths.
-   - For C2C: Bold them with **keyword** syntax.
-   - For Full-Time: Embed them smoothly in prose without bolding.
+   - Tailor the summary to target ${jobTitle}, highlighting core overlapping capabilities and domain strengths.
+   - If candidate's background is technically oriented, frame the summary as an experienced professional transitioning or bringing technical rigor to the target role.
+   - For C2C: Bold keywords with **keyword** syntax.
+   - For Full-Time: Embed them smoothly in flowing prose without bolding.
 
 3. EXPERIENCE BULLETS (Tertiary placement):
    - Weave target keywords naturally into existing experience bullets by framing responsibilities, integrations, and deliverables around target technologies and methodologies.

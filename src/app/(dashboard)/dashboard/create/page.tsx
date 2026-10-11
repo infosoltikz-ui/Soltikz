@@ -380,7 +380,8 @@ export default function CreateResumePage() {
           body: JSON.stringify({
             parsedJdData: parseData.parsed_data,
             generatedResume: resumeGenData.generated_resume,
-            resumeId: resumeGenData.resume_id
+            resumeId: resumeGenData.resume_id,
+            masterProfile: profileData
           })
         }),
         fetch('/api/ai/generate-prep', {
