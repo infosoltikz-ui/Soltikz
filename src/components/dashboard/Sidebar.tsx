@@ -114,6 +114,11 @@ export function Sidebar({
               key={item.label}
               href={item.href}
               title={isCollapsed ? item.label : undefined}
+              onClick={() => {
+                if (item.href === '/dashboard/create' && typeof window !== 'undefined' && window.location.pathname === '/dashboard/create') {
+                  window.location.href = '/dashboard/create'
+                }
+              }}
               className={cn(
                 "flex items-center px-4 py-3.5 rounded-xl text-[14px] font-bold transition-all duration-200",
                 isCollapsed ? "justify-center" : "gap-3",

@@ -66,15 +66,41 @@ export default function CreateResumePage() {
   const resumeRef = useRef<HTMLDivElement>(null)
   const canvasContainerRef = useRef<HTMLDivElement>(null)
 
-  // Clean up any stale '?step=' parameter from the URL on mount so refreshing always resets to Step 1
+  // Helper to detect if current page load was a browser reload/refresh
+  const checkIsReload = () => {
+    if (typeof window === 'undefined') return false
+    try {
+      const navEntries = performance.getEntriesByType('navigation')
+      if (navEntries.length > 0) {
+        return (navEntries[0] as PerformanceNavigationTiming).type === 'reload'
+      }
+      return (window.performance as any)?.navigation?.type === 1
+    } catch {
+      return false
+    }
+  }
+
+  // On mount: If user reloaded/refreshed the page, reset completely to Step 1 and wipe URL search params
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      const isReload = checkIsReload()
+      if (isReload) {
+        // Strip any '?id=...' or other query params so URL is cleanly /dashboard/create
+        window.history.replaceState({}, '', '/dashboard/create')
+        setStep(1)
+        setGeneratedResume(null)
+        setCurrentResumeId(null)
+        setAtsData(null)
+        setInterviewPrep(null)
+        return
+      }
+
+      // If not a reload, but '?step=' is present, clean it up
       const url = new URL(window.location.href)
       if (url.searchParams.has('step')) {
         url.searchParams.delete('step')
         window.history.replaceState({}, '', url.pathname + (url.search ? url.search : ''))
       }
-      setStep(1)
     }
   }, [])
 
@@ -160,6 +186,15 @@ export default function CreateResumePage() {
 
   useEffect(() => {
     if (!resumeIdParam) return
+
+    // If the user refreshed the page, DO NOT reload the existing resume into Step 2!
+    if (checkIsReload()) {
+      if (typeof window !== 'undefined') {
+        window.history.replaceState({}, '', '/dashboard/create')
+      }
+      setStep(1)
+      return
+    }
 
     const loadExistingResume = async () => {
       try {
@@ -335,8 +370,7 @@ export default function CreateResumePage() {
       setCurrentResumeId(resumeGenData.resume_id)
       setGeneratedResume(resumeGenData.generated_resume)
 
-      // Update URL so a page refresh doesn't lose resume ID
-      window.history.pushState(null, '', `?id=${resumeGenData.resume_id}`)
+      // Do not append ?id to URL so refreshing always resets cleanly to Step 1
 
       setOrchestratorState('Finalizing ATS Analysis & Prep...')
       // 4. Generate ATS & Prep concurrently
@@ -500,8 +534,18 @@ export default function CreateResumePage() {
 
       <CreateResumeHeader
         currentStep={step}
-        onStepClick={(s) => setStep(s)}
-        onBack={step > 1 ? () => setStep(step - 1) : undefined}
+        onStepClick={(s) => {
+          if (s === 1 && typeof window !== 'undefined') {
+            window.history.replaceState({}, '', '/dashboard/create')
+          }
+          setStep(s)
+        }}
+        onBack={step > 1 ? () => {
+          if (step <= 2 && typeof window !== 'undefined') {
+            window.history.replaceState({}, '', '/dashboard/create')
+          }
+          setStep(step - 1)
+        } : undefined}
       />
 
       <main className="px-4 sm:px-6 lg:px-8 pt-6">
@@ -555,9 +599,6 @@ export default function CreateResumePage() {
               <Button
                 onClick={() => {
                   setStep(2)
-                  if (currentResumeId) {
-                    window.history.pushState(null, '', `?id=${currentResumeId}`)
-                  }
                 }}
                 className="relative h-14 px-10 text-[16px] font-black rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xl shadow-emerald-600/30 flex items-center gap-3 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-600/50 hover:-translate-y-1 overflow-hidden group/btn cursor-pointer"
               >
@@ -593,7 +634,12 @@ export default function CreateResumePage() {
                 <div className="bg-white/80 backdrop-blur-md border border-slate-200/80 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-md">
                   <div className="flex flex-wrap items-center gap-3">
                     <Button
-                      onClick={() => setGeneratedResume(null)}
+                      onClick={() => {
+                        setGeneratedResume(null)
+                        if (typeof window !== 'undefined') {
+                          window.history.replaceState({}, '', '/dashboard/create')
+                        }
+                      }}
                       variant="outline"
                       className="h-10 px-4 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-slate-50 text-[13px] font-bold shadow-2xs flex items-center gap-2"
                     >
