@@ -66,18 +66,21 @@ export default function CreateResumePage() {
   const resumeRef = useRef<HTMLDivElement>(null)
   const canvasContainerRef = useRef<HTMLDivElement>(null)
 
-  // ONE-TIME client-only mount: read step from URL (runs after hydration, no SSR mismatch)
+  // Clean up any stale '?step=' parameter from the URL on mount so refreshing always resets to Step 1
   useEffect(() => {
-    const s = parseInt(new URLSearchParams(window.location.search).get('step') || '1', 10)
-    if (!isNaN(s) && s >= 1 && s <= 3) setStep(s)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href)
+      if (url.searchParams.has('step')) {
+        url.searchParams.delete('step')
+        window.history.replaceState({}, '', url.pathname + (url.search ? url.search : ''))
+      }
+      setStep(1)
+    }
+  }, [])
 
-  // Write-only: persist step to URL on change (never reads back → no loop)
+  // Smooth scroll to top on step change without polluting URL params
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
-    const url = new URL(window.location.href)
-    url.searchParams.set('step', step.toString())
-    window.history.replaceState({}, '', url.toString())
   }, [step])
 
   useEffect(() => {
@@ -332,8 +335,8 @@ export default function CreateResumePage() {
       setCurrentResumeId(resumeGenData.resume_id)
       setGeneratedResume(resumeGenData.generated_resume)
 
-      // Update URL so a page refresh doesn't lose state
-      window.history.pushState(null, '', `?id=${resumeGenData.resume_id}&step=2`)
+      // Update URL so a page refresh doesn't lose resume ID
+      window.history.pushState(null, '', `?id=${resumeGenData.resume_id}`)
 
       setOrchestratorState('Finalizing ATS Analysis & Prep...')
       // 4. Generate ATS & Prep concurrently
@@ -553,7 +556,7 @@ export default function CreateResumePage() {
                 onClick={() => {
                   setStep(2)
                   if (currentResumeId) {
-                    window.history.pushState(null, '', `?id=${currentResumeId}&step=2`)
+                    window.history.pushState(null, '', `?id=${currentResumeId}`)
                   }
                 }}
                 className="relative h-14 px-10 text-[16px] font-black rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xl shadow-emerald-600/30 flex items-center gap-3 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-600/50 hover:-translate-y-1 overflow-hidden group/btn cursor-pointer"
