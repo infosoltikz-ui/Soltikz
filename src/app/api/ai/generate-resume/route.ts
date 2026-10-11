@@ -23,7 +23,7 @@ const GeneratedResumeFormat = z.object({
     duration: z.string(),
     environment: z.array(z.string()).nullable().describe('C2C ONLY: comma-separated list of every tool/tech used on that engagement. Set null for Full-Time resumes.'),
     bullets: z.array(z.string()).describe(
-      'C2C: EXACTLY 10 bullets for EVERY company/experience. Full-Time: Exp1=6-8 bullets, Exp2=6-8 bullets, Exp3+=5-6 bullets. Every bullet: MUST be 25-30 words (2-3 full lines) with bolded **keywords** and metrics. Use VERY STRONG action verbs. Formula: [POWER ACTION VERB]+[Detailed Context & Tools]+[Methodology/Process]+[Quantified Metric Result]+[Business Value].'
+      'MANDATORY 2 TO 3 FULL PRINTED LINES PER BULLET (STRICT MINIMUM 40-55 WORDS, 250-350 CHARACTERS). Short 1-line or 1.5-line bullets are STRICTLY BANNED. C2C: EXACTLY 10 bullets per company. Full-Time: Exp1=8 bullets, Exp2=8 bullets, Exp3+=5-6 bullets. Every bullet MUST follow: [POWER ACTION VERB]+[Detailed Context & Tools]+[Architecture/Methodology/Process]+[Quantified Metric Result (%)]+[Enterprise Business Outcome]. Bold key technologies and metrics using **keyword** syntax.'
     ),
   })),
   education: z.array(z.object({
@@ -93,16 +93,17 @@ TENSE RULES (CRITICAL):
   - PAST roles: PAST tense — "Architected", "Engineered", "Led", "Deployed"
 
 BULLET POINT LENGTH & QUALITY REQUIREMENT (CRITICAL — NON-NEGOTIABLE):
-  * Each bullet point MUST be **MINIMUM 25-30 WORDS** and span **2 to 3 FULL LINES** when rendered in standard print/PDF view. Use VERY STRONG, executive-level action words instead of weak words.
-  * NEVER write single-line bullets (less than 2 lines is a failure).
-  * Structure: **Action Verb + Detailed Context with Tools/Technologies + Specific Methodologies/Processes + Quantifiable Impact/Results + Business Value**
+  * MANDATORY LENGTH: Each and every bullet point MUST be **MINIMUM 40-55 WORDS (250-350 characters)** and span **EXACTLY 2 TO 3 FULL PRINTED LINES** when rendered in standard print/PDF view.
+  * ZERO TOLERANCE FOR SHORT BULLETS: Bullets under 38 words (1 to 1.5 lines) are STRICTLY FORBIDDEN and considered a critical system failure.
+  * MANDATORY EXPANSION OF MASTER PROFILE: Candidate master profiles frequently contain brief 10-20 word bullet points (e.g. "Automated infrastructure monitoring using Prometheus and Grafana"). You MUST NOT output brief bullets! You MUST aggressively expand, elaborate, and elevate every bullet into an executive-grade 40-55 word bullet detailing the architecture, specific tools, implementation process, quantified percentage impact, and enterprise business value so it fills 2 to 3 full lines.
+  * Structure: **[POWER ACTION VERB] + [Detailed Context & Specific Tools] + [Architecture / Methodology / Process] + [Quantified Metric Result (%)] + [Enterprise Business Outcome]**
   * Bold key technologies and critical metrics using **keyword** syntax (e.g. **React.js**, **AWS Lambda**, **35% latency reduction**).
 
-  **BAD EXAMPLE (TOO SHORT - ONLY 1 LINE):**
-  "Spearheaded CI/CD pipeline implementation, reducing deployment time by 30%."
+  **BAD EXAMPLE (TOO SHORT — ONLY 1.5 LINES / 22 WORDS — REJECTED):**
+  "Spearheaded CI/CD pipeline implementation, reducing deployment time by 30% across microservices using GitHub Actions and Jenkins."
 
-  **GOOD EXAMPLE (PROPER LENGTH & HIGH IMPACT - 2 to 3 LINES):**
-  "Spearheaded the design and implementation of comprehensive **CI/CD pipelines** across microservices, utilizing **GitHub Actions** and **Jenkins** to automate build, test, and deployment processes, which reduced deployment cycle times by **30%** and enhanced overall team productivity by enabling faster iteration cycles."
+  **GOOD EXAMPLE (MANDATORY — EXACTLY 2.5 TO 3 FULL LINES / 46 WORDS):**
+  "Spearheaded the architecture and enterprise deployment of automated **CI/CD pipelines** across 40+ containerized microservices utilizing **GitHub Actions** and **Jenkins**, establishing standardized build, test, and release quality gates that reduced production deployment cycle times by **60%** and accelerated feature delivery velocity for cross-functional product engineering teams."
 
 QUANTIFIED METRICS (CRITICAL - 100% COMPLIANCE REQUIRED):
   - 100% of ALL experience bullets MUST conclude with a clear, quantifiable percentage metric (%).
@@ -147,7 +148,7 @@ SKILLS MATRIX — C2C:
 
 EXPERIENCE — C2C (STRICT MANDATORY BULLET COUNTS):
   - Follow the exact bullet point counts specified later in the prompt per experience level (Experience 1 vs 2 vs 3).
-  - Every bullet: MUST be 25-30 words (2 to 3 full lines) with bolded **keyword** syntax and metrics.
+  - Every bullet: MUST be 40-55 words (2 to 3 full printed lines) with bolded **keyword** syntax and metrics.
   - Use VERY STRONG action verbs (e.g., Architected, Spearheaded, Engineered) instead of weak words.
   - Include "environment" tech stack array for ALL roles (comma-separated, every tool used on that engagement).
   - C2C length is 3-4 pages — DO NOT compress or shorten.
@@ -202,8 +203,8 @@ EXPERIENCE — FULL-TIME (STRICT MANDATORY BULLET COUNTS):
   - Experience 1 (most recent / current role): EXACTLY 8 Powerful Bullet Points (STRICT MANDATORY 8 BULLETS).
   - Experience 2: EXACTLY 8 Powerful Bullet Points (STRICT MANDATORY 8 BULLETS).
   - Experience 3 & Experience 4+: EXACTLY 5 to 6 Powerful Bullet Points.
-  - Every bullet: MUST be 35-50 words (2 to 3 full lines) with bolded **keyword** syntax and quantified metrics (%).
-  - Anatomy: [POWER ACTION VERB] + [Detailed Context & Tools] + [Methodology] + [Quantified Metric Result (%)] + [Business Outcome].
+  - Every bullet: MUST be 40-55 words (2 to 3 full printed lines) with bolded **keyword** syntax and quantified metrics (%). NEVER output short 1-line or 1.5-line bullets.
+  - Anatomy: [POWER ACTION VERB] + [Detailed Context & Specific Tools] + [Architecture / Methodology] + [Quantified Metric Result (%)] + [Enterprise Business Outcome].
   - 🛑 BANNED WEAK VERBS: NEVER use passive/weak words like "helped", "assisted", "worked on", "responsible for", "handled", "participated in", "involved in", "supported".
   - ✅ MANDATORY POWER VERBS: ALWAYS use high-impact action verbs like "Architected", "Engineered", "Spearheaded", "Orchestrated", "Optimized", "Automated", "Pioneered", "Overhauled", "Formulated".
   - One accomplishment per bullet — two "and"s means it is two bullets.
@@ -297,13 +298,13 @@ export async function POST(req: Request) {
       `══════════════════════════════════════════════════════════════════`,
       isC2CMode ? `
       FOR C2C RESUMES (CONTRACT TO HIRE VENDOR SUBMISSION):
-      - PROFESSIONAL SUMMARY: EXACTLY 10 bullet points. Every bullet MUST be EXACTLY 2 full lines long (minimum 25-30 words per point) with bold **keywords** and quantified metrics (%).
+      - PROFESSIONAL SUMMARY: EXACTLY 10 bullet points. Every bullet MUST be EXACTLY 2 full lines long (minimum 30-40 words per point) with bold **keywords** and quantified metrics (%).
       - SKILLS MATRIX: EXACTLY 10 categories, each with 5-7 items.
       - ONLY generate Experience entries for companies that exist in the Master Profile. NEVER invent or hallucinate extra companies.
       - EXPERIENCE 1 (Most Recent Role): EXACTLY 10 BULLET POINTS (STRICT MINIMUM 10 BULLETS).
       - EXPERIENCE 2 (If exists in profile): EXACTLY 8 to 10 BULLET POINTS.
       - EXPERIENCE 3+ (If exists in profile): EXACTLY 6 to 8 BULLET POINTS.
-      - EVERY SINGLE BULLET: MUST BE MINIMUM 35-50 WORDS (2 TO 3 FULL PRINTED LINES). SHORT 1-LINE BULLETS ARE BANNED.
+      - EVERY SINGLE BULLET: MUST BE MINIMUM 40-55 WORDS (2 TO 3 FULL PRINTED LINES). SHORT 1-LINE OR 1.5-LINE BULLETS ARE STRICTLY BANNED.
       ` : `
       FOR FULL-TIME RESUMES (CORPORATE DIRECT HIRE):
       - PROFESSIONAL SUMMARY: EXACTLY 5 sentences that join into one flowing prose paragraph. No bullets, no bold, no "I".
@@ -312,9 +313,10 @@ export async function POST(req: Request) {
       - EXPERIENCE 1 (Most Recent Role): EXACTLY 8 BULLET POINTS (MANDATORY 8 BULLETS).
       - EXPERIENCE 2 (If exists in profile): EXACTLY 8 BULLET POINTS (MANDATORY 8 BULLETS).
       - EXPERIENCE 3 & EXPERIENCE 4+ (If exists in profile): EXACTLY 5 to 6 BULLET POINTS.
-      - EVERY SINGLE BULLET: MUST BE MINIMUM 35-50 WORDS (2 TO 3 FULL PRINTED LINES) WITH BOLD KEYWORDS & METRICS (%). NO WEAK VERBS.
+      - EVERY SINGLE BULLET: MUST BE MINIMUM 40-55 WORDS (2 TO 3 FULL PRINTED LINES) WITH BOLD KEYWORDS & METRICS (%). NO WEAK VERBS.
+      - CRITICAL MANDATE: MASTER PROFILE BULLETS ARE OFTEN BRIEF (10-20 WORDS). YOU MUST AGGRESSIVELY EXPAND AND ELEVATE EVERY BULLET INTO A 40-55 WORD EXECUTIVE-GRADE ACCOMPLISHMENT SPANNING 2 TO 3 FULL LINES.
       `,
-      `CRITICAL: DO NOT SHORTEN OR COMPRESS BULLET POINTS. GENERATE LONG DETAILED 3-LINE BULLETS WITH METRICS AND BOLD KEYWORDS.`
+      `CRITICAL: DO NOT SHORTEN OR COMPRESS BULLET POINTS. GENERATE DETAILED 2 TO 3 FULL PRINTED LINE BULLETS (40-55 WORDS EACH) WITH METRICS AND BOLD KEYWORDS.`
     ].join('\n');
 
     // Currently using GPT-4o. 
