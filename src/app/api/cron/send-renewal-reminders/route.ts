@@ -5,10 +5,12 @@ import nodemailer from 'nodemailer'
 export const dynamic = 'force-dynamic'
 
 // Service Role Client — bypasses RLS, has access to auth.users
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getAdminClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
+    process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder_key'
+  )
+}
 
 export async function GET(request: Request) {
   // 1. Authenticate the Cron request
@@ -16,6 +18,8 @@ export async function GET(request: Request) {
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+
+  const supabase = getAdminClient()
 
   try {
     // 2. Setup Nodemailer Transporter using Gmail App Password
