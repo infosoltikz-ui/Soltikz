@@ -54,10 +54,35 @@ export interface ATSDataProps {
   improvement_suggestions?: string[];
 }
 
+function getMetricColor(val: number) {
+  if (val >= 75) return '#10b981' // emerald
+  if (val >= 50) return '#f59e0b' // amber
+  return '#f43f5e' // rose
+}
+
+function getScoreBadge(val: number) {
+  if (val >= 75) {
+    return {
+      textColor: 'text-emerald-600 dark:text-emerald-400',
+      barColor: 'from-emerald-500 to-teal-400',
+    }
+  }
+  if (val >= 50) {
+    return {
+      textColor: 'text-amber-500 dark:text-amber-400',
+      barColor: 'from-amber-500 to-yellow-400',
+    }
+  }
+  return {
+    textColor: 'text-rose-500 dark:text-rose-400',
+    barColor: 'from-rose-500 to-red-400',
+  }
+}
+
 function MiniMetricCard({ 
   value, 
   label, 
-  color = '#10b981' 
+  color 
 }: { 
   value: number
   label: string
@@ -67,6 +92,7 @@ function MiniMetricCard({
   const radius = 18
   const circumference = 2 * Math.PI * radius
   const strokeDashoffset = circumference - (animatedVal / 100) * circumference
+  const strokeColor = color || getMetricColor(value)
 
   useEffect(() => {
     const timer = setTimeout(() => setAnimatedVal(value), 150)
@@ -89,7 +115,7 @@ function MiniMetricCard({
             cx="22"
             cy="22"
             r={radius}
-            stroke={color}
+            stroke={strokeColor}
             strokeWidth="3.5"
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
@@ -130,24 +156,25 @@ export function ATSScoreMeter({
   
   const categoryScores = (atsData as any)?.categoryScores || (atsData as any)?.category_scores || {};
 
-  const atsCompatibility = atsData?.atsCompatibility?.score ?? categoryScores?.keywordMatch ?? categoryScores?.atsCompatibility ?? 0;
+  const atsCompatibility = atsData?.atsCompatibility?.score ?? categoryScores?.keywordMatch ?? categoryScores?.atsCompatibility ?? 100;
   const jobMatchScore = atsData?.jobMatch?.score ?? categoryScores?.jobMatch ?? categoryScores?.experienceRelevance ?? 0;
   
-  const missingKw = [
+  // Deduplicate missing requirements so keywords aren't counted or displayed multiple times
+  const missingKw = Array.from(new Set([
     ...(atsData?.missingRequiredRequirements || []),
     ...(atsData?.missingPreferredRequirements || []),
-    ...(atsData?.missing_keywords || [])
-  ];
+    ...((atsData?.missingRequiredRequirements && atsData.missingRequiredRequirements.length > 0) ? [] : (atsData?.missing_keywords || []))
+  ])).filter(Boolean);
 
   const evidence = atsData?.evidence || atsData?.improvement_suggestions || [];
 
   const breakdown = atsData?.breakdown || {
-    requiredSkills: categoryScores?.requiredSkills ?? categoryScores?.skillsCoverage ?? 0,
-    preferredSkills: categoryScores?.preferredSkills ?? 0,
+    requiredSkills: categoryScores?.requiredSkills ?? categoryScores?.keywordMatch ?? 0,
+    preferredSkills: categoryScores?.preferredSkills ?? categoryScores?.skillsCoverage ?? 0,
     semanticSkills: categoryScores?.semanticSkills ?? 0,
     experience: categoryScores?.experience ?? categoryScores?.experienceRelevance ?? 0,
     title: categoryScores?.title ?? 0,
-    formatting: categoryScores?.formatting ?? 0,
+    formatting: categoryScores?.formatting ?? 100,
   };
 
   useEffect(() => {
@@ -178,10 +205,11 @@ export function ATSScoreMeter({
   const radius = 46
   const circumference = 2 * Math.PI * radius
   const strokeDashoffset = circumference - (displayScore / 100) * circumference
+  const mainScoreColor = getMetricColor(displayScore)
 
-  const handleCopy = (text: string, key: string) => {
+  const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text)
-    setCopiedKey(key)
+    setCopiedKey(id)
     toast.success(`Copied "${text}" to clipboard!`)
     setTimeout(() => setCopiedKey(null), 2000)
   }
@@ -218,7 +246,7 @@ export function ATSScoreMeter({
               cx="12"
               cy="12"
               r="9"
-              stroke="#10b981"
+              stroke={mainScoreColor}
               strokeWidth="2.5"
               strokeDasharray={2 * Math.PI * 9}
               strokeDashoffset={(2 * Math.PI * 9) - (targetScore / 100) * (2 * Math.PI * 9)}
@@ -230,7 +258,9 @@ export function ATSScoreMeter({
         </div>
         <div className="flex items-center gap-1.5 whitespace-nowrap">
           <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">ATS Match:</span>
-          <span className="text-[12.5px] font-black text-emerald-600 dark:text-emerald-400">{targetScore}/100</span>
+          <span className={cn("text-[12.5px] font-black", displayScore >= 75 ? "text-emerald-600 dark:text-emerald-400" : displayScore >= 50 ? "text-amber-500" : "text-rose-500")}>
+            {targetScore}/100
+          </span>
         </div>
       </div>
     )
@@ -252,7 +282,7 @@ export function ATSScoreMeter({
             <div className="relative w-28 h-28 shrink-0 flex items-center justify-center">
               <svg className="w-28 h-28 -rotate-90 transform drop-shadow-[0_0_12px_rgba(16,185,129,0.35)]" viewBox="0 0 110 110">
                 <circle cx="55" cy="55" r={radius} className="stroke-slate-800" strokeWidth="8" fill="transparent" />
-                <circle cx="55" cy="55" r={radius} stroke="#10b981" strokeWidth="8" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} strokeLinecap="round" fill="transparent" className="transition-all duration-1000 ease-out" />
+                <circle cx="55" cy="55" r={radius} stroke={mainScoreColor} strokeWidth="8" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} strokeLinecap="round" fill="transparent" className="transition-all duration-1000 ease-out" />
               </svg>
 
               <div className="absolute flex flex-col items-center justify-center text-center select-none">
@@ -270,14 +300,14 @@ export function ATSScoreMeter({
                 Standardized ATS Match
               </h3>
               <p className="text-[12px] text-slate-300 font-medium leading-relaxed">
-                Evidence-based engine v{atsData.engineVersion || '2.0'}
+                Evidence-based engine v{atsData.engineVersion || '2.0.0'}
               </p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-2.5 w-full pt-2">
-            <MiniMetricCard value={atsCompatibility} label="ATS Compatibility" color="#06b6d4" />
-            <MiniMetricCard value={jobMatchScore} label="Job Match" color="#10b981" />
+            <MiniMetricCard value={atsCompatibility} label="ATS Compatibility" color={getMetricColor(atsCompatibility)} />
+            <MiniMetricCard value={jobMatchScore} label="Job Match" color={getMetricColor(jobMatchScore)} />
           </div>
         </div>
       </div>
@@ -318,18 +348,19 @@ export function ATSScoreMeter({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {Object.entries(breakdown).map(([key, val]) => {
                 const displayLabel = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+                const { textColor, barColor } = getScoreBadge(val);
                 return (
                   <div key={key} className="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
                     <div className="flex items-center justify-between text-[12px] font-bold text-slate-800 dark:text-slate-200 mb-1.5 gap-2">
                       <span className="truncate" title={displayLabel}>{displayLabel}</span>
-                      <span className="font-extrabold text-emerald-600 dark:text-emerald-400 shrink-0">
+                      <span className={cn("font-extrabold shrink-0", textColor)}>
                         {val}%
                       </span>
                     </div>
                     <div className="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                       <div 
-                        className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-1000 ease-out"
-                        style={{ width: `${Math.min(100, val)}%` }}
+                        className={cn("h-full rounded-full bg-gradient-to-r transition-all duration-1000 ease-out", barColor)}
+                        style={{ width: `${Math.max(val === 0 ? 0 : 3, Math.min(100, val))}%` }}
                       />
                     </div>
                   </div>
