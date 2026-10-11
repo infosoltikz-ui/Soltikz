@@ -56,8 +56,7 @@ export async function generateAIResponse<T = string>(
           finalResponseFormat = zodResponseFormat(options.responseFormat as any, "response_schema");
         }
 
-        // @ts-ignore
-        const completion = await openai.beta.chat.completions.parse({
+        const completion = await (openai.chat.completions as any).parse({
           model: model,
           messages: [
             { role: 'system', content: options.systemPrompt },
