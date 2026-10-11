@@ -266,7 +266,7 @@ export async function POST(req: Request) {
       ...(parsedJdData.technologies || []),
       ...(parsedJdData.priorityKeywords || [])
     ]));
-    
+
     const jobTitle: string = parsedJdData.jobTitle || 'Software Engineer';
     const coreDomain: string = parsedJdData.industry || 'Software Engineering';
 
@@ -321,7 +321,6 @@ export async function POST(req: Request) {
 
     // Currently using GPT-4o. 
     // WHEN CLAUDE API KEY IS READY: Comment out the openai call and uncomment the claude call below.
-    /*
     const aiResponse = await generateAIResponse<any>({
       systemPrompt: dynamicSystemPrompt,
       userPrompt: finalUserPrompt,
@@ -330,19 +329,20 @@ export async function POST(req: Request) {
       temperature: 0.15, // Precise enough for keyword placement, natural enough for writing
       responseFormat: zodResponseFormat(GeneratedResumeFormat, 'generated_resume'),
     });
-    */
 
     // --- CLAUDE 3.5 SONNET IMPLEMENTATION (Uncomment when ready) ---
+    /*
     const aiResponse = await generateAIResponse<any>({
       systemPrompt: dynamicSystemPrompt,
       userPrompt: finalUserPrompt,
-      provider: 'claude',
+      provider: 'openai',
       model: 'claude-3-5-sonnet-20241022', // updated to latest 3.5 sonnet
       temperature: 0.15,
       // Note: ai-gateway will need to be updated to handle zodResponseFormat for Claude, 
       // or you can switch to using Vercel's 'generateObject' from 'ai' package which natively handles both.
-      responseFormat: GeneratedResumeFormat, 
+      responseFormat: GeneratedResumeFormat,
     });
+    */
 
     if (aiResponse.error || !aiResponse.data) {
       throw new Error(aiResponse.error || 'Failed to generate resume');
@@ -403,12 +403,12 @@ export async function POST(req: Request) {
 
     // ─── Deduct Quota & Track Generations ─────────────────────────
     const currentGenerated = profile?.resumes_generated ?? 0;
-    
+
     if (profile?.plan_id === 'FREE') {
       const remaining = profile?.credits_remaining ?? 10;
       await supabase
         .from('profiles')
-        .update({ 
+        .update({
           credits_remaining: Math.max(0, remaining - 1),
           resumes_generated: currentGenerated + 1
         })

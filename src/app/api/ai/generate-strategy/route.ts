@@ -26,7 +26,7 @@ Return your strategy as a structured JSON object matching the schema.
 export async function POST(req: Request) {
   try {
     const supabase = await createClient();
-    
+
     // Ensure user is authenticated
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
@@ -40,7 +40,6 @@ export async function POST(req: Request) {
     }
 
     // Call the AI Gateway
-    /*
     const aiResponse = await generateAIResponse<any>({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt: `Master Profile:\n${JSON.stringify(masterProfile)}\n\nParsed Job Description:\n${JSON.stringify(parsedJdData)}`,
@@ -48,16 +47,17 @@ export async function POST(req: Request) {
       temperature: 0.3,
       responseFormat: zodResponseFormat(StrategyFormat, 'resume_strategy'),
     });
-    */
 
+    /*
     const aiResponse = await generateAIResponse<any>({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt: `Master Profile:\n${JSON.stringify(masterProfile)}\n\nParsed Job Description:\n${JSON.stringify(parsedJdData)}`,
-      provider: 'claude',
+      provider: 'openai',
       model: 'claude-3-5-sonnet-20241022',
       temperature: 0.3,
       responseFormat: StrategyFormat,
     });
+    */
 
     if (aiResponse.error || !aiResponse.data) {
       throw new Error(aiResponse.error || 'Failed to generate strategy');
@@ -87,8 +87,8 @@ export async function POST(req: Request) {
       status: 'success'
     });
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       strategy_id: dbData.id,
       strategy_data: aiResponse.data
     });

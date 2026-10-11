@@ -50,15 +50,22 @@ export async function generateAIResponse<T = string>(
 
   try {
     if (provider === 'openai') {
-      const completion = await openai.chat.completions.parse({
-        model: model,
-        messages: [
-          { role: 'system', content: options.systemPrompt },
-          { role: 'user', content: options.userPrompt },
-        ],
-        temperature: options.temperature ?? 0.7,
-        response_format: options.responseFormat, // This enforces strict JSON matching the schema
-      });
+        let finalResponseFormat = options.responseFormat;
+        if (options.responseFormat && !options.responseFormat.json_schema && options.responseFormat._def) {
+          const { zodResponseFormat } = require('openai/helpers/zod');
+          finalResponseFormat = zodResponseFormat(options.responseFormat as any, "response_schema");
+        }
+
+        // @ts-ignore
+        const completion = await openai.beta.chat.completions.parse({
+          model: model,
+          messages: [
+            { role: 'system', content: options.systemPrompt },
+            { role: 'user', content: options.userPrompt },
+          ],
+          temperature: options.temperature ?? 0.7,
+          response_format: finalResponseFormat, // This enforces strict JSON matching the schema
+        });
 
       const message = completion.choices[0].message;
       
