@@ -121,7 +121,7 @@ export function BillingTab({ initialYearly = false }: { initialYearly?: boolean 
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h3 className="text-2xl font-black">
-                {isPro ? (profile?.plan_id === 'PRO_YEARLY' ? 'Pro Plan (Yearly)' : 'Pro Plan (Monthly)') : 'Free Plan'}
+                {isPro ? (profile?.plan_id === 'PRO_YEARLY' ? 'Pro Plan (Yearly)' : profile?.plan_id === 'PRO_MONTHLY' ? 'Pro Plan (Monthly)' : 'Pro Plan') : 'Free Plan'}
               </h3>
               <span className="px-2.5 py-1 bg-white/20 text-white text-[10px] font-black rounded uppercase tracking-wider backdrop-blur-sm">
                 Active

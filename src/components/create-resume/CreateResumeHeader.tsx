@@ -36,7 +36,7 @@ function CompactUserMenu() {
         setUser({
           name: p?.full_name || u.user_metadata?.full_name || 'User',
           email: u.email || '',
-          plan: isPremiumPlan(p?.plan_id) ? 'Premium' : 'Free Plan',
+          plan: isPremiumPlan(p?.plan_id) ? 'Pro Plan' : 'Free Plan',
         })
       }
     }

@@ -27,7 +27,7 @@ export function UserMenu() {
         setUserData({
           name: profile?.full_name || user.user_metadata?.full_name || 'User',
           email: user.email || '',
-          plan: isPremiumPlan(profile?.plan_id) ? 'Premium Plan' : 'Free Plan'
+          plan: isPremiumPlan(profile?.plan_id) ? 'Pro Plan' : 'Free Plan'
         })
       }
     }

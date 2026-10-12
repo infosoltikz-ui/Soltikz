@@ -28,7 +28,9 @@ export function getPlan(isYearly: boolean): PricingPlan {
   return isYearly ? PRO_YEARLY : PRO_MONTHLY
 }
 
-// Any plan_id starting with PRO_ is a paid tier (monthly or yearly).
+// Any plan_id starting with PRO (e.g. PRO, PRO_MONTHLY, PRO_YEARLY) or PREMIUM/ENTERPRISE is a paid tier.
 export function isPremiumPlan(planId: string | null | undefined): boolean {
-  return !!planId?.startsWith('PRO_')
+  if (!planId) return false
+  const upper = planId.trim().toUpperCase()
+  return upper.startsWith('PRO') || upper === 'PREMIUM' || upper === 'ENTERPRISE'
 }

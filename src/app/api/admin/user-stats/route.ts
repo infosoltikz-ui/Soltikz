@@ -23,7 +23,7 @@ export async function GET() {
       { count: newToday },
     ] = await Promise.all([
       supabase.from('profiles').select('*', { count: 'exact', head: true }),
-      supabase.from('profiles').select('*', { count: 'exact', head: true }).in('plan_id', ['PRO_MONTHLY', 'PRO_YEARLY']),
+      supabase.from('profiles').select('*', { count: 'exact', head: true }).in('plan_id', ['PRO_MONTHLY', 'PRO_YEARLY', 'PRO', 'PREMIUM', 'ENTERPRISE']),
       supabase.from('profiles').select('*', { count: 'exact', head: true }).or('plan_id.eq.FREE,plan_id.is.null'),
       supabase.from('profiles').select('*', { count: 'exact', head: true }).gte('created_at', today.toISOString()),
     ])

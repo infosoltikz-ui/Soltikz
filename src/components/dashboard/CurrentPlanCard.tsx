@@ -56,7 +56,7 @@ export function CurrentPlanCard({
         setPlanId(profile.plan_id || 'FREE')
         
         // For FREE plan, start is profile creation, no expiry
-        if (!profile.plan_id || profile.plan_id === 'FREE') {
+        if (!isPremiumPlan(profile.plan_id)) {
           setPlanStart(profile.created_at)
           setPlanExpiry(null) // Lifetime
           setIsExpiringSoon(false)
@@ -83,7 +83,7 @@ export function CurrentPlanCard({
       }
 
       // Calculate the maximum possible generated count
-      const spentFreeCredits = profile?.plan_id === 'FREE' ? Math.max(0, 10 - (profile.credits_remaining ?? 10)) : 0;
+      const spentFreeCredits = !isPremiumPlan(profile?.plan_id) ? Math.max(0, 10 - (profile?.credits_remaining ?? 10)) : 0;
       const permanentCount = Math.max(
         profile?.resumes_generated ?? 0,
         (typeof count === 'number' ? count : 0),

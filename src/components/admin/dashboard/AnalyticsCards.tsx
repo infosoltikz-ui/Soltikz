@@ -19,7 +19,7 @@ export function AnalyticsCards() {
       const supabase = createClient();
       try {
         const { count: totalUsers } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
-        const { count: proUsers } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).in('plan_id', ['PRO_MONTHLY', 'PRO_YEARLY']);
+        const { count: proUsers } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).in('plan_id', ['PRO_MONTHLY', 'PRO_YEARLY', 'PRO', 'PREMIUM', 'ENTERPRISE']);
         const { count: totalResumes } = await supabase.from('resumes_v2').select('*', { count: 'exact', head: true });
         
         const { data: payments } = await supabase.from('payments_and_subscriptions').select('amount_paid');

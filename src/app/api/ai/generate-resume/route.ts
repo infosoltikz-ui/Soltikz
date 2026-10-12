@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { generateAIResponse } from '@/utils/ai-gateway';
 import { createClient } from '@/utils/supabase/server';
+import { isPremiumPlan } from '@/utils/pricingPlans';
 
 // --- Keyword Extraction code removed since we now rely on parse-jd data ---
 // ─── STEP 2: Resume Generation Schema ────────────────────────────────────────
@@ -256,7 +257,7 @@ export async function POST(req: Request) {
       .single();
 
     // --- PAYWALL / QUOTA CHECK ---
-    if (profile?.plan_id === 'FREE' && (profile?.credits_remaining ?? 0) <= 0) {
+    if (!isPremiumPlan(profile?.plan_id) && (profile?.credits_remaining ?? 0) <= 0) {
       return NextResponse.json({ error: 'Paywall', message: 'Upgrade to Pro to continue.' }, { status: 403 });
     }
 
@@ -409,7 +410,7 @@ export async function POST(req: Request) {
     // ─── Deduct Quota & Track Generations ─────────────────────────
     const currentGenerated = profile?.resumes_generated ?? 0;
 
-    if (profile?.plan_id === 'FREE') {
+    if (!isPremiumPlan(profile?.plan_id)) {
       const remaining = profile?.credits_remaining ?? 10;
       await supabase
         .from('profiles')
