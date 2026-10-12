@@ -554,6 +554,12 @@ export default function CreateResumePage() {
         {step === 1 && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex flex-col gap-6">
+              <ResumeTypeSelector selectedType={resumeType} onChange={(type) => {
+                setResumeType(type)
+                // Automatically switch to the correct default template for the mode
+                if (type === 'c2c' && !selectedTemplateId.startsWith('c2c')) setSelectedTemplateId('c2c')
+                else if (type === 'fulltime' && selectedTemplateId.startsWith('c2c')) setSelectedTemplateId('modern')
+              }} />
               <TemplateSelector
                 selectedId={selectedTemplateId}
                 onChange={setSelectedTemplateId}
@@ -562,12 +568,6 @@ export default function CreateResumePage() {
                 resumeType={resumeType}
                 profileData={profileData}
               />
-              <ResumeTypeSelector selectedType={resumeType} onChange={(type) => {
-                setResumeType(type)
-                // Automatically switch to the correct default template for the mode
-                if (type === 'c2c' && !selectedTemplateId.startsWith('c2c')) setSelectedTemplateId('c2c')
-                else if (type === 'fulltime' && selectedTemplateId.startsWith('c2c')) setSelectedTemplateId('modern')
-              }} />
               <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200/80 shadow-xl shadow-slate-200/20 p-8 relative overflow-hidden group hover:shadow-2xl hover:border-emerald-200 transition-all duration-500">
                 {/* Ambient Glow */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl opacity-50 -mr-20 -mt-20 pointer-events-none group-hover:bg-emerald-100 transition-colors duration-500" />
