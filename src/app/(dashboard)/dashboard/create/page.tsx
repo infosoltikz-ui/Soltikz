@@ -344,9 +344,20 @@ export default function CreateResumePage() {
       if (!strategyData.success) throw new Error(strategyData.error || 'Failed to generate strategy')
 
       setOrchestratorState('Generating Resume Content...')
-      // 3. Generate Resume
+      // 3. Generate Resume (Dynamically routes to Claude or OpenAI based on Admin Setting)
+      let activeEndpoint = '/api/ai/generate-resume'
+      try {
+        const providerRes = await fetch('/api/ai/active-provider')
+        const providerData = await providerRes.json()
+        if (providerData?.provider === 'claude') {
+          activeEndpoint = '/api/ai/generate-resume-claude'
+        }
+      } catch (e) {
+        console.warn('Defaulting to standard resume endpoint:', e)
+      }
+
       const rType = resumeType === 'c2c' ? 'C2C (Contract to Hire)' : 'Full Time'
-      const resumeRes = await fetch('/api/ai/generate-resume', {
+      const resumeRes = await fetch(activeEndpoint, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           masterProfile: profileData,

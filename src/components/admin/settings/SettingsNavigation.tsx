@@ -4,6 +4,7 @@ import { Settings, Palette, Shield, Mail, BrainCircuit, HardDrive, CreditCard, L
 
 export const SETTINGS_TABS = [
   { id: 'general', label: 'General', icon: Settings },
+  { id: 'ai', label: 'AI Configuration', icon: BrainCircuit },
   { id: 'branding', label: 'Branding', icon: Palette },
   { id: 'auth', label: 'Authentication', icon: Shield },
   { id: 'email', label: 'Email & Notifications', icon: Mail },

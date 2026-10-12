@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import { SettingsNavigation } from '@/components/admin/settings/SettingsNavigation'
 import { GeneralSettings } from '@/components/admin/settings/forms/GeneralSettings'
+import { AIConfigSettings } from '@/components/admin/settings/forms/AIConfigSettings'
 import { BrandingSettings } from '@/components/admin/settings/forms/BrandingSettings'
 import { AuthSettings } from '@/components/admin/settings/forms/AuthSettings'
 import { EmailSettings } from '@/components/admin/settings/forms/EmailSettings'
@@ -18,6 +19,7 @@ export default function SettingsPage() {
   const renderForm = () => {
     switch(activeTab) {
       case 'general': return <GeneralSettings />
+      case 'ai': return <AIConfigSettings />
       case 'branding': return <BrandingSettings />
       case 'auth': return <AuthSettings />
       case 'email': return <EmailSettings />
