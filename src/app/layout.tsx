@@ -104,12 +104,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="google-site-verification" content="U3ySGlGG2fC3L4rUpVCAkRHi-6a8myCH2Y26qQ8tpME" />
         <JsonLd />
       </head>
-      <body className={`${inter.className} antialiased min-h-screen bg-background text-foreground`}>
+      <body className={`${inter.className} antialiased min-h-screen bg-background text-foreground`} suppressHydrationWarning>
         <Providers>
           {children}
         </Providers>
