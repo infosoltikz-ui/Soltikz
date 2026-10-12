@@ -253,13 +253,20 @@ export async function POST(req: Request) {
     const dynamicSystemPrompt = buildGenerationPrompt(extractedKeywords, jobTitle, coreDomain);
     const isC2CMode = String(resumeType || '').toLowerCase().includes('c2c');
 
+    const profileExperience = masterProfile?.experience || masterProfile?.employment || [];
+    const normalizedMasterProfile = {
+      ...masterProfile,
+      experience: profileExperience,
+      employment: profileExperience
+    };
+
     const finalUserPrompt = [
       `TARGET RESUME TYPE: ${resumeType}`,
       ``,
       `TARGET JD KEYWORDS (MANDATORY TO INTEGRATE ACROSS SKILLS & BULLETS FOR 90%+ ATS SCORE):`,
       extractedKeywords.map(k => `- ${k}`).join('\n'),
       ``,
-      `Master Profile:\n${JSON.stringify(masterProfile)}`,
+      `Master Profile:\n${JSON.stringify(normalizedMasterProfile)}`,
       ``,
       `Parsed JD:\n${JSON.stringify(parsedJdData)}`,
       ``,
@@ -268,11 +275,13 @@ export async function POST(req: Request) {
       `══════════════════════════════════════════════════════════════════`,
       `STRICT OUTPUT QUANTITY & LENGTH DIRECTIVES (MANDATORY — ZERO EXCEPTIONS):`,
       `══════════════════════════════════════════════════════════════════`,
+      `MANDATORY RULE FOR EXPERIENCE SECTION:`,
+      `- You MUST generate an Experience item for EVERY company found in Master Profile employment/experience (${profileExperience.map((e: any) => e.company).filter(Boolean).join(', ')}).`,
+      `- Under NO circumstances should the experience array be empty.`,
       isC2CMode ? `
       FOR C2C RESUMES (CONTRACT TO HIRE VENDOR SUBMISSION):
       - PROFESSIONAL SUMMARY: EXACTLY 10 bullet points. Every bullet MUST be EXACTLY 2 full lines long (minimum 30-40 words per point) with bold **keywords** and quantified metrics (%).
       - SKILLS MATRIX: EXACTLY 10 categories, each with 5-7 items.
-      - ONLY generate Experience entries for companies that exist in the Master Profile. NEVER invent or hallucinate extra companies.
       - EXPERIENCE 1 (Most Recent Role): EXACTLY 10 BULLET POINTS (STRICT MINIMUM 10 BULLETS).
       - EXPERIENCE 2 (If exists in profile): EXACTLY 8 to 10 BULLET POINTS.
       - EXPERIENCE 3+ (If exists in profile): EXACTLY 6 to 8 BULLET POINTS.
@@ -281,7 +290,6 @@ export async function POST(req: Request) {
       FOR FULL-TIME RESUMES (CORPORATE DIRECT HIRE):
       - PROFESSIONAL SUMMARY: EXACTLY 5 sentences that join into one flowing prose paragraph. No bullets, no bold, no "I".
       - SKILLS MATRIX: EXACTLY 10 categories, each with 5-7 items.
-      - ONLY generate Experience entries for companies that exist in the Master Profile. NEVER invent or hallucinate extra companies.
       - EXPERIENCE 1 (Most Recent Role): EXACTLY 8 BULLET POINTS (MANDATORY 8 BULLETS).
       - EXPERIENCE 2 (If exists in profile): EXACTLY 8 BULLET POINTS (MANDATORY 8 BULLETS).
       - EXPERIENCE 3 & EXPERIENCE 4+ (If exists in profile): EXACTLY 5 to 6 BULLET POINTS.
@@ -407,8 +415,22 @@ export async function POST(req: Request) {
     }
 
     // Guarantee experience is an array of objects with array bullets
-    if (!Array.isArray(finalResumeData.experience)) {
-      finalResumeData.experience = [];
+    if (!Array.isArray(finalResumeData.experience) || finalResumeData.experience.length === 0) {
+      if (profileExperience.length > 0) {
+        console.warn('Claude returned empty experience, falling back to structured profile employment...');
+        finalResumeData.experience = profileExperience.map((exp: any, i: number) => ({
+          id: `exp_${i + 1}`,
+          role: exp.title || exp.role || 'Software Professional',
+          company: exp.company || 'Enterprise Solutions',
+          duration: exp.startDate ? `${exp.startDate} – ${exp.current ? 'Present' : (exp.endDate || 'Present')}` : (exp.duration || '2020 – Present'),
+          environment: Array.isArray(exp.environment) ? exp.environment : [],
+          bullets: typeof exp.responsibilities === 'string'
+            ? exp.responsibilities.split('\n').map((l: string) => l.replace(/^[•\-\*]\s*/, '').trim()).filter(Boolean)
+            : (Array.isArray(exp.bullets) ? exp.bullets : [])
+        }));
+      } else {
+        finalResumeData.experience = [];
+      }
     } else {
       finalResumeData.experience = finalResumeData.experience.map((exp: any, i: number) => {
         let b = sanitizeSection(exp.bullets);
