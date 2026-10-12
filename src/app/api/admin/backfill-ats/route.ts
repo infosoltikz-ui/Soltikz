@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
+import { verifyAdminSession } from '@/utils/adminAuth';
 import { generateAIResponse } from '@/utils/ai-gateway';
 import { z } from 'zod';
 import { zodResponseFormat } from 'openai/helpers/zod';
@@ -35,6 +36,11 @@ Return a perfect JSON object mapping to the exact requested schema.
 
 export async function GET(req: Request) {
   try {
+    const { authorized } = await verifyAdminSession();
+    if (!authorized) {
+      return NextResponse.json({ error: 'Unauthorized: Admin access required' }, { status: 401 });
+    }
+
     const supabase = await createClient();
     
     // We fetch ALL resumes in the database since this is a backfill for all existing ones.

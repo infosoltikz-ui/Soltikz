@@ -57,7 +57,7 @@ export function CoverLettersPageContent() {
     if (!user) return
 
     const [{ data: profile }, { data: letters }, { data: resumes }] = await Promise.all([
-      supabase.from('profiles').select('full_name, master_resume_data').eq('id', user.id).single(),
+      supabase.from('profiles').select('full_name, email, phone, location, master_resume_data').eq('id', user.id).single(),
       supabase
         .from('cover_letters')
         .select('id, content, created_at, resumes_v2 ( title, parsed_job_descriptions ( company_name, job_title ) )')
@@ -71,13 +71,16 @@ export function CoverLettersPageContent() {
         .order('created_at', { ascending: false }),
     ])
 
-    setCandidateName(profile?.full_name || '')
-    const contact = (profile?.master_resume_data as any)?.contact || {}
+    const master = (profile?.master_resume_data as any) || {}
+    const pInfo = master.personal_info || master.contact || {}
+    const fullName = profile?.full_name || `${pInfo.firstName || ''} ${pInfo.lastName || ''}`.trim() || 'Candidate'
+    
+    setCandidateName(fullName)
     setCandidateContact({
-      email: contact.email || '',
-      phone: contact.phone || '',
-      location: contact.location || '',
-      linkedin: contact.linkedin || '',
+      email: profile?.email || user.email || pInfo.email || '',
+      phone: profile?.phone || pInfo.phone || '',
+      location: profile?.location || pInfo.location || '',
+      linkedin: pInfo.linkedin || '',
     })
 
     setCoverLetters((letters || []).map((l: any) => {

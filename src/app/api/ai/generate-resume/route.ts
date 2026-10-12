@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { generateAIResponse } from '@/utils/ai-gateway';
 import { createClient } from '@/utils/supabase/server';
-import { isPremiumPlan } from '@/utils/pricingPlans';
+import { isPremiumPlan, FREE_TIER_CREDITS } from '@/utils/pricingPlans';
 
 // --- Keyword Extraction code removed since we now rely on parse-jd data ---
 // ─── STEP 2: Resume Generation Schema ────────────────────────────────────────
@@ -411,7 +411,7 @@ export async function POST(req: Request) {
     const currentGenerated = profile?.resumes_generated ?? 0;
 
     if (!isPremiumPlan(profile?.plan_id)) {
-      const remaining = profile?.credits_remaining ?? 10;
+      const remaining = profile?.credits_remaining ?? FREE_TIER_CREDITS;
       await supabase
         .from('profiles')
         .update({

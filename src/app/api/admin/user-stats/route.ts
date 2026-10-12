@@ -1,18 +1,16 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { verifyAdminSession, getAdminSupabaseClient } from '@/utils/adminAuth'
 
 export const dynamic = 'force-dynamic'
 
-function getAdminClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder_key'
-  )
-}
-
 export async function GET() {
   try {
-    const supabase = getAdminClient()
+    const { authorized } = await verifyAdminSession()
+    if (!authorized) {
+      return NextResponse.json({ error: 'Unauthorized: Admin access required' }, { status: 401 })
+    }
+
+    const supabase = getAdminSupabaseClient()
     const today = new Date()
     today.setHours(0, 0, 0, 0)
 

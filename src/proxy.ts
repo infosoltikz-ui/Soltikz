@@ -1,10 +1,6 @@
-import { type NextRequest } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 import { updateSession } from '@/utils/supabase/middleware'
-
-const ADMIN_EMAILS = [
-  'info.soltikz@gmail.com',
-  'balajiprojects049@gmail.com'
-]
+import { ADMIN_EMAILS } from '@/utils/adminAuth'
 
 export async function proxy(request: NextRequest) {
   // Update the Supabase session
@@ -16,9 +12,20 @@ export async function proxy(request: NextRequest) {
   
   const isUserDashboard = pathname.startsWith('/dashboard')
   const isAdminDashboard = pathname.startsWith('/admin') && pathname !== '/admin/login'
+  const isAdminApiRoute = pathname.startsWith('/api/admin')
 
   const userEmail = user?.email || ''
-  const isAdmin = ADMIN_EMAILS.includes(userEmail)
+  const isAdmin = ADMIN_EMAILS.includes(userEmail.toLowerCase().trim())
+
+  // Protect Admin API Routes immediately
+  if (isAdminApiRoute) {
+    if (!user || !isAdmin) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Admin privileges required' },
+        { status: 401 }
+      )
+    }
+  }
 
   // 1. If user is logged in and visits an auth route or the home page
   if (user) {

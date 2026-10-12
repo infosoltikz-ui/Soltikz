@@ -20,7 +20,7 @@ import { SkillsForm } from '@/components/profile/SkillsForm'
 import { ProjectsForm } from '@/components/profile/ProjectsForm'
 import { CertificationsForm } from '@/components/profile/CertificationsForm'
 import { Button } from '@/components/ui/Button'
-import { ArrowRight, ArrowLeft, Loader2, Download, ZoomIn, ZoomOut, FileText, Sparkles } from 'lucide-react'
+import { ArrowRight, ArrowLeft, Loader2, Download, ZoomIn, ZoomOut, FileText, Sparkles, AlertTriangle } from 'lucide-react'
 import { TemplateSelector } from '@/components/create-resume/TemplateSelector'
 import { ATSScoreMeter } from '@/components/create-resume/ATSScoreMeter'
 import { AIGenerationLoadingHUD } from '@/components/create-resume/AIGenerationLoadingHUD'
@@ -60,6 +60,7 @@ export default function CreateResumePage() {
 
   const [isRegenerateSummaryModalOpen, setIsRegenerateSummaryModalOpen] = useState(false)
   const [isManualEditModalOpen, setIsManualEditModalOpen] = useState(false)
+  const [isEmptyProfileModalOpen, setIsEmptyProfileModalOpen] = useState(false)
 
   const openModal = useUIStore((s) => s.openModal)
   const closeModal = useUIStore((s) => s.closeModal)
@@ -510,6 +511,16 @@ export default function CreateResumePage() {
     }
   }
 
+  const handleProceedToStep2 = () => {
+    const masterData = profileData?.master_resume_data || {}
+    const employmentList = masterData.employment || masterData.experience || []
+    if (!employmentList || employmentList.length === 0) {
+      setIsEmptyProfileModalOpen(true)
+      return
+    }
+    setStep(2)
+  }
+
   return (
     <div className="pb-10 max-w-[1600px] mx-auto min-h-screen bg-slate-50/50">
       <Modal id="paywall-modal" title="Upgrade to Pro" size="sm">
@@ -580,9 +591,7 @@ export default function CreateResumePage() {
 
             <div className="flex justify-end pt-4">
               <Button
-                onClick={() => {
-                  setStep(2)
-                }}
+                onClick={handleProceedToStep2}
                 className="relative h-14 px-10 text-[16px] font-black rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xl shadow-emerald-600/30 flex items-center gap-3 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-600/50 hover:-translate-y-1 overflow-hidden group/btn cursor-pointer"
               >
                 {/* Shimmer Effect */}
@@ -836,6 +845,74 @@ export default function CreateResumePage() {
           onSave={handleManualEditSave}
           initialSkills={generatedResume?.skills || []}
         />
+
+        {/* Empty Profile Guard Modal */}
+        {isEmptyProfileModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
+            <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 space-y-6 relative animate-in zoom-in-95 duration-200">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-600 shrink-0">
+                  <AlertTriangle className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-[19px] font-black text-slate-900 tracking-tight">
+                    Work Experience Missing
+                  </h3>
+                  <p className="text-[13px] font-medium text-slate-500 mt-1 leading-relaxed">
+                    Our Enterprise AI strictly adheres to your real career history and <span className="font-bold text-slate-700">never fabricates fake companies</span>. 
+                    Generating now without work experience will produce an empty work history.
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2 text-[13px]">
+                <div className="font-bold text-slate-800 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-emerald-600" />
+                  Fastest Way (Takes 10 Seconds):
+                </div>
+                <p className="text-slate-600 leading-normal">
+                  Export your LinkedIn profile using <b>"Save to PDF"</b> and import it in your <b>Master Profile</b>. All your roles, education, and skills will be auto-filled instantly!
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+                <Button
+                  onClick={() => {
+                    setIsEmptyProfileModalOpen(false)
+                    router.push('/dashboard/profile')
+                  }}
+                  className="w-full sm:flex-1 h-12 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-[14px] shadow-md cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <span>Go to Master Profile</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    setIsEmptyProfileModalOpen(false)
+                    setEditingTab('employment')
+                  }}
+                  variant="outline"
+                  className="w-full sm:w-auto h-12 px-5 rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-[14px] cursor-pointer"
+                >
+                  Add Job Below
+                </Button>
+              </div>
+
+              <div className="text-center pt-1">
+                <button
+                  onClick={() => {
+                    setIsEmptyProfileModalOpen(false)
+                    setStep(2)
+                  }}
+                  className="text-[12px] font-semibold text-slate-400 hover:text-slate-600 underline cursor-pointer transition-colors"
+                >
+                  Proceed anyway without work experience
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Dedicated Always-Mounted Print Target for 100% Reliable PDF Download across Steps 2 & 3 */}
         {generatedResume && (

@@ -12,7 +12,7 @@ export default async function PublicResumePage({ params }: { params: Promise<{ s
   // regardless of who's viewing - no login required, and this never touches `profiles`.
   const { data: resume } = await supabase
     .from('resumes_v2')
-    .select('id, title, public_snapshot')
+    .select('id, title, public_snapshot, template_id')
     .eq('share_slug', slug)
     .eq('is_public', true)
     .single()
@@ -39,7 +39,7 @@ export default async function PublicResumePage({ params }: { params: Promise<{ s
   })
 
   const profileData = resume.public_snapshot || {}
-  const Template = getTemplateById(DEFAULT_TEMPLATE_ID).component
+  const Template = getTemplateById(resume.template_id || DEFAULT_TEMPLATE_ID).component
 
   return (
     <div className="min-h-screen bg-slate-50 py-10 print:py-0 print:bg-white">

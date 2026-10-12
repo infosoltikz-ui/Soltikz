@@ -106,7 +106,7 @@ BEGIN
     new.raw_user_meta_data->>'full_name',
     'FREE',
     0,
-    5,
+    10,
     '{}'::jsonb
   );
   RETURN new;
