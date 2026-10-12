@@ -291,16 +291,44 @@ export async function POST(req: Request) {
       `CRITICAL: DO NOT SHORTEN OR COMPRESS BULLET POINTS. GENERATE DETAILED 2 TO 3 FULL PRINTED LINE BULLETS (40-55 WORDS EACH) WITH METRICS AND BOLD KEYWORDS. CALL THE generate_resume TOOL WITH YOUR FINAL STRUCTURED DATA.`
     ].join('\n');
 
-    // ─── ANTHROPIC CLAUDE 3.5 SONNET TOOL CALL ──────────────────────────────
-    const claudeMessage = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 8192,
-      temperature: 0.15,
-      system: dynamicSystemPrompt,
-      messages: [{ role: 'user', content: finalUserPrompt }],
-      tools: [CLAUDE_RESUME_TOOL_SCHEMA],
-      tool_choice: { type: 'tool', name: 'generate_resume' },
-    });
+    // ─── ANTHROPIC CLAUDE SONNET TOOL CALL ─────────────────────────────────
+    const CANDIDATE_MODELS = [
+      'claude-sonnet-4-6',
+      'claude-3-5-sonnet-20241022',
+      'claude-3-7-sonnet-20250219',
+      'claude-sonnet-5'
+    ];
+
+    let claudeMessage: any = null;
+    let selectedModel = 'claude-sonnet-4-6';
+    let lastError: any = null;
+
+    for (const modelCandidate of CANDIDATE_MODELS) {
+      try {
+        claudeMessage = await anthropic.messages.create({
+          model: modelCandidate,
+          max_tokens: 8192,
+          temperature: 0.15,
+          system: dynamicSystemPrompt,
+          messages: [{ role: 'user', content: finalUserPrompt }],
+          tools: [CLAUDE_RESUME_TOOL_SCHEMA],
+          tool_choice: { type: 'tool', name: 'generate_resume' },
+        });
+        selectedModel = modelCandidate;
+        break;
+      } catch (err: any) {
+        lastError = err;
+        if (err.status === 404) {
+          console.warn(`Claude model ${modelCandidate} returned 404, attempting fallback...`);
+          continue;
+        }
+        throw err;
+      }
+    }
+
+    if (!claudeMessage) {
+      throw lastError || new Error('Failed to generate resume with available Claude models.');
+    }
 
     // Extract tool call output
     const toolUseBlock = claudeMessage.content.find(
@@ -370,7 +398,7 @@ export async function POST(req: Request) {
       resume_id: resumeRecord.id,
       action_type: 'Generate Resume',
       provider: 'claude',
-      model: 'claude-3-5-sonnet-20241022',
+      model: selectedModel,
       input_tokens: inputTokens,
       output_tokens: outputTokens,
       duration_ms: durationMs,
@@ -404,7 +432,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       success: true,
       provider: 'claude',
-      model: 'claude-3-5-sonnet-20241022',
+      model: selectedModel,
       resume_id: resumeRecord.id,
       generated_resume: finalResumeData,
       keyword_stats: {

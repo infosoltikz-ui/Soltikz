@@ -44,7 +44,7 @@ export function AIConfigSettings() {
       setActiveProvider(provider)
       toast.success(
         provider === 'claude'
-          ? 'Switched to Claude 3.5 Sonnet for resume generation!'
+          ? 'Switched to Claude Sonnet for resume generation!'
           : 'Switched to OpenAI GPT-4o for resume generation!'
       )
     } catch (err: any) {
@@ -137,7 +137,7 @@ export function AIConfigSettings() {
                 <span className="text-[15px] font-black text-slate-900 flex items-center gap-2">
                   <span>Anthropic Claude</span>
                   <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-100 text-amber-800">
-                    3.5 Sonnet
+                    Claude Sonnet
                   </span>
                 </span>
                 {activeProvider === 'claude' && (
