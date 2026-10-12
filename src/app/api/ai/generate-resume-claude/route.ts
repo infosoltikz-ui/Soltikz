@@ -332,7 +332,7 @@ export async function POST(req: Request) {
 
     // Extract tool call output
     const toolUseBlock = claudeMessage.content.find(
-      (block): block is Anthropic.ToolUseBlock => block.type === 'tool_use' && block.name === 'generate_resume'
+      (block: any): block is Anthropic.ToolUseBlock => block.type === 'tool_use' && block.name === 'generate_resume'
     );
 
     let finalResumeData: any = null;
@@ -340,7 +340,7 @@ export async function POST(req: Request) {
     if (toolUseBlock && toolUseBlock.input) {
       finalResumeData = toolUseBlock.input;
     } else {
-      const textBlock = claudeMessage.content.find((block) => block.type === 'text');
+      const textBlock = claudeMessage.content.find((block: any) => block.type === 'text');
       if (textBlock && 'text' in textBlock) {
         const jsonMatch = textBlock.text.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
@@ -350,7 +350,7 @@ export async function POST(req: Request) {
     }
 
     if (!finalResumeData) {
-      throw new Error('Claude 3.5 Sonnet did not return the expected structured resume format.');
+      throw new Error('Claude did not return the expected structured resume format.');
     }
 
     // Validate with Zod
