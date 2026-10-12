@@ -72,9 +72,9 @@ const CLAUDE_RESUME_TOOL_SCHEMA: Anthropic.Tool = {
             company: { type: 'string' },
             duration: { type: 'string' },
             environment: {
-              type: ['array', 'null'],
+              type: 'array',
               items: { type: 'string' },
-              description: 'List of tools for C2C, or null for Full-Time',
+              description: 'List of tools for C2C, or empty array [] for Full-Time',
             },
             bullets: {
               type: 'array',
@@ -353,10 +353,93 @@ export async function POST(req: Request) {
       throw new Error('Claude did not return the expected structured resume format.');
     }
 
+    // Unwrap if wrapped under resume or generated_resume
+    if (finalResumeData.generated_resume && typeof finalResumeData.generated_resume === 'object') {
+      finalResumeData = finalResumeData.generated_resume;
+    } else if (finalResumeData.resume && typeof finalResumeData.resume === 'object') {
+      finalResumeData = finalResumeData.resume;
+    }
+
+    // Helper to safely parse stringified JSON sections
+    const sanitizeSection = (val: any): any => {
+      if (val === null || val === undefined) return [];
+      if (typeof val === 'string') {
+        let str = val.trim();
+        try {
+          return JSON.parse(str);
+        } catch {
+          // Fix trailing bracket glitch if model wrote `"..."}]}]` instead of `"..." ]}]`
+          str = str.replace(/\}\]\}\]$/, ']}]');
+          try {
+            return JSON.parse(str);
+          } catch {
+            if (str.startsWith('[') && !str.endsWith(']')) {
+              try { return JSON.parse(str + ']'); } catch {}
+            }
+            return val;
+          }
+        }
+      }
+      return val;
+    };
+
+    finalResumeData.summary = sanitizeSection(finalResumeData.summary);
+    finalResumeData.skills = sanitizeSection(finalResumeData.skills);
+    finalResumeData.experience = sanitizeSection(finalResumeData.experience);
+    finalResumeData.education = sanitizeSection(finalResumeData.education);
+    finalResumeData.certifications = sanitizeSection(finalResumeData.certifications);
+
+    // Guarantee summary is an array
+    if (typeof finalResumeData.summary === 'string') {
+      finalResumeData.summary = [finalResumeData.summary];
+    } else if (!Array.isArray(finalResumeData.summary)) {
+      finalResumeData.summary = [];
+    }
+
+    // Guarantee skills is an array
+    if (!Array.isArray(finalResumeData.skills)) {
+      finalResumeData.skills = [];
+    } else {
+      finalResumeData.skills = finalResumeData.skills.map((s: any) => ({
+        category: s.category || 'Core Domain Skills',
+        items: Array.isArray(s.items) ? s.items : (typeof s.items === 'string' ? sanitizeSection(s.items) : [])
+      }));
+    }
+
+    // Guarantee experience is an array of objects with array bullets
+    if (!Array.isArray(finalResumeData.experience)) {
+      finalResumeData.experience = [];
+    } else {
+      finalResumeData.experience = finalResumeData.experience.map((exp: any, i: number) => {
+        let b = sanitizeSection(exp.bullets);
+        if (typeof b === 'string') b = [b];
+        if (!Array.isArray(b)) b = [];
+        return {
+          ...exp,
+          id: exp.id || `exp_${i + 1}`,
+          role: exp.role || '',
+          company: exp.company || '',
+          duration: exp.duration || '',
+          environment: Array.isArray(exp.environment) ? exp.environment : (typeof exp.environment === 'string' ? [exp.environment] : []),
+          bullets: b
+        };
+      });
+    }
+
+    // Guarantee education is an array
+    if (!Array.isArray(finalResumeData.education)) {
+      finalResumeData.education = [];
+    }
+
+    // Guarantee certifications is an array
+    if (!Array.isArray(finalResumeData.certifications)) {
+      finalResumeData.certifications = [];
+    }
+
     // Validate with Zod
     const validatedData = GeneratedResumeFormat.safeParse(finalResumeData);
     if (!validatedData.success) {
-      console.warn('Claude schema warning, continuing with parsed data:', validatedData.error.issues);
+      console.warn('Claude schema warning, continuing with normalized data:', validatedData.error.issues);
     }
 
     const durationMs = Date.now() - startTime;

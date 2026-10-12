@@ -380,8 +380,34 @@ export default function CreateResumePage() {
         throw new Error(resumeGenData.message || resumeGenData.error || 'Failed to generate resume')
       }
 
+      // Normalize generated resume sections so templates never fail on non-array types
+      const rawGen = resumeGenData.generated_resume || {}
+      const parseIfStr = (v: any) => {
+        if (typeof v === 'string') {
+          try { return JSON.parse(v) } catch { return v }
+        }
+        return v
+      }
+      const normExperience = parseIfStr(rawGen.experience)
+      const normSkills = parseIfStr(rawGen.skills)
+      const normSummary = parseIfStr(rawGen.summary)
+      const normEducation = parseIfStr(rawGen.education)
+      const normCertifications = parseIfStr(rawGen.certifications)
+
+      const normalizedResume = {
+        ...rawGen,
+        experience: Array.isArray(normExperience) ? normExperience.map((exp: any) => ({
+          ...exp,
+          bullets: Array.isArray(parseIfStr(exp.bullets)) ? parseIfStr(exp.bullets) : (typeof exp.bullets === 'string' ? [exp.bullets] : [])
+        })) : [],
+        skills: Array.isArray(normSkills) ? normSkills : [],
+        summary: Array.isArray(normSummary) ? normSummary : (typeof normSummary === 'string' ? [normSummary] : []),
+        education: Array.isArray(normEducation) ? normEducation : [],
+        certifications: Array.isArray(normCertifications) ? normCertifications : []
+      }
+
       setCurrentResumeId(resumeGenData.resume_id)
-      setGeneratedResume(resumeGenData.generated_resume)
+      setGeneratedResume(normalizedResume)
 
       // Do not append ?id to URL so refreshing always resets cleanly to Step 1
 
@@ -392,7 +418,7 @@ export default function CreateResumePage() {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             parsedJdData: parseData.parsed_data,
-            generatedResume: resumeGenData.generated_resume,
+            generatedResume: normalizedResume,
             resumeId: resumeGenData.resume_id,
             masterProfile: profileData
           })
@@ -401,7 +427,7 @@ export default function CreateResumePage() {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             parsedJdData: parseData.parsed_data,
-            generatedResume: resumeGenData.generated_resume,
+            generatedResume: normalizedResume,
             resumeId: resumeGenData.resume_id
           })
         })

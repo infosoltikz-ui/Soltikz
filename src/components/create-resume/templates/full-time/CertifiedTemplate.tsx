@@ -91,10 +91,16 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
     let hasAddedExpSectionHeading = false;
 
     // 1. Paginate Experiences
-    const exps = resumeData.experience || [];
+    const rawExp = resumeData.experience;
+    const exps: any[] = Array.isArray(rawExp)
+      ? rawExp
+      : (typeof rawExp === 'string' ? (() => { try { return JSON.parse(rawExp); } catch { return []; } })() : []);
     for (let i = 0; i < exps.length; i++) {
         const exp = exps[i];
-        const bullets = exp.bullets || [];
+        const rawBullets = exp.bullets;
+        const bullets: any[] = Array.isArray(rawBullets)
+          ? rawBullets
+          : (typeof rawBullets === 'string' ? (() => { try { return JSON.parse(rawBullets); } catch { return []; } })() : []);
         
         let expHeaderH = getElementHeight(`meas-exp-${i}-header`) + 4; // +4 for ul mt-1
         let needsSectionHeading = !hasAddedExpSectionHeading;
@@ -318,7 +324,12 @@ const CertifiedTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTempla
         <SectionHeader title="Professional Experience" sectionKey="experience" />
       </div>
 
-      {resumeData.experience?.map((exp: any, i: number) => (
+      {(Array.isArray(resumeData.experience)
+        ? resumeData.experience
+        : (typeof resumeData.experience === 'string'
+            ? (() => { try { return JSON.parse(resumeData.experience); } catch { return []; } })()
+            : [])
+      ).map((exp: any, i: number) => (
         <div key={`exp-meas-${i}`}>
           <div id={`meas-exp-${i}-header-${compId}`}>
             <div className="flex justify-between items-start leading-tight" style={{ fontSize: '11.5pt' }}>
