@@ -28,6 +28,8 @@ export interface ResumeRow {
   section_styles?: Record<string, any> | null
   full_resume_data?: any
   profile_data?: any
+  ai_provider?: string
+  ai_model?: string
 }
 
 interface ResumeGridProps {
@@ -143,6 +145,8 @@ export function ResumeGrid({ resumes, loading, hasAnyResumes, onDelete, onDuplic
               skillsList: resume.skills_list,
               fullResumeData: resume.full_resume_data,
               profileData: resume.profile_data,
+              aiProvider: resume.ai_provider,
+              aiModel: resume.ai_model,
             }}
             onDelete={() => onDelete(resume.id)}
             onDuplicate={() => onDuplicate(resume)}

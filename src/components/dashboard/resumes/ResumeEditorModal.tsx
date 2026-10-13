@@ -50,6 +50,7 @@ import { createClient } from '@/utils/supabase/client'
 import { exportToPdf } from '@/utils/exportPdf'
 import { getTemplateById, RESUME_TEMPLATES } from '@/components/create-resume/templates/registry'
 import { ResumeRow } from './ResumeGrid'
+import { getAiModelDisplay } from './ResumeCard'
 import { SectionStyleConfig } from '@/components/create-resume/templates/types'
 import { toast } from 'react-hot-toast'
 import { cn } from '@/utils/cn'
@@ -581,6 +582,23 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                   {atsScore > 0 ? `${atsScore}% ATS Match` : 'Analyzing...'}
                 </span>
+                {(() => {
+                  const aiInfo = getAiModelDisplay(resume?.ai_provider, resume?.ai_model);
+                  return (
+                    <span
+                      className={cn(
+                        "hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold border",
+                        aiInfo.isClaude
+                          ? "bg-amber-50 text-amber-800 border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-700"
+                          : "bg-emerald-50 text-emerald-800 border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-700"
+                      )}
+                      title={`Generated using ${aiInfo.displayName} (${aiInfo.fullModel})`}
+                    >
+                      <Sparkles className="w-3 h-3" />
+                      {aiInfo.displayName}
+                    </span>
+                  );
+                })()}
               </div>
               <p className="text-[11.5px] text-slate-500 dark:text-slate-400 truncate flex items-center gap-1.5 mt-0.5">
                 <span>In-Place Resume Studio</span>

@@ -112,14 +112,18 @@ export function ResumesPageContent() {
         }
       }
 
-      // Batch fetch sections and profile data for all resumes
+      // Batch fetch sections, profile data, telemetry logs, and usage events for all resumes
       const resumeIds = resumesList.map((r: any) => r.id)
+      const parentIds = resumesList.map((r: any) => r.parent_id).filter(Boolean)
+      const allTelemetryIds = Array.from(new Set([...resumeIds, ...parentIds]))
+
       let sectionsByResumeId: Record<string, Record<string, any>> = {}
+      let modelByResumeId: Record<string, { provider: string; model: string }> = {}
       let candidateName = 'Candidate'
       let profileInfo: any = {}
 
       if (resumeIds.length > 0) {
-        const [sectionsResult, profileResult] = await Promise.all([
+        const [sectionsResult, profileResult, telemetryResult, usageResult] = await Promise.all([
           supabase
             .from('resume_sections')
             .select('resume_id, section_type, content')
@@ -128,7 +132,16 @@ export function ResumesPageContent() {
             .from('profiles')
             .select('full_name, master_resume_data')
             .eq('id', user.id)
-            .single()
+            .single(),
+          supabase
+            .from('ai_telemetry_logs')
+            .select('resume_id, provider, model, created_at')
+            .in('resume_id', allTelemetryIds)
+            .order('created_at', { ascending: false }),
+          supabase
+            .from('usage_events')
+            .select('resume_id, event_type')
+            .in('resume_id', allTelemetryIds)
         ])
 
         if (sectionsResult.data) {
@@ -146,6 +159,29 @@ export function ResumesPageContent() {
           const pInfo = prof.master_resume_data?.personal_info || {}
           profileInfo = pInfo
           candidateName = prof.full_name || `${pInfo.firstName || ''} ${pInfo.lastName || ''}`.trim() || pInfo.fullName || 'Candidate'
+        }
+
+        if (telemetryResult.data) {
+          telemetryResult.data.forEach((log: any) => {
+            if (log.resume_id && !modelByResumeId[log.resume_id]) {
+              modelByResumeId[log.resume_id] = {
+                provider: log.provider || '',
+                model: log.model || ''
+              }
+            }
+          })
+        }
+
+        if (usageResult.data) {
+          usageResult.data.forEach((evt: any) => {
+            if (evt.resume_id && !modelByResumeId[evt.resume_id]) {
+              const isClaude = evt.event_type?.includes('claude')
+              modelByResumeId[evt.resume_id] = {
+                provider: isClaude ? 'claude' : 'openai',
+                model: isClaude ? 'claude-sonnet-4-6' : 'gpt-4o'
+              }
+            }
+          })
         }
       }
 
@@ -205,8 +241,15 @@ export function ResumesPageContent() {
         // Deduplicate and filter empty
         skillsList = Array.from(new Set(skillsList.filter(Boolean))).slice(0, 6)
 
+        const aiInfo = modelByResumeId[r.id] || (r.parent_id ? modelByResumeId[r.parent_id] : null) || {
+          provider: 'openai',
+          model: 'gpt-4o'
+        }
+
         return {
           ...r,
+          ai_provider: aiInfo.provider,
+          ai_model: aiInfo.model,
           candidate_name: candidateName,
           summary_text: summaryText,
           experience_role: experienceRole,
@@ -433,21 +476,29 @@ export function ResumesPageContent() {
     let result = [...resumes]
 
     if (filterType !== 'all') {
-      const isFilterC2C = filterType.toLowerCase().includes('c2c')
-      result = result.filter((r) => {
-        const isC2C = String(r.resume_type || '').toLowerCase().includes('c2c')
-        return isFilterC2C ? isC2C : !isC2C
-      })
+      if (filterType === 'claude') {
+        result = result.filter(r => r.ai_provider === 'claude' || r.ai_model?.toLowerCase().includes('claude'))
+      } else if (filterType === 'gpt') {
+        result = result.filter(r => r.ai_provider === 'openai' || r.ai_model?.toLowerCase().includes('gpt'))
+      } else {
+        const isFilterC2C = filterType.toLowerCase().includes('c2c')
+        result = result.filter((r) => {
+          const isC2C = String(r.resume_type || '').toLowerCase().includes('c2c')
+          return isFilterC2C ? isC2C : !isC2C
+        })
+      }
     }
 
     if (searchQuery.trim()) {
       const q = searchQuery.trim().toLowerCase()
       result = result.filter((r) => {
         const jd = Array.isArray(r.parsed_job_descriptions) ? r.parsed_job_descriptions[0] : r.parsed_job_descriptions
+        const aiModelStr = `${r.ai_provider || ''} ${r.ai_model || ''}`.toLowerCase()
         return (
           r.title?.toLowerCase().includes(q) ||
           jd?.company_name?.toLowerCase().includes(q) ||
-          jd?.job_title?.toLowerCase().includes(q)
+          jd?.job_title?.toLowerCase().includes(q) ||
+          aiModelStr.includes(q)
         )
       })
     }

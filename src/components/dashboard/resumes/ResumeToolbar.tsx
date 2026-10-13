@@ -7,13 +7,15 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { cn } from '@/utils/cn'
 
-export type ResumeFilterType = 'all' | 'Full-Time' | 'C2C'
+export type ResumeFilterType = 'all' | 'Full-Time' | 'C2C' | 'claude' | 'gpt'
 export type ResumeSortBy = 'newest' | 'oldest' | 'ats-desc' | 'ats-asc'
 
 const FILTER_OPTIONS: { value: ResumeFilterType; label: string }[] = [
-  { value: 'all', label: 'All Types' },
+  { value: 'all', label: 'All Types & Models' },
   { value: 'Full-Time', label: 'Full-Time' },
   { value: 'C2C', label: 'C2C' },
+  { value: 'claude', label: 'Claude (AI)' },
+  { value: 'gpt', label: 'GPT-4o (AI)' },
 ]
 
 const SORT_OPTIONS: { value: ResumeSortBy; label: string }[] = [

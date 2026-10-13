@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { FileText, Building2, Target, Calendar, CheckCircle2, Eye, Edit3, Trash2, Copy, GitBranch, Loader2, Share2, Download } from 'lucide-react'
+import { FileText, Building2, Target, Calendar, CheckCircle2, Eye, Edit3, Trash2, Copy, GitBranch, Loader2, Share2, Download, Sparkles, Cpu } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/utils/cn'
 import { differenceInDays } from 'date-fns'
@@ -27,6 +27,61 @@ export interface ResumeData {
   templateId?: string;
   fullResumeData?: any;
   profileData?: any;
+  aiProvider?: string;
+  aiModel?: string;
+}
+
+export interface AiModelInfo {
+  provider: 'claude' | 'openai' | string
+  badgeText: string
+  displayName: string
+  fullModel: string
+  isClaude: boolean
+}
+
+export function getAiModelDisplay(provider?: string, model?: string): AiModelInfo {
+  const p = String(provider || '').toLowerCase().trim()
+  const m = String(model || '').toLowerCase().trim()
+
+  const isClaude = p === 'claude' || m.includes('claude') || m.includes('anthropic')
+
+  if (isClaude) {
+    let displayName = 'Claude 3.5 Sonnet'
+    let badgeText = 'Claude'
+    if (m.includes('haiku')) {
+      displayName = 'Claude 3.5 Haiku'
+      badgeText = 'Claude Haiku'
+    } else if (m.includes('opus')) {
+      displayName = 'Claude 3 Opus'
+      badgeText = 'Claude Opus'
+    }
+    return {
+      provider: 'claude',
+      badgeText,
+      displayName,
+      fullModel: model || 'claude-sonnet-4-6',
+      isClaude: true
+    }
+  }
+
+  // OpenAI / GPT
+  let displayName = 'GPT-4o'
+  let badgeText = 'GPT-4o'
+  if (m.includes('mini')) {
+    displayName = 'GPT-4o Mini'
+    badgeText = 'GPT-4o Mini'
+  } else if (m.includes('o1')) {
+    displayName = 'OpenAI o1'
+    badgeText = 'GPT-o1'
+  }
+
+  return {
+    provider: 'openai',
+    badgeText,
+    displayName,
+    fullModel: model || 'gpt-4o',
+    isClaude: false
+  }
 }
 
 interface ResumeCardProps {
@@ -44,6 +99,7 @@ interface ResumeCardProps {
 
 export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggleShare, isTogglingShare, onPreview, onEdit, onDownload, isDownloading }: ResumeCardProps) {
   const isFullTime = !String(data.type || '').toLowerCase().includes('c2c')
+  const aiInfo = getAiModelDisplay(data.aiProvider, data.aiModel)
 
   const displayName = data.candidateName || data.name?.replace(/Resume/i, '').replace(/Full Time/i, '').replace(/C2C/i, '').replace(/[-–]/g, '').trim() || 'Balaji Rockzzz'
   const displayRole = data.experienceRole || data.role || 'Senior Software Engineer'
@@ -107,7 +163,20 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
             return <div className="p-8 text-[12px] font-bold">Template preview unavailable</div>
           })()}
         </div>
-        
+               {/* AI Model Badge (Top Left of Preview) */}
+        <div 
+          className={cn(
+            "absolute top-2.5 left-2.5 px-2 py-0.5 rounded-lg border shadow-xs flex items-center gap-1 z-10 backdrop-blur-xs font-black text-[10.5px]",
+            aiInfo.isClaude
+              ? "bg-amber-50/95 border-amber-300/80 text-amber-800"
+              : "bg-emerald-50/95 border-emerald-300/80 text-emerald-800"
+          )}
+          title={`Generated using ${aiInfo.displayName} (${aiInfo.fullModel})`}
+        >
+          <Sparkles className={cn("w-3 h-3", aiInfo.isClaude ? "text-amber-600" : "text-emerald-600")} />
+          <span>{aiInfo.badgeText}</span>
+        </div>
+
         {/* High-Impact ATS Score Badge */}
         <div className="absolute top-2.5 right-2.5 bg-white/95 backdrop-blur-xs px-2 py-0.5 rounded-lg border border-slate-200 shadow-xs flex items-center gap-1.5 z-10">
           <div className={cn(
@@ -137,7 +206,7 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
             onClick={(e) => {
               e.stopPropagation()
               onEdit?.()
-            }}
+            }} 
             className="w-9 h-9 bg-emerald-600 text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm cursor-pointer" 
             title="Edit Resume (Same Tab)"
           >
@@ -178,7 +247,7 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 mb-3">
+        <div className="flex items-center gap-1.5 mb-3 flex-wrap">
           <span className={cn(
             "px-1.5 py-0.5 rounded text-[10.5px] font-bold",
             isFullTime ? "bg-primary/10 text-primary" : "bg-orange-500/10 text-orange-500"
@@ -188,6 +257,18 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
           <span className="flex items-center gap-1 text-[11.5px] font-bold text-slate-500">
             <CheckCircle2 className="w-3 h-3 text-primary" strokeWidth={3} />
             {data.status}
+          </span>
+          <span 
+            className={cn(
+              "flex items-center gap-1 text-[10px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded border",
+              aiInfo.isClaude
+                ? "bg-amber-500/10 text-amber-700 border-amber-300/60 dark:text-amber-400"
+                : "bg-emerald-500/10 text-emerald-700 border-emerald-300/60 dark:text-emerald-400"
+            )}
+            title={`Generated with ${aiInfo.displayName} (${aiInfo.fullModel})`}
+          >
+            <Sparkles className="w-2.5 h-2.5" />
+            {aiInfo.badgeText}
           </span>
         </div>
 
@@ -203,6 +284,10 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
           <div className="flex items-center gap-2 text-[12px] text-slate-600">
             <FileText className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span className="font-medium truncate">{data.template}</span>
+          </div>
+          <div className="flex items-center gap-2 text-[12px] text-slate-600">
+            <Cpu className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <span className="font-medium truncate">AI Engine: {aiInfo.displayName}</span>
           </div>
         </div>
 

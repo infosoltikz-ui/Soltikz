@@ -7,6 +7,7 @@ import { createClient } from '@/utils/supabase/client'
 import { exportToPdf } from '@/utils/exportPdf'
 import { getTemplateById, DEFAULT_TEMPLATE_ID } from '@/components/create-resume/templates/registry'
 import { ResumeRow } from './ResumeGrid'
+import { getAiModelDisplay } from './ResumeCard'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 import { cn } from '@/utils/cn'
@@ -191,7 +192,7 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
               <FileText className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="text-[15px] font-bold text-slate-900 dark:text-slate-100 truncate">
                   {resume.title || 'Tailored Resume Preview'}
                 </h3>
@@ -201,6 +202,23 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
                 )}>
                   {isC2C ? 'C2C' : 'Full-Time'}
                 </span>
+                {(() => {
+                  const aiInfo = getAiModelDisplay(resume?.ai_provider, resume?.ai_model)
+                  return (
+                    <span 
+                      className={cn(
+                        "flex items-center gap-1 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border shrink-0",
+                        aiInfo.isClaude
+                          ? "bg-amber-500/10 text-amber-700 border-amber-300/60 dark:text-amber-400"
+                          : "bg-emerald-500/10 text-emerald-700 border-emerald-300/60 dark:text-emerald-400"
+                      )}
+                      title={`Generated with ${aiInfo.displayName} (${aiInfo.fullModel})`}
+                    >
+                      <Sparkles className="w-2.5 h-2.5" />
+                      {aiInfo.displayName}
+                    </span>
+                  )
+                })()}
               </div>
               <p className="text-[11.5px] text-slate-500 truncate">
                 {template.name} • {profileData?.full_name || 'Executive Candidate'}
