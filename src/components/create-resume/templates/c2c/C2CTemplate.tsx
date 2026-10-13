@@ -69,20 +69,106 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
     const MAX_CONTENT_HEIGHT = PAGE_HEIGHT - PAGE_PADDING_TOP - PAGE_PADDING_BOTTOM - FOOTER_HEIGHT - SAFETY_MARGIN;
 
     let currentPages: any[] = [];
-    let currentPage: any = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: false, hasEducationHeading: false, hasCertificationsHeading: false };
+    let currentPage: any = { 
+      header: false, 
+      summary: false, 
+      skills: [], 
+      isSkillsContinued: false, 
+      experiences: [], 
+      education: [], 
+      certifications: [], 
+      hasExperienceHeading: false, 
+      hasEducationHeading: false, 
+      hasCertificationsHeading: false, 
+      isFirstExpHeading: false 
+    };
     let remainingHeight = MAX_CONTENT_HEIGHT;
 
     const headerHeight = getElementHeight('meas-header');
     const summaryHeight = getElementHeight('meas-summary');
-    const skillsHeight = getElementHeight('meas-skills');
 
     currentPage.header = true;
     currentPage.summary = true;
-    currentPage.skills = true;
-    remainingHeight -= (headerHeight + summaryHeight + skillsHeight);
+    remainingHeight -= (headerHeight + summaryHeight);
+
+    // --- Dynamic Skills Pagination ---
+    const allSkills = resumeData.skills || [];
+    if (allSkills.length > 0) {
+      const skillsHeadingH = (getElementHeight('meas-skills-heading') || 36) + 4;
+      const firstSkillH = (getElementHeight('meas-skill-0') || 28);
+      const minRequiredH = skillsHeadingH + firstSkillH;
+
+      if (remainingHeight < minRequiredH && remainingHeight < MAX_CONTENT_HEIGHT) {
+        currentPages.push(currentPage);
+        currentPage = { 
+          header: false, 
+          summary: false, 
+          skills: [], 
+          isSkillsContinued: false, 
+          experiences: [], 
+          education: [], 
+          certifications: [], 
+          hasExperienceHeading: false, 
+          hasEducationHeading: false, 
+          hasCertificationsHeading: false, 
+          isFirstExpHeading: false 
+        };
+        remainingHeight = MAX_CONTENT_HEIGHT;
+      }
+
+      let currentSkillsForPage: any[] = [];
+      let isSkillsContinued = false;
+      let addedHeadingOnThisPage = false;
+
+      for (let k = 0; k < allSkills.length; k++) {
+        const skillH = getElementHeight(`meas-skill-${k}`) || 28;
+        const needed = (!addedHeadingOnThisPage ? skillsHeadingH : 0) + skillH;
+
+        if (remainingHeight < needed && remainingHeight < MAX_CONTENT_HEIGHT) {
+          if (currentSkillsForPage.length > 0) {
+            currentPage.skills = currentSkillsForPage;
+            currentPage.isSkillsContinued = isSkillsContinued;
+            remainingHeight -= 16;
+          }
+          currentPages.push(currentPage);
+          currentPage = { 
+            header: false, 
+            summary: false, 
+            skills: [], 
+            isSkillsContinued: false, 
+            experiences: [], 
+            education: [], 
+            certifications: [], 
+            hasExperienceHeading: false, 
+            hasEducationHeading: false, 
+            hasCertificationsHeading: false, 
+            isFirstExpHeading: false 
+          };
+          remainingHeight = MAX_CONTENT_HEIGHT;
+          currentSkillsForPage = [];
+          isSkillsContinued = true;
+          addedHeadingOnThisPage = false;
+        }
+
+        if (!addedHeadingOnThisPage) {
+          remainingHeight -= skillsHeadingH;
+          addedHeadingOnThisPage = true;
+        }
+
+        remainingHeight -= skillH;
+        currentSkillsForPage.push(allSkills[k]);
+      }
+
+      if (currentSkillsForPage.length > 0) {
+        currentPage.skills = currentSkillsForPage;
+        currentPage.isSkillsContinued = isSkillsContinued;
+        remainingHeight -= 16;
+      }
+    }
 
     const expSectionHeadingHeight = getElementHeight('meas-exp-section-heading') + 24;
     let hasAddedExpSectionHeading = false;
+    let hasEverRenderedExp = false;
 
     const exps = resumeData.experience || [];
     for (let i = 0; i < exps.length; i++) {
@@ -96,14 +182,35 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
       const envH = (exp.environment && exp.environment.length > 0) ? getElementHeight(`meas-exp-${i}-env`) : 0;
 
       if (remainingHeight < fullHeaderH && remainingHeight < MAX_CONTENT_HEIGHT) {
+        const transferExpHeading = currentPage.hasExperienceHeading && (!currentPage.experiences || currentPage.experiences.length === 0);
+        if (transferExpHeading) {
+          currentPage.hasExperienceHeading = false;
+        }
+
         currentPages.push(currentPage);
-        currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: false, hasEducationHeading: false, hasCertificationsHeading: false };
+        currentPage = { 
+          header: false, 
+          summary: false, 
+          skills: [], 
+          isSkillsContinued: false, 
+          experiences: [], 
+          education: [], 
+          certifications: [], 
+          hasExperienceHeading: transferExpHeading, 
+          hasEducationHeading: false, 
+          hasCertificationsHeading: false, 
+          isFirstExpHeading: !hasEverRenderedExp 
+        };
         remainingHeight = MAX_CONTENT_HEIGHT;
+        if (transferExpHeading) {
+          remainingHeight -= expSectionHeadingHeight;
+        }
       }
 
-      if (needsSectionHeading) {
+      if (needsSectionHeading && !currentPage.hasExperienceHeading) {
         hasAddedExpSectionHeading = true;
         currentPage.hasExperienceHeading = true;
+        currentPage.isFirstExpHeading = !hasEverRenderedExp;
       }
 
       let currentExpObj: any = { ...exp, bullets: [], isContinued: false, isSplit: false };
@@ -119,17 +226,38 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
         if (remainingHeight < requiredSpace) {
           if (currentExpObj.bullets.length > 0) {
             currentPage.experiences.push({ ...currentExpObj, isSplit: true });
+            hasEverRenderedExp = true;
             remainingHeight -= 16;
           }
 
           if (currentExpObj.bullets.length > 0 || remainingHeight < MAX_CONTENT_HEIGHT) {
+            const transferExpHeading = currentPage.hasExperienceHeading && (!currentPage.experiences || currentPage.experiences.length === 0);
+            if (transferExpHeading) {
+              currentPage.hasExperienceHeading = false;
+            }
+
             currentPages.push(currentPage);
-            currentPage = { header: false, summary: false, skills: false, experiences: [], education: [], certifications: [], hasExperienceHeading: false, hasEducationHeading: false, hasCertificationsHeading: false };
+            currentPage = { 
+              header: false, 
+              summary: false, 
+              skills: [], 
+              isSkillsContinued: false, 
+              experiences: [], 
+              education: [], 
+              certifications: [], 
+              hasExperienceHeading: transferExpHeading, 
+              hasEducationHeading: false, 
+              hasCertificationsHeading: false, 
+              isFirstExpHeading: !hasEverRenderedExp 
+            };
             remainingHeight = MAX_CONTENT_HEIGHT;
 
             const isActuallyContinued = currentExpObj.bullets.length > 0;
             currentExpObj = { ...exp, bullets: [], isContinued: isActuallyContinued, isSplit: false };
             currentExpHeaderH = getElementHeight(isActuallyContinued ? `meas-exp-${i}-header-continued` : `meas-exp-${i}-header`);
+            if (transferExpHeading) {
+              currentExpHeaderH += expSectionHeadingHeight;
+            }
           }
         }
 
@@ -321,10 +449,12 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
       {resumeData.skills && resumeData.skills.length > 0 && (
         <div id={`meas-skills-${compId}`} className={getSectionWrapperClass('skills')} style={getSectionStyle('skills')}>
           <div className="mb-3">
-            <SectionHeader title="Technical Skills" sectionKey="skills" />
+            <div id={`meas-skills-heading-${compId}`}>
+              <SectionHeader title="Technical Skills" sectionKey="skills" />
+            </div>
             <div className="space-y-0.5">
               {resumeData.skills.map((skillGroup: any, i: number) => (
-                <div key={i} className="leading-snug">
+                <div key={i} id={`meas-skill-${i}-${compId}`} className="leading-snug">
                   <span className="font-bold">{skillGroup.category}: </span>
                   <span>{Array.isArray(skillGroup.items) ? skillGroup.items.join(', ') : skillGroup.items}</span>
                 </div>
@@ -486,16 +616,19 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
               )}
 
               {/* Technical Skills */}
-              {page.skills && resumeData.skills && resumeData.skills.length > 0 && (
+              {((Array.isArray(page.skills) && page.skills.length > 0) || (page.skills === true && resumeData.skills && resumeData.skills.length > 0)) && (
                 <div
                   onClick={() => onSelectSection?.('skills')}
                   className={getSectionWrapperClass('skills')}
                   style={getSectionStyle('skills')}
                 >
                   <div className="mb-3">
-                    <SectionHeader title="Technical Skills" sectionKey="skills" />
+                    <SectionHeader 
+                      title={page.isSkillsContinued ? "Technical Skills (Continued)" : "Technical Skills"} 
+                      sectionKey="skills" 
+                    />
                     <div className="space-y-0.5">
-                      {resumeData.skills.map((skillGroup: any, i: number) => (
+                      {(Array.isArray(page.skills) ? page.skills : resumeData.skills).map((skillGroup: any, i: number) => (
                         <div key={i} className="leading-snug">
                           <span className="font-bold">{skillGroup.category}: </span>
                           <span>{Array.isArray(skillGroup.items) ? skillGroup.items.join(', ') : skillGroup.items}</span>
@@ -516,7 +649,7 @@ export const C2CTemplate = React.forwardRef<HTMLDivElement, ResumeTemplateProps>
                   <div className="mb-2">
                     {page.hasExperienceHeading && (
                       <SectionHeader
-                        title={isPage1 ? "Professional Experience" : "Professional Experience (Continued)"}
+                        title={page.isFirstExpHeading ? "Professional Experience" : "Professional Experience (Continued)"}
                         sectionKey="experience"
                       />
                     )}
