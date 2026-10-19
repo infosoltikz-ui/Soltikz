@@ -22,7 +22,13 @@ export async function GET(request: Request) {
       const targetUrl = new URL(destination, request.url)
       targetUrl.searchParams.set('login', 'success')
 
-      return NextResponse.redirect(targetUrl)
+      const response = NextResponse.redirect(targetUrl)
+      response.cookies.set('session_start', Date.now().toString(), {
+        path: '/',
+        sameSite: 'lax',
+        httpOnly: false,
+      })
+      return response
     } else {
       console.error('OAuth Exchange Error:', error.message)
       return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(error.message)}`)

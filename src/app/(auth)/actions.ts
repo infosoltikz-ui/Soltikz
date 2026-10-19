@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 
 export async function login(formData: FormData) {
@@ -23,8 +24,15 @@ export async function login(formData: FormData) {
     return { error: error.message }
   }
 
+  const cookieStore = await cookies()
+  cookieStore.set('session_start', Date.now().toString(), {
+    path: '/',
+    sameSite: 'lax',
+    httpOnly: false,
+  })
+
   revalidatePath('/dashboard')
-  redirect('/dashboard')
+  redirect('/dashboard?login=success')
 }
 
 export async function signup(formData: FormData) {
@@ -69,13 +77,23 @@ export async function signup(formData: FormData) {
     await adminSupabase.auth.admin.updateUserById(data.user.id, { email_confirm: true })
   }
 
+  const cookieStore = await cookies()
+  cookieStore.set('session_start', Date.now().toString(), {
+    path: '/',
+    sameSite: 'lax',
+    httpOnly: false,
+  })
+
   revalidatePath('/dashboard')
-  redirect('/dashboard')
+  redirect('/dashboard?login=success')
 }
 
 export async function logout() {
   const supabase = await createClient()
   await supabase.auth.signOut()
   
-  redirect('/login')
+  const cookieStore = await cookies()
+  cookieStore.delete('session_start')
+  
+  redirect('/login?logout=success')
 }

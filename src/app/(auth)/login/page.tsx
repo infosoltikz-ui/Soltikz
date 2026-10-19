@@ -14,8 +14,17 @@ function LoginToast() {
   const router = useRouter()
 
   useEffect(() => {
-    if (searchParams.get('logout') === 'success') {
+    const logoutParam = searchParams.get('logout')
+    const reasonParam = searchParams.get('reason')
+
+    if (logoutParam === 'success') {
       toast.success('Successfully logged out!')
+      router.replace('/login')
+    } else if (reasonParam === 'expired') {
+      toast.error('Your 3-hour session has expired. Please sign in again.')
+      router.replace('/login')
+    } else if (reasonParam === 'session_ended') {
+      toast('Please sign in to access your dashboard.', { icon: '🔒' })
       router.replace('/login')
     }
   }, [searchParams, router])
@@ -188,18 +197,6 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
-
-            {/* Remember Me */}
-            <label className="flex items-center gap-3 cursor-pointer group">
-              <div className="relative">
-                <input type="checkbox" className="sr-only peer" />
-                <div className="w-5 h-5 rounded-md border-2 border-slate-300 peer-checked:bg-primary peer-checked:border-primary transition-all group-hover:border-primary/50" />
-                <svg className="absolute top-0.5 left-0.5 w-4 h-4 text-white hidden peer-checked:block pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </div>
-              <span className="text-sm font-medium text-slate-600">Remember me for 30 days</span>
-            </label>
 
             {/* Submit */}
             <Button

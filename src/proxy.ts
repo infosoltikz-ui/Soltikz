@@ -17,6 +17,13 @@ export async function proxy(request: NextRequest) {
   const userEmail = user?.email || ''
   const isAdmin = ADMIN_EMAILS.includes(userEmail.toLowerCase().trim())
 
+  const THREE_HOURS_MS = 3 * 60 * 60 * 1000 // 3 hours
+
+  // Session expiry check (3 hours)
+  const sessionStartVal = request.cookies.get('session_start')?.value
+  const sessionStartTime = sessionStartVal ? parseInt(sessionStartVal, 10) : null
+  const isSessionExpired = sessionStartTime ? (Date.now() - sessionStartTime > THREE_HOURS_MS) : false
+
   // Protect Admin API Routes immediately
   if (isAdminApiRoute) {
     if (!user || !isAdmin) {
@@ -27,36 +34,38 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // 1. If user is logged in and visits an auth route or the home page
-  if (user) {
-    if (isAuthRoute || pathname === '/') {
-      // Normal auth route or home page -> dashboard
+  // 1. Protect User Dashboard (Require user, valid session, and not expired)
+  if (isUserDashboard) {
+    if (!user || !sessionStartTime || isSessionExpired) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      if (isSessionExpired) {
+        url.searchParams.set('reason', 'expired')
+      }
+      const response = NextResponse.redirect(url)
+      response.cookies.delete('session_start')
+      return response
+    }
+  }
+
+  // 2. If user is logged in with active session and visits auth routes (/login, /register)
+  // (NOTE: Home page '/' is NOT redirected, so users can view the home page at any time)
+  if (user && !isSessionExpired && sessionStartTime) {
+    if (isAuthRoute) {
       const url = request.nextUrl.clone()
       url.pathname = isAdmin ? '/admin' : '/dashboard'
       return Response.redirect(url)
     }
     if (isAdminAuthRoute && isAdmin) {
-      // If they are an admin visiting admin login, take them to admin dashboard
       const url = request.nextUrl.clone()
       url.pathname = '/admin'
       return Response.redirect(url)
     }
-    // If they are NOT an admin, we actually DO want to let them see /admin/login
-    // so they have a chance to log in with their admin credentials.
-  }
-
-  // 2. Protect User Dashboard
-  if (!user && isUserDashboard) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return Response.redirect(url)
   }
 
   // 3. Protect Admin Dashboard
   if (isAdminDashboard) {
     if (!user || !isAdmin) {
-      // If not logged in, or logged in as a NORMAL user -> redirect to admin login
-      // This forces them to log in with an admin account if they want access.
       const url = request.nextUrl.clone()
       url.pathname = '/admin/login'
       return Response.redirect(url)

@@ -54,6 +54,11 @@ export function Sidebar({
   const handleLogout = async () => {
     const supabase = createClient()
     await supabase.auth.signOut()
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('soltkiz_session_active')
+      sessionStorage.removeItem('soltkiz_session_start')
+      document.cookie = 'session_start=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax'
+    }
     router.push('/login?logout=success')
     router.refresh()
   }
