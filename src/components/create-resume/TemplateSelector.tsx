@@ -64,7 +64,7 @@ export function TemplateSelector({ selectedId, onChange, isSubscribed = true, on
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-4">
           {RESUME_TEMPLATES.filter(t => 
             resumeType === 'c2c' ? t.id.startsWith('c2c') : !t.id.startsWith('c2c')
           ).map((template) => {

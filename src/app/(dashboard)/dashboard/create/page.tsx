@@ -713,15 +713,15 @@ export default function CreateResumePage() {
                 </div>
 
                 {/* DUAL-COLUMN INTERACTIVE WORKBENCH GRID */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 xl:gap-8 items-start">
 
-                  {/* LEFT COLUMN: FULL BOLD ATS SCORE METER DASHBOARD (Col-span-5) */}
-                  <div className="lg:col-span-5 space-y-6">
+                  {/* LEFT COLUMN: FULL BOLD ATS SCORE METER DASHBOARD (Col-span-5 on xl+) */}
+                  <div className="w-full xl:col-span-5 space-y-6">
                     <ATSScoreMeter atsData={atsData} variant="full" />
                   </div>
 
-                  {/* RIGHT COLUMN: HD LIVE PRINTABLE A4 RESUME CANVAS (Col-span-7) */}
-                  <div className="lg:col-span-7 space-y-4">
+                  {/* RIGHT COLUMN: HD LIVE PRINTABLE A4 RESUME CANVAS (Col-span-7 on xl+) */}
+                  <div className="w-full xl:col-span-7 space-y-4">
                     <div className="bg-white border border-slate-200 rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xs">
                       <div className="flex items-center gap-2">
                         <FileText className="w-4 h-4 text-emerald-600" />
@@ -757,7 +757,7 @@ export default function CreateResumePage() {
                     {/* Document Sheet Container */}
                     <div
                       ref={canvasContainerRef}
-                      className="bg-slate-200/80 p-4 sm:p-6 rounded-3xl border border-slate-300/80 flex flex-col items-center justify-start overflow-y-auto overflow-x-hidden h-[82vh] min-h-[620px] shadow-inner scrollbar-thin"
+                      className="bg-slate-200/80 p-3 sm:p-6 rounded-3xl border border-slate-300/80 flex flex-col items-center justify-start overflow-y-auto overflow-x-auto h-[75vh] min-h-[480px] max-h-[860px] shadow-inner scrollbar-thin"
                     >
                       {(() => {
                         const effectiveScale = Number((autoScale * resumeZoom).toFixed(2))

@@ -23,7 +23,7 @@ function AnimatedScore({ targetScore }: { targetScore: number }) {
   }, [targetScore])
 
   return (
-    <div className="absolute top-12 right-0 md:-right-4 z-20 bg-white px-4 py-3 rounded-xl shadow-xl border border-slate-100 flex items-center gap-3 animate-in fade-in zoom-in duration-700 delay-300">
+    <div className="absolute top-8 sm:top-12 right-2 sm:right-0 lg:-right-3 z-20 bg-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl shadow-xl border border-slate-100 flex items-center gap-3 animate-in fade-in zoom-in duration-700 delay-300">
       <div className="relative w-[48px] h-[48px] flex items-center justify-center shrink-0">
         <svg className="w-full h-full transform -rotate-90" viewBox="0 0 40 40">
           <circle cx="20" cy="20" r="16" fill="none" className="stroke-slate-100" strokeWidth="4" />
@@ -49,7 +49,7 @@ function AnimatedScore({ targetScore }: { targetScore: number }) {
 
 function AnimatedKeywords() {
   return (
-    <div className="absolute bottom-16 left-0 md:-left-8 z-20 bg-white p-4 rounded-xl shadow-xl border border-slate-100 flex flex-col gap-2 animate-in fade-in slide-in-from-left-8 duration-700 delay-700 w-[240px]">
+    <div className="absolute bottom-12 sm:bottom-16 left-2 sm:left-0 lg:-left-4 z-20 bg-white p-3 sm:p-4 rounded-xl shadow-xl border border-slate-100 flex flex-col gap-2 animate-in fade-in slide-in-from-left-8 duration-700 delay-700 w-[210px] sm:w-[240px]">
       <div className="text-sm font-bold text-slate-800 tracking-wide mb-1">
         Found in the posting
       </div>

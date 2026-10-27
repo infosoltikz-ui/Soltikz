@@ -89,7 +89,7 @@ export function ResumeGrid({ resumes, loading, hasAnyResumes, onDelete, onDuplic
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 min-[1800px]:grid-cols-5 gap-5">
       {resumes.map(resume => {
         const rawAts = Array.isArray(resume.ats_analyses)
           ? resume.ats_analyses[0]?.overall_score
