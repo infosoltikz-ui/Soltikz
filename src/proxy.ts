@@ -54,12 +54,12 @@ export async function proxy(request: NextRequest) {
     if (isAuthRoute) {
       const url = request.nextUrl.clone()
       url.pathname = isAdmin ? '/admin' : '/dashboard'
-      return Response.redirect(url)
+      return NextResponse.redirect(url)
     }
     if (isAdminAuthRoute && isAdmin) {
       const url = request.nextUrl.clone()
       url.pathname = '/admin'
-      return Response.redirect(url)
+      return NextResponse.redirect(url)
     }
   }
 
@@ -68,7 +68,7 @@ export async function proxy(request: NextRequest) {
     if (!user || !isAdmin) {
       const url = request.nextUrl.clone()
       url.pathname = '/admin/login'
-      return Response.redirect(url)
+      return NextResponse.redirect(url)
     }
   }
 

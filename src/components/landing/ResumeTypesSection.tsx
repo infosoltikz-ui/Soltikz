@@ -22,7 +22,7 @@ export function ResumeTypesSection() {
             {/* Full Time Mockup */}
             <div className="flex flex-col">
               <div className="flex gap-3 items-center mb-6">
-                <span className="px-3 py-1 bg-[#12734C]/10 text-[#12734C] text-sm font-bold rounded-full">Full time</span>
+                <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-bold rounded-full">Full time</span>
                 <span className="font-bold text-slate-900 text-lg">Summary as one paragraph</span>
               </div>
               
@@ -34,8 +34,8 @@ export function ResumeTypesSection() {
                 
                 <div className="mb-6 flex-1">
                   <h4 className="text-[10px] font-bold text-slate-900 tracking-wider mb-2 uppercase">Professional Summary</h4>
-                  <div className="relative p-4 border-2 border-dashed border-[#12734C] rounded-md bg-white">
-                    <div className="absolute -top-3 left-4 bg-[#12734C] text-white text-[10px] font-bold px-3 py-0.5 rounded-full">
+                  <div className="relative p-4 border-2 border-dashed border-primary rounded-md bg-white">
+                    <div className="absolute -top-3 left-4 bg-primary text-white text-[10px] font-bold px-3 py-0.5 rounded-full">
                       One paragraph • 90-120 words • about six lines
                     </div>
                     <p className="text-[11px] text-slate-600 leading-[1.7] mt-1">
@@ -56,7 +56,7 @@ export function ResumeTypesSection() {
               </div>
 
               <div className="flex gap-3 text-sm text-slate-500 leading-relaxed items-start">
-                <Check className="w-5 h-5 text-[#12734C] shrink-0 mt-0.5" />
+                <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                 <p>Built to a fixed formula: target title, verified years of experience, domain, core expertise, hands-on tools, major responsibilities, proven impact, and the value you bring to that specific role - written as one connected paragraph, never a list.</p>
               </div>
             </div>
@@ -131,8 +131,8 @@ export function ResumeTypesSection() {
               {/* Header block */}
               <div className="mb-8">
                 <h3 className="text-xl font-bold text-slate-900">Joh****</h3>
-                <div className="relative border-2 border-dashed border-[#12734C] rounded-md p-2 mt-3 inline-block">
-                  <div className="absolute -top-3 left-2 bg-[#12734C] text-white text-[9px] font-bold px-2 py-0.5 rounded-full">
+                <div className="relative border-2 border-dashed border-primary rounded-md p-2 mt-3 inline-block">
+                  <div className="absolute -top-3 left-2 bg-primary text-white text-[9px] font-bold px-2 py-0.5 rounded-full">
                     Four optional fields, your choice
                   </div>
                   <p className="text-[10px] text-slate-400 mt-1">Dallas, TX • +1 (813) - xxx xxxx • john.xxxx@gmail.com • linkedin.com/in/john-xxxx</p>
@@ -142,8 +142,8 @@ export function ResumeTypesSection() {
               {/* Skills block */}
               <div className="mb-8">
                 <h4 className="text-[10px] font-bold text-slate-900 tracking-wider mb-4 uppercase border-b border-slate-900 pb-1">Skills</h4>
-                <div className="relative border-2 border-dashed border-[#12734C] rounded-md p-4">
-                  <div className="absolute -top-3 left-4 bg-[#12734C] text-white text-[9px] font-bold px-2 py-0.5 rounded-full">
+                <div className="relative border-2 border-dashed border-primary rounded-md p-4">
+                  <div className="absolute -top-3 left-4 bg-primary text-white text-[9px] font-bold px-2 py-0.5 rounded-full">
                     7-8 categories • 5-8 skills each
                   </div>
                   <div className="space-y-3 text-[10px] leading-[1.6] mt-1">
@@ -159,8 +159,8 @@ export function ResumeTypesSection() {
               <div>
                 <h4 className="text-[10px] font-bold text-slate-900 tracking-wider mb-4 uppercase border-b border-slate-900 pb-1">Professional Experience</h4>
                 
-                <div className="relative border-2 border-dashed border-[#12734C] rounded-md p-5 mb-8">
-                  <div className="absolute -top-3 left-4 bg-[#12734C] text-white text-[9px] font-bold px-2 py-0.5 rounded-full">
+                <div className="relative border-2 border-dashed border-primary rounded-md p-5 mb-8">
+                  <div className="absolute -top-3 left-4 bg-primary text-white text-[9px] font-bold px-2 py-0.5 rounded-full">
                     Most recent role • 8 bullets • 18-25 words each
                   </div>
                   <div className="flex justify-between items-baseline mb-3 text-[11px] mt-1">
@@ -204,21 +204,21 @@ export function ResumeTypesSection() {
               </div>
 
               <div>
-                <h3 className="text-[17px] font-bold text-slate-900 mb-2"><span className="text-[#12734C]">7-8</span> skill categories, <span className="text-[#12734C]">5-8</span> skills in each</h3>
+                <h3 className="text-[17px] font-bold text-slate-900 mb-2"><span className="text-primary">7-8</span> skill categories, <span className="text-primary">5-8</span> skills in each</h3>
                 <p className="text-sm text-slate-500 leading-relaxed">
                   Category names are generated for your profession rather than pulled from a fixed list, and every skill has to be backed by your experience, projects or certifications. Nothing gets added just because it appeared in the posting.
                 </p>
               </div>
 
               <div>
-                <h3 className="text-[17px] font-bold text-slate-900 mb-2"><span className="text-[#12734C]">8</span> bullets on your current role, <span className="text-[#12734C]">7</span> on every role before it</h3>
+                <h3 className="text-[17px] font-bold text-slate-900 mb-2"><span className="text-primary">8</span> bullets on your current role, <span className="text-primary">7</span> on every role before it</h3>
                 <p className="text-sm text-slate-500 leading-relaxed">
                   In reverse chronological order, with job title, company, location and dates on each. Every position you enter appears - none are quietly dropped to save space.
                 </p>
               </div>
 
               <div>
-                <h3 className="text-[17px] font-bold text-slate-900 mb-2"><span className="text-[#12734C]">18-25</span> words per bullet, about two lines</h3>
+                <h3 className="text-[17px] font-bold text-slate-900 mb-2"><span className="text-primary">18-25</span> words per bullet, about two lines</h3>
                 <p className="text-sm text-slate-500 leading-relaxed">
                   Each one follows the same shape: a strong action verb, the specific task, the tool or method you used, why the work mattered, and the result. Present tense for your current role, past tense for the rest.
                 </p>

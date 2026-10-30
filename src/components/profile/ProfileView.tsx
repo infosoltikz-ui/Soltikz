@@ -135,7 +135,7 @@ export function ProfileView({ profile, onEdit, hideBanner }: ProfileViewProps) {
                     href={pi.linkedin} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 font-medium text-primary hover:text-primary-dark bg-primary/5 border border-primary/20 px-2.5 py-1 rounded-md transition-colors"
+                    className="inline-flex items-center gap-1.5 font-medium text-primary hover:text-primary-hover bg-primary/5 border border-primary/20 px-2.5 py-1 rounded-md transition-colors"
                   >
                     <LinkIcon className="w-3 h-3" /> LinkedIn Profile
                   </a>

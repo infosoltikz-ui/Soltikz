@@ -104,7 +104,7 @@ export default function RegisterPage() {
           {/* Header */}
           <div className="mb-7">
             <h1 className="text-3xl font-black text-slate-900 mb-2">Create your account 🚀</h1>
-            <p className="text-slate-500 font-medium">Free forever. Upgrade when you're ready.</p>
+            <p className="text-slate-500 font-medium">Free forever. Upgrade when you&apos;re ready.</p>
           </div>
 
           {/* Social Signup */}

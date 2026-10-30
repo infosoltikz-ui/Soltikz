@@ -51,14 +51,14 @@ export function PricingHero() {
         <div className="hidden lg:block absolute right-4 top-16 w-56 h-48">
           <div className="relative w-full h-full animate-float" style={{ animationDelay: '1s' }}>
             {/* Wallet Body (Green) */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#16A34A] to-[#14532d] rounded-3xl shadow-2xl transform rotate-6 border border-white/20 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0F2744] to-[#0A1C33] rounded-3xl shadow-2xl transform rotate-6 border border-white/20 overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl transform translate-x-1/2 -translate-y-1/2" />
             </div>
             
             {/* Wallet Strap */}
-            <div className="absolute top-1/2 left-0 right-0 h-12 bg-[#15803d] transform -translate-y-1/2 rotate-6 shadow-inner border-y border-white/10" />
+            <div className="absolute top-1/2 left-0 right-0 h-12 bg-[#163252] transform -translate-y-1/2 rotate-6 shadow-inner border-y border-white/10" />
             {/* Wallet Button */}
-            <div className="absolute top-1/2 left-8 w-6 h-6 bg-[#22c55e] rounded-full transform -translate-y-1/2 rotate-6 border-2 border-[#14532d] shadow-sm" />
+            <div className="absolute top-1/2 left-8 w-6 h-6 bg-[#F59E0B] rounded-full transform -translate-y-1/2 rotate-6 border-2 border-[#0A1C33] shadow-sm" />
             
             {/* Gold Coins */}
             {/* Coin 1 */}

@@ -14,7 +14,7 @@ export function RecentResumes({ resumes }: { resumes: any[] }) {
           Create a tailored resume targeted to your specific job description.
         </p>
         <Link href="/dashboard/create">
-          <button className="bg-primary hover:bg-primary-dark text-white font-semibold px-4 py-2 rounded-lg text-[13px] shadow-sm transition-all">
+          <button className="bg-primary hover:bg-primary-hover text-white font-semibold px-4 py-2 rounded-lg text-[13px] shadow-sm transition-all">
             Create First Resume
           </button>
         </Link>
@@ -114,7 +114,7 @@ export function RecentResumes({ resumes }: { resumes: any[] }) {
       <div className="pt-3 border-t border-slate-100 mt-2">
         <Link 
           href="/dashboard/create" 
-          className="text-[12px] font-semibold text-primary hover:text-primary-dark inline-flex items-center gap-1 transition-colors"
+          className="text-[12px] font-semibold text-primary hover:text-primary-hover inline-flex items-center gap-1 transition-colors"
         >
           Create New Tailored Resume <ArrowRight className="w-3 h-3" />
         </Link>

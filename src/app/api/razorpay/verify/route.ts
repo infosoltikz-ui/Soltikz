@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { createClient } from '@/utils/supabase/server';
+import { getAdminSupabaseClient } from '@/utils/adminAuth';
 import { PRO_MONTHLY, PRO_YEARLY } from '@/utils/pricingPlans';
 
 const KNOWN_PLANS = { PRO_MONTHLY, PRO_YEARLY };
@@ -47,7 +48,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid payment signature' }, { status: 400 });
     }
 
-    // 3. Update Database on Success
+    // 3. Update Database on Success using Admin Client to bypass RLS safely
+    const adminSupabase = getAdminSupabaseClient();
+
     const validUntil = new Date();
     if (plan.period === 'year') {
       validUntil.setFullYear(validUntil.getFullYear() + 1);
@@ -56,17 +59,19 @@ export async function POST(req: Request) {
     }
 
     // Log the payment
-    await supabase.from('payments_and_subscriptions').insert({
+    const { error: paymentError } = await adminSupabase.from('payments_and_subscriptions').insert({
       user_id: user.id,
       razorpay_payment_id: razorpay_payment_id,
       razorpay_order_id: razorpay_order_id,
       amount_paid: plan.amountInr,
-      status: 'Captured',
+      status: 'SUCCESS',
       valid_until: validUntil.toISOString()
     });
 
+    if (paymentError) throw paymentError;
+
     // Upgrade the user's profile
-    const { error: profileError } = await supabase
+    const { error: profileError } = await adminSupabase
       .from('profiles')
       .update({ plan_id: planId }) // e.g., 'PRO_MONTHLY'
       .eq('id', user.id);

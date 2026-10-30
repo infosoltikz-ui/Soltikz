@@ -55,8 +55,8 @@ export function StatCards({
               {avgAts !== null && avgAts > 0 ? `${avgAts}%` : '—'}
             </div>
           </div>
-          <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
-            <TrendingUp className="w-4 h-4 text-emerald-600" strokeWidth={2} />
+          <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">
+            <TrendingUp className="w-4 h-4 text-amber-600" strokeWidth={2.2} />
           </div>
         </div>
         <div className="text-[12px] font-medium text-slate-500">
@@ -89,7 +89,7 @@ export function StatCards({
               d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
             />
             <path
-              className={profileCompletion === 100 ? "text-emerald-600" : "text-primary"}
+              className={profileCompletion === 100 ? "text-emerald-600" : "text-[#D97706]"}
               strokeWidth="3.5"
               strokeDasharray={`${profileCompletion}, 100`}
               strokeLinecap="round"

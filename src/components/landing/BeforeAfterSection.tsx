@@ -3,7 +3,7 @@ import { AlertTriangle, Check } from 'lucide-react';
 
 export function BeforeAfterSection() {
   return (
-    <section className="py-24 bg-slate-50 border-t border-slate-200">
+    <section className="py-24 bg-[#FBFBF9] border-t border-slate-200">
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="mb-16 md:mb-20">
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-[1.1] tracking-tight max-w-3xl">
@@ -85,7 +85,7 @@ export function BeforeAfterSection() {
           {/* After Column */}
           <div className="flex flex-col">
             <div className="flex items-center gap-4 mb-6">
-              <span className="text-4xl font-black text-[#12734C]">91</span>
+              <span className="text-4xl font-black text-primary">91</span>
               <div>
                 <h4 className="font-bold text-slate-900">After</h4>
                 <p className="text-sm text-slate-500">Tailored to one posting</p>
@@ -102,7 +102,7 @@ export function BeforeAfterSection() {
               <div className="mb-6">
                 <h4 className="text-[10px] font-bold text-slate-900 tracking-wider mb-2 uppercase border-b border-slate-200 pb-1">Summary</h4>
                 <p className="text-[11px] text-slate-600 leading-[1.8] mt-2">
-                  Security analyst with five years in cloud and financial-services environments. Runs <span className="bg-green-100/80 text-[#12734C] font-semibold px-1 py-0.5 rounded">incident response</span> end to end and tunes <span className="bg-green-100/80 text-[#12734C] font-semibold px-1 py-0.5 rounded">SIEM</span> detections analysts trust.
+                  Security analyst with five years in cloud and financial-services environments. Runs <span className="bg-emerald-50 text-emerald-800 font-semibold px-1 py-0.5 rounded border border-emerald-200">incident response</span> end to end and tunes <span className="bg-emerald-50 text-emerald-800 font-semibold px-1 py-0.5 rounded border border-emerald-200">SIEM</span> detections analysts trust.
                 </p>
               </div>
 
@@ -116,8 +116,8 @@ export function BeforeAfterSection() {
                     <span className="text-slate-500">2026 – Now</span>
                   </div>
                   <ul className="list-disc pl-4 text-[10px] text-slate-600 leading-[1.8] space-y-1 marker:text-slate-400">
-                    <li>Tuned 40+ <span className="bg-green-100/80 text-[#12734C] font-semibold px-1 py-0.5 rounded">Splunk ES</span> correlation searches, cutting false positives 38%.</li>
-                    <li>Mapped controls to <span className="bg-green-100/80 text-[#12734C] font-semibold px-1 py-0.5 rounded">NIST 800-53</span>, closing 23 of 27 findings before fieldwork.</li>
+                    <li>Tuned 40+ <span className="bg-emerald-50 text-emerald-800 font-semibold px-1 py-0.5 rounded border border-emerald-200">Splunk ES</span> correlation searches, cutting false positives 38%.</li>
+                    <li>Mapped controls to <span className="bg-emerald-50 text-emerald-800 font-semibold px-1 py-0.5 rounded border border-emerald-200">NIST 800-53</span>, closing 23 of 27 findings before fieldwork.</li>
                   </ul>
                 </div>
 
@@ -127,8 +127,8 @@ export function BeforeAfterSection() {
                     <span className="text-slate-500">2023</span>
                   </div>
                   <ul className="list-disc pl-4 text-[10px] text-slate-600 leading-[1.8] space-y-1 marker:text-slate-400">
-                    <li>Investigated ~150 endpoint alerts a month in <span className="bg-green-100/80 text-[#12734C] font-semibold px-1 py-0.5 rounded">CrowdStrike Falcon</span>.</li>
-                    <li>Built a <span className="bg-green-100/80 text-[#12734C] font-semibold px-1 py-0.5 rounded">SOAR</span> playbook that cut phishing response from 45 minutes to 9.</li>
+                    <li>Investigated ~150 endpoint alerts a month in <span className="bg-emerald-50 text-emerald-800 font-semibold px-1 py-0.5 rounded border border-emerald-200">CrowdStrike Falcon</span>.</li>
+                    <li>Built a <span className="bg-emerald-50 text-emerald-800 font-semibold px-1 py-0.5 rounded border border-emerald-200">SOAR</span> playbook that cut phishing response from 45 minutes to 9.</li>
                   </ul>
                 </div>
               </div>
@@ -143,7 +143,7 @@ export function BeforeAfterSection() {
             </div>
 
             <div className="flex gap-3 text-sm text-slate-500 leading-relaxed items-start">
-              <Check className="w-5 h-5 text-[#12734C] shrink-0 mt-0.5" />
+              <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
               <p>Same jobs, same dates. Now every bullet ends in a result, the vocabulary matches the posting, and the spelling mistakes are gone.</p>
             </div>
           </div>

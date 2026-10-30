@@ -65,7 +65,7 @@ export async function POST(req: Request) {
 
     // Fetch the parsed JD data
     const { data: parsedJd } = await supabase
-      .from('parsed_jds')
+      .from('parsed_job_descriptions')
       .select('parsed_data')
       .eq('id', resumeRecord.parsed_jd_id)
       .single();

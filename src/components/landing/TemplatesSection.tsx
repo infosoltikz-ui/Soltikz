@@ -6,7 +6,7 @@ import { sampleResumeData, sampleProfileData, c2cSampleData } from '@/components
 
 export function TemplatesSection() {
   return (
-    <section className="py-20 bg-slate-50 border-t border-slate-100 overflow-hidden">
+    <section className="py-20 bg-[#FBFBF9] border-t border-slate-100 overflow-hidden">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-4">
           <div className="text-center md:text-left">

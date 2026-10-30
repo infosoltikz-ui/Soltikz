@@ -37,13 +37,13 @@ export function CompanyDetailsSection({ onGenerate }: CompanyDetailsSectionProps
     <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200/80 shadow-xl shadow-slate-200/20 p-8 relative overflow-hidden group hover:shadow-2xl hover:border-emerald-200 transition-all duration-500">
       
       {/* Background Ambient Glow */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl opacity-50 -mr-20 -mt-20 pointer-events-none group-hover:bg-emerald-100 transition-colors duration-500" />
+      <div className="absolute top-0 right-0 w-64 h-64 bg-amber-50 rounded-full blur-3xl opacity-50 -mr-20 -mt-20 pointer-events-none group-hover:bg-amber-100 transition-colors duration-500" />
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-8 border-b border-slate-100 pb-5 relative z-10">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse shadow-[0_0_8px_rgba(217,119,6,0.5)]" />
             <h2 className="text-[20px] font-black text-slate-900 tracking-tight">Target Job Details</h2>
           </div>
           <p className="text-[13px] font-medium text-slate-500">
@@ -60,8 +60,8 @@ export function CompanyDetailsSection({ onGenerate }: CompanyDetailsSectionProps
             <Button variant="outline" size="sm" onClick={handleFillPartial} className="text-[11px] h-8 px-3 font-bold text-amber-700 border-amber-200 bg-amber-50 hover:bg-amber-100 transition-all rounded-lg">
               Partial Match
             </Button>
-            <Button variant="outline" size="sm" onClick={handleFillPerfect} className="text-[11px] h-8 px-3 font-bold text-emerald-700 border-emerald-300 bg-emerald-50 hover:bg-emerald-100 transition-all rounded-lg">
-              <Wand2 className="w-3 h-3 mr-1.5 text-emerald-600" />
+            <Button variant="outline" size="sm" onClick={handleFillPerfect} className="text-[11px] h-8 px-3 font-bold text-secondary border-amber-300 bg-amber-50 hover:bg-amber-100 transition-all rounded-lg">
+              <Wand2 className="w-3 h-3 mr-1.5 text-secondary" />
               100% Match
             </Button>
           </div>
@@ -75,7 +75,7 @@ export function CompanyDetailsSection({ onGenerate }: CompanyDetailsSectionProps
           <div className="group/input">
             <label className="block text-[12.5px] font-extrabold text-slate-800 mb-2 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
-                <Building2 className="w-4 h-4 text-emerald-600" />
+                <Building2 className="w-4 h-4 text-primary" />
                 Target Company Name
               </span>
             </label>
@@ -84,14 +84,14 @@ export function CompanyDetailsSection({ onGenerate }: CompanyDetailsSectionProps
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               placeholder="e.g., Google, Amazon, Startup Inc." 
-              className="w-full h-12 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 text-[14px] font-bold text-slate-900 transition-all bg-slate-50 group-hover/input:bg-white placeholder:text-slate-400 shadow-xs"
+              className="w-full h-12 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 text-[14px] font-bold text-slate-900 transition-all bg-slate-50 group-hover/input:bg-white placeholder:text-slate-400 shadow-xs"
             />
           </div>
           
           <div className="group/input">
             <label className="block text-[12.5px] font-extrabold text-slate-800 mb-2 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
-                <Briefcase className="w-4 h-4 text-teal-600" />
+                <Briefcase className="w-4 h-4 text-secondary" />
                 Target Job Title
               </span>
             </label>
@@ -100,7 +100,7 @@ export function CompanyDetailsSection({ onGenerate }: CompanyDetailsSectionProps
               value={role}
               onChange={(e) => setRole(e.target.value)}
               placeholder="e.g., Senior Full Stack Engineer" 
-              className="w-full h-12 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 text-[14px] font-bold text-slate-900 transition-all bg-slate-50 group-hover/input:bg-white placeholder:text-slate-400 shadow-xs"
+              className="w-full h-12 px-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 text-[14px] font-bold text-slate-900 transition-all bg-slate-50 group-hover/input:bg-white placeholder:text-slate-400 shadow-xs"
             />
           </div>
         </div>
@@ -109,10 +109,10 @@ export function CompanyDetailsSection({ onGenerate }: CompanyDetailsSectionProps
         <div className="group/textarea">
           <label className="block text-[12.5px] font-extrabold text-slate-800 mb-2 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <FileText className="w-4 h-4 text-indigo-600" />
+              <FileText className="w-4 h-4 text-primary" />
               Full Job Description
             </span>
-            <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-100">
+            <span className="text-[11px] font-bold text-secondary bg-amber-50 px-2 py-0.5 rounded-lg border border-amber-200">
               {jd ? `${jd.length} chars` : 'Required'}
             </span>
           </label>
@@ -121,7 +121,7 @@ export function CompanyDetailsSection({ onGenerate }: CompanyDetailsSectionProps
             value={jd}
             onChange={(e) => setJd(e.target.value)}
             placeholder="Paste the full job posting text here. AI will extract keywords and requirements to tailor your resume perfectly."
-            className="w-full p-4 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 text-[13.5px] font-medium text-slate-900 transition-all resize-none leading-relaxed bg-slate-50 group-hover/textarea:bg-white placeholder:text-slate-400 shadow-xs"
+            className="w-full p-4 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 text-[13.5px] font-medium text-slate-900 transition-all resize-none leading-relaxed bg-slate-50 group-hover/textarea:bg-white placeholder:text-slate-400 shadow-xs"
           ></textarea>
         </div>
       </div>
@@ -131,18 +131,18 @@ export function CompanyDetailsSection({ onGenerate }: CompanyDetailsSectionProps
         <Button 
           onClick={() => onGenerate && isFormReady && onGenerate(company, role, jd)}
           disabled={!isFormReady}
-          className="relative h-14 px-10 text-[16px] font-black rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xl shadow-emerald-600/30 w-full sm:w-auto min-w-[360px] flex items-center justify-center gap-3 transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none hover:shadow-2xl hover:shadow-emerald-600/50 hover:-translate-y-1 overflow-hidden group/btn" 
+          className="relative h-14 px-10 text-[16px] font-black rounded-2xl bg-gradient-to-r from-primary via-[#163252] to-primary text-white shadow-xl shadow-primary/25 w-full sm:w-auto min-w-[360px] flex items-center justify-center gap-3 transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none hover:shadow-2xl hover:shadow-primary/40 hover:-translate-y-1 overflow-hidden group/btn" 
         >
           {/* Shimmer Effect */}
           <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover/btn:animate-[shimmer_1.5s_infinite]" />
           
-          <Sparkles className="w-5 h-5 text-amber-300 animate-spin-slow relative z-10" />
+          <Sparkles className="w-5 h-5 text-amber-400 animate-spin-slow relative z-10" />
           <span className="relative z-10 tracking-wide">Generate Tailored AI Resume</span>
           <ArrowRight className="w-5 h-5 opacity-90 group-hover/btn:translate-x-1.5 transition-transform relative z-10" />
         </Button>
 
         <p className="text-[12px] font-bold text-slate-400 mt-4 flex items-center gap-1.5">
-          <Shield className="w-3.5 h-3.5 text-emerald-500" />
+          <Shield className="w-3.5 h-3.5 text-secondary" />
           <span>Powered by Gemini AI • Guaranteed 90%+ ATS Score</span>
         </p>
       </div>

@@ -46,7 +46,7 @@ export function UserMenu() {
     }
   }, [])
 
-  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}&background=16A34A&color=fff&bold=true`
+  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}&background=0F2744&color=F59E0B&bold=true`
 
   const handleLogout = async () => {
     const supabase = createClient()

@@ -79,7 +79,7 @@ export function Sidebar({
 
       <aside 
         className={cn(
-          "h-screen bg-white border-r border-slate-100 flex flex-col fixed left-0 top-0 z-50 transition-all duration-300 ease-in-out",
+          "h-screen bg-white border-r border-[#E2E8F0] flex flex-col fixed left-0 top-0 z-50 transition-all duration-300 ease-in-out",
           isCollapsed ? "md:w-[80px]" : "w-[280px]",
           isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         )}
@@ -128,11 +128,11 @@ export function Sidebar({
                 "flex items-center px-4 py-3.5 rounded-xl text-[14px] font-bold transition-all duration-200",
                 isCollapsed ? "justify-center" : "gap-3",
                 isActive 
-                  ? "bg-[#F0FDF4] text-primary" 
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-[#0F2744] text-white shadow-sm shadow-[#0F2744]/20" 
+                  : "text-slate-600 hover:bg-[#F8FAFC] hover:text-[#0F2744]"
               )}
             >
-              <Icon className={cn("shrink-0 w-[18px] h-[18px]", isActive ? "text-primary" : "text-slate-400")} strokeWidth={2.5} />
+              <Icon className={cn("shrink-0 w-[18px] h-[18px]", isActive ? "text-[#F59E0B]" : "text-slate-400")} strokeWidth={2.5} />
               {!isCollapsed && <span className="overflow-hidden whitespace-nowrap">{item.label}</span>}
             </Link>
           )

@@ -149,10 +149,10 @@ export function WorkspaceSection({
     <div className="flex flex-col lg:flex-row gap-6 w-full max-w-full items-start">
       {/* Sidebar Navigation */}
       <div className="w-full lg:w-72 shrink-0 relative z-10">
-        <div className="bg-slate-900 rounded-3xl p-5 shadow-2xl border border-slate-800 sticky top-24">
+        <div className="bg-[#0F2744] rounded-3xl p-5 shadow-2xl border border-[#1E3A8A] sticky top-24">
           <div className="mb-5 px-1">
-            <h3 className="text-[11px] font-black text-slate-500 uppercase tracking-widest mb-1">Workspace Menu</h3>
-            <p className="text-[12px] text-slate-400 font-medium leading-tight">Tailored tools & prep materials</p>
+            <h3 className="text-[11px] font-black text-amber-400 uppercase tracking-widest mb-1">Workspace Menu</h3>
+            <p className="text-[12px] text-slate-300 font-medium leading-tight">Tailored tools & prep materials</p>
           </div>
           
           <div className="flex flex-col gap-1.5">
@@ -161,15 +161,15 @@ export function WorkspaceSection({
               className={cn(
                 "flex items-center justify-between px-3.5 py-3 rounded-xl text-[13px] font-bold transition-all w-full text-left cursor-pointer group",
                 activeTab === 'cover'
-                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-inner"
-                  : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
+                  ? "bg-amber-400/20 text-amber-400 border border-amber-400/40 shadow-inner"
+                  : "text-slate-300 hover:text-white hover:bg-white/10 border border-transparent"
               )}
             >
               <div className="flex items-center gap-3">
-                <FileSignature className={cn("w-4 h-4", activeTab === 'cover' ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-400")} />
+                <FileSignature className={cn("w-4 h-4", activeTab === 'cover' ? "text-amber-400" : "text-slate-400 group-hover:text-white")} />
                 <span>Cover Letter</span>
               </div>
-              {activeTab === 'cover' && <ChevronRight className="w-4 h-4 opacity-70" />}
+              {activeTab === 'cover' && <ChevronRight className="w-4 h-4 opacity-80" />}
             </button>
 
             <button
@@ -177,15 +177,15 @@ export function WorkspaceSection({
               className={cn(
                 "flex items-center justify-between px-3.5 py-3 rounded-xl text-[13px] font-bold transition-all w-full text-left cursor-pointer group",
                 activeTab === 'intro'
-                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-inner"
-                  : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
+                  ? "bg-amber-400/20 text-amber-400 border border-amber-400/40 shadow-inner"
+                  : "text-slate-300 hover:text-white hover:bg-white/10 border border-transparent"
               )}
             >
               <div className="flex items-center gap-3">
-                <MessageSquare className={cn("w-4 h-4", activeTab === 'intro' ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-400")} />
+                <MessageSquare className={cn("w-4 h-4", activeTab === 'intro' ? "text-amber-400" : "text-slate-400 group-hover:text-white")} />
                 <span>Self Pitch</span>
               </div>
-              {activeTab === 'intro' && <ChevronRight className="w-4 h-4 opacity-70" />}
+              {activeTab === 'intro' && <ChevronRight className="w-4 h-4 opacity-80" />}
             </button>
 
             <button
@@ -193,22 +193,22 @@ export function WorkspaceSection({
               className={cn(
                 "flex items-center justify-between px-3.5 py-3 rounded-xl text-[13px] font-bold transition-all w-full text-left cursor-pointer group",
                 activeTab === 'tech'
-                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-inner"
-                  : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
+                  ? "bg-amber-400/20 text-amber-400 border border-amber-400/40 shadow-inner"
+                  : "text-slate-300 hover:text-white hover:bg-white/10 border border-transparent"
               )}
             >
               <div className="flex items-center gap-3">
-                <Code2 className={cn("w-4 h-4", activeTab === 'tech' ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-400")} />
+                <Code2 className={cn("w-4 h-4", activeTab === 'tech' ? "text-amber-400" : "text-slate-400 group-hover:text-white")} />
                 <span>Tech Q&A</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className={cn(
                   "px-2 py-0.5 rounded-full text-[10px] font-black",
-                  activeTab === 'tech' ? "bg-emerald-500/30 text-emerald-300" : "bg-slate-800 text-slate-400"
+                  activeTab === 'tech' ? "bg-amber-400/30 text-amber-300" : "bg-white/10 text-slate-300"
                 )}>
                   {techQuestions.length}
                 </span>
-                {activeTab === 'tech' && <ChevronRight className="w-4 h-4 opacity-70" />}
+                {activeTab === 'tech' && <ChevronRight className="w-4 h-4 opacity-80" />}
               </div>
             </button>
 
@@ -217,22 +217,22 @@ export function WorkspaceSection({
               className={cn(
                 "flex items-center justify-between px-3.5 py-3 rounded-xl text-[13px] font-bold transition-all w-full text-left cursor-pointer group",
                 activeTab === 'hr'
-                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-inner"
-                  : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
+                  ? "bg-amber-400/20 text-amber-400 border border-amber-400/40 shadow-inner"
+                  : "text-slate-300 hover:text-white hover:bg-white/10 border border-transparent"
               )}
             >
               <div className="flex items-center gap-3">
-                <Users2 className={cn("w-4 h-4", activeTab === 'hr' ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-400")} />
+                <Users2 className={cn("w-4 h-4", activeTab === 'hr' ? "text-amber-400" : "text-slate-400 group-hover:text-white")} />
                 <span>HR Q&A</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className={cn(
                   "px-2 py-0.5 rounded-full text-[10px] font-black",
-                  activeTab === 'hr' ? "bg-emerald-500/30 text-emerald-300" : "bg-slate-800 text-slate-400"
+                  activeTab === 'hr' ? "bg-amber-400/30 text-amber-300" : "bg-white/10 text-slate-300"
                 )}>
                   {hrQuestions.length}
                 </span>
-                {activeTab === 'hr' && <ChevronRight className="w-4 h-4 opacity-70" />}
+                {activeTab === 'hr' && <ChevronRight className="w-4 h-4 opacity-80" />}
               </div>
             </button>
 
@@ -241,26 +241,26 @@ export function WorkspaceSection({
               className={cn(
                 "flex items-center justify-between px-3.5 py-3 rounded-xl text-[13px] font-bold transition-all w-full text-left cursor-pointer group",
                 activeTab === 'star'
-                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-inner"
-                  : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
+                  ? "bg-amber-400/20 text-amber-400 border border-amber-400/40 shadow-inner"
+                  : "text-slate-300 hover:text-white hover:bg-white/10 border border-transparent"
               )}
             >
               <div className="flex items-center gap-3">
-                <Star className={cn("w-4 h-4", activeTab === 'star' ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-400")} />
+                <Star className={cn("w-4 h-4", activeTab === 'star' ? "text-amber-400" : "text-slate-400 group-hover:text-white")} />
                 <span>STAR Stories</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className={cn(
                   "px-2 py-0.5 rounded-full text-[10px] font-black",
-                  activeTab === 'star' ? "bg-emerald-500/30 text-emerald-300" : "bg-slate-800 text-slate-400"
+                  activeTab === 'star' ? "bg-amber-400/30 text-amber-300" : "bg-white/10 text-slate-300"
                 )}>
                   {starAnswers.length}
                 </span>
-                {activeTab === 'star' && <ChevronRight className="w-4 h-4 opacity-70" />}
+                {activeTab === 'star' && <ChevronRight className="w-4 h-4 opacity-80" />}
               </div>
             </button>
 
-            <div className="h-px bg-slate-800/50 my-2 mx-2" />
+            <div className="h-px bg-white/10 my-2 mx-2" />
 
             {atsData && (
               <button
@@ -268,15 +268,15 @@ export function WorkspaceSection({
                 className={cn(
                   "flex items-center justify-between px-3.5 py-3 rounded-xl text-[13px] font-bold transition-all w-full text-left cursor-pointer group",
                   activeTab === 'ats'
-                    ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-inner"
-                    : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
+                    ? "bg-amber-400/20 text-amber-400 border border-amber-400/40 shadow-inner"
+                    : "text-slate-300 hover:text-white hover:bg-white/10 border border-transparent"
                 )}
               >
                 <div className="flex items-center gap-3">
-                  <ShieldCheck className={cn("w-4 h-4", activeTab === 'ats' ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-400")} />
+                  <ShieldCheck className={cn("w-4 h-4", activeTab === 'ats' ? "text-amber-400" : "text-slate-400 group-hover:text-white")} />
                   <span>ATS Score Report</span>
                 </div>
-                {activeTab === 'ats' && <ChevronRight className="w-4 h-4 opacity-70" />}
+                {activeTab === 'ats' && <ChevronRight className="w-4 h-4 opacity-80" />}
               </button>
             )}
 
@@ -285,15 +285,15 @@ export function WorkspaceSection({
               className={cn(
                 "flex items-center justify-between px-3.5 py-3 rounded-xl text-[13px] font-bold transition-all w-full text-left cursor-pointer group",
                 activeTab === 'company'
-                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-inner"
-                  : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
+                  ? "bg-amber-400/20 text-amber-400 border border-amber-400/40 shadow-inner"
+                  : "text-slate-300 hover:text-white hover:bg-white/10 border border-transparent"
               )}
             >
               <div className="flex items-center gap-3">
-                <Building className={cn("w-4 h-4", activeTab === 'company' ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-400")} />
+                <Building className={cn("w-4 h-4", activeTab === 'company' ? "text-amber-400" : "text-slate-400 group-hover:text-white")} />
                 <span>Company Notes</span>
               </div>
-              {activeTab === 'company' && <ChevronRight className="w-4 h-4 opacity-70" />}
+              {activeTab === 'company' && <ChevronRight className="w-4 h-4 opacity-80" />}
             </button>
           </div>
         </div>

@@ -12,7 +12,7 @@ export function CreateResumeSidebar() {
         
         <div className="flex items-center justify-between mb-6 relative z-10">
           <div className="flex items-center gap-2">
-            <LayoutTemplate className="w-4 h-4 text-emerald-600" />
+            <LayoutTemplate className="w-4 h-4 text-primary" />
             <h3 className="text-[16px] font-black text-slate-900 tracking-tight">AI Layout Engine</h3>
           </div>
           <div className="flex gap-1.5 opacity-50">
@@ -26,7 +26,7 @@ export function CreateResumeSidebar() {
         <div className="relative border border-slate-200/80 rounded-2xl p-5 bg-slate-50/50 shadow-inner flex flex-col items-center overflow-hidden">
           
           {/* Animated Scanning Laser */}
-          <div className="absolute inset-x-0 h-[2px] bg-emerald-400 shadow-[0_0_8px_2px_rgba(52,211,153,0.5)] animate-[scan_3s_ease-in-out_infinite]" />
+          <div className="absolute inset-x-0 h-[2px] bg-amber-400 shadow-[0_0_8px_2px_rgba(245,158,11,0.5)] animate-[scan_3s_ease-in-out_infinite]" />
 
           <div className="w-16 h-16 rounded-full bg-slate-200/80 mb-3 flex items-center justify-center relative">
             <UserIconSkeleton />
@@ -92,20 +92,20 @@ export function CreateResumeSidebar() {
       </div>
 
       {/* Premium ATS Banner */}
-      <div className="relative overflow-hidden bg-slate-900 rounded-3xl p-6 text-white shadow-xl shadow-slate-900/10 border border-slate-800">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/20 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-teal-500/20 rounded-full blur-3xl -ml-10 -mb-10 pointer-events-none" />
+      <div className="relative overflow-hidden bg-[#0F2744] rounded-3xl p-6 text-white shadow-xl shadow-slate-900/10 border border-[#1E3A8A]">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/15 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl -ml-10 -mb-10 pointer-events-none" />
         
         <div className="flex items-start gap-4 relative z-10">
-          <div className="p-3 bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 rounded-2xl shadow-inner shrink-0 text-emerald-400">
+          <div className="p-3 bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/30 rounded-2xl shadow-inner shrink-0 text-amber-400">
             <ShieldCheck className="w-6 h-6" strokeWidth={2.5} />
           </div>
           <div>
             <h4 className="text-[15px] font-black text-white mb-1 tracking-tight flex items-center gap-1.5">
               100% ATS Optimized
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
             </h4>
-            <p className="text-[12.5px] font-medium text-slate-400 leading-relaxed">
+            <p className="text-[12.5px] font-medium text-slate-300 leading-relaxed">
               Your generated resume is automatically formatted to bypass Workday, Taleo, and Greenhouse applicant tracking systems.
             </p>
           </div>

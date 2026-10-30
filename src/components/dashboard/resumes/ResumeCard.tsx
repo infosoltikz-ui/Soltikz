@@ -207,7 +207,7 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
               e.stopPropagation()
               onEdit?.()
             }} 
-            className="w-9 h-9 bg-emerald-600 text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm cursor-pointer" 
+            className="w-9 h-9 bg-primary text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm cursor-pointer" 
             title="Edit Resume (Same Tab)"
           >
             <Edit3 className="w-4 h-4" strokeWidth={2.5} />
@@ -250,7 +250,7 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
         <div className="flex items-center gap-1.5 mb-3 flex-wrap">
           <span className={cn(
             "px-1.5 py-0.5 rounded text-[10.5px] font-bold",
-            isFullTime ? "bg-primary/10 text-primary" : "bg-orange-500/10 text-orange-500"
+            isFullTime ? "bg-primary/10 text-primary" : "bg-secondary/15 text-secondary"
           )}>
             {data.type}
           </span>
@@ -317,7 +317,7 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
                 onDownload?.()
               }} 
               disabled={isDownloading}
-              className="text-slate-400 hover:text-emerald-600 transition-colors cursor-pointer p-0.5 disabled:opacity-50" 
+              className="text-slate-400 hover:text-primary transition-colors cursor-pointer p-0.5 disabled:opacity-50" 
               title="Download PDF (Template UI)"
             >
               {isDownloading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
@@ -328,7 +328,7 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
                 e.preventDefault()
                 onEdit?.()
               }} 
-              className="text-slate-400 hover:text-emerald-600 transition-colors cursor-pointer p-0.5" 
+              className="text-slate-400 hover:text-primary transition-colors cursor-pointer p-0.5" 
               title="Edit in same tab"
             >
               <Edit3 className="w-3.5 h-3.5" />

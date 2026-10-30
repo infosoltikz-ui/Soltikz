@@ -22,7 +22,7 @@ export function FeaturesSection() {
             
             {/* Top Score */}
             <div className="flex items-start gap-4 mb-6">
-              <div className="relative w-16 h-16 shrink-0 flex items-center justify-center rounded-full border-[4px] border-[#12734C]">
+              <div className="relative w-16 h-16 shrink-0 flex items-center justify-center rounded-full border-[4px] border-primary">
                 <span className="text-xl font-bold text-slate-900">91</span>
               </div>
               <div>
@@ -41,7 +41,7 @@ export function FeaturesSection() {
                   <span className="text-slate-900 font-bold">88%</span>
                 </div>
                 <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-[#12734C] rounded-full" style={{ width: '88%' }}></div>
+                  <div className="h-full bg-primary rounded-full" style={{ width: '88%' }}></div>
                 </div>
               </div>
               <div>
@@ -50,7 +50,7 @@ export function FeaturesSection() {
                   <span className="text-slate-900 font-bold">95%</span>
                 </div>
                 <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-[#12734C] rounded-full" style={{ width: '95%' }}></div>
+                  <div className="h-full bg-primary rounded-full" style={{ width: '95%' }}></div>
                 </div>
               </div>
               <div>
@@ -68,7 +68,7 @@ export function FeaturesSection() {
                   <span className="text-slate-900 font-bold">98%</span>
                 </div>
                 <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-[#12734C] rounded-full" style={{ width: '98%' }}></div>
+                  <div className="h-full bg-primary rounded-full" style={{ width: '98%' }}></div>
                 </div>
               </div>
             </div>
@@ -90,7 +90,7 @@ export function FeaturesSection() {
               </div>
 
               <div className="flex gap-3">
-                <button className="px-4 py-2 bg-[#12734C] text-white text-[13px] font-bold rounded-md hover:bg-[#0f603f] transition-colors">
+                <button className="px-4 py-2 bg-primary text-white text-[13px] font-bold rounded-md hover:bg-primary-hover transition-colors">
                   Add the ones I've used
                 </button>
                 <button className="px-4 py-2 bg-white border border-slate-200 text-slate-700 text-[13px] font-bold rounded-md hover:bg-slate-50 transition-colors">

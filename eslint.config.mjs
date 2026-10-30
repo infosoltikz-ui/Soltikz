@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "ats_old.tsx",
+    "old_hero.tsx",
+    "test_resumes.js",
+    "add_dark_mode.js",
   ]),
 ]);
 

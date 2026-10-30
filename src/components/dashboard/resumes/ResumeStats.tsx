@@ -146,7 +146,7 @@ export function ResumeStats() {
       {/* C2C Resumes */}
       <div className="bg-[#FAFAF8] rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 rounded-full bg-orange-500/10 text-orange-500 flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-full bg-secondary/15 text-secondary flex items-center justify-center shrink-0">
             <Users className="w-4 h-4" strokeWidth={2.5} />
           </div>
           <span className="text-[13px] font-bold text-slate-500">C2C Resumes</span>
@@ -157,7 +157,7 @@ export function ResumeStats() {
       {/* Downloads */}
       <div className="bg-[#FAFAF8] rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
             <Download className="w-4 h-4" strokeWidth={2.5} />
           </div>
           <span className="text-[13px] font-bold text-slate-500">Downloads</span>

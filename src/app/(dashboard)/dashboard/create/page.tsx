@@ -419,6 +419,7 @@ export default function CreateResumePage() {
           body: JSON.stringify({
             parsedJdData: parseData.parsed_data,
             generatedResume: normalizedResume,
+            resumeContent: normalizedResume,
             resumeId: resumeGenData.resume_id,
             masterProfile: profileData
           })
@@ -428,6 +429,7 @@ export default function CreateResumePage() {
           body: JSON.stringify({
             parsedJdData: parseData.parsed_data,
             generatedResume: normalizedResume,
+            resumeContent: normalizedResume,
             resumeId: resumeGenData.resume_id
           })
         })

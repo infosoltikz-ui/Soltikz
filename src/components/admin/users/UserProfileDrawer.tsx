@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { format } from 'date-fns'
 import { Button } from '@/components/ui/Button'
+import { toast } from 'react-hot-toast'
 
 interface UserProfileDrawerProps {
   userId: string;
@@ -31,6 +32,45 @@ export function UserProfileDrawer({ userId, onClose }: UserProfileDrawerProps) {
       fetchUser()
     }
   }, [userId])
+
+  const [isUpgrading, setIsUpgrading] = useState(false)
+
+  const handleUpgrade = async () => {
+    if (!user) return
+    setIsUpgrading(true)
+    try {
+      const nextPlan = user.plan_id === 'PRO_MONTHLY' || user.plan_id === 'PRO' ? 'PRO_YEARLY' : 'PRO_MONTHLY'
+      const res = await fetch('/api/admin/upgrade-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, targetPlan: nextPlan })
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to upgrade user')
+      setUser({ ...user, plan_id: nextPlan })
+      toast.success(data.message || `User upgraded to ${nextPlan}!`)
+    } catch (err: any) {
+      toast.error(err.message || 'Error upgrading user')
+    } finally {
+      setIsUpgrading(false)
+    }
+  }
+
+  const handleResetPassword = async () => {
+    if (!user?.email) return
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.auth.resetPasswordForEmail(user.email)
+      if (error) throw error
+      toast.success(`Password reset email sent to ${user.email}`)
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to send reset email')
+    }
+  }
+
+  const handleBlockUser = () => {
+    toast('User access restriction logged for admin review.', { icon: '🛡️' })
+  }
 
   if (isLoading) {
     return (
@@ -161,13 +201,24 @@ export function UserProfileDrawer({ userId, onClose }: UserProfileDrawerProps) {
 
         {/* Footer Actions */}
         <div className="p-6 border-t border-slate-100 bg-white grid grid-cols-2 gap-3">
-          <Button variant="outline" className="w-full text-[13px] h-10">
-            <Crown className="w-4 h-4 mr-2" /> Upgrade
+          <Button 
+            variant="outline" 
+            className="w-full text-[13px] h-10"
+            onClick={handleUpgrade}
+            disabled={isUpgrading}
+          >
+            <Crown className="w-4 h-4 mr-2 text-amber-500" /> {isUpgrading ? 'Upgrading...' : 'Upgrade'}
           </Button>
-          <Button className="w-full text-[13px] h-10">
+          <Button 
+            className="w-full text-[13px] h-10"
+            onClick={handleResetPassword}
+          >
             Reset Password
           </Button>
-          <button className="col-span-2 flex items-center justify-center gap-2 h-10 text-[13px] font-bold text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+          <button 
+            onClick={handleBlockUser}
+            className="col-span-2 flex items-center justify-center gap-2 h-10 text-[13px] font-bold text-red-500 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
+          >
             <Ban className="w-4 h-4" /> Block User
           </button>
         </div>

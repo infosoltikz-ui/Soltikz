@@ -29,7 +29,7 @@ function AnimatedScore({ targetScore }: { targetScore: number }) {
           <circle cx="20" cy="20" r="16" fill="none" className="stroke-slate-100" strokeWidth="4" />
           <circle 
             cx="20" cy="20" r="16" fill="none" 
-            className="stroke-[#00875A] transition-all duration-300 ease-out" 
+            className="stroke-secondary transition-all duration-300 ease-out" 
             strokeWidth="4" 
             strokeLinecap="round"
             strokeDasharray={`${(score / 100) * 100.5} 100.5`} 
@@ -39,7 +39,7 @@ function AnimatedScore({ targetScore }: { targetScore: number }) {
       </div>
       <div className="flex flex-col">
         <div className="text-sm font-bold text-slate-900 mb-0.5">Match score</div>
-        <div className="text-xs text-[#00875A] font-medium">
+        <div className="text-xs text-secondary font-bold">
           Up from 74
         </div>
       </div>
@@ -85,7 +85,7 @@ export function HeroSection() {
   }, [slides.length])
 
   return (
-    <section className="relative overflow-hidden pt-8 md:pt-12 pb-16 lg:pt-16 lg:pb-24" style={{ background: 'linear-gradient(135deg, #f0f7f4 0%, #e8f5ee 40%, #f5f5f0 100%)' }}>
+    <section className="relative overflow-hidden pt-8 md:pt-12 pb-16 lg:pt-16 lg:pb-24" style={{ background: 'linear-gradient(135deg, #FBFBF9 0%, #F5F7FA 50%, #EEF4FA 100%)' }}>
       {/* Background decoration */}
       <div className="absolute top-0 right-0 -z-10 translate-x-1/3 -translate-y-1/4">
         <div className="w-[800px] h-[800px] rounded-full bg-primary/10 blur-[120px]" />

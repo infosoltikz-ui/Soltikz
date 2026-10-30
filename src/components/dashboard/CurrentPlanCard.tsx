@@ -50,7 +50,7 @@ export function CurrentPlanCard({
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(1)
-        .single()
+        .maybeSingle()
 
       if (profile) {
         setPlanId(profile.plan_id || 'FREE')
@@ -222,7 +222,7 @@ export function CurrentPlanCard({
           <button className={`w-full h-9 rounded-lg text-[13px] font-semibold flex items-center justify-center gap-1.5 transition-all ${
             isPremium
               ? 'bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200'
-              : 'bg-primary text-white hover:bg-primary-dark shadow-sm hover:shadow'
+              : 'bg-primary text-white hover:bg-primary-hover shadow-sm hover:shadow'
           }`}>
             <span>{isPremium ? 'Manage Pro Subscription' : 'Upgrade to Pro'}</span>
             <ArrowUpRight className="w-3.5 h-3.5" />

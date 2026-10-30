@@ -36,8 +36,8 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
           className={cn(
             "relative p-3.5 sm:p-4 rounded-xl border-2 text-left transition-all duration-200 group cursor-pointer flex flex-col justify-between overflow-hidden",
             selectedType === 'fulltime' 
-              ? "border-emerald-500 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/20 ring-2 ring-emerald-500/15 shadow-sm" 
-              : "border-slate-200 hover:border-emerald-400/60 hover:shadow-xs bg-white"
+              ? "border-[#0F2744] bg-gradient-to-br from-[#EEF4FA] via-white to-slate-50 ring-2 ring-[#0F2744]/20 shadow-sm" 
+              : "border-slate-200 hover:border-[#0F2744]/40 hover:shadow-xs bg-white"
           )}
         >
           <div>
@@ -46,8 +46,8 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
                 <div className={cn(
                   "p-2 rounded-lg transition-all shrink-0",
                   selectedType === 'fulltime' 
-                    ? "bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-xs" 
-                    : "bg-slate-100 text-slate-500 group-hover:bg-emerald-50 group-hover:text-emerald-600"
+                    ? "bg-[#0F2744] text-white shadow-xs" 
+                    : "bg-slate-100 text-slate-500 group-hover:bg-[#EEF4FA] group-hover:text-[#0F2744]"
                 )}>
                   <Briefcase className="w-4 h-4 stroke-[2.2]" />
                 </div>
@@ -57,7 +57,7 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
                     <span className={cn(
                       "text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider border",
                       selectedType === 'fulltime'
-                        ? "bg-emerald-100 text-emerald-800 border-emerald-300"
+                        ? "bg-[#0F2744] text-white border-[#0F2744]"
                         : "bg-slate-100 text-slate-500 border-slate-200"
                     )}>
                       Direct-Hire
@@ -102,8 +102,8 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
           className={cn(
             "relative p-3.5 sm:p-4 rounded-xl border-2 text-left transition-all duration-200 group cursor-pointer flex flex-col justify-between overflow-hidden",
             selectedType === 'c2c' 
-              ? "border-orange-500 bg-gradient-to-br from-orange-50/70 via-white to-amber-50/20 ring-2 ring-orange-500/15 shadow-sm" 
-              : "border-slate-200 hover:border-orange-400/60 hover:shadow-xs bg-white"
+              ? "border-[#D97706] bg-gradient-to-br from-[#FEF3C7]/40 via-white to-amber-50/20 ring-2 ring-[#D97706]/20 shadow-sm" 
+              : "border-slate-200 hover:border-[#D97706]/40 hover:shadow-xs bg-white"
           )}
         >
           <div>
@@ -112,8 +112,8 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
                 <div className={cn(
                   "p-2 rounded-lg transition-all shrink-0",
                   selectedType === 'c2c' 
-                    ? "bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-xs" 
-                    : "bg-slate-100 text-slate-500 group-hover:bg-orange-50 group-hover:text-orange-600"
+                    ? "bg-[#D97706] text-white shadow-xs" 
+                    : "bg-slate-100 text-slate-500 group-hover:bg-amber-50 group-hover:text-amber-700"
                 )}>
                   <FileText className="w-4 h-4 stroke-[2.2]" />
                 </div>
@@ -123,7 +123,7 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
                     <span className={cn(
                       "text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider border",
                       selectedType === 'c2c'
-                        ? "bg-orange-100 text-orange-900 border-orange-300"
+                        ? "bg-[#D97706] text-white border-[#D97706]"
                         : "bg-slate-100 text-slate-500 border-slate-200"
                     )}>
                       Vendor / Staffing
@@ -136,7 +136,7 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
               </div>
 
               {selectedType === 'c2c' ? (
-                <div className="flex items-center gap-1 bg-orange-500 text-white text-[10.5px] font-black px-2 py-0.5 rounded-full shrink-0 shadow-2xs">
+                <div className="flex items-center gap-1 bg-[#D97706] text-white text-[10.5px] font-black px-2 py-0.5 rounded-full shrink-0 shadow-2xs">
                   <Check className="w-3 h-3 stroke-[3]" />
                   <span>Selected</span>
                 </div>

@@ -42,7 +42,7 @@ export function RecentSubscriptionsTable() {
             method: 'Razorpay', // Assuming Razorpay is used based on Indian Rupee
             date: format(new Date(sub.created_at), 'MMM dd, yyyy'),
             renewal: sub.valid_until ? format(new Date(sub.valid_until), 'MMM dd, yyyy') : 'N/A',
-            status: sub.status === 'SUCCESS' || sub.status === 'ACTIVE' ? 'Active' : 'Past Due'
+            status: sub.status === 'SUCCESS' || sub.status === 'ACTIVE' || sub.status === 'Captured' ? 'Active' : 'Past Due'
           }
         })
         setSubscriptions(mapped)

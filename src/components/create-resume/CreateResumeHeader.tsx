@@ -161,15 +161,15 @@ export function CreateResumeHeader({
                     disabled={upcoming}
                     className={cn(
                       'flex items-center gap-2 h-9 px-4 rounded-xl text-[12px] font-bold transition-all duration-150 border select-none',
-                      active   && 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-transparent shadow-md shadow-emerald-500/25',
-                      done     && 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 cursor-pointer',
+                      active   && 'bg-[#0F2744] text-white border-[#0F2744] shadow-md shadow-[#0F2744]/25 ring-2 ring-[#F59E0B]/40',
+                      done     && 'bg-[#EEF4FA] text-[#0F2744] border-[#0F2744]/20 hover:bg-[#D97706]/10 hover:text-[#D97706] cursor-pointer',
                       upcoming && 'bg-transparent text-slate-400 border-slate-200/60 cursor-default opacity-50',
                     )}
                   >
                     <span className="w-4 h-4 rounded flex items-center justify-center shrink-0">
                       {done
-                        ? <Check className="w-3 h-3 stroke-[3]" />
-                        : <Icon className="w-3 h-3" />
+                        ? <Check className="w-3 h-3 stroke-[3] text-[#D97706]" />
+                        : <Icon className={cn("w-3 h-3", active ? "text-[#F59E0B]" : "")} />
                       }
                     </span>
                     <span className="hidden md:block">{item.label}</span>
@@ -179,7 +179,7 @@ export function CreateResumeHeader({
                   {idx < STEPS.length - 1 && (
                     <div className={cn(
                       'w-7 h-px mx-1',
-                      currentStep > item.step ? 'bg-emerald-400' : 'bg-slate-200'
+                      currentStep > item.step ? 'bg-[#D97706]' : 'bg-slate-200'
                     )} />
                   )}
                 </div>
@@ -204,27 +204,27 @@ export function CreateResumeHeader({
     </header>
 
     {/* ── Animated Sub-bar ── */}
-    <div className="sticky top-[68px] z-30 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-slate-700/50 shadow-lg">
+    <div className="sticky top-[68px] z-30 bg-gradient-to-r from-[#0F2744] via-[#153258] to-[#1E3A8A] border-b border-[#1E3A8A]/50 shadow-lg">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-10 flex items-center justify-between gap-4">
 
         {/* Left: pulsing dot + sparkle + explanation text */}
         <div className="flex items-center gap-2.5 min-w-0 flex-1 overflow-hidden">
           {/* Live pulsing dot */}
           <span className="relative flex h-2 w-2 shrink-0">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
           </span>
 
           {/* Rotating sparkle icon */}
           <Sparkles
-            className="w-3 h-3 text-emerald-400 shrink-0"
+            className="w-3 h-3 text-amber-400 shrink-0"
             style={{ animation: 'spin 5s linear infinite' }}
           />
 
           {/* Explanation text */}
-          <p className="text-[11.5px] font-semibold text-slate-400 whitespace-nowrap overflow-hidden text-ellipsis">
-            <span className="text-emerald-400 font-bold">AI Resume Suite</span>
-            <span className="mx-2 text-slate-600">·</span>
+          <p className="text-[11.5px] font-semibold text-slate-300 whitespace-nowrap overflow-hidden text-ellipsis">
+            <span className="text-amber-400 font-bold">AI Resume Suite</span>
+            <span className="mx-2 text-slate-500">·</span>
             Paste any job description — AI tailors your resume with ATS keywords, power bullets &amp; interview prep in under 3 min.
           </p>
         </div>
@@ -232,11 +232,11 @@ export function CreateResumeHeader({
         {/* Right: pulsing arrow + How it Works button */}
         <div className="flex items-center gap-2 shrink-0">
           {/* Pulsing arrow pointing to button */}
-          <ChevronRight className="w-4 h-4 text-emerald-400 animate-pulse" />
+          <ChevronRight className="w-4 h-4 text-amber-400 animate-pulse" />
 
           <button
             onClick={() => setGuideOpen(true)}
-            className="flex items-center gap-1.5 h-7 px-3.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white text-[11.5px] font-bold transition-all shadow-md shadow-emerald-500/30 hover:shadow-emerald-400/40 hover:scale-[1.03] active:scale-[0.97] select-none"
+            className="flex items-center gap-1.5 h-7 px-3.5 rounded-lg bg-[#F59E0B] hover:bg-[#D97706] text-slate-950 text-[11.5px] font-extrabold transition-all shadow-md shadow-amber-500/20 hover:scale-[1.03] active:scale-[0.97] select-none cursor-pointer"
           >
             <BookOpen className="w-3 h-3 shrink-0" />
             How it Works

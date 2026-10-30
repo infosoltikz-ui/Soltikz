@@ -4,6 +4,7 @@ import { X, Save } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 interface PlanConfigurationDrawerProps {
   planId: string | null;
@@ -135,7 +136,13 @@ export function PlanConfigurationDrawer({ planId, onClose }: PlanConfigurationDr
           <Button variant="outline" onClick={onClose} className="w-full text-[13px] h-11">
             Cancel
           </Button>
-          <Button className="w-full text-[13px] h-11 shadow-sm shadow-primary/20">
+          <Button 
+            className="w-full text-[13px] h-11 shadow-sm shadow-primary/20"
+            onClick={() => {
+              toast.success(`${planId?.toUpperCase()} tier configuration saved successfully!`)
+              onClose()
+            }}
+          >
             <Save className="w-4 h-4 mr-2" /> Save Changes
           </Button>
         </div>

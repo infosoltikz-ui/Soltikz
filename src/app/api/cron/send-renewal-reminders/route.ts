@@ -45,7 +45,7 @@ export async function GET(request: Request) {
       .select('user_id, valid_until')
       .gte('valid_until', startOfDay.toISOString())
       .lte('valid_until', endOfDay.toISOString())
-      .eq('status', 'SUCCESS')
+      .in('status', ['SUCCESS', 'Captured'])
 
     if (subError) throw subError
     if (!expiringSubscriptions || expiringSubscriptions.length === 0) {

@@ -20,11 +20,21 @@ export function ResumePreviewDrawer({ resumeId, onClose }: ResumePreviewDrawerPr
       const supabase = createClient()
       const { data } = await supabase
         .from('resumes_v2')
-        .select('*, profiles(full_name), parsed_job_descriptions(company_name, job_title), ats_analyses(overall_score), resume_sections(section_type, content)')
+        .select('*, parsed_job_descriptions(company_name, job_title), ats_analyses(overall_score), resume_sections(section_type, content)')
         .eq('id', resumeId)
         .single()
       
-      if (data) setResume(data)
+      if (data) {
+        if (data.user_id) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('full_name')
+            .eq('id', data.user_id)
+            .maybeSingle()
+          data.profiles = profile
+        }
+        setResume(data)
+      }
       setIsLoading(false)
     }
     if (resumeId) {

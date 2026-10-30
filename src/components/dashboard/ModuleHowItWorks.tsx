@@ -44,7 +44,7 @@ function GuideModal({ open, onClose, moduleTitle, steps }: { open: boolean; onCl
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[88vh] flex flex-col overflow-hidden border border-slate-200">
 
         {/* Header */}
-        <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 px-6 pt-6 pb-5 shrink-0">
+        <div className="relative bg-gradient-to-br from-[#0F2744] via-[#153258] to-[#1E3A8A] px-6 pt-6 pb-5 shrink-0">
           <div
             className="absolute inset-0 opacity-10"
             style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }}
@@ -52,10 +52,10 @@ function GuideModal({ open, onClose, moduleTitle, steps }: { open: boolean; onCl
           <div className="relative flex items-start justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                <div className="w-8 h-8 rounded-xl bg-amber-400/20 border border-amber-400/30 flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-amber-400" />
                 </div>
-                <span className="text-[11px] font-extrabold text-emerald-400 uppercase tracking-widest">Module Guide</span>
+                <span className="text-[11px] font-extrabold text-amber-400 uppercase tracking-widest">Module Guide</span>
               </div>
               <h2 className="text-[20px] font-black text-white leading-tight mb-1">How to use — {moduleTitle}</h2>
               <p className="text-[12px] text-slate-300 font-medium">Step-by-step guide for this module.</p>
@@ -122,31 +122,31 @@ export function ModuleHowItWorks({ moduleTitle, tagline, steps }: ModuleHowItWor
       <GuideModal open={open} onClose={() => setOpen(false)} moduleTitle={moduleTitle} steps={steps} />
 
       {/* Dark horizontal bar */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/50 rounded-xl shadow-lg mb-3">
+      <div className="bg-gradient-to-r from-[#0F2744] via-[#153258] to-[#1E3A8A] border border-[#1E3A8A]/50 rounded-xl shadow-lg mb-3">
         <div className="px-5 sm:px-6 h-14 flex items-center justify-between gap-4">
 
           {/* Left: pulsing dot + sparkle + tagline */}
           <div className="flex items-center gap-3 min-w-0 flex-1 overflow-hidden">
             <span className="relative flex h-2.5 w-2.5 shrink-0">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500" />
             </span>
-            <Sparkles className="w-4 h-4 text-emerald-400 shrink-0" style={{ animation: 'spin 5s linear infinite' }} />
-            <p className="text-[13px] font-semibold text-slate-400 whitespace-nowrap overflow-hidden text-ellipsis">
-              <span className="text-emerald-400 font-extrabold">{moduleTitle}</span>
-              <span className="mx-2 text-slate-600">·</span>
+            <Sparkles className="w-4 h-4 text-amber-400 shrink-0" style={{ animation: 'spin 5s linear infinite' }} />
+            <p className="text-[13px] font-semibold text-slate-300 whitespace-nowrap overflow-hidden text-ellipsis">
+              <span className="text-amber-400 font-extrabold">{moduleTitle}</span>
+              <span className="mx-2 text-slate-500">·</span>
               {tagline}
             </p>
           </div>
 
           {/* Right: arrow + How it Works button */}
           <div className="flex items-center gap-2.5 shrink-0">
-            <ChevronRight className="w-5 h-5 text-emerald-400 animate-pulse" />
+            <ChevronRight className="w-5 h-5 text-amber-400 animate-pulse" />
             <button
               onClick={() => setOpen(true)}
-              className="flex items-center gap-2 h-9 px-5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white text-[13px] font-bold transition-all shadow-md shadow-emerald-500/30 hover:shadow-emerald-400/40 hover:scale-[1.03] active:scale-[0.97] select-none"
+              className="flex items-center gap-2 h-9 px-5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] text-slate-950 text-[13px] font-extrabold transition-all shadow-md shadow-amber-500/20 hover:scale-[1.03] active:scale-[0.97] select-none cursor-pointer"
             >
-              <BookOpen className="w-4 h-4 shrink-0" />
+              <BookOpen className="w-4 h-4 shrink-0 text-slate-950" />
               How it Works
             </button>
           </div>

@@ -24,23 +24,21 @@ export interface ButtonProps
 // ── Style maps ────────────────────────────────────────────────
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-primary text-white shadow-button hover:bg-primary-hover active:scale-[0.98] ' +
-    'dark:bg-primary dark:hover:bg-primary-hover',
+    'bg-[#0F2744] text-white shadow-sm hover:bg-[#0A1C33] hover:shadow-md active:scale-[0.98] ' +
+    'dark:bg-[#1E3A8A] dark:hover:bg-[#1E40AF]',
   secondary:
-    'bg-secondary text-white shadow-button hover:bg-secondary-hover active:scale-[0.98] ' +
-    'dark:bg-secondary dark:hover:bg-secondary-hover',
+    'bg-[#D97706] text-white shadow-sm shadow-amber-500/20 hover:bg-[#B45309] active:scale-[0.98]',
   outline:
-    'border bg-transparent hover:bg-surface-muted dark:hover:bg-dark-muted active:scale-[0.98] ' +
-    'border-surface-border dark:border-dark-border ' +
-    'text-heading dark:text-dark-text',
+    'border border-[#E2E8F0] bg-white hover:bg-slate-50 active:scale-[0.98] ' +
+    'text-slate-900 shadow-2xs hover:border-slate-300',
   ghost:
-    'bg-transparent hover:bg-surface-muted dark:hover:bg-dark-muted active:scale-[0.98] ' +
-    'text-heading dark:text-dark-text',
+    'bg-transparent hover:bg-slate-100 active:scale-[0.98] ' +
+    'text-slate-800',
   danger:
-    'bg-danger text-white shadow-button hover:bg-red-600 active:scale-[0.98]',
+    'bg-rose-600 text-white shadow-sm hover:bg-rose-700 active:scale-[0.98]',
   link:
     'bg-transparent underline-offset-4 hover:underline p-0 h-auto ' +
-    'text-primary hover:text-primary-hover',
+    'text-[#0F2744] hover:text-[#D97706]',
 }
 
 const sizeClasses: Record<ButtonSize, string> = {

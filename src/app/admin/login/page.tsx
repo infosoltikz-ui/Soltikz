@@ -86,6 +86,12 @@ export default function AdminLoginPage() {
     if (error) {
       toast.error(error.message)
     } else {
+      const now = Date.now().toString()
+      document.cookie = `session_start=${now}; path=/; SameSite=Lax`
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('soltkiz_session_active', 'true')
+        sessionStorage.setItem('soltkiz_session_start', now)
+      }
       router.push('/admin?login=success')
     }
   }

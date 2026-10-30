@@ -82,7 +82,7 @@ export function PricingSection() {
           email: profile?.email || "email@example.com",
         },
         theme: {
-          color: "#22c55e"
+          color: "#0F2744"
         }
       };
 
@@ -102,7 +102,7 @@ export function PricingSection() {
   const symbol = currency === 'INR' ? '₹' : '$';
 
   return (
-    <section className="py-24 bg-slate-50">
+    <section className="py-24 bg-[#FBFBF9]">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="text-center mb-16">
@@ -118,7 +118,7 @@ export function PricingSection() {
             <button
               onClick={() => setIsYearly(false)}
               className={`px-6 py-2.5 rounded-full text-sm font-bold transition-colors ${
-                !isYearly ? 'bg-[#18202F] text-white' : 'text-slate-600 hover:text-slate-900'
+                !isYearly ? 'bg-primary text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               Monthly
@@ -126,17 +126,17 @@ export function PricingSection() {
             <button
               onClick={() => setIsYearly(true)}
               className={`px-6 py-2.5 rounded-full text-sm font-bold transition-colors ${
-                isYearly ? 'bg-[#18202F] text-white' : 'text-slate-600 hover:text-slate-900'
+                isYearly ? 'bg-primary text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Yearly <span className="font-normal text-slate-500">- two months free</span>
+              Yearly <span className="font-normal text-slate-300">- two months free</span>
             </button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {/* Free Tier */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-8 lg:p-10 flex flex-col">
+          <div className="bg-white border border-slate-200 rounded-2xl p-8 lg:p-10 flex flex-col hover:border-slate-300 transition-all">
             <h3 className="text-xl font-medium text-slate-900 mb-4">Free</h3>
             <div className="flex items-baseline gap-1 mb-4">
               <span className="text-6xl font-black text-slate-900 tracking-tighter">{symbol}0</span>
@@ -159,7 +159,7 @@ export function PricingSection() {
               ].map((feature, idx) => (
                 <li key={idx} className="flex items-start gap-3">
                   {feature.included ? (
-                    <Check className="w-5 h-5 text-[#12734C] shrink-0 mt-0.5" />
+                    <Check className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
                   ) : (
                     <Minus className="w-5 h-5 text-slate-300 shrink-0 mt-0.5" />
                   )}
@@ -170,8 +170,8 @@ export function PricingSection() {
           </div>
 
           {/* Pro Tier */}
-          <div className="bg-white border border-slate-900 rounded-2xl p-8 lg:p-10 flex flex-col relative shadow-xl">
-            <div className="absolute -top-4 left-8 bg-[#12734C] text-white text-xs font-bold px-4 py-1.5 rounded-full">
+          <div className="bg-white border-2 border-primary rounded-2xl p-8 lg:p-10 flex flex-col relative shadow-xl shadow-primary/5">
+            <div className="absolute -top-4 left-8 bg-secondary text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm">
               What most students pick
             </div>
             <h3 className="text-xl font-medium text-slate-900 mb-4">Pro</h3>
@@ -185,7 +185,7 @@ export function PricingSection() {
             <button 
               onClick={handleUpgrade}
               disabled={isProcessing}
-              className="w-full py-3.5 px-6 rounded-xl bg-[#12734C] text-white font-bold hover:bg-[#0f603f] transition-colors mb-10 flex items-center justify-center gap-2"
+              className="w-full py-3.5 px-6 rounded-xl bg-primary text-white font-bold hover:bg-primary-hover shadow-md shadow-primary/20 transition-all mb-10 flex items-center justify-center gap-2"
             >
               {isProcessing && <Loader2 className="w-4 h-4 animate-spin" />}
               {isProcessing ? 'Processing...' : 'Upgrade to Pro'}
@@ -202,7 +202,7 @@ export function PricingSection() {
                 'Replies within a day',
               ].map((feature, idx) => (
                 <li key={idx} className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-[#12734C] shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
                   <span className="text-slate-600">{feature}</span>
                 </li>
               ))}
@@ -230,7 +230,7 @@ export function PricingSection() {
           <div className="grid grid-cols-1 md:grid-cols-3 bg-white border border-slate-200 rounded-2xl overflow-hidden">
             {/* Feature 1 */}
             <div className="p-8 border-b border-slate-200 md:border-r">
-              <div className="w-8 h-8 rounded bg-[#12734C]/10 text-[#12734C] flex items-center justify-center mb-6">
+              <div className="w-8 h-8 rounded bg-secondary/10 text-secondary flex items-center justify-center mb-6">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
               </div>
               <h4 className="text-[17px] font-bold text-slate-900 mb-2">Unlimited tailored résumés</h4>
@@ -241,7 +241,7 @@ export function PricingSection() {
 
             {/* Feature 2 */}
             <div className="p-8 border-b border-slate-200 md:border-r">
-              <div className="w-8 h-8 rounded bg-[#12734C]/10 text-[#12734C] flex items-center justify-center mb-6">
+              <div className="w-8 h-8 rounded bg-secondary/10 text-secondary flex items-center justify-center mb-6">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
               </div>
               <h4 className="text-[17px] font-bold text-slate-900 mb-2">The full match report</h4>
@@ -252,7 +252,7 @@ export function PricingSection() {
 
             {/* Feature 3 */}
             <div className="p-8 border-b border-slate-200">
-              <div className="w-8 h-8 rounded bg-[#12734C]/10 text-[#12734C] flex items-center justify-center mb-6">
+              <div className="w-8 h-8 rounded bg-secondary/10 text-secondary flex items-center justify-center mb-6">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
               </div>
               <h4 className="text-[17px] font-bold text-slate-900 mb-2">Cover letters that match</h4>
@@ -263,7 +263,7 @@ export function PricingSection() {
 
             {/* Feature 4 */}
             <div className="p-8 border-b border-slate-200 md:border-b-0 md:border-r">
-              <div className="w-8 h-8 rounded bg-[#12734C]/10 text-[#12734C] flex items-center justify-center mb-6">
+              <div className="w-8 h-8 rounded bg-secondary/10 text-secondary flex items-center justify-center mb-6">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
               </div>
               <h4 className="text-[17px] font-bold text-slate-900 mb-2">PDF and Word export</h4>
@@ -274,7 +274,7 @@ export function PricingSection() {
 
             {/* Feature 5 */}
             <div className="p-8 border-b border-slate-200 md:border-b-0 md:border-r">
-              <div className="w-8 h-8 rounded bg-[#12734C]/10 text-[#12734C] flex items-center justify-center mb-6">
+              <div className="w-8 h-8 rounded bg-secondary/10 text-secondary flex items-center justify-center mb-6">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.9 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
               </div>
               <h4 className="text-[17px] font-bold text-slate-900 mb-2">Interview questions from the posting</h4>
@@ -285,7 +285,7 @@ export function PricingSection() {
 
             {/* Feature 6 */}
             <div className="p-8">
-              <div className="w-8 h-8 rounded bg-[#12734C]/10 text-[#12734C] flex items-center justify-center mb-6">
+              <div className="w-8 h-8 rounded bg-secondary/10 text-secondary flex items-center justify-center mb-6">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
               </div>
               <h4 className="text-[17px] font-bold text-slate-900 mb-2">Version history</h4>

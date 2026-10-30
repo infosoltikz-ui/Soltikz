@@ -3,26 +3,33 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-primary: #16A34A;
-  --color-primary-hover: #15803D;
-  --color-primary-light: #DCFCE7;
+  --color-primary: #0F2744;
+  --color-primary-hover: #0A1C33;
+  --color-primary-light: #EEF4FA;
 
-  --color-secondary: #F97316;
-  --color-secondary-hover: #EA580C;
-  --color-secondary-light: #FED7AA;
+  --color-secondary: #D97706;
+  --color-secondary-hover: #B45309;
+  --color-secondary-light: #FEF3C7;
 
-  --color-accent: #F97316;
-  --color-accent-hover: #EA580C;
-  --color-accent-light: #FED7AA;
+  --color-accent: #F59E0B;
+  --color-accent-hover: #D97706;
+  --color-accent-light: #FEF3C7;
 
-  --color-bg: #FAFAF8;
+  --color-navy: #0F2744;
+  --color-navy-light: #1E3A8A;
+  --color-amber-gold: #F59E0B;
+
+  --color-success: #059669;
+  --color-success-light: #D1FAE5;
+
+  --color-bg: #FBFBF9;
   --color-card: #FFFFFF;
-  --color-border: #E5E7EB;
-  --color-muted-bg: #F3F4F6;
+  --color-border: #E2E8F0;
+  --color-muted-bg: #F1F5F9;
 
   --color-heading: #0F172A;
-  --color-body: #475569;
-  --color-muted: #94A3B8;
+  --color-body: #334155;
+  --color-muted: #64748B;
 
   --animate-fade-in-up: fade-in-up 0.5s ease-out forwards;
   --animate-marquee: scroll-left 60s linear infinite;
@@ -42,45 +49,43 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #000000;
+  --background: #FBFBF9;
+  --foreground: #0F172A;
 
-  --primary: #16A34A;
-  /* Green */
-  --primary-foreground: #ffffff;
+  --primary: #0F2744;
+  --primary-foreground: #FFFFFF;
 
-  --accent: #F97316;
-  /* Orange */
-  --accent-foreground: #ffffff;
+  --accent: #D97706;
+  --accent-foreground: #FFFFFF;
 
-  --card: #ffffff;
-  --card-foreground: #000000;
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
 
-  --muted: #F3F4F6;
-  --muted-foreground: #475569;
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
 
-  --border: #E5E7EB;
-  --ring: #16A34A;
+  --border: #E2E8F0;
+  --ring: #D97706;
 }
 
 .dark {
-  --background: #020617;
-  --foreground: #94A3B8;
+  --background: #0B132B;
+  --foreground: #E2E8F0;
 
-  --primary: #16A34A;
+  --primary: #1C315E;
   --primary-foreground: #FFFFFF;
 
-  --accent: #EA580C;
-  --accent-foreground: #FFFFFF;
+  --accent: #F59E0B;
+  --accent-foreground: #0B132B;
 
   --card: #0F172A;
   --card-foreground: #F8FAFC;
 
-  --muted: #0F172A;
-  --muted-foreground: #475569;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
 
   --border: #1E293B;
-  --ring: #16A34A;
+  --ring: #F59E0B;
 }
 
 @layer base {

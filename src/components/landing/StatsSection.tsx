@@ -43,7 +43,7 @@ const stats = [
 
 export function StatsSection() {
   return (
-    <section className="bg-slate-50 border-b border-slate-200 py-4 overflow-hidden relative flex">
+    <section className="bg-[#FBFBF9] border-b border-slate-200 py-4 overflow-hidden relative flex">
       <div className="w-full flex overflow-x-hidden">
         <div className="animate-ticker whitespace-nowrap flex items-center">
           {/* Duplicate 4 times for a seamless loop on ultrawide screens */}

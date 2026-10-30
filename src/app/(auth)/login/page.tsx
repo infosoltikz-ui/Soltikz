@@ -212,7 +212,7 @@ export default function LoginPage() {
 
           {/* Footer */}
           <p className="text-center text-sm font-medium text-slate-500 mt-8">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/register" className="font-bold text-primary hover:text-primary-hover transition-colors">
               Create one free →
             </Link>

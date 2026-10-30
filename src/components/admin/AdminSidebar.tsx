@@ -26,6 +26,11 @@ export function AdminSidebar() {
     setIsLoggingOut(true)
     const supabase = createClient()
     await supabase.auth.signOut()
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('soltkiz_session_active')
+      sessionStorage.removeItem('soltkiz_session_start')
+      document.cookie = 'session_start=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax'
+    }
     toast.success('Successfully logged out of Admin Portal')
     router.push('/admin/login')
     setIsLoggingOut(false)
@@ -33,7 +38,7 @@ export function AdminSidebar() {
   }
   return (
     <>
-      <aside className="w-[280px] h-screen fixed left-0 top-0 bg-white border-r border-slate-100 flex flex-col z-50">
+      <aside className="w-[280px] h-screen fixed left-0 top-0 bg-white border-r border-[#E2E8F0] flex flex-col z-50">
       {/* Logo */}
       <div className="h-20 px-8 flex items-center">
         <img src="/LOGO.png" alt="Resume Builder Logo" className="h-10 w-auto object-contain" />
@@ -52,14 +57,14 @@ export function AdminSidebar() {
               className={cn(
                 "flex items-center gap-3 px-4 py-3.5 rounded-xl text-[14px] font-bold transition-all duration-200 group",
                 isActive 
-                  ? "bg-[#F0FDF4] text-primary" 
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-[#0F2744] text-white shadow-sm shadow-[#0F2744]/20" 
+                  : "text-slate-600 hover:bg-[#F8FAFC] hover:text-[#0F2744]"
               )}
             >
               <Icon 
                 className={cn(
                   "shrink-0 w-[18px] h-[18px] transition-transform duration-200", 
-                  isActive ? "text-primary" : "text-slate-400 group-hover:scale-110 group-hover:text-slate-600"
+                  isActive ? "text-[#F59E0B]" : "text-slate-400 group-hover:scale-110 group-hover:text-slate-600"
                 )} 
                 strokeWidth={2.5} 
               />
