@@ -1,10 +1,11 @@
 "use client";
-import { Check, Minus, Loader2 } from 'lucide-react'
+import { Check, Minus, Loader2, Sparkles, Zap, Shield, ArrowRight } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { PRO_MONTHLY, PRO_YEARLY, getPlan } from '@/utils/pricingPlans'
 import Script from 'next/script'
 import { toast } from 'react-hot-toast'
 import { createClient } from '@/utils/supabase/client'
+import Link from 'next/link'
 
 export function PricingSection() {
   const [isYearly, setIsYearly] = useState(true)
@@ -102,199 +103,170 @@ export function PricingSection() {
   const symbol = currency === 'INR' ? '₹' : '$';
 
   return (
-    <section className="py-24 bg-[#FBFBF9]">
+    <section className="py-24 bg-gradient-to-b from-white via-slate-50/50 to-white relative overflow-hidden" id="pricing">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+      
+      {/* Background Soft Glow */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[750px] h-[400px] bg-emerald-500/5 blur-[130px] pointer-events-none -z-10" />
+
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
-            Free until you're serious. Then<br className="hidden md:block" /> {symbol}{monthlyPrice}.
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 text-[11px] font-black uppercase tracking-wider mb-4 shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+            Simple, Transparent Pricing
+          </div>
+          
+          <h2 className="text-4xl md:text-5xl font-black text-slate-950 mb-5 tracking-tight">
+            Free until you're serious. Then{' '}
+            <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 bg-clip-text text-transparent">
+              {symbol}{monthlyPrice}
+            </span>.
           </h2>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
-            About the price of one coffee a fortnight, for the month you're actually job hunting. Cancel from settings in two clicks.
+          <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+            About the price of a single coffee a fortnight, for the month you're actively landing interviews. Cancel anytime from your settings in 2 clicks.
           </p>
 
-          {/* Toggle */}
-          <div className="inline-flex items-center p-1 bg-white border border-slate-200 rounded-full shadow-sm">
+          {/* Toggle Switch */}
+          <div className="inline-flex items-center p-1.5 bg-white border border-slate-200/90 rounded-full shadow-sm">
             <button
               onClick={() => setIsYearly(false)}
-              className={`px-6 py-2.5 rounded-full text-sm font-bold transition-colors ${
-                !isYearly ? 'bg-primary text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              className={`px-6 py-2 rounded-full text-xs sm:text-sm font-black transition-all cursor-pointer ${
+                !isYearly 
+                  ? 'bg-gradient-to-r from-[#0F2744] via-emerald-800 to-[#0F2744] text-white shadow-md' 
+                  : 'text-slate-600 hover:text-slate-950'
               }`}
             >
-              Monthly
+              Monthly Billing
             </button>
             <button
               onClick={() => setIsYearly(true)}
-              className={`px-6 py-2.5 rounded-full text-sm font-bold transition-colors ${
-                isYearly ? 'bg-primary text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              className={`px-6 py-2 rounded-full text-xs sm:text-sm font-black transition-all cursor-pointer flex items-center gap-2 ${
+                isYearly 
+                  ? 'bg-gradient-to-r from-[#0F2744] via-emerald-800 to-[#0F2744] text-white shadow-md' 
+                  : 'text-slate-600 hover:text-slate-950'
               }`}
             >
-              Yearly <span className="font-normal text-slate-300">- two months free</span>
+              <span>Annual Plan</span>
+              <span className="text-[10px] font-black text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full border border-emerald-300">
+                SAVE 35%
+              </span>
             </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {/* Free Tier */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-8 lg:p-10 flex flex-col hover:border-slate-300 transition-all">
-            <h3 className="text-xl font-medium text-slate-900 mb-4">Free</h3>
-            <div className="flex items-baseline gap-1 mb-4">
-              <span className="text-6xl font-black text-slate-900 tracking-tighter">{symbol}0</span>
+        {/* Pricing Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
+          
+          {/* FREE TIER CARD */}
+          <div className="bg-white border border-slate-200/90 rounded-3xl p-8 lg:p-10 flex flex-col hover:border-slate-300 hover:shadow-xl transition-all duration-300 relative group">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-black text-slate-900">Starter Free</h3>
+              <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+                No Card Required
+              </span>
             </div>
-            <p className="text-slate-500 mb-8 leading-relaxed">
-              Enough to build a real résumé and judge the scoring for yourself.
+            
+            <div className="flex items-baseline gap-1 mb-4">
+              <span className="text-5xl sm:text-6xl font-black text-slate-950 tracking-tight">{symbol}0</span>
+              <span className="text-slate-400 font-bold text-sm">/ forever</span>
+            </div>
+            
+            <p className="text-slate-600 text-sm mb-8 leading-relaxed">
+              Enough to build a real tailored resume, test AI tailoring, and verify ATS score parsing.
             </p>
-            <button className="w-full py-3.5 px-6 rounded-xl border border-slate-300 text-slate-900 font-bold hover:bg-slate-50 transition-colors mb-10">
-              Create a free account
-            </button>
+            
+            <Link href="/register">
+              <button className="w-full py-3.5 px-6 rounded-2xl border-2 border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-900 font-black text-sm transition-all duration-200 shadow-2xs cursor-pointer mb-8">
+                Get Started Free
+              </button>
+            </Link>
 
-            <ul className="space-y-4 mt-auto">
+            <ul className="space-y-3.5 mt-auto">
               {[
-                { text: '10 tailored résumés', included: true },
-                { text: 'All five templates', included: true },
-                { text: 'Match score, without the breakdown', included: true },
-                { text: 'PDF download', included: true },
-                { text: 'No cover letters', included: false },
-                { text: 'No Word export', included: false },
+                { text: '20 AI Tailored Resumes', included: true },
+                { text: 'All 10 Resume Templates', included: true },
+                { text: 'Instant Vector PDF Download', included: true },
+                { text: 'Full-Time & C2C Resume Modes', included: true },
+                { text: 'Advanced Word (.docx) Export', included: false },
+                { text: 'Matching Cover Letter Studio', included: false },
               ].map((feature, idx) => (
-                <li key={idx} className="flex items-start gap-3">
+                <li key={idx} className="flex items-start gap-3 text-xs sm:text-[13px]">
                   {feature.included ? (
-                    <Check className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
+                    <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" strokeWidth={2.5} />
                   ) : (
-                    <Minus className="w-5 h-5 text-slate-300 shrink-0 mt-0.5" />
+                    <Minus className="w-4 h-4 text-slate-300 shrink-0 mt-0.5" />
                   )}
-                  <span className={feature.included ? "text-slate-600" : "text-slate-400"}>{feature.text}</span>
+                  <span className={feature.included ? "text-slate-700 font-medium" : "text-slate-400"}>
+                    {feature.text}
+                  </span>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Pro Tier */}
-          <div className="bg-white border-2 border-primary rounded-2xl p-8 lg:p-10 flex flex-col relative shadow-xl shadow-primary/5">
-            <div className="absolute -top-4 left-8 bg-secondary text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm">
-              What most students pick
-            </div>
-            <h3 className="text-xl font-medium text-slate-900 mb-4">Pro</h3>
-            <div className="flex items-baseline gap-1 mb-4">
-              <span className="text-6xl font-black text-slate-900 tracking-tighter">{symbol}{isYearly ? yearlyPrice : monthlyPrice}</span>
-              <span className="text-slate-500 font-medium">/{isYearly ? 'year' : 'month'}</span>
-            </div>
-            <p className="text-slate-500 mb-8 leading-relaxed">
-              For an active search - when every application needs its own version and you want to know why a score is what it is.
-            </p>
-            <button 
-              onClick={handleUpgrade}
-              disabled={isProcessing}
-              className="w-full py-3.5 px-6 rounded-xl bg-primary text-white font-bold hover:bg-primary-hover shadow-md shadow-primary/20 transition-all mb-10 flex items-center justify-center gap-2"
-            >
-              {isProcessing && <Loader2 className="w-4 h-4 animate-spin" />}
-              {isProcessing ? 'Processing...' : 'Upgrade to Pro'}
-            </button>
-
-            <ul className="space-y-4 mt-auto">
-              {[
-                'Unlimited tailored résumés',
-                'The full match report, with one-click rewrites',
-                'Cover letters from the same posting',
-                'PDF and Word export',
-                'Interview questions from the job description',
-                'Version history',
-                'Replies within a day',
-              ].map((feature, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
-                  <span className="text-slate-600">{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-16 text-center">
-          <p className="text-slate-500 font-medium">
-            Studying? Verify a .edu address for 40% off - $5.40 a month.
-          </p>
-        </div>
-
-        {/* Subscription Features Grid */}
-        <div className="mt-32 max-w-6xl mx-auto">
-          <div className="mb-10 text-left">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
-              What you get with a subscription
-            </h2>
-            <p className="text-lg text-slate-500 max-w-2xl">
-              Built for the weeks when you're sending five or ten applications<br className="hidden md:block" /> and each one needs its own version.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 bg-white border border-slate-200 rounded-2xl overflow-hidden">
-            {/* Feature 1 */}
-            <div className="p-8 border-b border-slate-200 md:border-r">
-              <div className="w-8 h-8 rounded bg-secondary/10 text-secondary flex items-center justify-center mb-6">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          {/* PRO TIER CARD (Radiant Gradient Border & Highlights) */}
+          <div className="relative group flex flex-col">
+            {/* Animated Glow Halo */}
+            <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600 opacity-60 blur-xs group-hover:opacity-100 transition duration-300" />
+            
+            <div className="relative flex-1 bg-white border border-slate-200/50 rounded-3xl p-8 lg:p-10 flex flex-col shadow-2xl">
+              
+              {/* Most Popular Floating Pill */}
+              <div className="absolute -top-3.5 left-8 bg-gradient-to-r from-emerald-600 to-teal-700 text-white text-[11px] font-black tracking-wider uppercase px-4 py-1 rounded-full shadow-md flex items-center gap-1.5">
+                <Sparkles className="w-3 h-3 text-amber-300" />
+                <span>Most Popular Choice</span>
               </div>
-              <h4 className="text-[17px] font-bold text-slate-900 mb-2">Unlimited tailored résumés</h4>
-              <p className="text-[15px] text-slate-500 leading-relaxed">
-                A separate version for every posting, each stored with the job it was written for so you know which one you actually sent.
-              </p>
-            </div>
 
-            {/* Feature 2 */}
-            <div className="p-8 border-b border-slate-200 md:border-r">
-              <div className="w-8 h-8 rounded bg-secondary/10 text-secondary flex items-center justify-center mb-6">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-black text-slate-900">Pro Career Pass</h3>
+                <span className="text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
+                  Unlimited Access
+                </span>
               </div>
-              <h4 className="text-[17px] font-bold text-slate-900 mb-2">The full match report</h4>
-              <p className="text-[15px] text-slate-500 leading-relaxed">
-                Not just a number. Every missing keyword, every weak bullet, every fix - with a one-click rewrite you approve.
-              </p>
-            </div>
 
-            {/* Feature 3 */}
-            <div className="p-8 border-b border-slate-200">
-              <div className="w-8 h-8 rounded bg-secondary/10 text-secondary flex items-center justify-center mb-6">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              <div className="flex items-baseline gap-1 mb-4">
+                <span className="text-5xl sm:text-6xl font-black text-slate-950 tracking-tight">
+                  {symbol}{isYearly ? yearlyPrice : monthlyPrice}
+                </span>
+                <span className="text-slate-500 font-bold text-sm">/{isYearly ? 'year' : 'month'}</span>
               </div>
-              <h4 className="text-[17px] font-bold text-slate-900 mb-2">Cover letters that match</h4>
-              <p className="text-[15px] text-slate-500 leading-relaxed">
-                Written from the same posting and the same résumé, so the story you tell in the letter is the story on the page.
-              </p>
-            </div>
 
-            {/* Feature 4 */}
-            <div className="p-8 border-b border-slate-200 md:border-b-0 md:border-r">
-              <div className="w-8 h-8 rounded bg-secondary/10 text-secondary flex items-center justify-center mb-6">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-              </div>
-              <h4 className="text-[17px] font-bold text-slate-900 mb-2">PDF and Word export</h4>
-              <p className="text-[15px] text-slate-500 leading-relaxed">
-                Some application portals only accept .docx. Both formats keep the same layout and stay readable to a parser.
+              <p className="text-slate-600 text-sm mb-8 leading-relaxed">
+                For active job seekers sending multiple tailored applications who demand high interview conversion rates.
               </p>
-            </div>
 
-            {/* Feature 5 */}
-            <div className="p-8 border-b border-slate-200 md:border-b-0 md:border-r">
-              <div className="w-8 h-8 rounded bg-secondary/10 text-secondary flex items-center justify-center mb-6">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.9 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
-              </div>
-              <h4 className="text-[17px] font-bold text-slate-900 mb-2">Interview questions from the posting</h4>
-              <p className="text-[15px] text-slate-500 leading-relaxed">
-                The five things they're most likely to ask, drawn from the requirements you were just matched against.
-              </p>
-            </div>
+              <button 
+                onClick={handleUpgrade}
+                disabled={isProcessing}
+                className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#0F2744] via-emerald-800 to-[#0F2744] hover:bg-[position:right_center] bg-[length:200%_auto] text-white font-black text-sm shadow-xl shadow-emerald-950/20 transition-all duration-300 transform group-hover:scale-[1.01] active:scale-[0.99] mb-8 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                {isProcessing && <Loader2 className="w-4 h-4 animate-spin text-emerald-300" />}
+                <span>{isProcessing ? 'Connecting to Gateway...' : 'Upgrade to Pro Now'}</span>
+                <ArrowRight className="w-4 h-4 text-emerald-300" />
+              </button>
 
-            {/* Feature 6 */}
-            <div className="p-8">
-              <div className="w-8 h-8 rounded bg-secondary/10 text-secondary flex items-center justify-center mb-6">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-              </div>
-              <h4 className="text-[17px] font-bold text-slate-900 mb-2">Version history</h4>
-              <p className="text-[15px] text-slate-500 leading-relaxed">
-                Every rewrite is saved. If the older wording was better, go back to it in one click.
-              </p>
+              <ul className="space-y-3.5 mt-auto">
+                {[
+                  'Unlimited AI tailored resumes',
+                  'Word (.docx) & Vector PDF Export (All Templates)',
+                  'Matching Cover Letter Studio with STAR points',
+                  'Full ATS score diagnostics & 1-click rewrites',
+                  'Strict 2-line bullets & keyword bolding',
+                  'Target interview questions & prep sheet',
+                  'Priority parser verification & support',
+                ].map((feature, idx) => (
+                  <li key={idx} className="flex items-start gap-3 text-xs sm:text-[13px]">
+                    <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" strokeWidth={2.5} />
+                    <span className="text-slate-800 font-bold">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
             </div>
           </div>
+
         </div>
+
       </div>
     </section>
   )

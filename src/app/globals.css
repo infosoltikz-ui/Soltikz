@@ -35,6 +35,11 @@
   --animate-marquee: scroll-left 60s linear infinite;
   --animate-shimmer: shimmer 1.5s infinite;
   --animate-scan: scan 3s ease-in-out infinite;
+  --animate-laser: laser-sweep 3.5s ease-in-out infinite;
+  --animate-float-slow: float-slow 4s ease-in-out infinite;
+  --animate-float-reverse: float-reverse 4.5s ease-in-out infinite;
+  --animate-aurora: aurora-pulse 6s ease-in-out infinite;
+  --animate-shimmer-beam: shimmer-beam 2.5s infinite;
 }
 
 @keyframes shimmer {
@@ -219,4 +224,31 @@
   .no-print {
     display: none !important;
   }
+}
+
+@keyframes laser-sweep {
+  0% { top: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes float-reverse {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(8px); }
+}
+
+@keyframes aurora-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.65; transform: scale(1.08); }
+}
+
+@keyframes shimmer-beam {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
 }

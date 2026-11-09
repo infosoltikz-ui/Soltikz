@@ -1,337 +1,747 @@
 "use client";
+import React from 'react'
 import Link from 'next/link'
-import { CheckCircle2, Sparkles, Shield, ArrowRight, Star, Building2, Award, Zap } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
-import { useState, useEffect } from 'react'
-
-const DEMO_ROLES = [
-  {
-    title: 'Cybersecurity Analyst',
-    score: 94,
-    prevScore: 71,
-    company: 'Cloudflare / CrowdStrike',
-    keywords: ['incident response', 'Splunk ES', 'Sentinel', 'KQL', 'SOC Triage'],
-    slide: '/slide1.jpg'
-  },
-  {
-    title: 'Full Stack Engineer',
-    score: 97,
-    prevScore: 68,
-    company: 'AWS / Stripe / Vercel',
-    keywords: ['Next.js 16', 'TypeScript', 'Supabase', 'Tailwind', 'REST APIs'],
-    slide: '/slide2.jpg'
-  },
-  {
-    title: 'Product Manager',
-    score: 92,
-    prevScore: 73,
-    company: 'Microsoft / FinTech',
-    keywords: ['Agile Roadmap', 'Product Discovery', 'User Metrics', 'KPIs', 'Sprint Planning'],
-    slide: '/slide3.jpg'
-  }
-]
-
-const HIRING_COMPANIES = [
-  'Google', 'Amazon', 'Microsoft', 'Deloitte', 'Meta', 'Salesforce', 'Goldman Sachs'
-]
-
-function AnimatedScore({ targetScore, prevScore }: { targetScore: number; prevScore: number }) {
-  const [score, setScore] = useState(prevScore)
-
-  useEffect(() => {
-    setScore(prevScore)
-    let current = prevScore
-    const interval = setInterval(() => {
-      if (current < targetScore) {
-        current += Math.ceil((targetScore - current) / 6) || 1
-        if (current > targetScore) current = targetScore
-        setScore(current)
-      } else {
-        clearInterval(interval)
-      }
-    }, 45)
-    return () => clearInterval(interval)
-  }, [targetScore, prevScore])
-
-  return (
-    <div className="absolute top-6 sm:top-10 right-2 sm:-right-4 z-20 bg-white/95 backdrop-blur-xl px-4 py-3 rounded-2xl shadow-[0_10px_30px_rgba(15,39,68,0.15)] border border-slate-200/90 flex items-center gap-3.5 animate-in fade-in zoom-in duration-500">
-      <div className="relative w-[50px] h-[50px] flex items-center justify-center shrink-0">
-        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 40 40">
-          <circle cx="20" cy="20" r="16" fill="none" className="stroke-slate-100" strokeWidth="4" />
-          <circle 
-            cx="20" cy="20" r="16" fill="none" 
-            className="stroke-secondary transition-all duration-300 ease-out" 
-            strokeWidth="4" 
-            strokeLinecap="round"
-            strokeDasharray={`${(score / 100) * 100.5} 100.5`} 
-          />
-        </svg>
-        <div className="absolute text-sm font-black text-slate-900 tracking-tight">{score}</div>
-      </div>
-      <div className="flex flex-col">
-        <div className="flex items-center gap-1.5">
-          <span className="text-xs font-black text-slate-900">ATS Match Score</span>
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-        </div>
-        <div className="text-[11px] text-secondary font-black flex items-center gap-1 mt-0.5">
-          <span>▲ Up from {prevScore} (Verified)</span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function AnimatedKeywords({ keywords }: { keywords: string[] }) {
-  return (
-    <div className="absolute bottom-8 sm:bottom-12 left-2 sm:-left-4 z-20 bg-white/95 backdrop-blur-xl p-4 rounded-2xl shadow-[0_10px_30px_rgba(15,39,68,0.15)] border border-slate-200/90 flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-6 duration-500 w-[220px] sm:w-[250px]">
-      <div className="text-xs font-black text-slate-900 tracking-wide flex items-center justify-between border-b border-slate-100 pb-1.5">
-        <span>Matched in Posting</span>
-        <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 rounded">100% Match</span>
-      </div>
-      <div className="flex flex-wrap gap-1.5">
-        {keywords.map((kw, idx) => (
-          <div 
-            key={kw} 
-            className={idx % 2 === 0 
-              ? "bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded-md text-[11px] font-bold" 
-              : "bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md text-[11px] font-bold"}
-          >
-            {kw}
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
+import {
+  Sparkles,
+  Rocket,
+  LayoutGrid,
+  Check,
+  Zap,
+  Target,
+  FileText,
+  Briefcase,
+  Bot,
+  GraduationCap,
+  Award,
+  CheckCircle2,
+  Star,
+  User,
+  Layers,
+} from 'lucide-react'
 
 export function HeroSection() {
-  const [activeRoleIndex, setActiveRoleIndex] = useState(0)
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveRoleIndex((prev) => (prev + 1) % DEMO_ROLES.length)
-    }, 5000)
-    return () => clearInterval(timer)
-  }, [])
-
-  const currentRole = DEMO_ROLES[activeRoleIndex]
-
   return (
-    <section 
-      className="relative overflow-hidden pt-10 md:pt-16 pb-16 lg:pt-20 lg:pb-24 border-b border-slate-200/70"
-      style={{ 
-        background: 'linear-gradient(135deg, #FBFBF9 0%, #F5F7FA 50%, #EEF4FA 100%)',
+    <section
+      className="relative overflow-hidden"
+      style={{
+        background: 'linear-gradient(145deg, #f0f4ff 0%, #eef2ff 25%, #f5f0ff 60%, #fff0f7 100%)',
+        paddingTop: '48px',
+        paddingBottom: '48px',
       }}
     >
-      {/* Background Subtlest Grid Pattern */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-40 -z-10" 
+      {/* Soft blob glows behind content */}
+      <div
+        className="absolute pointer-events-none"
         style={{
-          backgroundImage: 'radial-gradient(rgba(15, 39, 68, 0.08) 1px, transparent 1px)',
-          backgroundSize: '24px 24px',
+          top: '5%',
+          right: '20%',
+          width: '600px',
+          height: '600px',
+          background: 'radial-gradient(circle, rgba(147,112,219,0.13) 0%, transparent 70%)',
+          borderRadius: '50%',
+        }}
+      />
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          bottom: '5%',
+          right: '5%',
+          width: '500px',
+          height: '500px',
+          background: 'radial-gradient(circle, rgba(100,149,237,0.10) 0%, transparent 70%)',
+          borderRadius: '50%',
         }}
       />
 
-      {/* Ambient Radial Gradient Flares */}
-      <div className="absolute top-0 right-0 -z-10 translate-x-1/3 -translate-y-1/4">
-        <div className="w-[850px] h-[850px] rounded-full bg-primary/10 blur-[140px]" />
-      </div>
-      <div className="absolute bottom-0 left-0 -z-10 -translate-x-1/4 translate-y-1/4">
-        <div className="w-[650px] h-[650px] rounded-full bg-amber-500/10 blur-[120px]" />
-      </div>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
 
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-14">
-          
-          {/* Left Column: Headline & Value Proposition */}
-          <div className="flex-1 text-center lg:text-left max-w-2xl lg:max-w-none mx-auto">
-            
-            {/* Top Micro-Badges */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 mb-6">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 border border-slate-200/90 text-primary text-xs font-black shadow-xs backdrop-blur-md">
-                <Sparkles className="w-3.5 h-3.5 text-secondary" />
+        {/* ═══════════════════════════════════════════════════════════ */}
+        {/* MAIN GRID: LEFT CONTENT + RIGHT RESUME VISUAL              */}
+        {/* ═══════════════════════════════════════════════════════════ */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-6 items-center mb-10">
+
+          {/* ───────────────────────────────────────────────────────── */}
+          {/* LEFT COLUMN                                               */}
+          {/* ───────────────────────────────────────────────────────── */}
+          <div className="text-left">
+
+            {/* Purple Pill Badge */}
+            <div
+              className="inline-flex items-center gap-2 mb-5"
+              style={{
+                background: 'rgba(139,92,246,0.10)',
+                border: '1px solid rgba(139,92,246,0.25)',
+                borderRadius: '999px',
+                padding: '6px 14px',
+              }}
+            >
+              <Sparkles style={{ width: 14, height: 14, color: '#7c3aed' }} />
+              <span style={{ fontSize: 12, fontWeight: 700, color: '#6d28d9', letterSpacing: '0.01em' }}>
                 Next-Gen AI Resume &amp; ATS Platform
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50/90 border border-amber-200/80 text-amber-900 text-xs font-black shadow-xs">
-                <Shield className="w-3 h-3 text-secondary" />
-                99.8% ATS Verification Rate
               </span>
             </div>
 
-            {/* Main Headline with High-End SaaS Typography */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-black text-slate-900 tracking-tight leading-[1.06] mb-6">
-              One résumé won't get you{' '}
-              <span className="text-secondary relative inline-block">
-                ten jobs.
-                <svg className="absolute w-full h-3.5 -bottom-1.5 left-0 text-secondary/35" viewBox="0 0 100 10" preserveAspectRatio="none">
-                  <path d="M0 5 Q 50 10 100 5" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
+            {/* Main Headline */}
+            <h1
+              style={{
+                fontSize: 'clamp(32px, 4.5vw, 52px)',
+                fontWeight: 900,
+                color: '#0f172a',
+                lineHeight: 1.13,
+                letterSpacing: '-0.03em',
+                marginBottom: '14px',
+              }}
+            >
+              Build an ATS-Friendly<br />
+              Resume.{' '}
+              <span
+                style={{
+                  color: '#f97316',
+                  position: 'relative',
+                  display: 'inline-block',
+                }}
+              >
+                Get Hired Faster.
+                {/* Orange underline squiggle */}
+                <svg
+                  viewBox="0 0 280 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{
+                    position: 'absolute',
+                    bottom: -6,
+                    left: 0,
+                    width: '100%',
+                    height: 8,
+                  }}
+                >
+                  <path
+                    d="M2 6 C40 2, 80 9, 120 5 C160 1, 200 8, 240 4 C260 2, 270 5, 278 4"
+                    stroke="#f97316"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
                 </svg>
               </span>
             </h1>
 
-            {/* Subheadline */}
-            <p className="text-base sm:text-lg text-slate-600 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
-              Paste the job posting. Get a custom résumé rewritten specifically for that employer in 30 seconds — with verified ATS keyword scores, matching Cover Letters, and interview STAR talking points.
+            {/* Sub-headline */}
+            <p
+              style={{
+                fontSize: 15,
+                color: '#475569',
+                lineHeight: 1.65,
+                maxWidth: 480,
+                marginBottom: 24,
+                fontWeight: 400,
+              }}
+            >
+              Create a professional, ATS-optimized resume in minutes, match it
+              with the right jobs, and increase your interview chances with
+              AI-powered insights.
             </p>
 
-            {/* Checklist */}
-            <div className="grid sm:grid-cols-2 gap-3 mb-8 max-w-lg mx-auto lg:mx-0">
+            {/* 4 Feature Icon Blocks */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: 16,
+                marginBottom: 28,
+                maxWidth: 480,
+              }}
+            >
               {[
-                'Tailored to exact Job Requirements',
-                'Guaranteed 90%+ ATS Score',
-                'Full-Time & C2C / Contract Modes',
-                'Built-in Matching Cover Letter Studio',
-                'Download in Clean Vector PDF & DOCX',
-                'Workday & Taleo Parser Verification',
-              ].map((feature, i) => (
-                <div key={i} className="flex items-center gap-2 text-slate-700 font-semibold text-[13.5px]">
-                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" strokeWidth={2.4} />
-                  <span>{feature}</span>
+                { icon: <Zap style={{ width: 18, height: 18 }} />, label: 'Create Resume', sub: 'in Minutes' },
+                { icon: <Target style={{ width: 18, height: 18 }} />, label: 'ATS Score', sub: '& Feedback' },
+                { icon: <FileText style={{ width: 18, height: 18 }} />, label: 'Cover Letter', sub: 'Generator' },
+                { icon: <Briefcase style={{ width: 18, height: 18 }} />, label: 'Job Match', sub: '& Suggestions' },
+              ].map((item, i) => (
+                <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
+                  <div
+                    style={{
+                      width: 42,
+                      height: 42,
+                      borderRadius: 12,
+                      background: 'rgba(109,40,217,0.07)',
+                      border: '1px solid rgba(109,40,217,0.15)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#6d28d9',
+                    }}
+                  >
+                    {item.icon}
+                  </div>
+                  <div style={{ lineHeight: 1.2 }}>
+                    <div style={{ fontSize: 11, fontWeight: 800, color: '#1e293b' }}>{item.label}</div>
+                    <div style={{ fontSize: 10, fontWeight: 500, color: '#64748b' }}>{item.sub}</div>
+                  </div>
                 </div>
               ))}
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-5">
-              <Link href="/register" className="w-full sm:w-auto">
-                <Button 
-                  size="xl" 
-                  className="w-full sm:w-auto font-black px-8 py-4 rounded-xl shadow-xl shadow-primary/25 bg-primary hover:bg-primary-hover text-white transition-all transform hover:-translate-y-0.5 active:translate-y-0"
-                  rightIcon={<ArrowRight className="w-5 h-5 ml-1" />}
+            <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
+              <Link href="/register">
+                <button
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    padding: '13px 26px',
+                    borderRadius: 12,
+                    background: '#0f172a',
+                    color: '#fff',
+                    fontWeight: 700,
+                    fontSize: 14,
+                    border: 'none',
+                    cursor: 'pointer',
+                    letterSpacing: '0.01em',
+                    boxShadow: '0 4px 16px rgba(15,23,42,0.22)',
+                    transition: 'background 0.18s, transform 0.14s',
+                    whiteSpace: 'nowrap',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#1e293b' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0f172a' }}
                 >
-                  Create My Free Resume Now
-                </Button>
+                  <Rocket style={{ width: 16, height: 16, color: '#a78bfa' }} />
+                  Create My Free Resume Now →
+                </button>
               </Link>
-              <Link href="/templates" className="w-full sm:w-auto">
-                <Button size="xl" variant="outline" className="w-full sm:w-auto font-bold px-7 py-4 rounded-xl bg-white hover:bg-slate-50 border-slate-300 text-slate-800 shadow-2xs">
+
+              <Link href="/#templates">
+                <button
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    padding: '13px 22px',
+                    borderRadius: 12,
+                    background: '#fff',
+                    color: '#1e293b',
+                    fontWeight: 700,
+                    fontSize: 14,
+                    border: '1.5px solid #e2e8f0',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                    transition: 'border-color 0.18s, background 0.18s',
+                    whiteSpace: 'nowrap',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#94a3b8' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#e2e8f0' }}
+                >
+                  <LayoutGrid style={{ width: 16, height: 16, color: '#475569' }} />
                   Browse Templates
-                </Button>
+                </button>
               </Link>
             </div>
 
-            {/* Trust Signals */}
-            <div className="flex items-center justify-center lg:justify-start gap-3 text-[12px] font-bold text-slate-500 mb-8 flex-wrap">
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> No credit card needed
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-primary" /> 20 Free tailored resumes
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-secondary" /> Instant PDF download
-              </span>
-            </div>
-
-            {/* Social Proof Star Ratings & Top Employers Strip */}
-            <div className="pt-4 border-t border-slate-200/80">
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-4">
-                <div className="flex -space-x-2.5">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <img
-                      key={i}
-                      src={`https://i.pravatar.cc/100?img=${i + 15}`}
-                      alt={`User ${i}`}
-                      className="w-9 h-9 rounded-full border-2 border-white bg-slate-100 object-cover shadow-2xs"
-                    />
-                  ))}
-                </div>
-                <div className="text-left">
-                  <div className="flex items-center gap-1">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <Star key={s} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                    ))}
-                    <span className="text-[12px] font-black text-slate-900 ml-1">4.9 / 5.0</span>
-                  </div>
-                  <div className="text-xs text-slate-500 font-medium mt-0.5">
-                    Trusted by <span className="font-bold text-slate-900">50,000+</span> job seekers worldwide
-                  </div>
-                </div>
-              </div>
-
-              {/* Recruiter Placement Companies */}
-              <div className="flex items-center justify-center lg:justify-start gap-2 flex-wrap">
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Candidates placed at:</span>
-                {HIRING_COMPANIES.map((company) => (
-                  <span 
-                    key={company} 
-                    className="text-[11px] font-bold text-slate-600 bg-white/70 border border-slate-200/80 px-2 py-0.5 rounded-md shadow-2xs"
-                  >
-                    {company}
-                  </span>
-                ))}
-              </div>
+            {/* Trust Checks */}
+            <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
+              {['No credit card needed', '20+ Free templates', 'Download PDF & DOCX'].map((text) => (
+                <span key={text} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600, color: '#475569' }}>
+                  <Check style={{ width: 14, height: 14, color: '#22c55e' }} strokeWidth={3} />
+                  {text}
+                </span>
+              ))}
             </div>
 
           </div>
 
-          {/* Right Column: High-End Studio Mockup with 3D Ring */}
-          <div className="flex-1 w-full max-w-2xl lg:max-w-none relative flex flex-col items-center justify-center">
-            
-            {/* Interactive Role Switcher Pills */}
-            <div className="flex items-center gap-1.5 p-1.5 bg-white/95 backdrop-blur-xl rounded-2xl border border-slate-200/90 shadow-lg shadow-slate-900/5 mb-5 z-20">
-              <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider px-2.5 hidden sm:inline-block">Select Role:</span>
-              {DEMO_ROLES.map((role, idx) => (
-                <button
-                  key={role.title}
-                  onClick={() => setActiveRoleIndex(idx)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
-                    activeRoleIndex === idx
-                      ? 'bg-primary text-white shadow-md shadow-primary/20 scale-102'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                  }`}
+          {/* ───────────────────────────────────────────────────────── */}
+          {/* RIGHT COLUMN: 3D Layered Resume Visual                   */}
+          {/* ───────────────────────────────────────────────────────── */}
+          <div
+            style={{
+              position: 'relative',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingTop: 40,
+              paddingBottom: 40,
+              paddingLeft: 60,
+              paddingRight: 60,
+            }}
+          >
+            {/* ── Ghost layers for 3-D depth ── */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 40,
+                background: 'rgba(255,255,255,0.65)',
+                borderRadius: 24,
+                border: '1px solid rgba(203,213,225,0.5)',
+                boxShadow: '0 8px 30px rgba(15,39,68,0.08)',
+                transform: 'rotate(3deg) scale(0.97) translate(6px,6px)',
+                zIndex: 0,
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                inset: 40,
+                background: 'rgba(255,255,255,0.35)',
+                borderRadius: 24,
+                border: '1px solid rgba(167,139,250,0.3)',
+                boxShadow: '0 4px 20px rgba(15,39,68,0.05)',
+                transform: 'rotate(-2deg) scale(0.94) translate(-4px,10px)',
+                zIndex: 0,
+              }}
+            />
+
+            {/* ── Main Resume Card ── */}
+            <div
+              style={{
+                position: 'relative',
+                zIndex: 2,
+                background: '#fff',
+                borderRadius: 20,
+                border: '1px solid #e2e8f0',
+                boxShadow: '0 20px 60px -10px rgba(15,39,68,0.14)',
+                padding: '20px 22px',
+                width: '100%',
+                maxWidth: 400,
+              }}
+            >
+              {/* Resume Header */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: 14,
+                  paddingBottom: 14,
+                  marginBottom: 14,
+                  borderBottom: '1px solid #f1f5f9',
+                }}
+              >
+                <div
+                  style={{
+                    width: 54,
+                    height: 54,
+                    borderRadius: 10,
+                    overflow: 'hidden',
+                    border: '1px solid #e2e8f0',
+                    flexShrink: 0,
+                    background: '#f1f5f9',
+                  }}
                 >
-                  {role.title}
-                </button>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face"
+                    alt="Jonathan Davis"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </div>
+                <div>
+                  <div style={{ fontSize: 15, fontWeight: 900, color: '#0f172a', letterSpacing: '-0.02em' }}>
+                    JONATHAN DAVIS
+                  </div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: '#2563eb', marginTop: 2 }}>
+                    Full Stack Developer
+                  </div>
+                  <div style={{ fontSize: 9, color: '#94a3b8', marginTop: 3, lineHeight: 1.4 }}>
+                    jonathan@email.com &nbsp;•&nbsp; +91 98765 43210 &nbsp;•&nbsp; Bengaluru, India
+                  </div>
+                </div>
+              </div>
+
+              {/* Resume Body: 2 columns */}
+              <div style={{ display: 'grid', gridTemplateColumns: '5fr 7fr', gap: '0 14px' }}>
+
+                {/* Left col */}
+                <div style={{ borderRight: '1px solid #f1f5f9', paddingRight: 10, display: 'flex', flexDirection: 'column', gap: 12 }}>
+
+                  {/* Skills */}
+                  <div>
+                    <SectionHeader icon={<Zap style={{ width: 10, height: 10, color: '#2563eb' }} />} label="Skills" />
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3, marginTop: 5 }}>
+                      {['React', 'Node.js', 'PostgreSQL', 'Tailwind', 'TypeScript'].map((s) => (
+                        <span
+                          key={s}
+                          style={{
+                            fontSize: 8,
+                            fontWeight: 700,
+                            padding: '2px 6px',
+                            borderRadius: 4,
+                            background: '#eff6ff',
+                            color: '#1d4ed8',
+                            border: '1px solid #bfdbfe',
+                          }}
+                        >
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Education */}
+                  <div>
+                    <SectionHeader icon={<GraduationCap style={{ width: 10, height: 10, color: '#2563eb' }} />} label="Education" />
+                    <div style={{ marginTop: 4 }}>
+                      <div style={{ fontSize: 9, fontWeight: 800, color: '#1e293b' }}>B.Tech – CSE</div>
+                      <div style={{ fontSize: 8, color: '#64748b', lineHeight: 1.4 }}>ABR Institute of Science &amp; Technology</div>
+                      <div style={{ fontSize: 8, color: '#94a3b8', fontWeight: 500 }}>2020 – 2024</div>
+                    </div>
+                  </div>
+
+                  {/* Certifications */}
+                  <div>
+                    <SectionHeader icon={<Award style={{ width: 10, height: 10, color: '#2563eb' }} />} label="Certifications" />
+                    <ul style={{ marginTop: 4, paddingLeft: 12, listStyle: 'disc', fontSize: 8, color: '#475569', lineHeight: 1.6 }}>
+                      <li>React Professional</li>
+                      <li>AWS Fundamentals</li>
+                    </ul>
+                  </div>
+
+                </div>
+
+                {/* Right col */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, paddingLeft: 2 }}>
+
+                  {/* Summary */}
+                  <div>
+                    <SectionHeader icon={<User style={{ width: 10, height: 10, color: '#2563eb' }} />} label="Professional Summary" />
+                    <p style={{ fontSize: 8, color: '#475569', lineHeight: 1.5, marginTop: 4 }}>
+                      Full Stack Developer with expertise in React, Node.js, and cloud systems delivering scalable solutions.
+                    </p>
+                  </div>
+
+                  {/* Work Experience */}
+                  <div>
+                    <SectionHeader icon={<Briefcase style={{ width: 10, height: 10, color: '#2563eb' }} />} label="Work Experience" />
+                    <ul style={{ marginTop: 4, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      {['Built Next.js APIs reducing query latency by 42%.', 'Automated Docker CI/CD pipelines ensuring 99.9% uptime.'].map((txt, i) => (
+                        <li key={i} style={{ display: 'flex', gap: 5, fontSize: 8, color: '#475569', lineHeight: 1.4 }}>
+                          <span style={{ width: 4, height: 4, background: '#2563eb', borderRadius: '50%', marginTop: 3, flexShrink: 0 }} />
+                          <span>{txt}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Projects */}
+                  <div>
+                    <SectionHeader icon={<Layers style={{ width: 10, height: 10, color: '#2563eb' }} />} label="Projects" />
+                    <ul style={{ marginTop: 4, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      {['Enterprise SaaS Platform with real-time analytics.', 'AI Resume Engine achieving 94%+ ATS match rates.'].map((txt, i) => (
+                        <li key={i} style={{ display: 'flex', gap: 5, fontSize: 8, color: '#475569', lineHeight: 1.4 }}>
+                          <span style={{ width: 4, height: 4, background: '#2563eb', borderRadius: '50%', marginTop: 3, flexShrink: 0 }} />
+                          <span>{txt}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            {/* ══════════════════════════════════════════════════════ */}
+            {/* FLOATING BADGES                                        */}
+            {/* ══════════════════════════════════════════════════════ */}
+
+            {/* 1. Left floating pill: AI-Powered Resume Builder */}
+            <div
+              style={{
+                position: 'absolute',
+                left: -4,
+                top: '44%',
+                transform: 'translateY(-50%)',
+                zIndex: 10,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 0,
+              }}
+            >
+              <div
+                style={{
+                  background: '#fff',
+                  border: '1px solid #e9d5ff',
+                  borderRadius: 14,
+                  padding: '8px 12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 7,
+                  boxShadow: '0 6px 24px rgba(109,40,217,0.12)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                <div
+                  style={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: 8,
+                    background: '#f3e8ff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Bot style={{ width: 15, height: 15, color: '#7c3aed' }} />
+                </div>
+                <div>
+                  <div style={{ fontSize: 10, fontWeight: 800, color: '#1e293b', lineHeight: 1.2 }}>AI-Powered</div>
+                  <div style={{ fontSize: 10, fontWeight: 800, color: '#1e293b', lineHeight: 1.2 }}>Resume Builder</div>
+                </div>
+              </div>
+              {/* Curved purple arrow pointing right toward resume */}
+              <svg width="40" height="36" viewBox="0 0 40 36" fill="none" style={{ marginLeft: -2 }}>
+                <path
+                  d="M2 18 C10 18, 22 10, 36 6"
+                  stroke="#7c3aed"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+                <polygon points="36,2 40,8 33,8" fill="#7c3aed" />
+              </svg>
+            </div>
+
+            {/* 2. Top-Right floating card: ATS Match Score */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 2,
+                right: -2,
+                zIndex: 10,
+                background: '#fff',
+                borderRadius: 16,
+                border: '1px solid #e2e8f0',
+                boxShadow: '0 8px 28px rgba(15,39,68,0.12)',
+                padding: '12px 14px',
+                textAlign: 'center',
+                width: 130,
+              }}
+            >
+              {/* Golden sparkles */}
+              <div style={{ position: 'absolute', top: -8, right: 8, fontSize: 16, lineHeight: 1 }}>✦</div>
+              <div style={{ position: 'absolute', top: 2, right: -4, fontSize: 10, color: '#fbbf24', lineHeight: 1 }}>✦</div>
+
+              <div style={{ fontSize: 10, fontWeight: 800, color: '#0f172a', marginBottom: 8 }}>ATS Match Score</div>
+
+              {/* Circle ring */}
+              <div style={{ position: 'relative', width: 60, height: 60, margin: '0 auto 8px' }}>
+                <svg width="60" height="60" viewBox="0 0 36 36" style={{ transform: 'rotate(-90deg)' }}>
+                  <path
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    fill="none"
+                    stroke="#f1f5f9"
+                    strokeWidth="3.5"
+                  />
+                  <path
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    fill="none"
+                    stroke="#22c55e"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                    strokeDasharray="94, 100"
+                  />
+                </svg>
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 13,
+                    fontWeight: 900,
+                    color: '#0f172a',
+                  }}
+                >
+                  94%
+                </div>
+              </div>
+
+              {/* ATS Ready pill */}
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  background: '#f0fdf4',
+                  border: '1px solid #bbf7d0',
+                  borderRadius: 999,
+                  padding: '3px 10px',
+                  fontSize: 9,
+                  fontWeight: 800,
+                  color: '#15803d',
+                }}
+              >
+                <Check style={{ width: 10, height: 10, color: '#16a34a' }} strokeWidth={3} />
+                ATS Ready
+              </div>
+            </div>
+
+            {/* 3. Middle-Right floating card: Checklist */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '48%',
+                right: -6,
+                transform: 'translateY(-50%)',
+                zIndex: 10,
+                background: '#fff',
+                borderRadius: 14,
+                border: '1px solid #e2e8f0',
+                boxShadow: '0 6px 22px rgba(15,39,68,0.10)',
+                padding: '12px 14px',
+                width: 148,
+              }}
+            >
+              {[
+                'Keyword Match',
+                'Format & Structure',
+                'ATS Compatibility',
+                'Improvement Tips',
+              ].map((item) => (
+                <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 7, fontSize: 10, fontWeight: 700, color: '#1e293b' }}>
+                  <CheckCircle2
+                    style={{ width: 14, height: 14, color: '#22c55e', flexShrink: 0 }}
+                  />
+                  {item}
+                </div>
               ))}
             </div>
 
-            {/* Elevated Studio Bezel Frame */}
-            <div className="relative w-full aspect-square max-w-[500px] rounded-3xl bg-white/80 backdrop-blur-xl border border-slate-200/90 shadow-[0_20px_50px_rgba(15,39,68,0.12)] p-4 flex items-center justify-center group">
-              
-              {/* Target Company Tag (Top Left of Frame) */}
-              <div className="absolute top-4 left-4 z-20 bg-slate-900/90 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md flex items-center gap-1.5 backdrop-blur-md">
-                <Building2 className="w-3 h-3 text-amber-400" />
-                <span>Target: {currentRole.company}</span>
+            {/* 4. Bottom-Right floating pill: Professional Templates */}
+            <div
+              style={{
+                position: 'absolute',
+                bottom: 10,
+                right: 0,
+                zIndex: 10,
+                background: '#fff',
+                borderRadius: 14,
+                border: '1px solid #e2e8f0',
+                boxShadow: '0 6px 22px rgba(15,39,68,0.10)',
+                padding: '10px 14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Sparkles style={{ width: 14, height: 14, color: '#7c3aed' }} />
+                <div>
+                  <div style={{ fontSize: 10, fontWeight: 800, color: '#0f172a', lineHeight: 1.2 }}>Professional Templates</div>
+                  <div style={{ fontSize: 9, color: '#94a3b8', lineHeight: 1.2 }}>(20+ Designs)</div>
+                </div>
               </div>
-
-              {/* Template Slide Image */}
-              <div className="relative w-full h-full flex items-center justify-center overflow-hidden rounded-2xl">
-                {DEMO_ROLES.map((role, index) => (
-                  <img
-                    key={role.slide}
-                    src={role.slide}
-                    alt={`AI Resume Template for ${role.title}`}
-                    className={`absolute inset-0 w-full h-full object-contain drop-shadow-2xl transition-all duration-700 ${
-                      index === activeRoleIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
-                    }`}
-                  />
-                ))}
-              </div>
-              
-              {/* Floating Dynamic Badges */}
-              <AnimatedScore targetScore={currentRole.score} prevScore={currentRole.prevScore} />
-              <AnimatedKeywords keywords={currentRole.keywords} />
-              
-              {/* Progress Bar Indicator */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-20 bg-slate-900/70 px-3.5 py-1.5 rounded-full backdrop-blur-md shadow-md">
-                {DEMO_ROLES.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveRoleIndex(index)}
-                    className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                      index === activeRoleIndex ? 'bg-amber-400 w-5' : 'bg-white/40 w-1.5 hover:bg-white/70'
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
-                ))}
+              {/* Fanned mini cards */}
+              <div style={{ display: 'flex', alignItems: 'flex-end', position: 'relative', width: 32, height: 36 }}>
+                <div style={{ position: 'absolute', left: 0, bottom: 0, width: 20, height: 28, background: '#1e3a5f', borderRadius: 3, border: '1px solid #fff', transform: 'rotate(-8deg)', boxShadow: '0 2px 6px rgba(0,0,0,0.12)' }} />
+                <div style={{ position: 'absolute', left: 6, bottom: 0, width: 20, height: 28, background: '#e2e8f0', borderRadius: 3, border: '1px solid #fff', transform: 'rotate(2deg)', boxShadow: '0 2px 6px rgba(0,0,0,0.08)' }} />
+                <div style={{ position: 'absolute', left: 12, bottom: 0, width: 20, height: 28, background: '#064e3b', borderRadius: 3, border: '1px solid #fff', transform: 'rotate(10deg)', boxShadow: '0 2px 6px rgba(0,0,0,0.12)' }} />
               </div>
             </div>
 
           </div>
         </div>
+
+        {/* ═══════════════════════════════════════════════════════════ */}
+        {/* BOTTOM SOCIAL PROOF STRIP                                   */}
+        {/* ═══════════════════════════════════════════════════════════ */}
+        <div
+          style={{
+            background: 'rgba(255,255,255,0.90)',
+            borderRadius: 16,
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 2px 12px rgba(15,39,68,0.06)',
+            padding: '14px 24px',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 16,
+          }}
+        >
+          {/* Stars + rating */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ display: 'flex', gap: 2 }}>
+              {[1,2,3,4,5].map((s) => (
+                <Star key={s} style={{ width: 16, height: 16, fill: '#f59e0b', color: '#f59e0b' }} />
+              ))}
+            </div>
+            <div>
+              <span style={{ fontSize: 14, fontWeight: 900, color: '#0f172a' }}>4.9 / 5.0</span>
+              <span style={{ fontSize: 12, color: '#64748b', marginLeft: 8 }}>
+                Trusted by <strong style={{ color: '#0f172a' }}>50,000+</strong> job seekers worldwide
+              </span>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div style={{ width: 1, height: 28, background: '#e2e8f0', flexShrink: 0 }} className="hidden lg:block" />
+
+          {/* Logos */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', whiteSpace: 'nowrap' }}>
+              Candidates placed at:
+            </span>
+
+            {/* Google */}
+            <span style={{ fontSize: 15, fontWeight: 900, letterSpacing: '-0.02em', lineHeight: 1 }}>
+              <span style={{ color: '#4285F4' }}>G</span>
+              <span style={{ color: '#EA4335' }}>o</span>
+              <span style={{ color: '#FBBC05' }}>o</span>
+              <span style={{ color: '#4285F4' }}>g</span>
+              <span style={{ color: '#34A853' }}>l</span>
+              <span style={{ color: '#EA4335' }}>e</span>
+            </span>
+
+            {/* Amazon */}
+            <span style={{ fontSize: 14, fontWeight: 900, color: '#0f172a', letterSpacing: '-0.03em' }}>
+              amazon
+            </span>
+
+            {/* Microsoft */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5, width: 14, height: 14, flexShrink: 0 }}>
+                <span style={{ background: '#F25022', borderRadius: 1 }} />
+                <span style={{ background: '#7FBA00', borderRadius: 1 }} />
+                <span style={{ background: '#00A4EF', borderRadius: 1 }} />
+                <span style={{ background: '#FFB900', borderRadius: 1 }} />
+              </div>
+              <span style={{ fontSize: 13, fontWeight: 800, color: '#0f172a' }}>Microsoft</span>
+            </div>
+
+            {/* Deloitte */}
+            <span style={{ fontSize: 13, fontWeight: 900, color: '#0f172a' }}>
+              Deloitte<span style={{ color: '#86BC25' }}>.</span>
+            </span>
+
+            {/* Meta */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ fontSize: 16, color: '#0668E1', fontWeight: 900, lineHeight: 1 }}>∞</span>
+              <span style={{ fontSize: 13, fontWeight: 900, color: '#0f172a' }}>Meta</span>
+            </div>
+
+            {/* Salesforce */}
+            <span style={{ fontSize: 12, fontWeight: 700, color: '#00A1E0', display: 'flex', alignItems: 'center', gap: 3 }}>
+              <span style={{ fontSize: 14 }}>☁</span> salesforce
+            </span>
+
+            {/* Goldman Sachs */}
+            <span style={{ fontSize: 11, fontWeight: 900, color: '#1a3a6e', letterSpacing: '0.03em', textTransform: 'uppercase' }}>
+              Goldman Sachs
+            </span>
+          </div>
+        </div>
+
       </div>
     </section>
+  )
+}
+
+/* ─── small helper ─── */
+function SectionHeader({ icon, label }: { icon: React.ReactNode; label: string }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 900, color: '#0f172a' }}>
+      {icon}
+      <span>{label}</span>
+    </div>
   )
 }
