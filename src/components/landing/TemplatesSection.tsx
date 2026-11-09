@@ -1,4 +1,5 @@
 "use client";
+import React, { Suspense } from 'react'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { RESUME_TEMPLATES } from '@/components/create-resume/templates/registry'
@@ -6,7 +7,7 @@ import { sampleResumeData, sampleProfileData, c2cSampleData } from '@/components
 
 export function TemplatesSection() {
   return (
-    <section className="py-20 bg-[#FBFBF9] border-t border-slate-100 overflow-hidden">
+    <section className="py-20 bg-[#FBFBF9] border-t border-slate-100 overflow-hidden" id="templates">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-4">
           <div className="text-center md:text-left">
@@ -15,7 +16,7 @@ export function TemplatesSection() {
             </h2>
             <p className="text-slate-500 font-medium">Choose from a variety of professionally designed templates</p>
           </div>
-          <Link href="/templates" className="inline-flex items-center gap-1.5 text-accent font-bold hover:text-accent-hover transition-colors">
+          <Link href="/dashboard/create" className="inline-flex items-center gap-1.5 text-accent font-bold hover:text-accent-hover transition-colors">
             View All Templates <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -26,23 +27,29 @@ export function TemplatesSection() {
             const TemplateComponent = template.component
             return (
               <div key={template.id} className="shrink-0 w-[240px] sm:w-[280px] snap-center">
-                <Link href="/templates">
-                  <div className="relative rounded-2xl bg-white shadow-sm border border-slate-200 overflow-hidden aspect-[1/1.4] hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group flex justify-center">
+                <Link href={`/dashboard/create?template=${template.id}`}>
+                  <div className="relative rounded-2xl bg-white shadow-sm border border-slate-200 overflow-hidden aspect-[1/1.4] hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 cursor-pointer group flex justify-center">
+                    
+                    {/* Resume Canvas with Smooth Hover Zoom-Out Effect */}
                     <div
-                      className="absolute top-0 origin-top pointer-events-none"
-                      style={{ width: '850px', transform: 'scale(0.32)' }}
+                      className="absolute top-2 origin-top pointer-events-none transition-transform duration-500 ease-out scale-[0.32] group-hover:scale-[0.245] sm:scale-[0.33] sm:group-hover:scale-[0.255]"
+                      style={{ width: '850px' }}
                     >
-                      <TemplateComponent
-                        resumeData={template.id === 'c2c' ? c2cSampleData : sampleResumeData}
-                        profileData={sampleProfileData}
-                      />
+                      <Suspense fallback={<div className="w-[850px] h-[1100px] bg-slate-50 animate-pulse" />}>
+                        <TemplateComponent
+                          resumeData={template.id === 'c2c' ? c2cSampleData : sampleResumeData}
+                          profileData={sampleProfileData}
+                        />
+                      </Suspense>
                     </div>
 
-                    <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/5 transition-colors flex items-center justify-center">
-                      <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-slate-900 text-sm font-bold px-4 py-2 rounded-full shadow-sm backdrop-blur-sm transform translate-y-2 group-hover:translate-y-0 duration-200">
-                        Use Template
+                    {/* Bottom Floating "Use Template" Button (Doesn't block resume content) */}
+                    <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/5 transition-colors flex items-end justify-center pb-3 pointer-events-none">
+                      <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 bg-primary text-white text-[12px] font-black px-4 py-2 rounded-full shadow-lg transform translate-y-2 group-hover:translate-y-0 flex items-center gap-1.5 border border-white/20">
+                        Use Template <ArrowRight className="w-3.5 h-3.5" />
                       </div>
                     </div>
+
                   </div>
                 </Link>
               </div>

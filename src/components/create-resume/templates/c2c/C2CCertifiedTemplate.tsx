@@ -35,7 +35,11 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
     const parts = text.split(/(\*\*.*?\*\*)/g);
     return parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
-        return <strong key={i} className="text-black">{part.slice(2, -2)}</strong>;
+        return (
+          <strong key={i} className="font-bold text-black" style={{ fontWeight: 700 }}>
+            {part.slice(2, -2).trim()}
+          </strong>
+        );
       }
       return <span key={i}>{part}</span>;
     });

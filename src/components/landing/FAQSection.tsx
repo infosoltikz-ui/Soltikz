@@ -47,7 +47,7 @@ export function FAQSection() {
   }
 
   return (
-    <section className="bg-white border-b border-slate-200 py-16 sm:py-20">
+    <section className="bg-[#FBFBF9] border-t border-slate-200 py-20 sm:py-24">
       <div className="max-w-[960px] mx-auto px-4 sm:px-6">
 
         {/* Section Header */}

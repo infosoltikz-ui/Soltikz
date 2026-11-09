@@ -2,6 +2,8 @@ import { Metadata } from 'next'
 import { HeroSection } from '@/components/landing/HeroSection'
 import { StatsSection } from '@/components/landing/StatsSection'
 import { ATSCompatibilitySection } from '@/components/landing/ATSCompatibilitySection'
+import { HowItWorksSection } from '@/components/landing/HowItWorksSection'
+import { TemplatesSection } from '@/components/landing/TemplatesSection'
 import { FeaturesSection } from '@/components/landing/FeaturesSection'
 import { BeforeAfterSection } from '@/components/landing/BeforeAfterSection'
 import { ResumeTypesSection } from '@/components/landing/ResumeTypesSection'
@@ -29,6 +31,8 @@ export default function Home() {
       <HeroSection />
       <StatsSection />
       <ATSCompatibilitySection />
+      <HowItWorksSection />
+      <TemplatesSection />
       <FeaturesSection />
       <BeforeAfterSection />
       <ResumeTypesSection />

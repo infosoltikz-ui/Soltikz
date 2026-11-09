@@ -8,7 +8,11 @@ const parseBoldText = (text: string) => {
   const parts = cleanText.split(/(\*\*.*?\*\*)/g);
   return parts.map((part, index) => {
     if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={index}>{part.slice(2, -2)}</strong>;
+      return (
+        <strong key={index} className="font-bold text-slate-950 font-bold" style={{ fontWeight: 700 }}>
+          {part.slice(2, -2).trim()}
+        </strong>
+      );
     }
     return part;
   });

@@ -22,7 +22,7 @@ const GeneratedResumeFormat = z.object({
     duration: z.string(),
     environment: z.array(z.string()).nullable().describe('C2C ONLY: comma-separated list of every tool/tech used on that engagement. Set null for Full-Time resumes.'),
     bullets: z.array(z.string()).describe(
-      'MANDATORY 2 TO 3 FULL PRINTED LINES PER BULLET (STRICT MINIMUM 40-55 WORDS, 250-350 CHARACTERS). Short 1-line or 1.5-line bullets are STRICTLY BANNED. C2C: EXACTLY 10 bullets per company. Full-Time: Exp1=8 bullets, Exp2=8 bullets, Exp3+=5-6 bullets. Every bullet MUST follow: [POWER ACTION VERB]+[Detailed Context & Tools]+[Architecture/Methodology/Process]+[Quantified Metric Result (%)]+[Enterprise Business Outcome]. Bold key technologies and metrics using **keyword** syntax.'
+      'MANDATORY EXACTLY 2 FULL PRINTED LINES PER BULLET (STRICT RANGE 34-44 WORDS, 210-260 CHARACTERS). Bullets must span line 1 completely and end near the end of line 2. Short 1-line or 1.5-line bullets (under 32 words) and long 3+ line bullets are STRICTLY BANNED. C2C: EXACTLY 10 bullets per company. Full-Time: Exp1=8 bullets, Exp2=8 bullets, Exp3+=5-6 bullets. Every bullet MUST follow: [POWER ACTION VERB]+[Detailed Context & Tools]+[Architecture/Methodology/Process]+[Quantified Metric Result (%)]+[Enterprise Business Outcome]. MANDATORY: You MUST prominently bold 2 to 4 key technologies, tools, and metrics in EVERY single bullet using **keyword** syntax (e.g. **React.js**, **AWS Lambda**, **42%**).'
     ),
   })),
   education: z.array(z.object({
@@ -79,7 +79,7 @@ const CLAUDE_RESUME_TOOL_SCHEMA: Anthropic.Tool = {
             bullets: {
               type: 'array',
               items: { type: 'string' },
-              description: 'High-impact 40-55 word bullets with bold keywords and quantified metrics (%).',
+              description: 'High-impact bullets spanning exactly 2 full printed lines (34-44 words) with bold keywords (2-4 per bullet) and quantified metrics (%).',
             },
           },
           required: ['id', 'role', 'company', 'duration', 'bullets'],
@@ -285,7 +285,7 @@ export async function POST(req: Request) {
       - EXPERIENCE 1 (Most Recent Role): EXACTLY 10 BULLET POINTS (STRICT MINIMUM 10 BULLETS).
       - EXPERIENCE 2 (If exists in profile): EXACTLY 8 to 10 BULLET POINTS.
       - EXPERIENCE 3+ (If exists in profile): EXACTLY 6 to 8 BULLET POINTS.
-      - EVERY SINGLE BULLET: MUST BE MINIMUM 40-55 WORDS (2 TO 3 FULL PRINTED LINES). SHORT 1-LINE OR 1.5-LINE BULLETS ARE STRICTLY BANNED.
+      - EVERY SINGLE BULLET: MUST BE EXACTLY 2 FULL PRINTED LINES (34-44 WORDS, 210-260 CHARACTERS). Prominently bold 2-4 keywords per bullet using **keyword** syntax. Short 1-line or long 3+ line bullets are strictly prohibited.
       ` : `
       FOR FULL-TIME RESUMES (CORPORATE DIRECT HIRE):
       - PROFESSIONAL SUMMARY: EXACTLY 5 sentences that join into one flowing prose paragraph. No bullets, no bold, no "I".
@@ -293,10 +293,10 @@ export async function POST(req: Request) {
       - EXPERIENCE 1 (Most Recent Role): EXACTLY 8 BULLET POINTS (MANDATORY 8 BULLETS).
       - EXPERIENCE 2 (If exists in profile): EXACTLY 8 BULLET POINTS (MANDATORY 8 BULLETS).
       - EXPERIENCE 3 & EXPERIENCE 4+ (If exists in profile): EXACTLY 5 to 6 BULLET POINTS.
-      - EVERY SINGLE BULLET: MUST BE MINIMUM 40-55 WORDS (2 TO 3 FULL PRINTED LINES) WITH BOLD KEYWORDS & METRICS (%). NO WEAK VERBS.
-      - CRITICAL MANDATE: MASTER PROFILE BULLETS ARE OFTEN BRIEF (10-20 WORDS). YOU MUST AGGRESSIVELY EXPAND AND ELEVATE EVERY BULLET INTO A 40-55 WORD EXECUTIVE-GRADE ACCOMPLISHMENT SPANNING 2 TO 3 FULL LINES.
+      - EVERY SINGLE BULLET: MUST BE EXACTLY 2 FULL PRINTED LINES (34-44 WORDS, 210-260 CHARACTERS) WITH BOLD KEYWORDS (2-4 PER BULLET) & METRICS (%). NO WEAK VERBS.
+      - CRITICAL MANDATE: MASTER PROFILE BULLETS ARE OFTEN BRIEF (10-20 WORDS). YOU MUST AGGRESSIVELY EXPAND AND ELEVATE EVERY BULLET INTO AN EXECUTIVE-GRADE ACCOMPLISHMENT SPANNING EXACTLY 2 FULL PRINTED LINES (34-44 WORDS).
       `,
-      `CRITICAL: DO NOT SHORTEN OR COMPRESS BULLET POINTS. GENERATE DETAILED 2 TO 3 FULL PRINTED LINE BULLETS (40-55 WORDS EACH) WITH METRICS AND BOLD KEYWORDS. CALL THE generate_resume TOOL WITH YOUR FINAL STRUCTURED DATA.`
+      `CRITICAL CLIENT MANDATE: EVERY BULLET POINT MUST BE EXACTLY 2 FULL PRINTED LINES (34-44 WORDS) WITH 2 TO 4 TARGET KEYWORDS & METRICS PROMINENTLY BOLDED USING **keyword** SYNTAX. CALL THE generate_resume TOOL WITH YOUR FINAL STRUCTURED DATA.`
     ].join('\n');
 
     // ─── ANTHROPIC CLAUDE SONNET TOOL CALL ─────────────────────────────────

@@ -31,8 +31,8 @@ export function Header() {
         className={cn(
           'fixed top-0 inset-x-0 z-[1020] transition-all duration-300',
           scrolled
-            ? 'shadow-sm border-b bg-white/95 backdrop-blur-md border-slate-100'
-            : 'bg-white border-transparent',
+            ? 'shadow-sm border-b bg-white/95 backdrop-blur-md border-slate-200/80'
+            : 'bg-[#FBFBF9]/80 backdrop-blur-md border-b border-slate-200/40',
         )}
         style={{ height: '80px' }}
       >
