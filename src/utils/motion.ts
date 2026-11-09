@@ -11,7 +11,7 @@ export const ease = {
   springBounce: { type: 'spring' as const, damping: 18, stiffness: 280 },
 }
 
-/** Fade up — primary entrance animation */
+/** Fade up - primary entrance animation */
 export const fadeUp: Variants = {
   hidden:  { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: ease.out } },
@@ -78,7 +78,7 @@ export const modalPanel: Variants = {
   exit:    { opacity: 0, scale: 0.95, y: 8, transition: { duration: 0.18 } },
 }
 
-/** Drawer — slide from right */
+/** Drawer - slide from right */
 export const drawerRight: Variants = {
   hidden:  { opacity: 0, x: '100%' },
   visible: { opacity: 1, x: 0, transition: { ...ease.spring, damping: 28 } },

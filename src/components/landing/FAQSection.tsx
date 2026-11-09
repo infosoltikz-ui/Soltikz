@@ -1,10 +1,15 @@
 'use client'
 
 import React, { useState } from 'react'
-import { ChevronDown, HelpCircle, Sparkles } from 'lucide-react'
+import { ChevronDown, HelpCircle, MessageSquare, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
-const faqs = [
+interface FAQItem {
+  q: string
+  a: string
+}
+
+const faqs: FAQItem[] = [
   {
     q: 'How does the ATS Score Checker and optimization work?',
     a: 'Our AI engine compares your resume against your target job description across 3 distinct scoring layers: Hard Skill Keywords, Title & Seniority Alignment, and Experience Impact Metrics. It identifies exact keyword gaps and rewrites your bullet points using recruiter-tested action verbs and measurable results to ensure high ATS match rates.'
@@ -40,70 +45,98 @@ const faqs = [
 ]
 
 export function FAQSection() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0)
+  // Allow independent open states so reading on one side doesn't collapse the other
+  const [openIndices, setOpenIndices] = useState<number[]>([0])
 
   const toggleFaq = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index)
+    setOpenIndices((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    )
+  }
+
+  // Split FAQs evenly into 2 columns for compact side-by-side display
+  const midPoint = Math.ceil(faqs.length / 2)
+  const leftCol = faqs.slice(0, midPoint)
+  const rightCol = faqs.slice(midPoint)
+
+  const renderFaqCard = (faq: FAQItem, index: number) => {
+    const isOpen = openIndices.includes(index)
+
+    return (
+      <div
+        key={faq.q}
+        className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+          isOpen
+            ? 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm'
+            : 'border-slate-200/90 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => toggleFaq(index)}
+          className="w-full text-left px-5 py-4 flex items-center justify-between gap-4 font-bold text-slate-900 dark:text-slate-100 text-[14px] sm:text-[15px] cursor-pointer"
+        >
+          <span className="leading-snug">{faq.q}</span>
+          <div
+            className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
+              isOpen
+                ? 'bg-[#0F2744]/10 dark:bg-amber-400/20 text-[#0F2744] dark:text-amber-300 rotate-180'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+            }`}
+          >
+            <ChevronDown className="w-4 h-4" />
+          </div>
+        </button>
+
+        {isOpen && (
+          <div className="px-5 pb-5 pt-1 text-[13.5px] sm:text-[14px] text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800/80">
+            <p className="pt-2">{faq.a}</p>
+          </div>
+        )}
+      </div>
+    )
   }
 
   return (
-    <section className="bg-[#FBFBF9] border-t border-slate-200 py-20 sm:py-24">
-      <div className="max-w-[960px] mx-auto px-4 sm:px-6">
+    <section className="bg-[#FBFBF9] dark:bg-[#0B132B] border-t border-slate-200/80 dark:border-slate-800 py-10 sm:py-12 transition-colors duration-300" id="faq">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
 
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-3">
-            <HelpCircle className="w-3.5 h-3.5 text-primary" />
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-9">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-bold uppercase tracking-wider mb-3">
+            <HelpCircle className="w-3.5 h-3.5 text-[#0F2744] dark:text-amber-400" />
             Frequently Asked Questions
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 dark:text-white tracking-tight">
             Everything You Need to Know
           </h2>
-          <p className="text-[14px] sm:text-[15px] text-slate-500 font-medium mt-2 leading-relaxed">
+          <p className="text-[14px] sm:text-[15px] text-slate-500 dark:text-slate-400 font-medium mt-2 leading-relaxed">
             Clear answers about ATS scoring, resume formatting, free allowances, and privacy.
           </p>
         </div>
 
-        {/* Accordion List */}
-        <div className="space-y-3">
-          {faqs.map((faq, index) => {
-            const isOpen = openIndex === index
-            return (
-              <div
-                key={faq.q}
-                className={`border rounded-xl transition-all duration-200 ${
-                  isOpen 
-                    ? 'border-slate-300 bg-slate-50/50 shadow-2xs' 
-                    : 'border-slate-200 bg-white hover:border-slate-300'
-                }`}
-              >
-                <button
-                  onClick={() => toggleFaq(index)}
-                  className="w-full text-left px-5 py-4 flex items-center justify-between gap-4 font-bold text-slate-900 text-[14px] sm:text-[15px]"
-                >
-                  <span className="leading-snug">{faq.q}</span>
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                    isOpen ? 'bg-primary/10 text-primary rotate-180' : 'bg-slate-100 text-slate-500'
-                  }`}>
-                    <ChevronDown className="w-4 h-4" />
-                  </div>
-                </button>
+        {/* 2-COLUMN ACCORDION GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          {/* Column 1 */}
+          <div className="space-y-4">
+            {leftCol.map((faq, i) => renderFaqCard(faq, i))}
+          </div>
 
-                {isOpen && (
-                  <div className="px-5 pb-5 pt-1 text-[13.5px] sm:text-[14px] text-slate-600 leading-relaxed border-t border-slate-100/80">
-                    <p className="pt-2">{faq.a}</p>
-                  </div>
-                )}
-              </div>
-            )
-          })}
+          {/* Column 2 */}
+          <div className="space-y-4">
+            {rightCol.map((faq, i) => renderFaqCard(faq, i + midPoint))}
+          </div>
         </div>
 
         {/* Bottom Support Link */}
-        <div className="mt-10 text-center text-[13px] text-slate-500 font-medium">
-          Have another question?{' '}
-          <Link href="/contact" className="text-primary hover:text-primary-dark font-bold underline transition-colors">
-            Contact our 24/7 support team
+        <div className="mt-7 sm:mt-8 text-center text-[13px] text-slate-500 dark:text-slate-400 font-medium flex items-center justify-center gap-1.5 flex-wrap">
+          <span>Still have questions?</span>
+          <Link
+            href="/contact"
+            className="text-[#0F2744] dark:text-amber-400 hover:underline font-bold inline-flex items-center gap-1 transition-colors"
+          >
+            <span>Contact our 24/7 support team</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 

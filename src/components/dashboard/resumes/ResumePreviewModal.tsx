@@ -185,7 +185,7 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
 
   const isC2C = String(resume.resume_type || '').toLowerCase().includes('c2c')
 
-  // Use the exact template_id stored in DB — never fall back to a generic default
+  // Use the exact template_id stored in DB - never fall back to a generic default
   const resolvedTemplateId = 
     (resume as any).template_id ||
     (resume as any).templateId ||
@@ -194,7 +194,7 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
   const template = getTemplateById(resolvedTemplateId)
   const TemplateComponent = template.component
 
-  // Use exact saved styling — read all 3 values from the DB record
+  // Use exact saved styling - read all 3 values from the DB record
   const savedThemeColor = resume.theme_color || undefined
   const savedFontFamily = resume.font_family || undefined
   const savedSectionStyles = resume.section_styles || undefined

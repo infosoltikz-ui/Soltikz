@@ -1,33 +1,33 @@
-import { Metadata } from 'next'
-import { HeroSection } from '@/components/landing/HeroSection'
-import { AboutWhatWeDo } from '@/components/about/AboutWhatWeDo'
-import { AboutMission } from '@/components/about/AboutMission'
-import { AboutWhyChoose } from '@/components/about/AboutWhyChoose'
-import { AboutStats } from '@/components/about/AboutStats'
-import { AboutCTA } from '@/components/about/AboutCTA'
+import { Metadata } from 'next';
+import { AboutHero } from '@/components/about/AboutHero';
+import { AboutMission } from '@/components/about/AboutMission';
+import { AboutWhatWeDo } from '@/components/about/AboutWhatWeDo';
+import { AboutWhyChoose } from '@/components/about/AboutWhyChoose';
+import { AboutStats } from '@/components/about/AboutStats';
+import { AboutCTA } from '@/components/about/AboutCTA';
 
 export const metadata: Metadata = {
-  title: 'About Us - Empowering Careers with AI Technology | Resume Builder One',
-  description: 'Learn about Resume Builder One by Soltkiz IT Services. Our mission is to help job seekers worldwide create professional, ATS-beating resumes effortlessly.',
+  title: 'About Us - Authentic Career Engineering & ATS Intelligence | Soltkiz',
+  description: 'Learn how Soltkiz IT Services empowers candidates to bypass algorithmic screening with authentic, recruiter-calibrated resumes and real-time ATS scoring.',
   alternates: {
     canonical: 'https://www.resumebuilderone.com/about',
   },
   openGraph: {
-    title: 'About Us - Empowering Careers with AI Technology | Resume Builder One',
-    description: 'Learn about Resume Builder One by Soltkiz IT Services. Our mission is to help job seekers worldwide create professional, ATS-beating resumes effortlessly.',
+    title: 'About Us - Authentic Career Engineering & ATS Intelligence | Soltkiz',
+    description: 'Learn how Soltkiz IT Services empowers candidates to bypass algorithmic screening with authentic, recruiter-calibrated resumes and real-time ATS scoring.',
     url: 'https://www.resumebuilderone.com/about',
   },
-}
+};
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-white">
-      <HeroSection />
-      <AboutWhatWeDo />
+    <div className="min-h-screen bg-white">
+      <AboutHero />
       <AboutMission />
+      <AboutWhatWeDo />
       <AboutWhyChoose />
       <AboutStats />
       <AboutCTA />
-    </main>
-  )
+    </div>
+  );
 }

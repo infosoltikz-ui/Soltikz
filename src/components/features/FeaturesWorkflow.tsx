@@ -1,94 +1,98 @@
 "use client";
-import { UserPlus, Sparkles, ShieldCheck, TrendingUp, FileText, Download } from 'lucide-react'
-import { cn } from '@/utils/cn'
+import React from 'react';
+import { UploadCloud, ScanLine, FileCheck2, Download, ArrowRight, CheckCircle2 } from 'lucide-react';
 
-const steps = [
+const WORKFLOW_STEPS = [
   {
-    icon: <UserPlus className="w-6 h-6 text-primary" />,
-    title: 'Add Information',
-    description: 'Add your details, experience, skills and education',
-    badge: '01',
-    badgeColor: 'bg-primary'
+    step: '01',
+    title: 'Input Career History Once',
+    desc: 'Sync directly from LinkedIn or import your existing PDF resume. Soltkiz organizes your career into your Master Profile.',
+    icon: UploadCloud,
+    badge: '1-Click Import',
   },
   {
-    icon: <Sparkles className="w-6 h-6 text-primary" />,
-    title: 'AI Builds Resume',
-    description: 'Our AI creates a professional resume for you',
-    badge: '02',
-    badgeColor: 'bg-accent'
+    step: '02',
+    title: 'Paste Target Job Posting',
+    desc: 'Paste the job requirements from Workday, LinkedIn, or Greenhouse. Our engine extracts hard skills, seniority, and tooling.',
+    icon: ScanLine,
+    badge: 'Instant AST Scan',
   },
   {
-    icon: <ShieldCheck className="w-6 h-6 text-primary" />,
-    title: 'ATS Analysis',
-    description: 'We analyze your resume for ATS compatibility',
-    badge: '03',
-    badgeColor: 'bg-primary'
+    step: '03',
+    title: 'AI Tailors 2-Line Bullets',
+    desc: 'Our engine rewrites and ranks your achievements into the strict 2-line cadence with bolded employer keywords and measured metrics.',
+    icon: FileCheck2,
+    badge: '96+ ATS Score',
   },
   {
-    icon: <TrendingUp className="w-6 h-6 text-primary" />,
-    title: 'Optimize Content',
-    description: 'Get AI suggestions and optimize your content',
-    badge: '04',
-    badgeColor: 'bg-accent'
+    step: '04',
+    title: 'Export in Word or PDF',
+    desc: 'Download your recruiter-ready resume in native .docx or vector PDF. Plus, grab your auto-generated matching cover letter.',
+    icon: Download,
+    badge: 'Ready in 60s',
   },
-  {
-    icon: <FileText className="w-6 h-6 text-primary" />,
-    title: 'Choose Template',
-    description: 'Select a professional template you like',
-    badge: '05',
-    badgeColor: 'bg-primary'
-  },
-  {
-    icon: <Download className="w-6 h-6 text-primary" />,
-    title: 'Download & Apply',
-    description: 'Download your resume and apply with confidence',
-    badge: '06',
-    badgeColor: 'bg-accent'
-  }
-]
+];
 
 export function FeaturesWorkflow() {
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-4 max-w-7xl">
+    <section className="py-12 sm:py-16 bg-white border-b border-slate-200/80 relative">
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
         
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-sm font-black text-primary tracking-widest uppercase mb-4">
-            How Our Features Work Together
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-3">
+            Simple 4-Step Pipeline
+          </div>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 mb-3 tracking-tight">
+            From raw career notes to shortlisted resume in 60 seconds.
           </h2>
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto font-normal">
+            No repetitive typing. No guessing which keywords to use. A transparent, automated workflow.
+          </p>
         </div>
 
-        {/* Workflow Stepper */}
-        <div className="relative">
-          {/* Connecting Dashed Line (Desktop only) */}
-          <div className="hidden lg:block absolute top-8 left-[8%] right-[8%] h-px border-t-2 border-dashed border-slate-200" />
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-4 relative z-10">
-            {steps.map((step, idx) => (
-              <div key={idx} className="flex flex-col items-center text-center group">
-                <div className="relative mb-6">
-                  {/* Icon Circle */}
-                  <div className="w-16 h-16 rounded-full bg-white border-2 border-slate-100 shadow-sm flex items-center justify-center group-hover:scale-110 group-hover:border-primary/30 transition-all duration-300">
-                    {step.icon}
+        {/* 4 Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {WORKFLOW_STEPS.map((s) => {
+            const Icon = s.icon;
+            return (
+              <div
+                key={s.step}
+                className="bg-slate-50/70 border border-slate-200/90 rounded-3xl p-6 shadow-2xs hover:shadow-lg hover:border-slate-300 transition-all flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-black text-slate-400 group-hover:text-emerald-600 transition-colors">
+                      {s.step}
+                    </span>
+                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                      {s.badge}
+                    </span>
                   </div>
-                  {/* Number Badge */}
-                  <div className={cn(
-                    "absolute -top-2 -right-2 w-6 h-6 rounded-full text-white text-[10px] font-bold flex items-center justify-center border-2 border-white shadow-sm",
-                    step.badgeColor
-                  )}>
-                    {step.badge}
+
+                  <div className="w-11 h-11 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-center mb-4 shadow-2xs group-hover:scale-105 transition-transform">
+                    <Icon className="w-5 h-5 text-slate-900 group-hover:text-emerald-700 transition-colors" />
                   </div>
+
+                  <h3 className="text-base font-black text-slate-950 mb-2">
+                    {s.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                    {s.desc}
+                  </p>
                 </div>
-                
-                <h3 className="text-[13px] font-bold text-slate-900 mb-2 px-2">{step.title}</h3>
-                <p className="text-[12px] text-slate-500 leading-relaxed px-2">{step.description}</p>
+
+                <div className="mt-5 pt-3 border-t border-slate-200/70 flex items-center gap-1.5 text-xs font-bold text-slate-800">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>Automated & Instant</span>
+                </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
 
       </div>
     </section>
-  )
+  );
 }

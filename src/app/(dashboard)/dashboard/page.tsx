@@ -102,7 +102,7 @@ export default async function DashboardPage() {
       bullets: [
         'Fill in all work experience, skills, and education',
         'Aim for 100% Profile Health for the best resume quality',
-        'Update your profile anytime — resumes reflect new data',
+        'Update your profile anytime - resumes reflect new data',
       ],
     },
     {
@@ -135,7 +135,7 @@ export default async function DashboardPage() {
       <main className="space-y-6">
         <ModuleHowItWorks
           moduleTitle="Dashboard"
-          tagline="Complete your profile, create tailored resumes, and track your job search — all in one place."
+          tagline="Complete your profile, create tailored resumes, and track your job search - all in one place."
           steps={steps}
         />
 

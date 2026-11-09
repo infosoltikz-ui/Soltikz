@@ -1,81 +1,99 @@
 "use client";
-import { Search, BarChart3, GraduationCap } from 'lucide-react'
-import { cn } from '@/utils/cn'
+import React from 'react';
+import { Search, BrainCircuit, Rocket, ArrowRight, CheckCircle2 } from 'lucide-react';
+import Link from 'next/link';
 
-const pillars = [
+const PILLARS = [
   {
-    icon: <Search className="w-6 h-6 text-primary" />,
-    iconBg: 'bg-primary/10',
-    title: 'Recruitment Solutions',
-    titleColor: 'text-primary',
-    borderColor: 'border-primary',
-    description: 'We help companies find the right people and help professionals find the right roles. Our recruitment process is built on precision, transparency, and a deep understanding of both technical and human potential.'
+    step: '01',
+    icon: Search,
+    title: 'Recruitment & Job Market Alignment',
+    tag: 'US IT & Global Market',
+    description: 'We analyze current live job requisitions across Fortune 500 enterprises, tech startups, and government contractors to map the exact technical requirements, title hierarchies, and certification values.',
+    points: ['Live Workday & Taleo algorithm indexing', 'Target keyword gap extraction', 'Recruiter seniority verification'],
   },
   {
-    icon: <BarChart3 className="w-6 h-6 text-accent" />,
-    iconBg: 'bg-accent/10',
-    title: 'Profile Marketing',
-    titleColor: 'text-accent',
-    borderColor: 'border-accent',
-    description: "In today's competitive job market, visibility matters as much as skill. We help individuals build and market their professional profiles that get noticed by the right employers."
+    step: '02',
+    icon: BrainCircuit,
+    title: 'Profile Optimization & Transformation',
+    tag: 'Strict 2-Line Standard',
+    description: 'Our AI engine restructures your raw career history into concise 2-line bullets with bolded employer keywords, action verbs, and measured business impact percentages that recruiters scan first.',
+    points: ['Instant Word (.docx) & Vector PDF outputs', 'Full-Time (1-page) vs C2C (2-page) switcher', '100% human-readable typography'],
   },
   {
-    icon: <GraduationCap className="w-6 h-6 text-primary" />,
-    iconBg: 'bg-primary/10',
-    title: 'Technology Training',
-    titleColor: 'text-primary',
-    borderColor: 'border-primary',
-    description: 'We equip students and working professionals with in-demand technical skills through practical, industry-relevant training programs designed to make learners job-ready.'
-  }
-]
+    step: '03',
+    icon: Rocket,
+    title: 'Career Acceleration & Interview STAR Prep',
+    tag: 'End-to-End Success',
+    description: 'A great resume gets you the call; our companion tools prepare you to win the offer. Automatically generate matching Cover Letters and STAR-framework behavioral interview talking points.',
+    points: ['Auto-generated matching Cover Letter', 'STAR behavioral story generator', 'Role-specific compensation benchmarks'],
+  },
+];
 
 export function AboutWhatWeDo() {
   return (
-    <section className="py-20 bg-slate-50/50">
-      <div className="container mx-auto px-4 max-w-7xl">
+    <section className="py-12 sm:py-16 bg-slate-50/60 border-b border-slate-200/80 relative">
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
         
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center gap-4 mb-3">
-            <div className="h-px bg-slate-200 flex-1 max-w-[60px] border-t border-dashed border-slate-300" />
-            <h2 className="text-3xl font-black text-slate-900">
-              What <span className="text-primary">We Do</span>
-            </h2>
-            <div className="h-px bg-slate-200 flex-1 max-w-[60px] border-t border-dashed border-slate-300" />
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 text-[11px] font-black uppercase tracking-wider mb-3">
+            What We Do
           </div>
-          <p className="text-[15px] font-medium text-slate-600">
-            Our three core pillars that drive your success
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 mb-3 tracking-tight">
+            Comprehensive Career Enablement from Start to Offer.
+          </h2>
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto">
+            Beyond standard templates, Soltkiz provides the complete pipeline to help technical and corporate professionals stand out in an overcrowded market.
           </p>
         </div>
 
-        {/* Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {pillars.map((pillar, idx) => (
-            <div 
-              key={idx} 
-              className={cn(
-                "bg-white rounded-3xl p-10 text-center shadow-lg shadow-slate-200/50 flex flex-col items-center hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden border border-slate-100",
-              )}
-            >
-              {/* Colored Line at the bottom inside card */}
-              <div className={cn("absolute bottom-6 left-1/2 -translate-x-1/2 w-8 h-1 rounded-full", pillar.borderColor.replace('border', 'bg'))} />
+        {/* 3 Step Process Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {PILLARS.map((pillar) => {
+            const Icon = pillar.icon;
+            return (
+              <div
+                key={pillar.step}
+                className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs hover:shadow-xl hover:border-slate-300 transition-all flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-black text-slate-400 group-hover:text-emerald-600 transition-colors">
+                      {pillar.step}
+                    </span>
+                    <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full">
+                      {pillar.tag}
+                    </span>
+                  </div>
 
-              <div className={cn("w-16 h-16 rounded-full flex items-center justify-center mb-6", pillar.iconBg)}>
-                {pillar.icon}
+                  <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center mb-4 group-hover:bg-emerald-500/10 transition-colors">
+                    <Icon className="w-6 h-6 text-slate-800 group-hover:text-emerald-700 transition-colors" />
+                  </div>
+
+                  <h3 className="text-base sm:text-lg font-black text-slate-950 mb-2.5">
+                    {pillar.title}
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-5 font-normal">
+                    {pillar.description}
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-slate-100 space-y-2">
+                  {pillar.points.map((pt, idx) => (
+                    <div key={idx} className="flex items-center gap-2 text-xs font-semibold text-slate-700">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <span>{pt}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              
-              <h3 className={cn("text-[17px] font-bold mb-6", pillar.titleColor)}>
-                {pillar.title}
-              </h3>
-              
-              <p className="text-[14px] text-slate-600 leading-relaxed pb-4">
-                {pillar.description}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
       </div>
     </section>
-  )
+  );
 }

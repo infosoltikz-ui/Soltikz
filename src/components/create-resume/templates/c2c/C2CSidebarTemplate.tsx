@@ -490,7 +490,7 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
             {!page.header && (
               <div className="flex justify-between items-center pb-1.5 mb-3 border-b border-slate-300">
                 <span className="font-bold uppercase tracking-wider text-slate-900" style={{ fontSize: '10pt' }}>
-                  {profileData.full_name || 'JOHN DOE'} — Professional Experience (Cont.)
+                  {profileData.full_name || 'JOHN DOE'} - Professional Experience (Cont.)
                 </span>
                 <span className="text-slate-400 text-[8.5pt]">Page {pageIndex + 1}</span>
               </div>
@@ -637,7 +637,7 @@ export const C2CSidebarTemplate = React.forwardRef<HTMLDivElement, ResumeTemplat
           </div>
 
           <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 mt-auto select-none shrink-0 border-t border-slate-200">
-            <span>{profileData.full_name || 'Candidate'} — C2C Left-Aligned Resume</span>
+            <span>{profileData.full_name || 'Candidate'} - C2C Left-Aligned Resume</span>
             <span>Page {pageIndex + 1} of {pages.length}</span>
           </div>
         </div>

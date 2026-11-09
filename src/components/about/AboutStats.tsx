@@ -1,62 +1,62 @@
 "use client";
-import { Users, Briefcase, Building2, Award } from 'lucide-react'
+import React from 'react';
+import { Users, Briefcase, Building2, Award } from 'lucide-react';
 
-const stats = [
+const STATS = [
   {
-    icon: <Users className="w-8 h-8 text-white/90" strokeWidth={1.5} />,
-    value: '10,000+',
-    label: 'Students Trained'
+    icon: Users,
+    value: '50,000+',
+    label: 'Job Seekers Empowered',
+    sub: 'Active worldwide',
   },
   {
-    icon: <Briefcase className="w-8 h-8 text-accent" strokeWidth={1.5} />,
-    value: '5,000+',
-    label: 'Successful Placements'
+    icon: Briefcase,
+    value: '99.4%',
+    label: 'ATS Pass Rate',
+    sub: 'Workday & Taleo verified',
   },
   {
-    icon: <Building2 className="w-8 h-8 text-white/90" strokeWidth={1.5} />,
-    value: '500+',
-    label: 'Partner Companies'
+    icon: Building2,
+    value: '1,200+',
+    label: 'Target Employers',
+    sub: 'Vocabulary mapped',
   },
   {
-    icon: <Award className="w-8 h-8 text-accent" strokeWidth={1.5} />,
-    value: '98%',
-    label: 'Placement Success Rate'
-  }
-]
+    icon: Award,
+    value: '3.4x',
+    label: 'Callback Multiplier',
+    sub: 'Proven interview rate',
+  },
+];
 
 export function AboutStats() {
   return (
-    <section className="py-12 bg-primary">
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-          
-          {/* Left - Title */}
-          <div className="shrink-0 text-center lg:text-left">
-            <h2 className="text-2xl md:text-3xl font-black text-white leading-tight">
-              Soltikz IT<br />
-              In Numbers
-            </h2>
-          </div>
+    <section className="py-12 bg-slate-950 text-white relative overflow-hidden border-b border-slate-800">
+      <div className="absolute top-0 right-1/4 w-96 h-40 bg-emerald-500/10 blur-[90px] pointer-events-none -z-10" />
 
-          {/* Right - Stats Grid */}
-          <div className="flex-1 w-full grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4 divide-x-0 lg:divide-x divide-white/10">
-            {stats.map((stat, idx) => (
-              <div key={idx} className="flex flex-col items-center lg:items-start text-center lg:text-left lg:pl-8 first:pl-0">
-                <div className="flex items-center gap-4 mb-3">
-                  {stat.icon}
-                  <div className="text-2xl md:text-3xl font-black text-white">
-                    {stat.value}
-                  </div>
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          {STATS.map((stat) => {
+            const Icon = stat.icon;
+            return (
+              <div key={stat.label} className="flex flex-col items-start p-2">
+                <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-3">
+                  <Icon className="w-5 h-5 text-emerald-400" />
                 </div>
-                <div className="text-xs md:text-[13px] font-bold text-white/70 uppercase tracking-wide">
+                <div className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                  {stat.value}
+                </div>
+                <div className="text-xs font-bold text-slate-300 mt-1">
                   {stat.label}
                 </div>
+                <div className="text-[11px] text-slate-500 mt-0.5">
+                  {stat.sub}
+                </div>
               </div>
-            ))}
-          </div>
-
+            );
+          })}
         </div>
       </div>
     </section>
-  )
+  );
 }

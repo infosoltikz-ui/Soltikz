@@ -9,7 +9,7 @@ import { getTemplateById } from '@/components/create-resume/templates/registry'
 import { ResumeStats } from './ResumeStats'
 import { ResumeToolbar, ResumeFilterType, ResumeSortBy } from './ResumeToolbar'
 import { ResumeGrid, ResumeRow } from './ResumeGrid'
-// Lazy-load heavy modals — not bundled until user opens them
+// Lazy-load heavy modals - not bundled until user opens them
 const ResumePreviewModal = lazy(() => import('./ResumePreviewModal').then(m => ({ default: m.ResumePreviewModal })))
 const ResumeEditorModal = lazy(() => import('./ResumeEditorModal').then(m => ({ default: m.ResumeEditorModal })))
 
@@ -426,7 +426,7 @@ export function ResumesPageContent() {
       }
 
       const isC2C = String(resume.resume_type || '').toLowerCase().includes('c2c')
-      // Use the exact saved template_id — never fall back to a generic one
+      // Use the exact saved template_id - never fall back to a generic one
       const resolvedTemplateId =
         resume.template_id ||
         (isC2C ? 'c2c-modern' : 'modern')

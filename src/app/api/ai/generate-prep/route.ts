@@ -51,7 +51,7 @@ Generate a COMPLETE, deeply personalized interview preparation guide for this SP
 
 RULES:
 1. Use ONLY the candidate's actual experience, metrics, and skills from their resume. NEVER invent details.
-2. The selfPitch must sound like a real human speaking confidently — natural, clear, not robotic.
+2. The selfPitch must sound like a real human speaking confidently - natural, clear, not robotic.
 3. All numbers/metrics in the pitch MUST come from the actual resume (e.g., 45% improvement, 6 junior engineers).
 4. The fullVersion of selfPitch MUST start by introducing the candidate's name (e.g. 'Hi, I am [Name]'). It MUST also explicitly weave in their Education degree/university and any Certifications they hold into the narrative.
 5. The keyPoints array must have EXACTLY 8 items covering: Who You Are, Primary Expertise, Current Role, Performance Achievement, Architecture, API/Backend Collaboration, Quality & Engineering Practices, Leadership.

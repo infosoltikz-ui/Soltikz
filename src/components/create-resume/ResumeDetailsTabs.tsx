@@ -234,7 +234,7 @@ export function ResumeDetailsTabs({
                         </div>
                         <span className="text-[11px] font-bold text-slate-600 bg-white border border-slate-200 px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 shrink-0 self-start">
                           <Calendar className="w-3 h-3 text-slate-400" />
-                          {job.startDate || '—'} — {job.current ? <strong className="text-emerald-700 font-black">Present</strong> : (job.endDate || '—')}
+                          {job.startDate || '-'} - {job.current ? <strong className="text-emerald-700 font-black">Present</strong> : (job.endDate || '-')}
                         </span>
                       </div>
                       {job.responsibilities && (
@@ -319,7 +319,7 @@ export function ResumeDetailsTabs({
                       </div>
                       <div className="text-right shrink-0">
                         <span className="text-[11px] font-bold text-slate-600 bg-white border border-slate-200 px-2.5 py-1 rounded-lg">
-                          {edu.startDate || '—'} — {edu.endDate || '—'}
+                          {edu.startDate || '-'} - {edu.endDate || '-'}
                         </span>
                         {edu.grade && (
                           <div className="text-[11px] text-slate-500 font-medium mt-1">
@@ -397,7 +397,7 @@ export function ResumeDetailsTabs({
                       </div>
                       {(cert.issueDate || cert.expiryDate) && (
                         <span className="text-[11px] font-semibold text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded-md">
-                          {cert.issueDate || '—'}
+                          {cert.issueDate || '-'}
                         </span>
                       )}
                     </div>

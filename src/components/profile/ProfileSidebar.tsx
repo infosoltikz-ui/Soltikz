@@ -53,7 +53,7 @@ export function ProfileSidebar({
       if (!data.success) throw new Error(data.error || 'Failed to parse LinkedIn PDF')
 
       onImport?.(data.parsed_data)
-      toast.success('LinkedIn profile imported — please review and save each section')
+      toast.success('LinkedIn profile imported - please review and save each section')
     } catch (error: any) {
       toast.error(error.message || 'Failed to import LinkedIn profile')
     } finally {
@@ -83,7 +83,7 @@ export function ProfileSidebar({
   const linkedin = personalInfo?.linkedin || profile?.linkedin_url || null
   const phone = profile?.phone || personalInfo?.phone || null
 
-  // 6-section scoring — one point per tab
+  // 6-section scoring - one point per tab
   const totalPoints = 6
 
   const hasPersonalDetails = !!(

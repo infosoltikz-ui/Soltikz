@@ -18,7 +18,7 @@ export function FeaturesSection() {
             <span className="text-primary">Soltkiz tells you exactly what to fix.</span>
           </h2>
           <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed font-normal">
-            Plenty of tools hand you an arbitrary percentage. The real value is the sentence underneath it — identifying the missing keyword and offering a one-click approved rewrite.
+            Plenty of tools hand you an arbitrary percentage. The real value is the sentence underneath it - identifying the missing keyword and offering a one-click approved rewrite.
           </p>
         </div>
 
@@ -126,7 +126,7 @@ export function FeaturesSection() {
                 Reads the Posting, Not a Generic Template
               </h3>
               <p className="text-[13.5px] text-slate-600 leading-relaxed font-normal">
-                Keywords come strictly from the job posting you pasted — not a generic stock list for "analyst roles". Two postings for the same title produce two completely tailored reports.
+                Keywords come strictly from the job posting you pasted - not a generic stock list for "analyst roles". Two postings for the same title produce two completely tailored reports.
               </p>
             </div>
             
@@ -144,7 +144,7 @@ export function FeaturesSection() {
                 Complete Transparency (Diff Viewer)
               </h3>
               <p className="text-[13.5px] text-slate-600 leading-relaxed font-normal">
-                Flip between the original and the tailored version anytime. Nothing is silently edited behind your back, and nothing is hallucinated — we only build from your master record.
+                Flip between the original and the tailored version anytime. Nothing is silently edited behind your back, and nothing is hallucinated - we only build from your master record.
               </p>
             </div>
             

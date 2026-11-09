@@ -7,7 +7,7 @@ import { isPremiumPlan, FREE_TIER_CREDITS } from '@/utils/pricingPlans';
 // ─── RESUME GENERATION SCHEMA FOR CLAUDE ─────────────────────────────────────
 const GeneratedResumeFormat = z.object({
   summary: z.array(z.string()).describe(
-    'C2C: EXACTLY 10 bullet points (EXACTLY 2 full lines / minimum 25-30 words each) with bolded **keywords** and metrics. Full-Time: EXACTLY 5 sentences that join into one flowing prose paragraph — NO bullets, NO bold, NO "I".'
+    'C2C: EXACTLY 10 bullet points (EXACTLY 2 full lines / minimum 25-30 words each) with bolded **keywords** and metrics. Full-Time: EXACTLY 5 sentences that join into one flowing prose paragraph - NO bullets, NO bold, NO "I".'
   ),
   skills: z.array(z.object({
     category: z.string(),
@@ -121,7 +121,7 @@ const buildGenerationPrompt = (
   jobTitle: string,
   coreDomain: string
 ) => `
-You are the world's #1 Enterprise AI Resume Generator — powered by Anthropic Claude 3.5 Sonnet, engineered for guaranteed 90%+ ATS scores on Workday, Taleo, Greenhouse, and Lever.
+You are the world's #1 Enterprise AI Resume Generator - powered by Anthropic Claude 3.5 Sonnet, engineered for guaranteed 90%+ ATS scores on Workday, Taleo, Greenhouse, and Lever.
 
 ══════════════════════════════════════════════════════════════════
 🚨 STRICT HONESTY & REALISTIC TAILORING POLICY (CRITICAL) 🚨
@@ -162,7 +162,7 @@ KEYWORD PLACEMENT STRATEGY:
 UNIVERSAL CONTENT RULES (APPLY TO BOTH C2C AND FULL-TIME):
 ══════════════════════════════════════════════════════════════════
 
-BANNED PHRASES — NEVER USE:
+BANNED PHRASES - NEVER USE:
   ✗ "Responsible for"  ✗ "Helped with"  ✗ "Assisted in"  ✗ "Worked on"
   ✗ "Participated in"  ✗ "Involved in"  ✗ "Utilized"  ✗ "Tasked with"
   ✗ "Familiar with"  ✗ "Exposure to"  ✗ "detail-oriented"  ✗ "results-driven"
@@ -170,8 +170,8 @@ BANNED PHRASES — NEVER USE:
   ✗ NEVER open a sentence or bullet with "I"
 
 TENSE RULES (CRITICAL):
-  - CURRENT / PRESENT roles: PRESENT tense — "Architects", "Engineers", "Leads", "Deploys"
-  - PAST roles: PAST tense — "Architected", "Engineered", "Led", "Deployed"
+  - CURRENT / PRESENT roles: PRESENT tense - "Architects", "Engineers", "Leads", "Deploys"
+  - PAST roles: PAST tense - "Architected", "Engineered", "Led", "Deployed"
 
 MANDATORY 10 SKILL CATEGORIES:
   1. Core Domain Skills
@@ -273,7 +273,7 @@ export async function POST(req: Request) {
       `Strategy:\n${JSON.stringify(strategyData)}`,
       ``,
       `══════════════════════════════════════════════════════════════════`,
-      `STRICT OUTPUT QUANTITY & LENGTH DIRECTIVES (MANDATORY — ZERO EXCEPTIONS):`,
+      `STRICT OUTPUT QUANTITY & LENGTH DIRECTIVES (MANDATORY - ZERO EXCEPTIONS):`,
       `══════════════════════════════════════════════════════════════════`,
       `MANDATORY RULE FOR EXPERIENCE SECTION:`,
       `- You MUST generate an Experience item for EVERY company found in Master Profile employment/experience (${profileExperience.map((e: any) => e.company).filter(Boolean).join(', ')}).`,

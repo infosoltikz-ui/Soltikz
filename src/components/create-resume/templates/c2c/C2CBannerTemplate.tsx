@@ -68,7 +68,7 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
     const PAGE_PADDING_TOP = 44;
     const PAGE_PADDING_BOTTOM = 44;
     const FOOTER_HEIGHT = getElementHeight('meas-footer') || 30;
-    // compId namespaced — IDs are unique per instance
+    // compId namespaced - IDs are unique per instance
 
     const SAFETY_MARGIN = 24;
     const MAX_CONTENT_HEIGHT = PAGE_HEIGHT - PAGE_PADDING_TOP - PAGE_PADDING_BOTTOM - FOOTER_HEIGHT - SAFETY_MARGIN;
@@ -584,7 +584,7 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
       )}
 
       <div id={`meas-footer-${compId}`} className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
-        <span>{profileData.full_name || 'Candidate'} — C2C Professional Banner</span>
+        <span>{profileData.full_name || 'Candidate'} - C2C Professional Banner</span>
         <span>Page 1 of 2</span>
       </div>
     </div>
@@ -804,7 +804,7 @@ export const C2CBannerTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
             {/* Footer */}
             {(pages.length > 1 || page.education?.length > 0 || page.certifications?.length > 0) && (
               <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
-                <span>{profileData.full_name || 'Candidate'} — C2C Professional Banner</span>
+                <span>{profileData.full_name || 'Candidate'} - C2C Professional Banner</span>
                 <span>Page {pageNumber} of {pages.length}</span>
               </div>
             )}

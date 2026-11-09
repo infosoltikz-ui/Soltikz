@@ -40,7 +40,7 @@ export const useThemeStore = create<ThemeState>()(
     }),
     {
       name: THEME_STORAGE_KEY,
-      /** Re-apply theme on hydration so it's instant — no flash */
+      /** Re-apply theme on hydration so it's instant - no flash */
       onRehydrateStorage: () => (state) => {
         if (state) applyThemeToDom(state.theme)
       },

@@ -29,8 +29,8 @@ export default function CoverLettersPage() {
       title: 'Download & Apply',
       description: 'Export your cover letter as a PDF or DOCX and attach it directly to your application.',
       bullets: [
-        'PDF format — print-ready and ATS-safe',
-        'DOCX format — fully editable in Word or Google Docs',
+        'PDF format - print-ready and ATS-safe',
+        'DOCX format - fully editable in Word or Google Docs',
         'Saved to your dashboard for future reference',
       ],
     },
@@ -40,7 +40,7 @@ export default function CoverLettersPage() {
     <div className="p-8 max-w-[1600px] mx-auto min-h-screen">
       <ModuleHowItWorks
         moduleTitle="Cover Letters"
-        tagline="Select a resume — AI writes a matching cover letter in seconds."
+        tagline="Select a resume - AI writes a matching cover letter in seconds."
         steps={steps}
       />
       <DashboardHeader

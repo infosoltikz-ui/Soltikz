@@ -184,7 +184,7 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
             data.atsScore >= 90 ? "bg-emerald-500 animate-pulse" : data.atsScore >= 70 ? "bg-amber-500" : data.atsScore > 0 ? "bg-red-500" : "bg-slate-300"
           )}></div>
           <span className="text-[10.5px] font-black text-slate-800">
-            {data.atsScore > 0 ? `${data.atsScore}% ATS` : '— ATS'}
+            {data.atsScore > 0 ? `${data.atsScore}% ATS` : '- ATS'}
           </span>
         </div>
 

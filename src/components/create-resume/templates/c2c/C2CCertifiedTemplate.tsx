@@ -386,7 +386,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
               <div className="font-normal">{exp.duration}</div>
             </div>
             <div className="text-black font-semibold" style={{ fontSize: '9.5pt' }}>
-              {exp.company} {exp.location ? `— ${exp.location}` : ''}
+              {exp.company} {exp.location ? `- ${exp.location}` : ''}
             </div>
           </div>
 
@@ -396,7 +396,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
               <div className="font-normal">{exp.duration}</div>
             </div>
             <div className="text-black font-semibold" style={{ fontSize: '9.5pt' }}>
-              {exp.company} {exp.location ? `— ${exp.location}` : ''}
+              {exp.company} {exp.location ? `- ${exp.location}` : ''}
             </div>
           </div>
 
@@ -433,7 +433,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
                     <span className="font-normal">{edu.year}</span>
                   </div>
                   <div className="text-black">
-                    {edu.institution} {edu.location ? `— ${edu.location}` : ''}
+                    {edu.institution} {edu.location ? `- ${edu.location}` : ''}
                   </div>
                 </div>
               ))}
@@ -594,7 +594,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
                         </div>
                         {!exp.isContinued && (
                           <div className="text-black font-semibold" style={{ fontSize: '9.5pt' }}>
-                            {exp.company} {exp.location ? `— ${exp.location}` : ''}
+                            {exp.company} {exp.location ? `- ${exp.location}` : ''}
                           </div>
                         )}
 
@@ -638,7 +638,7 @@ export const C2CCertifiedTemplate = React.forwardRef<HTMLDivElement, ResumeTempl
                             <span className="font-normal">{edu.year}</span>
                           </div>
                           <div className="text-black">
-                            {edu.institution} {edu.location ? `— ${edu.location}` : ''}
+                            {edu.institution} {edu.location ? `- ${edu.location}` : ''}
                           </div>
                         </div>
                       ))}

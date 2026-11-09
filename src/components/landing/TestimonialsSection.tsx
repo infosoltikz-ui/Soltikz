@@ -43,11 +43,11 @@ const marqueeItems = [
 
 export function TestimonialsSection() {
   return (
-    <section className="py-24 bg-[#FBFBF9] border-t border-slate-200 overflow-hidden relative">
+    <section className="py-10 sm:py-12 bg-[#FBFBF9] border-t border-slate-200 overflow-hidden relative">
       <div className="container mx-auto px-4 max-w-7xl">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-9">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-bold uppercase tracking-wider mb-3">
             <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
             Verified Job Offers &amp; Interviews

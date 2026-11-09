@@ -191,7 +191,7 @@ export function ProfileView({ profile, onEdit, hideBanner }: ProfileViewProps) {
                   <div className="text-right shrink-0">
                     <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md inline-flex items-center gap-1">
                       <Calendar className="w-3 h-3 text-slate-400" />
-                      {job.startDate || '—'} — {job.current ? <strong className="text-emerald-700 font-bold">Present</strong> : (job.endDate || '—')}
+                      {job.startDate || '-'} - {job.current ? <strong className="text-emerald-700 font-bold">Present</strong> : (job.endDate || '-')}
                     </span>
                   </div>
                 </div>
@@ -233,7 +233,7 @@ export function ProfileView({ profile, onEdit, hideBanner }: ProfileViewProps) {
                   </div>
                   <div className="text-right shrink-0">
                     <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
-                      {edu.startDate || '—'} — {edu.endDate || '—'}
+                      {edu.startDate || '-'} - {edu.endDate || '-'}
                     </span>
                     {edu.grade && (
                       <div className="text-[11px] text-slate-500 font-medium mt-1">
@@ -325,7 +325,7 @@ export function ProfileView({ profile, onEdit, hideBanner }: ProfileViewProps) {
                   <div className="text-right shrink-0 space-y-1">
                     {(proj.startDate || proj.endDate) && (
                       <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
-                        {proj.startDate || '—'} — {proj.endDate || '—'}
+                        {proj.startDate || '-'} - {proj.endDate || '-'}
                       </span>
                     )}
                     {proj.link && (

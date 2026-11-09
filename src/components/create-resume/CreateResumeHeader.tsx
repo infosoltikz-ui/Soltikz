@@ -225,7 +225,7 @@ export function CreateResumeHeader({
           <p className="text-[11.5px] font-semibold text-slate-300 whitespace-nowrap overflow-hidden text-ellipsis">
             <span className="text-amber-400 font-bold">AI Resume Suite</span>
             <span className="mx-2 text-slate-500">·</span>
-            Paste any job description — AI tailors your resume with ATS keywords, power bullets &amp; interview prep in under 3 min.
+            Paste any job description - AI tailors your resume with ATS keywords, power bullets &amp; interview prep in under 3 min.
           </p>
         </div>
 

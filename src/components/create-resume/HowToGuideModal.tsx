@@ -21,7 +21,7 @@ const FEATURES = [
     border: 'border-violet-200',
     title: 'Choose Your Template',
     step: '01',
-    desc: 'Pick from 10 professionally designed templates — 5 Full-Time and 5 C2C formats. Each template is ATS-optimized and pagination-perfect.',
+    desc: 'Pick from 10 professionally designed templates - 5 Full-Time and 5 C2C formats. Each template is ATS-optimized and pagination-perfect.',
     bullets: [
       'Classic, Modern, Banner, Certified, Sidebar styles',
       'Full-Time Corporate & C2C Vendor submission formats',
@@ -63,7 +63,7 @@ const FEATURES = [
     border: 'border-emerald-200',
     title: 'AI Generates Your Resume',
     step: '04',
-    desc: 'Gemini AI rewrites your experience bullets to match the JD — 10 power bullets per role, 25-30 words each, using strong executive action verbs.',
+    desc: 'Gemini AI rewrites your experience bullets to match the JD - 10 power bullets per role, 25-30 words each, using strong executive action verbs.',
     bullets: [
       '10 tailored bullet points per experience (25-30 words each)',
       'Professional Summary as executive bullet points',
@@ -91,7 +91,7 @@ const FEATURES = [
     border: 'border-rose-200',
     title: 'Interview Strategy Prep',
     step: '06',
-    desc: 'Step 3 generates a complete interview kit — HR questions, technical Q&A, STAR method answers, self-introduction script and company research notes.',
+    desc: 'Step 3 generates a complete interview kit - HR questions, technical Q&A, STAR method answers, self-introduction script and company research notes.',
     bullets: [
       'Role-specific HR & technical questions with model answers',
       'STAR format behavioral answer templates',
@@ -107,17 +107,17 @@ const FEATURES = [
     step: '07',
     desc: 'Export your finished resume as a pixel-perfect PDF or a fully editable DOCX file. Both formats preserve the exact layout and typography.',
     bullets: [
-      'PDF — print-ready, ATS-safe, no layout shifts',
-      'DOCX — fully editable in Word or Google Docs',
+      'PDF - print-ready, ATS-safe, no layout shifts',
+      'DOCX - fully editable in Word or Google Docs',
       'Saved to your dashboard for future access',
     ],
   },
 ]
 
 const TIPS = [
-  { icon: Lightbulb, text: 'Use the full job description — the more detail, the better the keyword match.' },
+  { icon: Lightbulb, text: 'Use the full job description - the more detail, the better the keyword match.' },
   { icon: Zap, text: 'Generate a new resume for every application. Tailoring = 3× higher callback rate.' },
-  { icon: Star, text: 'Regenerate the summary if the first attempt doesn\'t feel right — it\'s instant.' },
+  { icon: Star, text: 'Regenerate the summary if the first attempt doesn\'t feel right - it\'s instant.' },
   { icon: FileCheck, text: 'Aim for an ATS score above 88 before submitting your resume.' },
 ]
 
@@ -156,7 +156,7 @@ export function HowToGuideModal({ open, onClose }: GuideModalProps) {
                 <span className="text-[11px] font-extrabold text-emerald-400 uppercase tracking-widest">AI Resume Suite</span>
               </div>
               <h2 className="text-[22px] font-black text-white leading-tight mb-1">How to Generate Your Resume</h2>
-              <p className="text-[13px] text-slate-300 font-medium">Complete guide — from setup to download in under 3 minutes.</p>
+              <p className="text-[13px] text-slate-300 font-medium">Complete guide - from setup to download in under 3 minutes.</p>
             </div>
             <button
               onClick={onClose}
@@ -253,7 +253,7 @@ export function HowToGuideModal({ open, onClose }: GuideModalProps) {
             onClick={onClose}
             className="flex items-center gap-1.5 h-9 px-5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[12px] font-bold rounded-xl shadow-md shadow-emerald-500/25 hover:shadow-lg hover:from-emerald-600 hover:to-teal-700 transition-all"
           >
-            Got it — Let's build
+            Got it - Let's build
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>

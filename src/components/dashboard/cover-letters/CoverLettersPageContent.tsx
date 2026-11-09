@@ -172,7 +172,7 @@ export function CoverLettersPageContent() {
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
         <h3 className="text-[15px] font-black text-slate-900 mb-1">Generate a New Cover Letter</h3>
         <p className="text-[13px] font-medium text-slate-500 mb-4">
-          Pick one of your tailored resumes — the cover letter is written to match that resume's job description.
+          Pick one of your tailored resumes - the cover letter is written to match that resume's job description.
         </p>
 
         {eligibleResumes.length === 0 ? (
@@ -190,7 +190,7 @@ export function CoverLettersPageContent() {
               placeholder="Select a resume..."
               options={eligibleResumes.map((r) => ({
                 value: r.id,
-                label: `${r.title}${r.company_name ? ` — ${r.company_name}` : ''}`,
+                label: `${r.title}${r.company_name ? ` - ${r.company_name}` : ''}`,
               }))}
             />
             <Button

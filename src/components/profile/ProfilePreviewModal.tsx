@@ -11,7 +11,7 @@ interface ProfilePreviewModalProps {
 }
 
 function EmptyState({ text }: { text: string }) {
-  return <p className="text-[13px] text-slate-400 italic py-1">— {text}</p>
+  return <p className="text-[13px] text-slate-400 italic py-1">- {text}</p>
 }
 
 function Field({ label, value }: { label: string; value?: string | null }) {
@@ -130,12 +130,12 @@ export function ProfilePreviewModal({ profile, onClose, onSave, isLoading }: Pro
                   <div key={i} className={i > 0 ? 'pt-4' : ''}>
                     <div className="flex items-start justify-between gap-4 mb-1">
                       <div>
-                        <h4 className="text-[14px] font-bold text-slate-900">{job.title || '—'}</h4>
-                        <p className="text-[12px] font-semibold text-primary mt-0.5">{job.company || '—'}</p>
+                        <h4 className="text-[14px] font-bold text-slate-900">{job.title || '-'}</h4>
+                        <p className="text-[12px] font-semibold text-primary mt-0.5">{job.company || '-'}</p>
                       </div>
                       <div className="text-right shrink-0">
                         <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
-                          {job.startDate || '?'} — {job.current ? 'Present' : (job.endDate || '?')}
+                          {job.startDate || '?'} - {job.current ? 'Present' : (job.endDate || '?')}
                         </span>
                         {job.location && <p className="text-[11px] text-slate-400 mt-0.5">{job.location}</p>}
                       </div>
@@ -162,12 +162,12 @@ export function ProfilePreviewModal({ profile, onClose, onSave, isLoading }: Pro
                   <div key={i} className={i > 0 ? 'pt-3' : ''}>
                     <div className="flex items-start justify-between gap-4 mb-1">
                       <div>
-                        <h4 className="text-[14px] font-bold text-slate-900">{edu.degree || '—'}</h4>
-                        <p className="text-[12px] font-semibold text-primary mt-0.5">{edu.institution || '—'}</p>
+                        <h4 className="text-[14px] font-bold text-slate-900">{edu.degree || '-'}</h4>
+                        <p className="text-[12px] font-semibold text-primary mt-0.5">{edu.institution || '-'}</p>
                       </div>
                       <div className="text-right shrink-0">
                         <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
-                          {edu.startDate || '?'} — {edu.endDate || '?'}
+                          {edu.startDate || '?'} - {edu.endDate || '?'}
                         </span>
                         {edu.grade && <p className="text-[11px] text-slate-500 font-medium mt-0.5">Grade: {edu.grade}</p>}
                       </div>
@@ -231,13 +231,13 @@ export function ProfilePreviewModal({ profile, onClose, onSave, isLoading }: Pro
                   <div key={i} className={i > 0 ? 'pt-3' : ''}>
                     <div className="flex items-start justify-between gap-4 mb-1">
                       <div>
-                        <h4 className="text-[14px] font-bold text-slate-900">{proj.name || '—'}</h4>
+                        <h4 className="text-[14px] font-bold text-slate-900">{proj.name || '-'}</h4>
                         {proj.role && <p className="text-[12px] font-medium text-primary mt-0.5">{proj.role}</p>}
                       </div>
                       <div className="text-right shrink-0">
                         {(proj.startDate || proj.endDate) && (
                           <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
-                            {proj.startDate || '?'} — {proj.endDate || '?'}
+                            {proj.startDate || '?'} - {proj.endDate || '?'}
                           </span>
                         )}
                         {proj.link && (
@@ -267,7 +267,7 @@ export function ProfilePreviewModal({ profile, onClose, onSave, isLoading }: Pro
                   <div key={i} className={i > 0 ? 'pt-3' : ''}>
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h4 className="text-[14px] font-bold text-slate-900">{cert.name || '—'}</h4>
+                        <h4 className="text-[14px] font-bold text-slate-900">{cert.name || '-'}</h4>
                         {cert.organization && <p className="text-[12px] font-medium text-slate-600 mt-0.5">{cert.organization}</p>}
                         {cert.credentialUrl && (
                           <a href={cert.credentialUrl} target="_blank" rel="noopener noreferrer" className="text-[11px] text-primary hover:underline font-semibold block mt-1">

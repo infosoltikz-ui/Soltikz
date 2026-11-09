@@ -9,7 +9,7 @@ import { isPremiumPlan, FREE_TIER_CREDITS } from '@/utils/pricingPlans';
 // ─── STEP 2: Resume Generation Schema ────────────────────────────────────────
 const GeneratedResumeFormat = z.object({
   summary: z.array(z.string()).describe(
-    'C2C: EXACTLY 10 bullet points (EXACTLY 2 full lines / minimum 25-30 words each) with bolded **keywords** and metrics. Full-Time: EXACTLY 5 sentences that join into one flowing prose paragraph — NO bullets, NO bold, NO "I".'
+    'C2C: EXACTLY 10 bullet points (EXACTLY 2 full lines / minimum 25-30 words each) with bolded **keywords** and metrics. Full-Time: EXACTLY 5 sentences that join into one flowing prose paragraph - NO bullets, NO bold, NO "I".'
   ),
   skills: z.array(z.object({
     category: z.string(),
@@ -46,7 +46,7 @@ const buildGenerationPrompt = (
   jobTitle: string,
   coreDomain: string
 ) => `
-You are the world's #1 Enterprise AI Resume Generator — engineered for guaranteed 90%+ ATS scores on Workday, Taleo, Greenhouse, and Lever.
+You are the world's #1 Enterprise AI Resume Generator - engineered for guaranteed 90%+ ATS scores on Workday, Taleo, Greenhouse, and Lever.
 
 ══════════════════════════════════════════════════════════════════
 🚨 STRICT HONESTY & REALISTIC TAILORING POLICY (CRITICAL) 🚨
@@ -87,7 +87,7 @@ KEYWORD PLACEMENT STRATEGY:
 UNIVERSAL CONTENT RULES (APPLY TO BOTH C2C AND FULL-TIME):
 ══════════════════════════════════════════════════════════════════
 
-BANNED PHRASES — NEVER USE:
+BANNED PHRASES - NEVER USE:
   ✗ "Responsible for"  ✗ "Helped with"  ✗ "Assisted in"  ✗ "Worked on"
   ✗ "Participated in"  ✗ "Involved in"  ✗ "Utilized"  ✗ "Tasked with"
   ✗ "Familiar with"  ✗ "Exposure to"  ✗ "detail-oriented"  ✗ "results-driven"
@@ -95,10 +95,10 @@ BANNED PHRASES — NEVER USE:
   ✗ NEVER open a sentence or bullet with "I"
 
 TENSE RULES (CRITICAL):
-  - CURRENT / PRESENT roles: PRESENT tense — "Architects", "Engineers", "Leads", "Deploys"
-  - PAST roles: PAST tense — "Architected", "Engineered", "Led", "Deployed"
+  - CURRENT / PRESENT roles: PRESENT tense - "Architects", "Engineers", "Leads", "Deploys"
+  - PAST roles: PAST tense - "Architected", "Engineered", "Led", "Deployed"
 
-BULLET POINT LENGTH & KEYWORD BOLDING REQUIREMENT (CRITICAL — NON-NEGOTIABLE CLIENT MANDATE):
+BULLET POINT LENGTH & KEYWORD BOLDING REQUIREMENT (CRITICAL - NON-NEGOTIABLE CLIENT MANDATE):
   * MANDATORY EXACT 2 FULL LINES: Each and every experience bullet point MUST span **EXACTLY 2 FULL PRINTED LINES** when rendered in the template (STRICT TARGET: **34-44 WORDS, 210-260 characters**).
   * ZERO TOLERANCE FOR INCORRECT LENGTHS:
     - Bullets under 32 words (short 1-line or 1.5-line bullets) are STRICTLY FORBIDDEN.
@@ -111,13 +111,13 @@ BULLET POINT LENGTH & KEYWORD BOLDING REQUIREMENT (CRITICAL — NON-NEGOTIABLE C
     - This is a non-negotiable requirement so keywords stand out prominently in bold when scanned by recruiters and hiring managers.
   * Structure: **[POWER ACTION VERB] + [Detailed Context & Specific Tools] + [Architecture / Methodology / Process] + [Quantified Metric Result (%)] + [Enterprise Business Outcome]**
 
-  **BAD EXAMPLE 1 (TOO SHORT — ONLY 1.5 LINES / 22 WORDS — REJECTED):**
+  **BAD EXAMPLE 1 (TOO SHORT - ONLY 1.5 LINES / 22 WORDS - REJECTED):**
   "Spearheaded CI/CD pipeline implementation, reducing deployment time by 30% across microservices using GitHub Actions and Jenkins."
 
-  **BAD EXAMPLE 2 (TOO LONG — 3.5 LINES / 55 WORDS — REJECTED):**
+  **BAD EXAMPLE 2 (TOO LONG - 3.5 LINES / 55 WORDS - REJECTED):**
   "Spearheaded the comprehensive enterprise architecture and multi-region deployment of automated CI/CD pipelines across 60+ containerized microservices utilizing GitHub Actions, Jenkins, and ArgoCD, establishing standardized build, test, and release quality gates that dramatically reduced production deployment cycle times by 60%, eliminated release bottlenecks, and accelerated quarterly feature delivery velocity for cross-functional engineering teams globally."
 
-  **GOOD EXAMPLE (MANDATORY — EXACTLY 2 FULL PRINTED LINES / 38 WORDS WITH PROMINENT BOLD KEYWORDS):**
+  **GOOD EXAMPLE (MANDATORY - EXACTLY 2 FULL PRINTED LINES / 38 WORDS WITH PROMINENT BOLD KEYWORDS):**
   "Spearheaded the enterprise deployment of automated **CI/CD pipelines** across 40+ containerized microservices utilizing **GitHub Actions** and **Jenkins**, establishing standardized quality gates that reduced production deployment cycle times by **42%** and accelerated feature delivery velocity."
 
 QUANTIFIED METRICS (CRITICAL - 100% COMPLIANCE REQUIRED):
@@ -139,34 +139,34 @@ ACTION VERB BANK:
 ★★★ C2C RESUME RULES (ONLY IF Resume Type = C2C) ★★★
 ══════════════════════════════════════════════════════════════════
 
-PROFESSIONAL SUMMARY — C2C (BULLETS, NOT PROSE):
+PROFESSIONAL SUMMARY - C2C (BULLETS, NOT PROSE):
   - EXACTLY 10 bullet points. Each bullet MUST be EXACTLY 2 full lines long (minimum 25-30 words per bullet point).
   - Every bullet MUST include quantified metrics (%, scale, time saved, volume).
   - Bold ALL critical JD keywords with **keyword** syntax.
   - Exact 10-bullet sequence:
     1. Headline: [Title] with [N]+ years across [domains] driving [metric]% improvement.
-    2. Primary technical depth — strongest JD tool built at scale, [%] efficiency gain.
-    3. Secondary technical depth — next JD capability at [metric] scale.
-    4. Design or build work — created from scratch, [%] improvement.
-    5. Analysis or problem-solving — hard problems solved, reducing errors by [%].
-    6. Delivery or operations — lifecycle phases owned end-to-end, [%] faster delivery.
-    7. Automation or efficiency — scripted/streamlined, [N] hours/week reclaimed.
-    8. Data/cloud/infrastructure — platforms, supporting [N] users or [metric] throughput.
-    9. Standards and compliance — frameworks, methodologies, 100% compliance achieved.
-    10. Leadership and communication — mentored [N] engineers, led cross-functional teams of [N]+.
+    2. Primary technical depth - strongest JD tool built at scale, [%] efficiency gain.
+    3. Secondary technical depth - next JD capability at [metric] scale.
+    4. Design or build work - created from scratch, [%] improvement.
+    5. Analysis or problem-solving - hard problems solved, reducing errors by [%].
+    6. Delivery or operations - lifecycle phases owned end-to-end, [%] faster delivery.
+    7. Automation or efficiency - scripted/streamlined, [N] hours/week reclaimed.
+    8. Data/cloud/infrastructure - platforms, supporting [N] users or [metric] throughput.
+    9. Standards and compliance - frameworks, methodologies, 100% compliance achieved.
+    10. Leadership and communication - mentored [N] engineers, led cross-functional teams of [N]+.
 
-SKILLS MATRIX — C2C:
+SKILLS MATRIX - C2C:
   - EXACTLY 10 grouped categories.
   - EXACTLY 5-7 items per category.
   - If a JD keyword is highly relevant to the user's master profile, place it first in the line.
   - DO NOT inject JD keywords that the user does not possess.
 
-EXPERIENCE — C2C (STRICT MANDATORY BULLET COUNTS):
+EXPERIENCE - C2C (STRICT MANDATORY BULLET COUNTS):
   - Follow the exact bullet point counts specified later in the prompt per experience level (Experience 1 vs 2 vs 3).
   - Every bullet: MUST be EXACTLY 2 full printed lines (34-44 words, 210-260 characters) with bolded **keyword** syntax (prominently bolding 2-4 target technologies, tools, and metrics per bullet).
   - Use VERY STRONG action verbs (e.g., Architected, Spearheaded, Engineered) instead of weak words.
   - Include "environment" tech stack array for ALL roles (comma-separated, every tool used on that engagement).
-  - C2C length is 3-4 pages — DO NOT compress or shorten.
+  - C2C length is 3-4 pages - DO NOT compress or shorten.
   - Education: Degree, Major | University | City, State | Mon YYYY – Mon YYYY
   - Certifications: Certification | Issuer | Earned Mon YYYY
 
@@ -174,30 +174,30 @@ EXPERIENCE — C2C (STRICT MANDATORY BULLET COUNTS):
 ★★★ FULL-TIME RESUME RULES (ONLY IF Resume Type = Full-Time) ★★★
 ══════════════════════════════════════════════════════════════════
 
-PROFESSIONAL SUMMARY — FULL-TIME (PROSE PARAGRAPH, NOT BULLETS):
-  ⚠️ CRITICAL: Summary MUST be PROSE — a flowing paragraph, NEVER a bulleted list.
+PROFESSIONAL SUMMARY - FULL-TIME (PROSE PARAGRAPH, NOT BULLETS):
+  ⚠️ CRITICAL: Summary MUST be PROSE - a flowing paragraph, NEVER a bulleted list.
   Direct-hire recruiters expect prose. Bullets read as a vendor/contract submission.
 
-  Return summary as an array of exactly 5 strings — each string is ONE complete sentence.
+  Return summary as an array of exactly 5 strings - each string is ONE complete sentence.
   The template will join them with a space into one flowing paragraph on the page.
 
   REQUIRED 5-SENTENCE STRUCTURE (in this exact order):
     [1] [Job Title] with [N]+ years in [domain/environment], focused on [core JD function].
     [2] Strong hands-on depth in [primary JD tools], with [secondary JD capability].
-    [3] [Strongest career accomplishment with a specific number — scale, %, volume, or time saved].
+    [3] [Strongest career accomplishment with a specific number - scale, %, volume, or time saved].
     [4] Experienced across [environments / team structures / business contexts from profile].
-    [5] [Leadership scope, mentoring count, or stakeholder-facing work — only if in profile].
+    [5] [Leadership scope, mentoring count, or stakeholder-facing work - only if in profile].
 
   HARD RULES FOR PROSE SUMMARY:
-    ✗ NEVER open with "I" — always open with the Job Title.
-    ✗ NEVER say "seeking a challenging role" — they know why you sent the resume.
+    ✗ NEVER open with "I" - always open with the Job Title.
+    ✗ NEVER say "seeking a challenging role" - they know why you sent the resume.
     ✗ NEVER use adjectives: "detail-oriented", "results-driven", "passionate", "motivated".
     ✗ NEVER use bullet characters, dashes, or numbered list markers.
-    ✗ DO NOT bold keywords in the summary — it is prose, not a bullet list.
+    ✗ DO NOT bold keywords in the summary - it is prose, not a bullet list.
     ✓ Weave JD keywords naturally into the prose.
     ✓ Third-person descriptive style (e.g., "Senior Engineer with 10 years...").
 
-SKILLS MATRIX — FULL-TIME (10 CATEGORIES REQUIRED):
+SKILLS MATRIX - FULL-TIME (10 CATEGORIES REQUIRED):
   - EXACTLY 10 categories. EXACTLY 5-7 items per category.
   - If a JD keyword is highly relevant to the user's master profile, place it first in the line.
   - DO NOT inject JD keywords that the user does not possess.
@@ -214,7 +214,7 @@ SKILLS MATRIX — FULL-TIME (10 CATEGORIES REQUIRED):
       10. Operating Systems & Environments
   - NO proficiency bars, ratings, percentages, or years-per-skill.
 
-EXPERIENCE — FULL-TIME (STRICT MANDATORY BULLET COUNTS):
+EXPERIENCE - FULL-TIME (STRICT MANDATORY BULLET COUNTS):
   - Experience 1 (most recent / current role): EXACTLY 8 Powerful Bullet Points (STRICT MANDATORY 8 BULLETS).
   - Experience 2: EXACTLY 8 Powerful Bullet Points (STRICT MANDATORY 8 BULLETS).
   - Experience 3 & Experience 4+: EXACTLY 5 to 6 Powerful Bullet Points.
@@ -222,14 +222,14 @@ EXPERIENCE — FULL-TIME (STRICT MANDATORY BULLET COUNTS):
   - Anatomy: [POWER ACTION VERB] + [Detailed Context & Specific Tools] + [Architecture / Methodology] + [Quantified Metric Result (%)] + [Enterprise Business Outcome].
   - 🛑 BANNED WEAK VERBS: NEVER use passive/weak words like "helped", "assisted", "worked on", "responsible for", "handled", "participated in", "involved in", "supported".
   - ✅ MANDATORY POWER VERBS: ALWAYS use high-impact action verbs like "Architected", "Engineered", "Spearheaded", "Orchestrated", "Optimized", "Automated", "Pioneered", "Overhauled", "Formulated".
-  - One accomplishment per bullet — two "and"s means it is two bullets.
+  - One accomplishment per bullet - two "and"s means it is two bullets.
   - Name the exact tool: "rebuilt the intake workflow in **ServiceNow**" not "improved the process".
   - DO NOT include an "environment" array for Full-Time roles (that is C2C format only).
   - Full-Time length: 1 page under ~8 years, 2 pages beyond. DO NOT pad to reach two pages.
   - Education: Degree, Major | University | City, State | Mon YYYY – Mon YYYY
   - Certifications: Certification | Issuer | Earned Mon YYYY
 
-Return valid JSON matching exact schema. Populate ALL fields fully — no shortcuts, no truncation.
+Return valid JSON matching exact schema. Populate ALL fields fully - no shortcuts, no truncation.
 `;
 
 
@@ -309,7 +309,7 @@ export async function POST(req: Request) {
       `Strategy:\n${JSON.stringify(strategyData)}`,
       ``,
       `══════════════════════════════════════════════════════════════════`,
-      `STRICT OUTPUT QUANTITY & LENGTH DIRECTIVES (MANDATORY — ZERO EXCEPTIONS):`,
+      `STRICT OUTPUT QUANTITY & LENGTH DIRECTIVES (MANDATORY - ZERO EXCEPTIONS):`,
       `══════════════════════════════════════════════════════════════════`,
       isC2CMode ? `
       FOR C2C RESUMES (CONTRACT TO HIRE VENDOR SUBMISSION):

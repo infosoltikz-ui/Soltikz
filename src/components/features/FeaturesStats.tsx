@@ -1,91 +1,52 @@
 "use client";
-import { Check, Users, BarChart2, LayoutTemplate, Headset } from 'lucide-react'
-import { cn } from '@/utils/cn'
+import React from 'react';
+import { ShieldCheck, CheckCircle2, TrendingUp, Users } from 'lucide-react';
 
-const stats = [
+const STAT_BLOCKS = [
   {
-    icon: <Users className="w-8 h-8 text-primary" />,
-    value: '50,000+',
-    label: 'Happy Users',
-    sublabel: 'Worldwide',
-    bgColor: 'bg-primary/5'
+    value: '99.4%',
+    title: 'Workday & Taleo Pass Rate',
+    desc: 'Zero rejected resumes due to layout, font, or parsing errors',
   },
   {
-    icon: <BarChart2 className="w-8 h-8 text-accent" />,
-    value: '95%',
-    label: 'Users Get Better',
-    sublabel: 'ATS Score',
-    bgColor: 'bg-accent/5'
+    value: '3.4x',
+    title: 'Higher Interview Callback Rate',
+    desc: 'Measured across 50,000+ candidates who applied with Soltkiz',
   },
   {
-    icon: <LayoutTemplate className="w-8 h-8 text-primary" />,
-    value: '25+',
-    label: 'Professional',
-    sublabel: 'Templates',
-    bgColor: 'bg-primary/5'
+    value: '6 Seconds',
+    title: 'Recruiter Reading Cadence',
+    desc: 'Strict 2-line standard engineered for fast human skimmers',
   },
   {
-    icon: <Headset className="w-8 h-8 text-accent" />,
-    value: '24/7',
-    label: 'Customer',
-    sublabel: 'Support',
-    bgColor: 'bg-accent/5'
-  }
-]
-
-const checklist = [
-  'AI-powered resume building',
-  'ATS-optimized for better scores',
-  'Trusted by 50,000+ job seekers',
-  'Regular updates and new features',
-  'Secure, fast & easy to use'
-]
+    value: '20 Free',
+    title: 'Tailored Resume Generations',
+    desc: 'Generate, optimize, and export Word and PDF resumes completely free',
+  },
+];
 
 export function FeaturesStats() {
   return (
-    <section className="py-20 bg-slate-50/50">
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="bg-white rounded-[2rem] p-8 md:p-12 shadow-xl shadow-slate-200/40 border border-slate-100 flex flex-col lg:flex-row items-center gap-16">
-          
-          {/* Left Column - Content */}
-          <div className="flex-1 text-center lg:text-left">
-            <h3 className="text-[11px] font-black text-primary tracking-widest uppercase mb-4">
-              Why Choose ATS Resume Builder?
-            </h3>
-            
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-8 leading-tight">
-              Smart Features for<br />
-              <span className="text-primary">Better Opportunities</span>
-            </h2>
-            
-            <ul className="space-y-4 text-left max-w-md mx-auto lg:mx-0">
-              {checklist.map((item, idx) => (
-                <li key={idx} className="flex items-center gap-3 text-sm font-bold text-slate-700">
-                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                    <Check className="w-3 h-3 text-primary" />
-                  </div>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
+    <section className="py-12 bg-slate-950 text-white relative overflow-hidden border-b border-slate-800">
+      <div className="absolute top-0 left-1/3 w-96 h-40 bg-emerald-500/10 blur-[90px] pointer-events-none -z-10" />
 
-          {/* Right Column - Stats Grid */}
-          <div className="flex-1 w-full max-w-xl mx-auto lg:mx-0 grid grid-cols-2 gap-4 sm:gap-6">
-            {stats.map((stat, idx) => (
-              <div key={idx} className="bg-slate-50 rounded-2xl p-6 text-center hover:-translate-y-1 transition-transform duration-300">
-                <div className={cn("w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4", stat.bgColor)}>
-                  {stat.icon}
-                </div>
-                <div className="text-2xl sm:text-3xl font-black text-slate-900 mb-1">{stat.value}</div>
-                <div className="text-xs sm:text-sm font-bold text-slate-600">{stat.label}</div>
-                <div className="text-[11px] font-medium text-slate-500">{stat.sublabel}</div>
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          {STAT_BLOCKS.map((b) => (
+            <div key={b.title} className="flex flex-col items-start p-2">
+              <div className="text-2xl sm:text-3xl font-black text-emerald-400 tracking-tight">
+                {b.value}
               </div>
-            ))}
-          </div>
-
+              <div className="text-xs font-bold text-slate-200 mt-1">
+                {b.title}
+              </div>
+              <div className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                {b.desc}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

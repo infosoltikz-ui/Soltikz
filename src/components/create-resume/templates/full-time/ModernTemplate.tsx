@@ -353,7 +353,7 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
           <ul className="list-disc pl-5 m-0 space-y-1" style={{ fontSize: '9.5pt' }}>
             {resumeData.certifications.map((cert, i) => (
               <li key={i} className="pl-1 leading-snug">
-                <span className="font-bold">{cert.name}</span> — {cert.issuer} ({cert.year})
+                <span className="font-bold">{cert.name}</span> - {cert.issuer} ({cert.year})
               </li>
             ))}
           </ul>
@@ -435,7 +435,7 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
 
                 {hasMultiplePages && (
                   <div className="pt-2 flex justify-between items-center text-[9pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
-                    <span>{profileData.full_name || 'Candidate'} — Modern Resume</span>
+                    <span>{profileData.full_name || 'Candidate'} - Modern Resume</span>
                     <span>Page {pageNumber} of {totalPages}</span>
                   </div>
                 )}
@@ -495,7 +495,7 @@ export const ModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplatePro
            <div id={`meas-certifications-${compId}`} className="overflow-hidden">{renderCertifications()}</div>
            <div id={`meas-footer-${compId}`} className="overflow-hidden">
              <div className="pt-2 flex justify-between items-center text-[9pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
-                <span>{profileData.full_name || 'Candidate'} — Modern Resume</span>
+                <span>{profileData.full_name || 'Candidate'} - Modern Resume</span>
                 <span>Page 1 of 2</span>
              </div>
            </div>

@@ -1,371 +1,195 @@
 "use client";
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Menu, X, ChevronDown, ArrowRight } from 'lucide-react'
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import {
+  Menu,
+  X,
+  ArrowRight,
+  ShieldCheck
+} from 'lucide-react';
 
-const NAV_LINKS = [
+const MAIN_NAV_LINKS = [
   { label: 'About', href: '/about' },
   { label: 'Features', href: '/features' },
-  { label: 'Templates', href: '/#templates' },
+  { label: 'Templates', href: '/#templates', badge: '10+' },
   { label: 'Pricing', href: '/pricing' },
-  {
-    label: 'Resources',
-    href: '#',
-    hasDropdown: true,
-    dropdownItems: [
-      { label: 'ATS Score Checker', href: '/features' },
-      { label: 'Cover Letter Builder', href: '/features' },
-      { label: 'Interview STAR Prep', href: '/features' },
-      { label: 'Resume Tips Blog', href: '/features' },
-    ],
-  },
-]
+];
 
 export function Header() {
-  const [scrolled, setScrolled] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [resourcesOpen, setResourcesOpen] = useState(false)
-  const pathname = usePathname()
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    const onScroll = () => setScrolled(window.scrollY > 15);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <>
       {/* ════════════════════════════════════════════════════════════ */}
-      {/* NAVBAR                                                       */}
+      {/* FLOATING GLASS CAPSULE NAVBAR                                */}
       {/* ════════════════════════════════════════════════════════════ */}
-      <header
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1020,
-          background: scrolled ? 'rgba(255,255,255,0.97)' : '#fff',
-          borderBottom: '1px solid #f1f5f9',
-          boxShadow: scrolled ? '0 2px 16px rgba(15,23,42,0.07)' : 'none',
-          transition: 'box-shadow 0.25s',
-          height: 72,
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
+      <header className="fixed top-0 inset-x-0 z-50 pt-2 sm:pt-2.5 px-3 sm:px-6 pointer-events-none transition-all duration-300">
         <div
-          style={{
-            maxWidth: 1280,
-            margin: '0 auto',
-            padding: '0 24px',
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 24,
-          }}
+          className={`max-w-6xl mx-auto pointer-events-auto transition-all duration-300 rounded-2xl sm:rounded-full border ${
+            scrolled
+              ? 'bg-white/95 backdrop-blur-xl border-slate-200/90 shadow-lg shadow-slate-900/5 py-1.5 px-3.5 sm:px-5'
+              : 'bg-white/85 backdrop-blur-md border-slate-200/70 shadow-xs py-2 px-4 sm:px-6'
+          }`}
         >
-
-          {/* ── Logo ── */}
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/LOGO.png"
-              alt="ResumeBuilderOne.com"
-              style={{ height: 46, width: 'auto', objectFit: 'contain' }}
-            />
-          </Link>
-
-          {/* ── Desktop Nav Links ── */}
-          <nav
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 32,
-              flex: 1,
-              justifyContent: 'center',
-            }}
-            className="hidden lg:flex"
-          >
-            {NAV_LINKS.map((link) => {
-              if (link.hasDropdown) {
-                return (
-                  <div
-                    key={link.label}
-                    style={{ position: 'relative' }}
-                    onMouseEnter={() => setResourcesOpen(true)}
-                    onMouseLeave={() => setResourcesOpen(false)}
-                  >
-                    <button
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 4,
-                        fontSize: 14,
-                        fontWeight: 600,
-                        color: '#374151',
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        padding: '4px 0',
-                        transition: 'color 0.15s',
-                      }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = '#111827' }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = '#374151' }}
-                    >
-                      {link.label}
-                      <ChevronDown style={{ width: 14, height: 14, color: '#9ca3af', marginTop: 1 }} />
-                    </button>
-
-                    {resourcesOpen && (
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: '100%',
-                          left: '50%',
-                          transform: 'translateX(-50%)',
-                          marginTop: 8,
-                          background: '#fff',
-                          border: '1px solid #f1f5f9',
-                          borderRadius: 12,
-                          boxShadow: '0 12px 32px rgba(15,23,42,0.12)',
-                          padding: '6px',
-                          minWidth: 190,
-                          zIndex: 100,
-                        }}
-                      >
-                        {link.dropdownItems?.map((item) => (
-                          <Link
-                            key={item.label}
-                            href={item.href}
-                            style={{
-                              display: 'block',
-                              padding: '9px 14px',
-                              fontSize: 13,
-                              fontWeight: 600,
-                              color: '#374151',
-                              textDecoration: 'none',
-                              borderRadius: 8,
-                              transition: 'background 0.12s, color 0.12s',
-                            }}
-                            onMouseEnter={e => {
-                              (e.currentTarget as HTMLAnchorElement).style.background = '#f8fafc'
-                              ;(e.currentTarget as HTMLAnchorElement).style.color = '#111827'
-                            }}
-                            onMouseLeave={e => {
-                              (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'
-                              ;(e.currentTarget as HTMLAnchorElement).style.color = '#374151'
-                            }}
-                          >
-                            {item.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )
-              }
-
-              const isActive = pathname === link.href
-              return (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  style={{
-                    fontSize: 14,
-                    fontWeight: isActive ? 700 : 600,
-                    color: isActive ? '#111827' : '#374151',
-                    textDecoration: 'none',
-                    padding: '4px 0',
-                    transition: 'color 0.15s',
-                  }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#111827' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = isActive ? '#111827' : '#374151' }}
-                >
-                  {link.label}
-                </Link>
-              )
-            })}
-          </nav>
-
-          {/* ── Right buttons ── */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-
-            {/* Log In outlined button */}
-            <Link
-              href="/login"
-              className="hidden sm:inline-flex"
-              style={{
-                fontSize: 14,
-                fontWeight: 600,
-                color: '#374151',
-                textDecoration: 'none',
-                padding: '8px 20px',
-                borderRadius: 10,
-                border: '1.5px solid #d1d5db',
-                background: '#fff',
-                transition: 'border-color 0.15s, color 0.15s, background 0.15s',
-                cursor: 'pointer',
-                lineHeight: 1,
-              }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLAnchorElement).style.borderColor = '#9ca3af'
-                ;(e.currentTarget as HTMLAnchorElement).style.background = '#f9fafb'
-              }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLAnchorElement).style.borderColor = '#d1d5db'
-                ;(e.currentTarget as HTMLAnchorElement).style.background = '#fff'
-              }}
-            >
-              Log In
-            </Link>
-
-            {/* Get Started Free → dark navy button */}
-            <Link href="/register" style={{ textDecoration: 'none' }}>
-              <button
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  fontSize: 14,
-                  fontWeight: 700,
-                  color: '#fff',
-                  background: '#0f172a',
-                  padding: '9px 20px',
-                  borderRadius: 10,
-                  border: 'none',
-                  cursor: 'pointer',
-                  letterSpacing: '0.01em',
-                  boxShadow: '0 2px 10px rgba(15,23,42,0.18)',
-                  transition: 'background 0.15s, transform 0.12s',
-                  whiteSpace: 'nowrap',
-                  lineHeight: 1,
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLButtonElement).style.background = '#1e293b'
-                  ;(e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLButtonElement).style.background = '#0f172a'
-                  ;(e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)'
-                }}
+          <div className="flex items-center justify-between gap-4">
+            
+            {/* ── Left: Brand Identity (Enlarged Logo) ── */}
+            <div className="flex items-center gap-3 shrink-0">
+              <Link
+                href="/"
+                className="flex items-center gap-2 group transition-transform duration-150 hover:scale-[1.02]"
               >
-                Get Started Free
-                <ArrowRight style={{ width: 14, height: 14 }} />
-              </button>
-            </Link>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/LOGO.png"
+                  alt="ResumeBuilderOne.com"
+                  className="h-11 sm:h-12 md:h-13 w-auto object-contain transition-all"
+                />
+              </Link>
 
-            {/* Mobile hamburger */}
-            <button
-              className="lg:hidden"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 38,
-                height: 38,
-                borderRadius: 8,
-                border: '1px solid #e2e8f0',
-                background: '#fff',
-                cursor: 'pointer',
-                color: '#374151',
-              }}
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Toggle menu"
-            >
-              {mobileOpen ? <X style={{ width: 20, height: 20 }} /> : <Menu style={{ width: 20, height: 20 }} />}
-            </button>
+              {/* High-Tech Operational Status Badge */}
+              <div className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100/90 border border-slate-200/80 text-[11px] font-semibold text-slate-600">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
+                <span>ATS AI Active</span>
+              </div>
+            </div>
+
+            {/* ── Center: Desktop Navigation Dock ── */}
+            <nav className="hidden lg:flex items-center gap-1 bg-slate-50/80 p-1 rounded-full border border-slate-200/60 shadow-2xs">
+              {MAIN_NAV_LINKS.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className={`relative px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-150 flex items-center gap-1.5 ${
+                      isActive
+                        ? 'bg-white text-slate-950 shadow-2xs border border-slate-200/80'
+                        : 'text-slate-600 hover:text-slate-950 hover:bg-white/80'
+                    }`}
+                  >
+                    <span>{link.label}</span>
+                    {link.badge && (
+                      <span className="text-[10px] font-black px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200/80">
+                        {link.badge}
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* ── Right: Auth & CTA Micro-Bar ── */}
+            <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+              
+              {/* Log In Button */}
+              <Link
+                href="/login"
+                className="hidden sm:inline-flex items-center justify-center px-4 py-2 rounded-full text-xs font-bold text-slate-700 hover:text-slate-950 hover:bg-slate-100/90 transition-all border border-transparent hover:border-slate-200/80 cursor-pointer"
+              >
+                Log In
+              </Link>
+
+              {/* Get Started Free CTA */}
+              <Link
+                href="/register"
+                className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs font-black text-white bg-slate-950 hover:bg-slate-900 border border-slate-800 shadow-sm shadow-slate-900/10 hover:shadow-md transition-all group cursor-pointer"
+              >
+                <span>Get Started Free</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform text-emerald-400" />
+              </Link>
+
+              {/* Mobile Menu Trigger */}
+              <button
+                onClick={() => setMobileOpen(!mobileOpen)}
+                className="lg:hidden w-9 h-9 rounded-xl flex items-center justify-center bg-slate-100 text-slate-700 hover:text-slate-950 hover:bg-slate-200/80 transition-colors border border-slate-200 cursor-pointer"
+                aria-label="Toggle navigation menu"
+              >
+                {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+              </button>
+
+            </div>
+
           </div>
         </div>
       </header>
 
       {/* ════════════════════════════════════════════════════════════ */}
-      {/* MOBILE DRAWER                                                */}
+      {/* MOBILE DRAWER (SLEEK FROSTED GLASS SHEET)                   */}
       {/* ════════════════════════════════════════════════════════════ */}
       {mobileOpen && (
         <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 1010,
-            background: 'rgba(15,23,42,0.35)',
-            paddingTop: 72,
-          }}
+          className="fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-xs pt-20 px-4 pb-6 lg:hidden animate-in fade-in duration-200"
           onClick={() => setMobileOpen(false)}
         >
           <div
-            style={{
-              background: '#fff',
-              margin: '8px 12px',
-              borderRadius: 16,
-              border: '1px solid #f1f5f9',
-              boxShadow: '0 20px 60px rgba(15,23,42,0.18)',
-              padding: '12px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 4,
-            }}
-            onClick={e => e.stopPropagation()}
+            className="bg-white rounded-3xl border border-slate-200 shadow-2xl p-4 sm:p-5 flex flex-col gap-3 max-h-[85vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
           >
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                style={{
-                  display: 'block',
-                  padding: '11px 14px',
-                  borderRadius: 10,
-                  fontSize: 14,
-                  fontWeight: 700,
-                  color: '#374151',
-                  textDecoration: 'none',
-                }}
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <div style={{ borderTop: '1px solid #f1f5f9', marginTop: 4, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {/* Top Identity in Mobile Sheet */}
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <span className="text-xs font-black uppercase tracking-wider text-slate-400">
+                Navigation
+              </span>
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                ATS AI Engine Active
+              </span>
+            </div>
+
+            {/* Core Links */}
+            <div className="flex flex-col gap-1">
+              {MAIN_NAV_LINKS.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-between p-3 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-slate-950 transition-colors"
+                >
+                  <span>{link.label}</span>
+                  {link.badge && (
+                    <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                      {link.badge}
+                    </span>
+                  )}
+                </Link>
+              ))}
+            </div>
+
+            {/* Mobile Auth Actions */}
+            <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
               <Link
                 href="/login"
-                style={{
-                  display: 'block',
-                  textAlign: 'center',
-                  padding: '11px',
-                  borderRadius: 10,
-                  border: '1.5px solid #e2e8f0',
-                  fontSize: 14,
-                  fontWeight: 700,
-                  color: '#374151',
-                  textDecoration: 'none',
-                }}
                 onClick={() => setMobileOpen(false)}
+                className="w-full text-center py-2.5 rounded-xl text-xs font-bold text-slate-700 border border-slate-200 bg-white hover:bg-slate-50 transition-colors"
               >
                 Log In
               </Link>
               <Link
                 href="/register"
-                style={{
-                  display: 'block',
-                  textAlign: 'center',
-                  padding: '12px',
-                  borderRadius: 10,
-                  background: '#0f172a',
-                  fontSize: 14,
-                  fontWeight: 700,
-                  color: '#fff',
-                  textDecoration: 'none',
-                }}
                 onClick={() => setMobileOpen(false)}
+                className="w-full text-center py-3 rounded-xl text-xs font-black text-white bg-slate-950 hover:bg-slate-900 transition-colors flex items-center justify-center gap-1.5 shadow-md"
               >
-                Get Started Free →
+                <span>Get Started Free</span>
+                <ArrowRight className="w-3.5 h-3.5 text-emerald-400" />
               </Link>
             </div>
+
           </div>
         </div>
       )}
     </>
-  )
+  );
 }

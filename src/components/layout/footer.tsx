@@ -1,142 +1,211 @@
 "use client";
-import Link from 'next/link'
-import { CheckCircle2, ShieldCheck, Zap, Lock, Headset, Send, Globe, ChevronDown } from 'lucide-react'
 
-const footerLinks = {
+import React from "react";
+import Link from "next/link";
+import {
+  ShieldCheck,
+  Zap,
+  Lock,
+  Headset,
+  Globe,
+  ArrowRight,
+  CheckCheck,
+  Sparkles,
+} from "lucide-react";
+
+interface FooterLinkItem {
+  label: string;
+  href: string;
+  isNew?: boolean;
+  isHot?: boolean;
+}
+
+const footerLinks: {
+  product: FooterLinkItem[];
+  resources: FooterLinkItem[];
+  company: FooterLinkItem[];
+} = {
   product: [
-    { label: 'Features', href: '/features' },
-    { label: 'Templates', href: '/templates' },
-    { label: 'ATS Checker', href: '/ats-checker' },
-    { label: 'AI Optimization', href: '/ai-optimization' },
-    { label: 'Pricing', href: '/pricing' },
-    { label: 'Updates', href: '/updates' },
-    { label: 'Roadmap', href: '/roadmap' },
+    { label: "AI Resume Builder", href: "/dashboard/create", isNew: true },
+    { label: "ATS Score Checker", href: "/features" },
+    { label: "Strict 2-Line Bullets", href: "/#features" },
+    { label: "Full-Time Templates", href: "/#templates" },
+    { label: "C2C Contractor Matrix", href: "/#templates", isHot: true },
+    { label: "Word & PDF Export", href: "/#features" },
+    { label: "Pricing Plans", href: "/pricing" },
   ],
   resources: [
-    { label: 'Resume Examples', href: '/examples' },
-    { label: 'Resume Tips', href: '/tips' },
-    { label: 'Career Blog', href: '/blog' },
-    { label: 'Help Center', href: '/help' },
-    { label: 'Glossary', href: '/glossary' },
-    { label: 'Webinars', href: '/webinars' },
-    { label: 'Download eBooks', href: '/ebooks' },
+    { label: "Resume Templates", href: "/#templates" },
+    { label: "Workday & Taleo Guide", href: "/features" },
+    { label: "Before & After Results", href: "/#before-after" },
+    { label: "Interview STAR Prep", href: "/features" },
+    { label: "Cover Letter Generator", href: "/features" },
+    { label: "Frequently Asked Questions", href: "/#faq" },
   ],
   company: [
-    { label: 'About Us', href: '/about' },
-    { label: 'Contact Us', href: '/contact' },
-    { label: 'Careers', href: '/careers' },
-    { label: 'Privacy Policy', href: '/privacy' },
-    { label: 'Terms of Service', href: '/terms' },
-    { label: 'Refund Policy', href: '/refund' },
-    { label: 'Shipping & Delivery', href: '/shipping' },
-    { label: 'Cookie Policy', href: '/cookies' },
-    { label: 'Affiliate Program', href: '/affiliates' },
+    { label: "About Soltkiz", href: "/about" },
+    { label: "Contact Support", href: "/contact" },
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Service", href: "/terms" },
+    { label: "Refund Policy", href: "/refund" },
+    { label: "Shipping & Delivery", href: "/shipping" },
+    { label: "Cookies Policy", href: "/cookies" },
   ],
-  support: [
-    { label: 'Help Center', href: '/help' },
-    { label: 'Contact Support', href: '/contact' },
-    { label: 'Feature Request', href: '/request' },
-    { label: 'Report a Bug', href: '/bug' },
-    { label: 'Status', href: '/status' },
-    { label: 'System Requirements', href: '/requirements' },
-  ],
-}
+};
 
 export function Footer() {
   return (
-    <footer className="bg-white pt-20 pb-6 px-4">
-      <div className="container mx-auto max-w-[1400px]">
-        {/* Top Main Footer Area */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 mb-16">
-          
-          {/* Brand & Socials & Trusted Box */}
-          <div className="lg:col-span-1 pr-4">
-            <Link href="/" className="flex items-center gap-2 mb-6 group inline-flex">
-              <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+    <footer className="bg-slate-950 text-slate-400 border-t border-slate-800/80 pt-12 pb-8 sm:pt-14 sm:pb-10 transition-colors">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* ── TOP SECTION: BRAND & NAVIGATION COLUMNS ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-12 pb-10 border-b border-slate-800/80">
+          {/* Brand Column (Span 2 on large screens) */}
+          <div className="lg:col-span-2 flex flex-col items-start pr-0 lg:pr-6">
+            <Link href="/" className="inline-block mb-4 group">
+              <div className="bg-white px-3 py-1.5 rounded-xl inline-flex items-center shadow-xs group-hover:shadow-[0_0_20px_rgba(255,255,255,0.25)] group-hover:scale-[1.02] transition-all duration-200">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/LOGO.png"
+                  alt="Soltkiz Resume Builder"
+                  className="h-7 w-auto object-contain"
+                />
               </div>
-              <span className="font-black text-[22px] tracking-tight text-slate-900 leading-none">
-                Resume Builder One
-              </span>
             </Link>
-            
-            <p className="text-slate-600 text-[13px] mb-6 leading-relaxed">
-              AI-powered resume builder that helps you create ATS-optimized resumes and land your dream job faster.
+
+            <p className="text-slate-400 text-xs sm:text-[13px] leading-relaxed max-w-sm mb-5">
+              Next-gen AI resume and ATS optimization engine engineered to bypass recruiter filters
+              and land 3.4x more interview callbacks.
             </p>
-            
-            <div className="flex items-center gap-3 mb-8">
+
+            {/* Live Status Pill */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-[11px] font-semibold text-slate-300 mb-6 hover:border-emerald-500/40 hover:bg-slate-900/90 transition-all duration-200 cursor-default">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span>All Systems Operational • 99.9% ATS Parsing Uptime</span>
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-3">
               {[
-                { icon: <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>, name: 'Facebook' },
-                { icon: <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/></svg>, name: 'Twitter' },
-                { icon: <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.51 0 10-4.48 10-10S17.51 2 12 2zm6.605 4.61a8.502 8.502 0 011.93 5.314c-.281-.054-3.101-.629-5.943-.271-.065-.156-.12-.311-.18-.474 2.115-.972 3.66-2.605 4.193-4.569zM12 4.11c1.284 0 2.476.32 3.493.882-.511 1.761-1.921 3.238-3.832 4.14-1.956-1.026-3.77-2.67-4.45-4.475C8.75 4.316 10.312 4.11 12 4.11zm-5.59 1.7c.655 1.572 2.302 3.036 4.041 3.993-1.42 1.408-3.155 2.15-4.814 2.13-1.127.02-2.138-.13-3.13-.374a8.497 8.497 0 013.903-5.75zM3.483 14.86c1.12.19 2.21.26 3.29.17 1.503-.13 3.003-.683 4.332-1.572.235.534.463 1.077.671 1.62-1.944 1.341-3.955 2.502-5.908 3.535A8.528 8.528 0 013.483 14.86zm10.74 3.738c-1.396-1.173-2.888-2.585-4.394-4.256.554-.108 1.134-.14 1.745-.102 2.709.18 5.23 1.17 7.023 2.65-1.01 1.073-2.427 1.706-4.374 1.708z"/></svg>, name: 'Linkedin' },
-                { icon: <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.51 0 10-4.48 10-10S17.51 2 12 2zm6.605 4.61a8.502 8.502 0 011.93 5.314c-.281-.054-3.101-.629-5.943-.271-.065-.156-.12-.311-.18-.474 2.115-.972 3.66-2.605 4.193-4.569zM12 4.11c1.284 0 2.476.32 3.493.882-.511 1.761-1.921 3.238-3.832 4.14-1.956-1.026-3.77-2.67-4.45-4.475C8.75 4.316 10.312 4.11 12 4.11zm-5.59 1.7c.655 1.572 2.302 3.036 4.041 3.993-1.42 1.408-3.155 2.15-4.814 2.13-1.127.02-2.138-.13-3.13-.374a8.497 8.497 0 013.903-5.75zM3.483 14.86c1.12.19 2.21.26 3.29.17 1.503-.13 3.003-.683 4.332-1.572.235.534.463 1.077.671 1.62-1.944 1.341-3.955 2.502-5.908 3.535A8.528 8.528 0 013.483 14.86zm10.74 3.738c-1.396-1.173-2.888-2.585-4.394-4.256.554-.108 1.134-.14 1.745-.102 2.709.18 5.23 1.17 7.023 2.65-1.01 1.073-2.427 1.706-4.374 1.708z"/></svg>, name: 'Instagram' }
-              ].map((item, i) => (
-                <a key={i} href="#" className="w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
-                  {item.icon}
+                {
+                  name: "LinkedIn",
+                  icon: (
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                    </svg>
+                  ),
+                },
+                {
+                  name: "Twitter / X",
+                  icon: (
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                  ),
+                },
+                {
+                  name: "GitHub",
+                  icon: (
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        fillRule="evenodd"
+                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  ),
+                },
+              ].map((s) => (
+                <a
+                  key={s.name}
+                  href="#"
+                  aria-label={s.name}
+                  className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 hover:bg-slate-800 hover:-translate-y-1 hover:shadow-[0_4px_16px_rgba(255,255,255,0.12)] transition-all duration-200 cursor-pointer"
+                >
+                  {s.icon}
                 </a>
               ))}
             </div>
-
-            <div className="bg-primary/5 rounded-xl p-4 flex items-start gap-3 border border-primary/10">
-              <ShieldCheck className="w-6 h-6 text-primary shrink-0" />
-              <div>
-                <div className="text-sm font-bold text-slate-900 mb-1">Trusted & Secure</div>
-                <div className="text-xs text-slate-600 leading-tight">Your data is safe with us.<br/>We never share your information.</div>
-              </div>
-            </div>
           </div>
 
-          {/* Links Columns */}
-          <div className="lg:col-span-1">
-            <h4 className="font-extrabold text-slate-900 text-sm tracking-wide mb-2 uppercase">Product</h4>
-            <div className="w-6 h-0.5 bg-primary mb-6" />
-            <ul className="space-y-4">
+          {/* Column 2: Product */}
+          <div>
+            <h4 className="text-xs font-black text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
+              Product
+            </h4>
+            <ul className="space-y-1.5">
               {footerLinks.product.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.href} className="text-[13px] font-medium text-slate-600 hover:text-primary transition-colors">
-                    {link.label}
+                  <Link
+                    href={link.href}
+                    className="group flex items-center text-xs text-slate-400 hover:text-white transition-colors duration-200 py-1"
+                  >
+                    {/* Glowing Micro-Dot / Indicator that blooms on hover */}
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 opacity-0 -ml-3 mr-2 scale-0 group-hover:opacity-100 group-hover:ml-0 group-hover:scale-100 transition-all duration-200 ease-out shadow-[0_0_8px_#f59e0b] shrink-0" />
+                    <span className="transform group-hover:translate-x-1 transition-transform duration-200 ease-out">
+                      {link.label}
+                    </span>
+                    {link.isNew && (
+                      <span className="ml-2 text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-400/10 text-amber-300 border border-amber-400/30 group-hover:border-amber-400/60 transition-colors">
+                        New
+                      </span>
+                    )}
+                    {link.isHot && (
+                      <span className="ml-2 text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-400/10 text-emerald-300 border border-emerald-400/30 group-hover:border-emerald-400/60 transition-colors">
+                        Hot
+                      </span>
+                    )}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="lg:col-span-1">
-            <h4 className="font-extrabold text-slate-900 text-sm tracking-wide mb-2 uppercase">Resources</h4>
-            <div className="w-6 h-0.5 bg-primary mb-6" />
-            <ul className="space-y-4">
+          {/* Column 3: Resources */}
+          <div>
+            <h4 className="text-xs font-black text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-sky-400 shadow-[0_0_8px_#38bdf8]" />
+              Resources
+            </h4>
+            <ul className="space-y-1.5">
               {footerLinks.resources.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.href} className="text-[13px] font-medium text-slate-600 hover:text-primary transition-colors">
-                    {link.label}
+                  <Link
+                    href={link.href}
+                    className="group flex items-center text-xs text-slate-400 hover:text-white transition-colors duration-200 py-1"
+                  >
+                    {/* Glowing Micro-Dot / Indicator that blooms on hover */}
+                    <span className="w-1.5 h-1.5 rounded-full bg-sky-400 opacity-0 -ml-3 mr-2 scale-0 group-hover:opacity-100 group-hover:ml-0 group-hover:scale-100 transition-all duration-200 ease-out shadow-[0_0_8px_#38bdf8] shrink-0" />
+                    <span className="transform group-hover:translate-x-1 transition-transform duration-200 ease-out">
+                      {link.label}
+                    </span>
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="lg:col-span-1">
-            <h4 className="font-extrabold text-slate-900 text-sm tracking-wide mb-2 uppercase">Company</h4>
-            <div className="w-6 h-0.5 bg-primary mb-6" />
-            <ul className="space-y-4">
+          {/* Column 4: Company & Legal */}
+          <div>
+            <h4 className="text-xs font-black text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8]" />
+              Company
+            </h4>
+            <ul className="space-y-1.5">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.href} className="text-[13px] font-medium text-slate-600 hover:text-primary transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="lg:col-span-1">
-            <h4 className="font-extrabold text-slate-900 text-sm tracking-wide mb-2 uppercase">Support</h4>
-            <div className="w-6 h-0.5 bg-primary mb-6" />
-            <ul className="space-y-4">
-              {footerLinks.support.map((link) => (
-                <li key={link.label}>
-                  <Link href={link.href} className="text-[13px] font-medium text-slate-600 hover:text-primary transition-colors">
-                    {link.label}
+                  <Link
+                    href={link.href}
+                    className="group flex items-center text-xs text-slate-400 hover:text-white transition-colors duration-200 py-1"
+                  >
+                    {/* Glowing Micro-Dot / Indicator that blooms on hover */}
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 opacity-0 -ml-3 mr-2 scale-0 group-hover:opacity-100 group-hover:ml-0 group-hover:scale-100 transition-all duration-200 ease-out shadow-[0_0_8px_#818cf8] shrink-0" />
+                    <span className="transform group-hover:translate-x-1 transition-transform duration-200 ease-out">
+                      {link.label}
+                    </span>
                   </Link>
                 </li>
               ))}
@@ -144,85 +213,99 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Info Blocks (Middle Footer) */}
-        <div className="border-t border-slate-100 py-10 flex flex-wrap lg:flex-nowrap items-center justify-between gap-6">
-          <div className="flex items-center gap-4 w-full md:w-auto">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-              <ShieldCheck className="w-6 h-6 text-primary" />
+        {/* ── MIDDLE STRIP: SECURITY & ACCREDITATION (WITH HOVER CARDS) ── */}
+        <div className="py-6 border-b border-slate-800/80 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+          <div className="p-2 rounded-xl bg-slate-900/40 border border-slate-800/80 hover:border-emerald-500/30 hover:bg-slate-900/80 transition-all duration-200 flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 group-hover:border-emerald-500/50 flex items-center justify-center text-emerald-400 shrink-0 transition-colors">
+              <ShieldCheck className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-sm font-bold text-slate-900">ATS Optimized</div>
-              <div className="text-[13px] text-slate-500">Pass ATS with confidence</div>
+              <div className="font-bold text-slate-200 text-xs group-hover:text-white transition-colors">
+                256-Bit SSL
+              </div>
+              <div className="text-[11px] text-slate-500">Bank-Grade Encryption</div>
             </div>
           </div>
-          <div className="hidden lg:block w-px h-10 bg-slate-200" />
 
-          <div className="flex items-center gap-4 w-full md:w-auto">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-              <Zap className="w-6 h-6 text-primary" />
+          <div className="p-2 rounded-xl bg-slate-900/40 border border-slate-800/80 hover:border-blue-500/30 hover:bg-slate-900/80 transition-all duration-200 flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 group-hover:border-blue-500/50 flex items-center justify-center text-blue-400 shrink-0 transition-colors">
+              <CheckCheck className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-sm font-bold text-slate-900">AI Powered</div>
-              <div className="text-[13px] text-slate-500">Smart suggestions that work</div>
+              <div className="font-bold text-slate-200 text-xs group-hover:text-white transition-colors">
+                ATS Calibrated
+              </div>
+              <div className="text-[11px] text-slate-500">Workday &amp; Taleo Safe</div>
             </div>
           </div>
-          <div className="hidden lg:block w-px h-10 bg-slate-200" />
 
-          <div className="flex items-center gap-4 w-full md:w-auto">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-              <Lock className="w-6 h-6 text-primary" />
+          <div className="p-2 rounded-xl bg-slate-900/40 border border-slate-800/80 hover:border-amber-500/30 hover:bg-slate-900/80 transition-all duration-200 flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 group-hover:border-amber-500/50 flex items-center justify-center text-amber-400 shrink-0 transition-colors">
+              <Lock className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-sm font-bold text-slate-900">100% Secure</div>
-              <div className="text-[13px] text-slate-500">Your data is fully protected</div>
+              <div className="font-bold text-slate-200 text-xs group-hover:text-white transition-colors">
+                100% Private
+              </div>
+              <div className="text-[11px] text-slate-500">Zero Data Resale</div>
             </div>
           </div>
-          <div className="hidden lg:block w-px h-10 bg-slate-200" />
 
-          <div className="flex items-center gap-4 w-full md:w-auto">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-              <Headset className="w-6 h-6 text-primary" />
+          <div className="p-2 rounded-xl bg-slate-900/40 border border-slate-800/80 hover:border-sky-500/30 hover:bg-slate-900/80 transition-all duration-200 flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 group-hover:border-sky-500/50 flex items-center justify-center text-sky-400 shrink-0 transition-colors">
+              <Headset className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-sm font-bold text-slate-900">24/7 Support</div>
-              <div className="text-[13px] text-slate-500">We're here to help anytime</div>
+              <div className="font-bold text-slate-200 text-xs group-hover:text-white transition-colors">
+                24/7 Support
+              </div>
+              <div className="text-[11px] text-slate-500">Dedicated Helpdesk</div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Green Banner */}
-        <div className="bg-primary text-white rounded-2xl p-6 flex flex-col lg:flex-row items-center justify-between gap-6 overflow-hidden relative">
-          <div className="absolute inset-0 opacity-10 pointer-events-none">
-             {/* Wave decoration */}
-             <svg viewBox="0 0 1000 100" className="w-full h-full object-cover" preserveAspectRatio="none">
-               <path d="M0,50 C250,100 750,0 1000,50 L1000,100 L0,100 Z" fill="white" />
-             </svg>
+        {/* ── BOTTOM BAR: COPYRIGHT & LEGAL DISCLOSURES ── */}
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <div>
+            © 2026 Soltkiz. All rights reserved. Built for ambitious candidates worldwide.
           </div>
 
-          <div className="text-[13px] font-medium relative z-10">
-            © 2024 Resume Builder One. All rights reserved.
-          </div>
-
-          <div className="flex items-center gap-3 lg:gap-6 text-[13px] font-medium relative z-10 flex-wrap">
-            <Link href="/privacy" className="hover:text-white/80 transition-colors">Privacy Policy</Link>
-            <span className="text-white/30">|</span>
-            <Link href="/terms" className="hover:text-white/80 transition-colors">Terms of Service</Link>
-            <span className="text-white/30">|</span>
-            <Link href="/refund" className="hover:text-white/80 transition-colors">Refund Policy</Link>
-            <span className="text-white/30">|</span>
-            <Link href="/shipping" className="hover:text-white/80 transition-colors">Shipping &amp; Delivery</Link>
-            <span className="text-white/30">|</span>
-            <Link href="/cookies" className="hover:text-white/80 transition-colors">Cookies Policy</Link>
-            
-            <button className="flex items-center gap-2 border border-white/30 rounded-lg px-3 py-1.5 hover:bg-white/10 transition-colors ml-2">
-              <Globe className="w-4 h-4" />
-              English
-              <ChevronDown className="w-3 h-3 ml-2" />
-            </button>
+          <div className="flex items-center gap-4 text-xs font-medium flex-wrap">
+            <Link
+              href="/privacy"
+              className="hover:text-white transition-colors duration-150"
+            >
+              Privacy
+            </Link>
+            <span>•</span>
+            <Link
+              href="/terms"
+              className="hover:text-white transition-colors duration-150"
+            >
+              Terms
+            </Link>
+            <span>•</span>
+            <Link
+              href="/refund"
+              className="hover:text-white transition-colors duration-150"
+            >
+              Refunds
+            </Link>
+            <span>•</span>
+            <Link
+              href="/shipping"
+              className="hover:text-white transition-colors duration-150"
+            >
+              Shipping
+            </Link>
+            <span>•</span>
+            <span className="inline-flex items-center gap-1.5 text-slate-400 bg-slate-900 hover:text-white hover:border-slate-700 px-2.5 py-1 rounded-md border border-slate-800 transition-colors cursor-pointer">
+              <Globe className="w-3 h-3 text-slate-400" />
+              <span>English (US)</span>
+            </span>
           </div>
         </div>
-
       </div>
     </footer>
-  )
+  );
 }

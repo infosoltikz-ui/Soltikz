@@ -7,7 +7,7 @@ import { createClient } from '@/utils/supabase/server';
 const CoverLetterVariationFormat = z.object({
   id: z.string().describe("A short unique id for this variation, e.g., 'traditional', 'modern', 'story-driven'"),
   name: z.string().describe("The name of the tone/template, e.g., 'The Traditional Professional', 'The Impact-Driven Innovator', 'The Passionate Storyteller'"),
-  salutation: z.string().describe("e.g. 'Dear Hiring Manager,' — use the company name if it fits naturally."),
+  salutation: z.string().describe("e.g. 'Dear Hiring Manager,' - use the company name if it fits naturally."),
   paragraphs: z.array(z.string()).describe("3-4 paragraphs: opening hook referencing the role/company, 1-2 body paragraphs connecting the candidate's real experience to the job's requirements using its own keywords, and a closing paragraph with a call to action."),
   sign_off: z.string().describe("e.g. 'Sincerely,'"),
 });

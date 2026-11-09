@@ -103,14 +103,14 @@ export function PricingSection() {
   const symbol = currency === 'INR' ? '₹' : '$';
 
   return (
-    <section className="py-24 bg-gradient-to-b from-white via-slate-50/50 to-white relative overflow-hidden" id="pricing">
+    <section className="py-10 sm:py-12 bg-gradient-to-b from-white via-slate-50/50 to-white relative overflow-hidden" id="pricing">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       
       {/* Background Soft Glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[750px] h-[400px] bg-emerald-500/5 blur-[130px] pointer-events-none -z-10" />
 
       <div className="container mx-auto px-4 max-w-5xl">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 sm:mb-9">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 text-[11px] font-black uppercase tracking-wider mb-4 shadow-2xs">
             <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
             Simple, Transparent Pricing

@@ -582,7 +582,7 @@ export const C2CModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
       )}
 
       <div id={`meas-footer-${compId}`} className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
-        <span>{profileData.full_name || 'Candidate'} — C2C Modern Resume</span>
+        <span>{profileData.full_name || 'Candidate'} - C2C Modern Resume</span>
         <span>Page 1 of 2</span>
       </div>
     </div>
@@ -800,7 +800,7 @@ export const C2CModernTemplate = React.forwardRef<HTMLDivElement, ResumeTemplate
             {/* Footer */}
             {(pages.length > 1 || page.education?.length > 0 || page.certifications?.length > 0) && (
               <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
-                <span>{profileData.full_name || 'Candidate'} — C2C Modern Resume</span>
+                <span>{profileData.full_name || 'Candidate'} - C2C Modern Resume</span>
                 <span>Page {pageNumber} of {pages.length}</span>
               </div>
             )}

@@ -31,7 +31,7 @@ export default async function ProfilePage() {
       title: 'Build Your Master Profile',
       description: 'Fill in your personal details, work experience, education, skills, and certifications.',
       bullets: [
-        'Personal info — name, email, phone, LinkedIn, location',
+        'Personal info - name, email, phone, LinkedIn, location',
         'Work experience with detailed role descriptions',
         'Education, certifications, and tech skills sections',
       ],
@@ -39,7 +39,7 @@ export default async function ProfilePage() {
     {
       iconName: 'ShieldAlert',
       title: 'This is Your AI Source of Truth',
-      description: 'Every resume AI generates is based 100% on your master profile data — no hallucinations.',
+      description: 'Every resume AI generates is based 100% on your master profile data - no hallucinations.',
       bullets: [
         'AI never invents experience you haven\'t listed here',
         'Keep your profile updated to get the most accurate resumes',
@@ -52,7 +52,7 @@ export default async function ProfilePage() {
       description: 'A 100% complete profile gives the AI maximum context to tailor your resume perfectly.',
       bullets: [
         'Aim for 100% Profile Health score (visible on the right)',
-        'Add all past roles, even older ones — AI picks the best matches',
+        'Add all past roles, even older ones - AI picks the best matches',
         'Include all skills and certifications for full ATS coverage',
       ],
     },
@@ -66,7 +66,7 @@ export default async function ProfilePage() {
       />
       <ModuleHowItWorks
         moduleTitle="Master Profile"
-        tagline="Complete your profile once — AI uses it to generate unlimited tailored resumes."
+        tagline="Complete your profile once - AI uses it to generate unlimited tailored resumes."
         steps={steps}
       />
       <ProfileContent initialProfile={profile} />

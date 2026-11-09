@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer'
 
 export const dynamic = 'force-dynamic'
 
-// Service Role Client — bypasses RLS, has access to auth.users
+// Service Role Client - bypasses RLS, has access to auth.users
 function getAdminClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
@@ -129,7 +129,7 @@ export async function GET(request: Request) {
                 </div>
 
                 <p style="font-size: 13px; color: #94a3b8; margin: 0;">
-                  If you have any questions, just reply to this email — we're happy to help!
+                  If you have any questions, just reply to this email - we're happy to help!
                 </p>
               </div>
 

@@ -57,7 +57,7 @@ function GuideModal({ open, onClose, moduleTitle, steps }: { open: boolean; onCl
                 </div>
                 <span className="text-[11px] font-extrabold text-amber-400 uppercase tracking-widest">Module Guide</span>
               </div>
-              <h2 className="text-[20px] font-black text-white leading-tight mb-1">How to use — {moduleTitle}</h2>
+              <h2 className="text-[20px] font-black text-white leading-tight mb-1">How to use - {moduleTitle}</h2>
               <p className="text-[12px] text-slate-300 font-medium">Step-by-step guide for this module.</p>
             </div>
             <button

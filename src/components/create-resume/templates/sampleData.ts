@@ -139,16 +139,16 @@ export const sampleResumeData: ResumeData = {
 
 export const c2cSampleData: ResumeData = {
   summary: [
-    'Headline — Senior Cloud Architect with 10+ years across financial services, healthcare, and high-volume enterprise environments.',
-    'Primary technical depth — AWS Cloud infrastructure, having built and migrated over 200 large-scale microservices using Kubernetes at massive global scale.',
-    'Secondary technical depth — Infrastructure as Code capabilities, specifically utilizing Terraform and CloudFormation to automate deployments across multiple regions consistently.',
-    'Design or build work — Architected serverless processing pipelines from scratch using AWS Lambda and EventBridge, eliminating manual intervention completely.',
-    'Analysis or problem-solving — Investigated and resolved catastrophic database bottleneck issues by restructuring indexing and implementing Redis caching layers successfully.',
-    'Delivery or operations — Managed full CI/CD lifecycle pipelines utilizing GitHub Actions and Jenkins to guarantee zero-downtime deployments for production.',
-    'Automation or efficiency — Automated daily compliance auditing scripts using Python, reclaiming approximately 20 hours weekly for the core engineering team.',
-    'Data, cloud, or infrastructure — AWS (EC2, S3, RDS, DynamoDB, EKS, ECS, Lambda), GCP (Compute Engine, Cloud Storage, BigQuery).',
-    'Standards & compliance — HIPAA, SOC2, PCI-DSS compliance frameworks, ensuring all deployed infrastructure met rigorous federal and industry security standards.',
-    'Leadership & communication — Mentored 5 junior engineers and authored comprehensive architectural decision records (ADRs) for cross-functional stakeholder alignments.'
+    'Headline - Senior Cloud Architect with 10+ years across financial services, healthcare, and high-volume enterprise environments.',
+    'Primary technical depth - AWS Cloud infrastructure, having built and migrated over 200 large-scale microservices using Kubernetes at massive global scale.',
+    'Secondary technical depth - Infrastructure as Code capabilities, specifically utilizing Terraform and CloudFormation to automate deployments across multiple regions consistently.',
+    'Design or build work - Architected serverless processing pipelines from scratch using AWS Lambda and EventBridge, eliminating manual intervention completely.',
+    'Analysis or problem-solving - Investigated and resolved catastrophic database bottleneck issues by restructuring indexing and implementing Redis caching layers successfully.',
+    'Delivery or operations - Managed full CI/CD lifecycle pipelines utilizing GitHub Actions and Jenkins to guarantee zero-downtime deployments for production.',
+    'Automation or efficiency - Automated daily compliance auditing scripts using Python, reclaiming approximately 20 hours weekly for the core engineering team.',
+    'Data, cloud, or infrastructure - AWS (EC2, S3, RDS, DynamoDB, EKS, ECS, Lambda), GCP (Compute Engine, Cloud Storage, BigQuery).',
+    'Standards & compliance - HIPAA, SOC2, PCI-DSS compliance frameworks, ensuring all deployed infrastructure met rigorous federal and industry security standards.',
+    'Leadership & communication - Mentored 5 junior engineers and authored comprehensive architectural decision records (ADRs) for cross-functional stakeholder alignments.'
   ],
   skills: [
     { category: 'Core Domain Skills', items: ['Cloud Architecture', 'System Design', 'Microservices', 'High Availability', 'Disaster Recovery'] },

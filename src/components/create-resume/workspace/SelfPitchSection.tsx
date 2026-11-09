@@ -53,7 +53,7 @@ export function SelfPitchSection({ interviewPrep, isRegeneratingPrep, onRegenera
             <MessageSquare className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-[17px] font-black text-slate-900">Self Pitch — Interview Guide</h3>
+            <h3 className="text-[17px] font-black text-slate-900">Self Pitch - Interview Guide</h3>
             <p className="text-[12px] font-medium text-slate-500 mt-0.5">Your complete personalized interview script tailored to this JD</p>
           </div>
         </div>
@@ -94,7 +94,7 @@ export function SelfPitchSection({ interviewPrep, isRegeneratingPrep, onRegenera
           ))}
           <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-2.5">
             <Sparkles className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-            <p className="text-[12px] text-amber-800 font-medium">Use this when asked <strong>"Tell me about yourself"</strong>. Each numbered paragraph covers a different angle — who you are, achievements, why this company, and your team value.</p>
+            <p className="text-[12px] text-amber-800 font-medium">Use this when asked <strong>"Tell me about yourself"</strong>. Each numbered paragraph covers a different angle - who you are, achievements, why this company, and your team value.</p>
           </div>
         </div>
       </div>

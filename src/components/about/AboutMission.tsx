@@ -1,51 +1,95 @@
 "use client";
-import { Target } from 'lucide-react'
+import React from 'react';
+import { Target, Shield, Zap, Sparkles, Check, Lock, Layers } from 'lucide-react';
+
+const CORE_VALUES = [
+  {
+    icon: Shield,
+    title: 'Authentic Truth (Zero Hallucination)',
+    desc: 'We never fabricate employers, exaggerate credentials, or invent fake facts. Soltkiz extracts your authentic work history and translates it into employer vocabulary with mathematical rigor.',
+    tag: 'Integrity First',
+    color: 'emerald',
+  },
+  {
+    icon: Zap,
+    title: 'Strict 2-Line Recruiter Cadence',
+    desc: 'Hiring managers spend an average of 6 seconds skimming a resume. Our engine enforces exactly two full printed lines per bullet with bolded keywords so your top achievements are instantly seen.',
+    tag: '6-Sec Standard',
+    color: 'amber',
+  },
+  {
+    icon: Layers,
+    title: 'Dual US Market Architecture',
+    desc: 'Full-Time roles require a 1-page high-impact narrative. Contract and C2C roles require a 2-page detailed skills matrix. We are the only platform purpose-built with dedicated engines for both.',
+    tag: 'Dual Format',
+    color: 'indigo',
+  },
+  {
+    icon: Lock,
+    title: 'Zero Data Broker Selling',
+    desc: 'Your career history, contact details, and employer metrics belong to you. We never sell your resume to headhunters, third-party recruiters, or advertising networks. Your vault is private.',
+    tag: 'Encrypted Vault',
+    color: 'teal',
+  },
+];
 
 export function AboutMission() {
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="bg-primary/5 rounded-[2rem] p-10 md:p-16 border border-primary/10 flex flex-col md:flex-row items-center justify-between gap-12 relative overflow-hidden">
-          
-          {/* Left Content */}
-          <div className="flex-1 flex gap-6 md:gap-10 relative z-10 max-w-2xl">
-            <div className="shrink-0">
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white shadow-xl shadow-primary/10 flex items-center justify-center border border-primary/20">
-                <Target className="w-10 h-10 md:w-12 md:h-12 text-primary" />
-              </div>
-            </div>
-            <div>
-              <h2 className="text-2xl md:text-3xl font-black text-primary mb-4">
-                Our Mission
-              </h2>
-              <p className="text-[15px] md:text-base font-bold text-slate-700 leading-relaxed">
-                To empower every student and professional with the skills, exposure, and opportunities they need to thrive in the technology industry — while helping businesses build strong, capable teams.
-              </p>
-            </div>
+    <section className="py-12 sm:py-16 bg-white border-b border-slate-200/80 relative">
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
+        
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-3">
+            <Target className="w-3.5 h-3.5 text-emerald-600" />
+            Core Engineering Principles
           </div>
-
-          {/* Right Content - CSS Mountain Illustration */}
-          <div className="hidden lg:block w-80 h-48 relative shrink-0 opacity-80">
-            {/* Sun */}
-            <div className="absolute top-4 right-12 w-12 h-12 rounded-full bg-primary/20 blur-sm" />
-            
-            {/* Back Mountain */}
-            <div className="absolute bottom-0 right-10 w-48 h-32 bg-primary/20" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }} />
-            
-            {/* Front Mountain */}
-            <div className="absolute bottom-0 right-0 w-64 h-40 bg-primary/40" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}>
-              {/* Snow Peak */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[84px] h-12 bg-white/60" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 30% 80%, 50% 100%, 70% 80%, 100% 100%)' }} />
-            </div>
-
-            {/* Flag Pole */}
-            <div className="absolute top-2 right-[126px] w-1 h-12 bg-primary" />
-            {/* Flag */}
-            <div className="absolute top-2 right-[86px] w-10 h-6 bg-primary" style={{ clipPath: 'polygon(0 0, 100% 50%, 0 100%)' }} />
-          </div>
-
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 mb-3 tracking-tight">
+            How we engineer your unfair career advantage.
+          </h2>
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto font-normal">
+            Most resume builders sell colorful Canva-style templates that break applicant tracking systems. We build algorithmic tools engineered for one single outcome: getting you shortlisted for the interview.
+          </p>
         </div>
+
+        {/* 4 Pillars Bento Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+          {CORE_VALUES.map((val) => {
+            const Icon = val.icon;
+            return (
+              <div
+                key={val.title}
+                className="bg-slate-50/70 border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-11 h-11 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">
+                      <Icon className="w-5 h-5 text-slate-900" />
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-700">
+                      {val.tag}
+                    </span>
+                  </div>
+
+                  <h3 className="text-base sm:text-lg font-black text-slate-950 mb-2">
+                    {val.title}
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    {val.desc}
+                  </p>
+                </div>
+
+                <div className="mt-5 pt-4 border-t border-slate-200/70 flex items-center gap-2 text-xs font-bold text-slate-800">
+                  <Check className="w-4 h-4 text-emerald-600 shrink-0" strokeWidth={2.5} />
+                  <span>Verified across Workday, Taleo & Greenhouse</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
       </div>
     </section>
-  )
+  );
 }

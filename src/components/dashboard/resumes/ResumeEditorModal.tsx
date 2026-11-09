@@ -344,7 +344,7 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
       const { error: insertErr } = await supabase.from('resume_sections').insert(sectionsToSave)
       if (insertErr) throw insertErr
 
-      // 2. Update resume metadata — including template, theme color, font, and section styles
+      // 2. Update resume metadata - including template, theme color, font, and section styles
       // These are saved so the exact edited state is preserved for preview and download
       const { error: updateErr } = await supabase
         .from('resumes_v2')

@@ -164,7 +164,7 @@ export const FEATURES_LIST = [
   {
     icon:        'Zap',
     title:       'Real-time Preview',
-    description: 'See your resume update live as you type — no lag, no refresh.',
+    description: 'See your resume update live as you type - no lag, no refresh.',
     color:       'secondary',
   },
   {
@@ -251,7 +251,7 @@ export const FAQ_ITEMS = [
   },
   {
     q: 'Can I export my resume in multiple formats?',
-    a: 'Yes — PDF, DOCX, plain text, and a shareable live link that updates in real time.',
+    a: 'Yes - PDF, DOCX, plain text, and a shareable live link that updates in real time.',
   },
   {
     q: 'Is my personal data secure?',
@@ -271,7 +271,7 @@ export const FAQ_ITEMS = [
   },
   {
     q: 'What makes ResumeAI different from other builders?',
-    a: "We're the only tool combining real-time ATS scoring, AI content generation, and premium design — all in one product.",
+    a: "We're the only tool combining real-time ATS scoring, AI content generation, and premium design - all in one product.",
   },
 ] as const
 

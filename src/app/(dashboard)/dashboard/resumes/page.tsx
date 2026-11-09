@@ -10,7 +10,7 @@ export default function MyResumesPage() {
       description: 'All your AI-tailored resumes are stored here, organized by job and company.',
       bullets: [
         'Every resume is linked to the job description it was generated for',
-        'Filter by resume type — Full-Time or C2C',
+        'Filter by resume type - Full-Time or C2C',
         'Resume history is preserved across all sessions',
       ],
     },
@@ -29,8 +29,8 @@ export default function MyResumesPage() {
       title: 'Export Anywhere',
       description: 'Download your finished resume as a PDF or DOCX for immediate application.',
       bullets: [
-        'PDF — pixel-perfect, ATS-safe, no layout shifts',
-        'DOCX — fully editable in Microsoft Word or Google Docs',
+        'PDF - pixel-perfect, ATS-safe, no layout shifts',
+        'DOCX - fully editable in Microsoft Word or Google Docs',
         'Both formats preserve exact layout and typography',
       ],
     },
@@ -40,7 +40,7 @@ export default function MyResumesPage() {
     <div className="p-6 md:p-8 max-w-[1800px] mx-auto min-h-screen">
       <ModuleHowItWorks
         moduleTitle="My Resumes"
-        tagline="All your AI-tailored resumes in one place — review, export, and apply instantly."
+        tagline="All your AI-tailored resumes in one place - review, export, and apply instantly."
         steps={steps}
       />
       <DashboardHeader

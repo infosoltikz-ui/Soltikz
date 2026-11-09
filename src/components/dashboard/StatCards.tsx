@@ -52,7 +52,7 @@ export function StatCards({
               ATS Score (Avg)
             </div>
             <div className="text-3xl font-extrabold text-slate-900 tracking-tight">
-              {avgAts !== null && avgAts > 0 ? `${avgAts}%` : '—'}
+              {avgAts !== null && avgAts > 0 ? `${avgAts}%` : '-'}
             </div>
           </div>
           <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">

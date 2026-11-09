@@ -381,7 +381,7 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
             <ul className="list-disc pl-5 m-0 space-y-1 text-[10.5pt]">
               {resumeData.certifications.map((cert: any, i: number) => (
                 <li key={`cert-meas-${i}`} className="pl-1 leading-relaxed">
-                  <span className="font-bold">{cert.name}</span> — {cert.issuer} ({cert.year})
+                  <span className="font-bold">{cert.name}</span> - {cert.issuer} ({cert.year})
                 </li>
               ))}
             </ul>
@@ -390,7 +390,7 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
       )}
 
       <div id={`meas-footer-${compId}`} className="pt-2 flex justify-between items-center text-[9.5pt] text-slate-400 border-t border-slate-200 mt-auto shrink-0">
-        <span>{profileData.full_name || 'Candidate'} — Professional Banner</span>
+        <span>{profileData.full_name || 'Candidate'} - Professional Banner</span>
         <span>Page 1 of 2</span>
       </div>
     </div>
@@ -592,7 +592,7 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
                     <ul className="list-disc pl-5 m-0 space-y-1 text-[10.5pt]">
                       {resumeData.certifications.map((cert: any, i: number) => (
                         <li key={i} className="pl-1 leading-relaxed">
-                          <span className="font-bold">{cert.name}</span> — {cert.issuer} ({cert.year})
+                          <span className="font-bold">{cert.name}</span> - {cert.issuer} ({cert.year})
                         </li>
                       ))}
                     </ul>
@@ -604,7 +604,7 @@ const BannerTemplateComponent = React.forwardRef<HTMLDivElement, ResumeTemplateP
             {/* Footer */}
             {(pages.length > 1 || page.hasEducation || page.hasCertifications) && (
               <div className="pt-2 flex justify-between items-center text-[8.5pt] text-slate-400 border-t border-slate-200 mt-auto select-none shrink-0">
-                <span>{profileData.full_name || 'Candidate'} — Professional Banner</span>
+                <span>{profileData.full_name || 'Candidate'} - Professional Banner</span>
                 <span>Page {pageNumber} of {pages.length}</span>
               </div>
             )}

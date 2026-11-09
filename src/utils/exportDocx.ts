@@ -468,7 +468,7 @@ export async function exportToDocx(
       )
 
       // Company and Location
-      const companyLine = [exp.company, exp.location].filter(Boolean).join(' — ')
+      const companyLine = [exp.company, exp.location].filter(Boolean).join(' - ')
       if (companyLine) {
         paragraphsOrTables.push(
           new Paragraph({
@@ -560,7 +560,7 @@ export async function exportToDocx(
         })
       )
 
-      const institutionLine = [edu.institution, edu.location].filter(Boolean).join(' — ')
+      const institutionLine = [edu.institution, edu.location].filter(Boolean).join(' - ')
       if (institutionLine) {
         paragraphsOrTables.push(
           new Paragraph({
@@ -600,7 +600,7 @@ export async function exportToDocx(
               font: 'Calibri',
             }),
             new TextRun({
-              text: [cert.issuer ? ` (${cert.issuer})` : '', cert.year ? ` — ${cert.year}` : ''].join(''),
+              text: [cert.issuer ? ` (${cert.issuer})` : '', cert.year ? ` - ${cert.year}` : ''].join(''),
               size: 19,
               color: '475569',
               font: 'Calibri',
