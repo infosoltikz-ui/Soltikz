@@ -48,6 +48,7 @@ import {
 import { Button } from '@/components/ui/Button'
 import { createClient } from '@/utils/supabase/client'
 import { exportToPdf } from '@/utils/exportPdf'
+import { exportToDocx } from '@/utils/exportDocx'
 import { getTemplateById, RESUME_TEMPLATES } from '@/components/create-resume/templates/registry'
 import { ResumeRow } from './ResumeGrid'
 import { getAiModelDisplay } from './ResumeCard'
@@ -164,6 +165,27 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
       toast.error('Failed to generate PDF. Please try again.', { id: toastId })
     } finally {
       setIsExportingPdf(false)
+    }
+  }
+
+  const [isExportingDocx, setIsExportingDocx] = useState(false)
+
+  const handleDownloadDocx = async () => {
+    if (!resumeData) {
+      toast.error('No resume data available to export.')
+      return
+    }
+    setIsExportingDocx(true)
+    const toastId = toast.loading('Generating Word document (.docx)...')
+    try {
+      const fileName = `${(profileData?.full_name || 'Resume').replace(/\s+/g, '_')}_Tailored_Resume.docx`
+      await exportToDocx(resumeData, profileData || {}, fileName, selectedTemplateId || (resume as any)?.template_id || 'classic', themeColor || '#0F2744')
+      toast.success('Word document (.docx) downloaded successfully!', { id: toastId })
+    } catch (error) {
+      console.error('DOCX export failed:', error)
+      toast.error('Failed to generate Word document. Please try again.', { id: toastId })
+    } finally {
+      setIsExportingDocx(false)
     }
   }
 
@@ -620,6 +642,16 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
             >
               {isExportingPdf ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
               <span className="hidden sm:inline">Download PDF</span>
+            </Button>
+            {/* Download Word */}
+            <Button
+              onClick={handleDownloadDocx}
+              disabled={isExportingDocx}
+              variant="outline"
+              className="gap-2 h-9 px-3.5 rounded-lg border-blue-200 text-blue-700 bg-blue-50 hover:bg-blue-100 font-bold text-[12.5px] cursor-pointer"
+            >
+              {isExportingDocx ? <Loader2 className="w-4 h-4 animate-spin text-blue-600" /> : <FileText className="w-4 h-4 text-blue-600" />}
+              <span className="hidden sm:inline">Word (.docx)</span>
             </Button>
 
             {/* Save Changes Button */}

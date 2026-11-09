@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { exportToPdf } from '@/utils/exportPdf'
+import { exportToDocx } from '@/utils/exportDocx'
 import { CreateResumeHeader } from '@/components/create-resume/CreateResumeHeader'
 import { ResumeTypeSelector } from '@/components/create-resume/ResumeTypeSelector'
 import { ResumeDetailsTabs } from '@/components/create-resume/ResumeDetailsTabs'
@@ -139,6 +140,7 @@ export default function CreateResumePage() {
   }, [step, generatedResume])
 
   const [isExportingPdf, setIsExportingPdf] = useState(false)
+  const [isExportingDocx, setIsExportingDocx] = useState(false)
 
   const handlePrint = async () => {
     if (!generatedResume || !resumeRef.current) {
@@ -159,6 +161,26 @@ export default function CreateResumePage() {
       setIsExportingPdf(false)
     }
   }
+
+  const handleDownloadDocx = async () => {
+    if (!generatedResume) {
+      toast.error('No resume data available to export.');
+      return;
+    }
+    setIsExportingDocx(true);
+    const toastId = toast.loading('Generating Word document (.docx)...');
+    try {
+      const fileName = `${(profileData?.full_name || 'Resume').replace(/\s+/g, '_')}_Tailored_Resume.docx`;
+      await exportToDocx(generatedResume, profileData || {}, fileName, selectedTemplateId);
+      logUsageEvent(currentResumeId, 'docx_download');
+      toast.success('Word document (.docx) downloaded successfully!', { id: toastId });
+    } catch (error) {
+      console.error('DOCX export failed:', error);
+      toast.error('Failed to generate Word document. Please try again.', { id: toastId });
+    } finally {
+      setIsExportingDocx(false);
+    }
+  };
 
 
 
@@ -711,6 +733,15 @@ export default function CreateResumePage() {
                       <Download className="w-4 h-4" />
                       <span>Download PDF</span>
                     </Button>
+                    <Button
+                      onClick={handleDownloadDocx}
+                      disabled={isExportingDocx}
+                      variant="outline"
+                      className="h-10 px-3.5 rounded-xl border-blue-200 text-blue-700 bg-blue-50/70 hover:bg-blue-100 hover:border-blue-300 text-[12.5px] font-bold shadow-2xs flex items-center gap-1.5 cursor-pointer"
+                    >
+                      {isExportingDocx ? <Loader2 className="w-4 h-4 animate-spin text-blue-600" /> : <FileText className="w-4 h-4 text-blue-600" />}
+                      <span>Download Word (.docx)</span>
+                    </Button>
                   </div>
                 </div>
 
@@ -847,6 +878,15 @@ export default function CreateResumePage() {
                 <Button onClick={handlePrint} className="h-9 px-5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm text-[13px] font-bold cursor-pointer flex items-center gap-1.5">
                   <Download className="w-4 h-4" />
                   Download PDF
+                </Button>
+                <Button 
+                  onClick={handleDownloadDocx} 
+                  disabled={isExportingDocx}
+                  variant="outline" 
+                  className="h-9 px-4 rounded-lg border-blue-200 text-blue-700 bg-blue-50 hover:bg-blue-100 text-[13px] font-bold cursor-pointer flex items-center gap-1.5"
+                >
+                  {isExportingDocx ? <Loader2 className="w-4 h-4 animate-spin text-blue-600" /> : <FileText className="w-4 h-4 text-blue-600" />}
+                  <span>Download Word (.docx)</span>
                 </Button>
               </div>
             </div>

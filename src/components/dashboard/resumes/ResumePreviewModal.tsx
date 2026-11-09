@@ -5,6 +5,7 @@ import { X, Download, FileText, Edit3, ZoomIn, ZoomOut, Loader2, Sparkles, Arrow
 import { Button } from '@/components/ui/Button'
 import { createClient } from '@/utils/supabase/client'
 import { exportToPdf } from '@/utils/exportPdf'
+import { exportToDocx } from '@/utils/exportDocx'
 import { getTemplateById, DEFAULT_TEMPLATE_ID } from '@/components/create-resume/templates/registry'
 import { ResumeRow } from './ResumeGrid'
 import { getAiModelDisplay } from './ResumeCard'
@@ -48,6 +49,28 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
       toast.error('Failed to generate PDF. Please try again.', { id: toastId })
     } finally {
       setIsExportingPdf(false)
+    }
+  }
+
+  const [isExportingDocx, setIsExportingDocx] = useState(false)
+
+  const handleDownloadDocx = async () => {
+    if (!resumeData) {
+      toast.error('No resume data available to export.')
+      return
+    }
+    setIsExportingDocx(true)
+    const toastId = toast.loading('Generating Word document (.docx)...')
+    try {
+      const fileName = `${(profileData?.full_name || 'Resume').replace(/\s+/g, '_')}_Tailored_Resume.docx`
+      const templateId = resume?.template_id || DEFAULT_TEMPLATE_ID
+      await exportToDocx(resumeData, profileData || {}, fileName, templateId, resume?.theme_color || '#0F2744')
+      toast.success('Word document (.docx) downloaded successfully!', { id: toastId })
+    } catch (error) {
+      console.error('DOCX export failed:', error)
+      toast.error('Failed to generate Word document. Please try again.', { id: toastId })
+    } finally {
+      setIsExportingDocx(false)
     }
   }
 
@@ -267,6 +290,16 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
             >
               {isExportingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
               <span>PDF</span>
+            </Button>
+            {/* Download Word */}
+            <Button
+              onClick={handleDownloadDocx}
+              disabled={loading || isExportingDocx}
+              variant="outline"
+              className="h-8.5 px-3 rounded-lg border-blue-200 text-blue-700 bg-blue-50 hover:bg-blue-100 text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs"
+            >
+              {isExportingDocx ? <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" /> : <FileText className="w-3.5 h-3.5 text-blue-600" />}
+              <span>Word</span>
             </Button>
 
             {/* Edit Resume */}
