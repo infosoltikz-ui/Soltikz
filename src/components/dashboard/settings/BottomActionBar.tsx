@@ -1,4 +1,4 @@
-import { Loader2 } from 'lucide-react'
+import { Loader2, Check } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
 interface BottomActionBarProps {
@@ -9,20 +9,26 @@ interface BottomActionBarProps {
 
 export function BottomActionBar({ onSave, onCancel, saving }: BottomActionBarProps) {
   return (
-    <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col-reverse sm:flex-row items-center justify-end gap-4">
+    <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col-reverse sm:flex-row items-center justify-end gap-3">
       <Button
         variant="outline"
         onClick={onCancel}
         disabled={saving}
-        className="w-full sm:w-auto h-11 px-8 text-[14px] font-bold rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+        className="w-full sm:w-auto h-11 px-6 text-[13.5px] font-bold rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 cursor-pointer"
       >
-        Cancel
+        Reset
       </Button>
       <Button
         onClick={onSave}
         disabled={saving}
-        className="w-full sm:w-auto h-11 px-8 text-[14px] font-bold rounded-xl shadow-sm"
-        leftIcon={saving ? <Loader2 className="w-4 h-4 animate-spin" /> : undefined}
+        className="w-full sm:w-auto h-11 px-7 text-[13.5px] font-bold rounded-xl bg-[#0F2744] hover:bg-[#0A1C33] text-white shadow-sm cursor-pointer transition-all"
+        leftIcon={
+          saving ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Check className="w-4 h-4 text-[#F59E0B]" strokeWidth={2.5} />
+          )
+        }
       >
         {saving ? 'Saving...' : 'Save Changes'}
       </Button>

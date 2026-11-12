@@ -1,34 +1,49 @@
 import React, { Suspense } from 'react'
-import { FileText, Building2, Target, Calendar, CheckCircle2, Eye, Edit3, Trash2, Copy, GitBranch, Loader2, Share2, Download, Sparkles, Cpu } from 'lucide-react'
-import Link from 'next/link'
+import {
+  FileText,
+  Building2,
+  Target,
+  Calendar,
+  CheckCircle2,
+  Eye,
+  Edit3,
+  Trash2,
+  Copy,
+  GitBranch,
+  Loader2,
+  Share2,
+  Download,
+  Sparkles,
+  Cpu,
+} from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { differenceInDays } from 'date-fns'
 import { getTemplateById } from '@/components/create-resume/templates/registry'
 
 export interface ResumeData {
-  id: string;
-  name: string;
-  type: 'Full-Time' | 'C2C' | string;
-  company: string;
-  role: string;
-  template: string;
-  atsScore: number;
-  lastUpdated: string;
-  createdAt?: string;
-  status: 'Completed' | 'Draft' | string;
-  versionNumber?: number;
-  isPublic?: boolean;
-  candidateName?: string;
-  summaryText?: string;
-  experienceRole?: string;
-  experienceCompany?: string;
-  experienceBullet?: string;
-  skillsList?: string[];
-  templateId?: string;
-  fullResumeData?: any;
-  profileData?: any;
-  aiProvider?: string;
-  aiModel?: string;
+  id: string
+  name: string
+  type: 'Full-Time' | 'C2C' | string
+  company: string
+  role: string
+  template: string
+  atsScore: number
+  lastUpdated: string
+  createdAt?: string
+  status: 'Completed' | 'Draft' | string
+  versionNumber?: number
+  isPublic?: boolean
+  candidateName?: string
+  summaryText?: string
+  experienceRole?: string
+  experienceCompany?: string
+  experienceBullet?: string
+  skillsList?: string[]
+  templateId?: string
+  fullResumeData?: any
+  profileData?: any
+  aiProvider?: string
+  aiModel?: string
 }
 
 export interface AiModelInfo {
@@ -60,11 +75,10 @@ export function getAiModelDisplay(provider?: string, model?: string): AiModelInf
       badgeText,
       displayName,
       fullModel: model || 'claude-sonnet-4-6',
-      isClaude: true
+      isClaude: true,
     }
   }
 
-  // OpenAI / GPT
   let displayName = 'GPT-4o'
   let badgeText = 'GPT-4o'
   if (m.includes('mini')) {
@@ -80,7 +94,7 @@ export function getAiModelDisplay(provider?: string, model?: string): AiModelInf
     badgeText,
     displayName,
     fullModel: model || 'gpt-4o',
-    isClaude: false
+    isClaude: false,
   }
 }
 
@@ -97,37 +111,50 @@ interface ResumeCardProps {
   isDownloading?: boolean
 }
 
-export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggleShare, isTogglingShare, onPreview, onEdit, onDownload, isDownloading }: ResumeCardProps) {
+export function ResumeCard({
+  data,
+  onDelete,
+  onDuplicate,
+  isDuplicating,
+  onToggleShare,
+  isTogglingShare,
+  onPreview,
+  onEdit,
+  onDownload,
+  isDownloading,
+}: ResumeCardProps) {
   const isFullTime = !String(data.type || '').toLowerCase().includes('c2c')
   const aiInfo = getAiModelDisplay(data.aiProvider, data.aiModel)
 
-  const displayName = data.candidateName || data.name?.replace(/Resume/i, '').replace(/Full Time/i, '').replace(/C2C/i, '').replace(/[-–]/g, '').trim() || 'Balaji Rockzzz'
-  const displayRole = data.experienceRole || data.role || 'Senior Software Engineer'
-  const displayCompany = data.experienceCompany || data.company || 'Tech Innovators'
-  const displaySummary = data.summaryText || `High-impact ${displayRole} architecting scalable enterprise systems with React, Node.js, and Cloud platforms.`
-  const displayBullet = data.experienceBullet || `Engineered core features at ${displayCompany} boosting performance by 35%.`
-  const skillsToRender = (data.skillsList && data.skillsList.length > 0)
-    ? data.skillsList.slice(0, 4)
-    : ['React', 'Node.js', 'AWS', 'TypeScript']
-
-  const daysOld = data.createdAt ? differenceInDays(new Date(), new Date(data.createdAt)) : 0
+  const daysOld = data.createdAt
+    ? differenceInDays(new Date(), new Date(data.createdAt))
+    : 0
   const daysRemaining = 20 - daysOld
 
   return (
-    <div className="group bg-[#FAFAF8] rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col">
-      {/* Top Section: Full-Width Realistic Resume Document Sheet */}
-      <div 
+    <div className="group bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-xl hover:shadow-slate-900/[0.06] hover:border-[#0F2744]/25 hover:-translate-y-0.5 transition-all duration-200 flex flex-col">
+      {/* Top Preview Canvas */}
+      <div
         onClick={() => onPreview?.()}
-        className="relative h-48 bg-white border-b border-slate-200 overflow-hidden cursor-pointer group-hover:bg-slate-50/40 transition-colors select-none"
+        className="relative h-52 bg-slate-50 border-b border-slate-200/80 overflow-hidden cursor-pointer select-none"
       >
-        <div className="absolute inset-0 transform scale-[0.3] origin-top-left w-[333.33%] h-[333.33%] pointer-events-none">
+        <div className="absolute inset-0 transform scale-[0.3] origin-top-left w-[333.33%] h-[333.33%] pointer-events-none bg-white">
           {(() => {
-            const TemplateComponent = getTemplateById(data.templateId || data.template)?.component
+            const TemplateComponent = getTemplateById(
+              data.templateId || data.template
+            )?.component
             if (TemplateComponent) {
-              const rData = data.fullResumeData || { summary: [], skills: [], experience: [], education: [], certifications: [] }
-              
-              // Ensure rData is properly typed as expected by the templates
-              if (!Array.isArray(rData.summary)) rData.summary = typeof rData.summary === 'string' ? [rData.summary] : []
+              const rData = data.fullResumeData || {
+                summary: [],
+                skills: [],
+                experience: [],
+                education: [],
+                certifications: [],
+              }
+
+              if (!Array.isArray(rData.summary)) {
+                rData.summary = typeof rData.summary === 'string' ? [rData.summary] : []
+              }
               if (!Array.isArray(rData.skills)) rData.skills = []
               if (!Array.isArray(rData.experience)) rData.experience = []
               if (!Array.isArray(rData.education)) rData.education = []
@@ -140,106 +167,138 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
                 linkedin: 'linkedin.com/in/candidate',
                 location: 'Remote',
                 firstName: '',
-                lastName: ''
+                lastName: '',
               }
 
-              // Normalizing PData since some templates use full_name, some fallback to firstName lastName
               const normalizedProfileData = {
                 ...pData,
-                full_name: pData.full_name || pData.fullName || `${pData.firstName || ''} ${pData.lastName || ''}`.trim() || data.candidateName || 'Candidate'
+                full_name:
+                  pData.full_name ||
+                  pData.fullName ||
+                  `${pData.firstName || ''} ${pData.lastName || ''}`.trim() ||
+                  data.candidateName ||
+                  'Candidate',
               }
 
               return (
                 <div style={{ pointerEvents: 'none' }}>
-                  <Suspense fallback={<div className="w-full h-full bg-slate-100 animate-pulse rounded" />}>
-                    <TemplateComponent 
-                      resumeData={rData} 
-                      profileData={normalizedProfileData} 
+                  <Suspense
+                    fallback={<div className="w-full h-full bg-slate-100 animate-pulse rounded" />}
+                  >
+                    <TemplateComponent
+                      resumeData={rData}
+                      profileData={normalizedProfileData}
                     />
                   </Suspense>
                 </div>
               )
             }
-            return <div className="p-8 text-[12px] font-bold">Template preview unavailable</div>
+            return <div className="p-8 text-xs font-bold">Template preview unavailable</div>
           })()}
         </div>
-               {/* AI Model Badge (Top Left of Preview) */}
-        <div 
+
+        {/* AI Model Badge */}
+        <div
           className={cn(
-            "absolute top-2.5 left-2.5 px-2 py-0.5 rounded-lg border shadow-xs flex items-center gap-1 z-10 backdrop-blur-xs font-black text-[10.5px]",
+            'absolute top-3 left-3 px-2.5 py-1 rounded-lg border shadow-xs flex items-center gap-1 z-10 backdrop-blur-xs font-extrabold text-[10.5px]',
             aiInfo.isClaude
-              ? "bg-amber-50/95 border-amber-300/80 text-amber-800"
-              : "bg-emerald-50/95 border-emerald-300/80 text-emerald-800"
+              ? 'bg-amber-50/95 border-amber-300/80 text-amber-800'
+              : 'bg-emerald-50/95 border-emerald-300/80 text-emerald-800'
           )}
           title={`Generated using ${aiInfo.displayName} (${aiInfo.fullModel})`}
         >
-          <Sparkles className={cn("w-3 h-3", aiInfo.isClaude ? "text-amber-600" : "text-emerald-600")} />
+          <Sparkles
+            className={cn('w-3 h-3', aiInfo.isClaude ? 'text-amber-600' : 'text-emerald-600')}
+          />
           <span>{aiInfo.badgeText}</span>
         </div>
 
-        {/* High-Impact ATS Score Badge */}
-        <div className="absolute top-2.5 right-2.5 bg-white/95 backdrop-blur-xs px-2 py-0.5 rounded-lg border border-slate-200 shadow-xs flex items-center gap-1.5 z-10">
-          <div className={cn(
-            "w-1.5 h-1.5 rounded-full",
-            data.atsScore >= 90 ? "bg-emerald-500 animate-pulse" : data.atsScore >= 70 ? "bg-amber-500" : data.atsScore > 0 ? "bg-red-500" : "bg-slate-300"
-          )}></div>
-          <span className="text-[10.5px] font-black text-slate-800">
+        {/* ATS Score Pill */}
+        <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-lg border border-slate-200/90 shadow-xs flex items-center gap-1.5 z-10">
+          <div
+            className={cn(
+              'w-2 h-2 rounded-full',
+              data.atsScore >= 90
+                ? 'bg-emerald-500'
+                : data.atsScore >= 70
+                ? 'bg-amber-500'
+                : data.atsScore > 0
+                ? 'bg-rose-500'
+                : 'bg-slate-300'
+            )}
+          />
+          <span className="text-[11px] font-black text-slate-900 tabular-nums">
             {data.atsScore > 0 ? `${data.atsScore}% ATS` : '- ATS'}
           </span>
         </div>
 
-        {/* Action Overlay on Hover */}
-        <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2.5 backdrop-blur-[2px] z-20">
-          <button 
+        {/* Hover Studio Overlay */}
+        <div className="absolute inset-0 bg-[#0F2744]/75 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2.5 backdrop-blur-[2px] z-20">
+          <button
             type="button"
             onClick={(e) => {
               e.stopPropagation()
               onPreview?.()
-            }} 
-            className="w-9 h-9 bg-white text-slate-900 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm cursor-pointer" 
+            }}
+            className="w-10 h-10 bg-white text-[#0F2744] rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-md cursor-pointer"
             title="Preview Resume"
           >
-            <Eye className="w-4 h-4" strokeWidth={2.5} />
+            <Eye className="w-4 h-4" strokeWidth={2.4} />
           </button>
-          <button 
+          <button
             type="button"
             onClick={(e) => {
               e.stopPropagation()
               onEdit?.()
-            }} 
-            className="w-9 h-9 bg-primary text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm cursor-pointer" 
-            title="Edit Resume (Same Tab)"
+            }}
+            className="w-10 h-10 bg-[#F59E0B] text-slate-950 rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-md cursor-pointer"
+            title="Edit Resume"
           >
-            <Edit3 className="w-4 h-4" strokeWidth={2.5} />
+            <Edit3 className="w-4 h-4" strokeWidth={2.4} />
           </button>
-          <button 
+          <button
             type="button"
             onClick={(e) => {
               e.stopPropagation()
               onDownload?.()
             }}
             disabled={isDownloading}
-            className="w-9 h-9 bg-slate-800 text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm cursor-pointer disabled:opacity-50" 
-            title="Download PDF (Template UI)"
+            className="w-10 h-10 bg-slate-900 border border-white/20 text-white rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-md cursor-pointer disabled:opacity-50"
+            title="Download PDF"
           >
-            {isDownloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" strokeWidth={2.5} />}
+            {isDownloading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Download className="w-4 h-4" strokeWidth={2.4} />
+            )}
           </button>
         </div>
       </div>
 
-      {/* Card Content */}
-      <div className="p-4 flex flex-col flex-1">
-        <div className="flex items-start justify-between gap-1.5 mb-1.5">
-          <h3 className="text-[14.5px] font-black text-slate-900 line-clamp-1" title={data.name}>{data.name}</h3>
+      {/* Card Body */}
+      <div className="p-4 sm:p-5 flex flex-col flex-1">
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <h3
+            className="text-[15px] font-extrabold text-slate-900 line-clamp-1 group-hover:text-[#0F2744] transition-colors"
+            title={data.name}
+          >
+            {data.name}
+          </h3>
           <div className="shrink-0 flex items-center gap-1">
             {data.isPublic && (
-              <span className="flex items-center gap-0.5 text-[9px] font-black text-primary bg-primary/10 px-1.5 py-0.5 rounded-full" title="Anyone with the link can view this resume">
+              <span
+                className="flex items-center gap-0.5 text-[10px] font-extrabold text-[#0F2744] bg-[#EEF4FA] border border-[#0F2744]/15 px-2 py-0.5 rounded-md"
+                title="Public share link enabled"
+              >
                 <Share2 className="w-2.5 h-2.5" />
                 Public
               </span>
             )}
             {data.versionNumber != null && data.versionNumber > 1 && (
-              <span className="flex items-center gap-0.5 text-[9px] font-black text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded-full" title="Duplicated from an earlier version">
+              <span
+                className="flex items-center gap-0.5 text-[10px] font-extrabold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded-md tabular-nums"
+                title="Version"
+              >
                 <GitBranch className="w-2.5 h-2.5" />
                 v{data.versionNumber}
               </span>
@@ -247,107 +306,128 @@ export function ResumeCard({ data, onDelete, onDuplicate, isDuplicating, onToggl
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 mb-3 flex-wrap">
-          <span className={cn(
-            "px-1.5 py-0.5 rounded text-[10.5px] font-bold",
-            isFullTime ? "bg-primary/10 text-primary" : "bg-secondary/15 text-secondary"
-          )}>
+        {/* Status Chips */}
+        <div className="flex items-center gap-1.5 mb-3.5 flex-wrap">
+          <span
+            className={cn(
+              'px-2 py-0.5 rounded-md text-[10.5px] font-extrabold border',
+              isFullTime
+                ? 'bg-[#EEF4FA] text-[#0F2744] border-[#0F2744]/15'
+                : 'bg-amber-50 text-amber-800 border-amber-200'
+            )}
+          >
             {data.type}
           </span>
-          <span className="flex items-center gap-1 text-[11.5px] font-bold text-slate-500">
-            <CheckCircle2 className="w-3 h-3 text-primary" strokeWidth={3} />
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md">
+            <CheckCircle2 className="w-3 h-3" strokeWidth={2.5} />
             {data.status}
           </span>
-          <span 
-            className={cn(
-              "flex items-center gap-1 text-[10px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded border",
-              aiInfo.isClaude
-                ? "bg-amber-500/10 text-amber-700 border-amber-300/60 dark:text-amber-400"
-                : "bg-emerald-500/10 text-emerald-700 border-emerald-300/60 dark:text-emerald-400"
-            )}
-            title={`Generated with ${aiInfo.displayName} (${aiInfo.fullModel})`}
-          >
-            <Sparkles className="w-2.5 h-2.5" />
-            {aiInfo.badgeText}
-          </span>
         </div>
 
-        <div className="space-y-1.5 mb-3">
-          <div className="flex items-center gap-2 text-[12px] text-slate-600">
+        {/* Metadata List */}
+        <div className="space-y-1.5 mb-4 text-xs text-slate-600">
+          <div className="flex items-center gap-2">
             <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span className="font-medium truncate">{data.company}</span>
+            <span className="font-semibold truncate">{data.company}</span>
           </div>
-          <div className="flex items-center gap-2 text-[12px] text-slate-600">
+          <div className="flex items-center gap-2">
             <Target className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span className="font-medium truncate">{data.role}</span>
+            <span className="font-semibold truncate">{data.role}</span>
           </div>
-          <div className="flex items-center gap-2 text-[12px] text-slate-600">
+          <div className="flex items-center gap-2">
             <FileText className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span className="font-medium truncate">{data.template}</span>
+            <span className="font-medium text-slate-500 truncate">{data.template}</span>
           </div>
-          <div className="flex items-center gap-2 text-[12px] text-slate-600">
+          <div className="flex items-center gap-2">
             <Cpu className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span className="font-medium truncate">AI Engine: {aiInfo.displayName}</span>
+            <span className="font-medium text-slate-500 truncate">{aiInfo.displayName}</span>
           </div>
         </div>
 
-        <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between">
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1.5 text-[10.5px] font-bold text-slate-400 truncate">
+        {/* Footer Actions */}
+        <div className="mt-auto pt-3.5 border-t border-slate-100 flex items-center justify-between gap-2">
+          <div className="flex flex-col min-w-0">
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 truncate">
               <Calendar className="w-3 h-3 shrink-0" />
               <span className="truncate">{data.lastUpdated}</span>
             </div>
             {data.createdAt && daysRemaining <= 5 && daysRemaining > 0 && (
-              <span className="text-[10px] font-bold text-amber-500 mt-0.5">
-                Deletes in {daysRemaining} {daysRemaining === 1 ? 'day' : 'days'}
+              <span className="text-[10px] font-bold text-amber-600 mt-0.5">
+                Expires in {daysRemaining} {daysRemaining === 1 ? 'day' : 'days'}
               </span>
             )}
             {data.createdAt && daysRemaining <= 0 && (
-              <span className="text-[10px] font-bold text-red-500 mt-0.5">
-                Pending deletion
+              <span className="text-[10px] font-bold text-rose-600 mt-0.5">
+                Pending cleanup
               </span>
             )}
           </div>
-          
-          <div className="flex items-center gap-2 shrink-0">
-            <button 
+
+          <div className="flex items-center gap-1 shrink-0">
+            <button
               type="button"
               onClick={(e) => {
                 e.preventDefault()
                 onDownload?.()
-              }} 
+              }}
               disabled={isDownloading}
-              className="text-slate-400 hover:text-primary transition-colors cursor-pointer p-0.5 disabled:opacity-50" 
-              title="Download PDF (Template UI)"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-[#0F2744] hover:bg-[#EEF4FA] transition-colors cursor-pointer disabled:opacity-50"
+              title="Download PDF"
             >
-              {isDownloading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+              {isDownloading ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <Download className="w-3.5 h-3.5" />
+              )}
             </button>
-            <button 
+            <button
               type="button"
               onClick={(e) => {
                 e.preventDefault()
                 onEdit?.()
-              }} 
-              className="text-slate-400 hover:text-primary transition-colors cursor-pointer p-0.5" 
-              title="Edit in same tab"
+              }}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-[#0F2744] hover:bg-[#EEF4FA] transition-colors cursor-pointer"
+              title="Edit Resume"
             >
               <Edit3 className="w-3.5 h-3.5" />
             </button>
-            <button onClick={onDuplicate} disabled={isDuplicating} className="text-slate-400 hover:text-slate-900 transition-colors disabled:opacity-50 p-0.5" title="Duplicate">
-              {isDuplicating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Copy className="w-3.5 h-3.5" />}
+            <button
+              type="button"
+              onClick={onDuplicate}
+              disabled={isDuplicating}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-[#0F2744] hover:bg-[#EEF4FA] transition-colors cursor-pointer disabled:opacity-50"
+              title="Duplicate"
+            >
+              {isDuplicating ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <Copy className="w-3.5 h-3.5" />
+              )}
             </button>
             <button
+              type="button"
               onClick={onToggleShare}
               disabled={isTogglingShare}
               className={cn(
-                "transition-colors disabled:opacity-50 p-0.5",
-                data.isPublic ? "text-primary" : "text-slate-400 hover:text-slate-900"
+                'p-1.5 rounded-lg transition-colors cursor-pointer disabled:opacity-50',
+                data.isPublic
+                  ? 'text-[#0F2744] bg-[#EEF4FA]'
+                  : 'text-slate-400 hover:text-[#0F2744] hover:bg-[#EEF4FA]'
               )}
-              title={data.isPublic ? "Make private" : "Make public & copy link"}
+              title={data.isPublic ? 'Make private' : 'Share public link'}
             >
-              {isTogglingShare ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Share2 className="w-3.5 h-3.5" />}
+              {isTogglingShare ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <Share2 className="w-3.5 h-3.5" />
+              )}
             </button>
-            <button onClick={onDelete} className="text-slate-400 hover:text-red-500 transition-colors p-0.5" title="Delete">
+            <button
+              type="button"
+              onClick={onDelete}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+              title="Delete"
+            >
               <Trash2 className="w-3.5 h-3.5" />
             </button>
           </div>

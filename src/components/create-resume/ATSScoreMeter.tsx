@@ -231,14 +231,14 @@ export function ATSScoreMeter({
 
   if (variant === 'compact') {
     return (
-      <div className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full border shadow-2xs transition-all bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800", className)}>
+      <div className={cn("inline-flex items-center gap-2 px-3 py-1.5 rounded-full border shadow-2xs transition-all bg-white border-slate-200/90", className)}>
         <div className="relative w-5 h-5 flex items-center justify-center shrink-0">
           <svg className="w-5 h-5 -rotate-90 transform" viewBox="0 0 24 24">
             <circle
               cx="12"
               cy="12"
               r="9"
-              className="stroke-slate-200 dark:stroke-slate-700"
+              className="stroke-slate-200"
               strokeWidth="2.5"
               fill="transparent"
             />
@@ -258,7 +258,7 @@ export function ATSScoreMeter({
         </div>
         <div className="flex items-center gap-1.5 whitespace-nowrap">
           <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">ATS Match:</span>
-          <span className={cn("text-[12.5px] font-black", displayScore >= 75 ? "text-emerald-600 dark:text-emerald-400" : displayScore >= 50 ? "text-amber-500" : "text-rose-500")}>
+          <span className={cn("text-[12.5px] font-black tabular-nums", displayScore >= 75 ? "text-[#059669]" : displayScore >= 50 ? "text-[#D97706]" : "text-rose-600")}>
             {targetScore}/100
           </span>
         </div>
@@ -267,29 +267,31 @@ export function ATSScoreMeter({
   }
 
   return (
-    <div className={cn("bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl overflow-hidden transition-all w-full", className)}>
-      <div className="p-5 sm:p-6 border-b border-slate-200/80 dark:border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 text-white relative">
-        <div className="absolute right-0 top-0 w-72 h-72 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16" />
-        <div className="absolute left-0 bottom-0 w-48 h-48 bg-teal-500/10 rounded-full blur-2xl pointer-events-none -ml-12 -mb-12" />
+    <div className={cn("bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden transition-all w-full", className)}>
+      <div className="p-5 sm:p-6 border-b border-slate-200/80 bg-[#0F2744] text-white relative overflow-hidden">
+        <div
+          className="pointer-events-none absolute -top-16 -right-16 w-56 h-56 rounded-full opacity-20"
+          style={{ background: 'radial-gradient(circle, #F59E0B 0%, transparent 70%)' }}
+        />
 
         <div className="flex flex-col items-center text-center relative z-10 space-y-4">
-          <span className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 backdrop-blur-md">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+          <span className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full bg-white/10 text-[#F59E0B] border border-white/15">
+            <ShieldCheck className="w-4 h-4 text-[#F59E0B]" />
             Deterministic Scan Verified
           </span>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full pt-1">
             <div className="relative w-28 h-28 shrink-0 flex items-center justify-center">
-              <svg className="w-28 h-28 -rotate-90 transform drop-shadow-[0_0_12px_rgba(16,185,129,0.35)]" viewBox="0 0 110 110">
-                <circle cx="55" cy="55" r={radius} className="stroke-slate-800" strokeWidth="8" fill="transparent" />
+              <svg className="w-28 h-28 -rotate-90 transform" viewBox="0 0 110 110">
+                <circle cx="55" cy="55" r={radius} className="stroke-white/15" strokeWidth="8" fill="transparent" />
                 <circle cx="55" cy="55" r={radius} stroke={mainScoreColor} strokeWidth="8" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} strokeLinecap="round" fill="transparent" className="transition-all duration-1000 ease-out" />
               </svg>
 
               <div className="absolute flex flex-col items-center justify-center text-center select-none">
-                <span className="text-[28px] font-black text-white leading-none tracking-tight">
+                <span className="text-[28px] font-black text-white leading-none tracking-tight tabular-nums">
                   {displayScore}
                 </span>
-                <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest mt-1">
+                <span className="text-[9px] font-bold text-[#F59E0B] uppercase tracking-widest mt-1">
                   / 100 ATS
                 </span>
               </div>
@@ -312,35 +314,35 @@ export function ATSScoreMeter({
         </div>
       </div>
 
-      <div className="p-4 sm:p-5 bg-slate-50/50 dark:bg-slate-900/40">
+      <div className="p-4 sm:p-5 bg-[#F8FAFC]">
         
         {/* Navigation Tabs */}
-        <div className="flex bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl shadow-inner mb-4">
+        <div className="flex bg-slate-200/60 p-1 rounded-xl mb-4">
           <button 
             onClick={() => setActiveTab('metrics')}
-            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'metrics' ? "bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'metrics' ? "bg-white text-[#0F2744] shadow-xs" : "text-slate-500 hover:text-slate-800")}
           >
             Diagnostic Metrics
           </button>
           <button 
             onClick={() => setActiveTab('missing')}
-            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'missing' ? "bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'missing' ? "bg-white text-[#0F2744] shadow-xs" : "text-slate-500 hover:text-slate-800")}
           >
-            Missing Requirements ({missingKw.length})
+            Missing ({missingKw.length})
           </button>
           <button 
             onClick={() => setActiveTab('evidence')}
-            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'evidence' ? "bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'evidence' ? "bg-white text-[#0F2744] shadow-xs" : "text-slate-500 hover:text-slate-800")}
           >
-            Scoring Evidence Log
+            Evidence Log
           </button>
         </div>
 
         {activeTab === 'metrics' && (
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-[13px] font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <Layers className="w-4 h-4 text-emerald-600" />
+              <h4 className="text-[13px] font-extrabold text-slate-900 flex items-center gap-2">
+                <Layers className="w-4 h-4 text-[#0F2744]" />
                 <span>Diagnostic Breakdown</span>
               </h4>
             </div>
@@ -350,14 +352,14 @@ export function ATSScoreMeter({
                 const displayLabel = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
                 const { textColor, barColor } = getScoreBadge(val);
                 return (
-                  <div key={key} className="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
-                    <div className="flex items-center justify-between text-[12px] font-bold text-slate-800 dark:text-slate-200 mb-1.5 gap-2">
+                  <div key={key} className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
+                    <div className="flex items-center justify-between text-[12px] font-bold text-slate-800 mb-1.5 gap-2">
                       <span className="truncate" title={displayLabel}>{displayLabel}</span>
-                      <span className={cn("font-extrabold shrink-0", textColor)}>
+                      <span className={cn("font-extrabold shrink-0 tabular-nums", textColor)}>
                         {val}%
                       </span>
                     </div>
-                    <div className="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                       <div 
                         className={cn("h-full rounded-full bg-gradient-to-r transition-all duration-1000 ease-out", barColor)}
                         style={{ width: `${Math.max(val === 0 ? 0 : 3, Math.min(100, val))}%` }}
@@ -374,11 +376,11 @@ export function ATSScoreMeter({
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 space-y-4">
             {missingKw.length > 0 ? (
               <>
-                <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700/80 p-4 shadow-2xs space-y-2.5">
+                <div className="bg-white rounded-xl border border-slate-200/80 p-4 shadow-2xs space-y-2.5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Target className="w-4 h-4 text-rose-500" />
-                      <h4 className="text-[13px] font-extrabold text-slate-900 dark:text-slate-100">
+                      <h4 className="text-[13px] font-extrabold text-slate-900">
                         Missing Requirements
                       </h4>
                     </div>
@@ -389,7 +391,7 @@ export function ATSScoreMeter({
                       <button
                         key={i}
                         onClick={() => handleCopy(kw, `kw-${i}`)}
-                        className="inline-flex items-center gap-1.5 text-[11.5px] font-bold px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-950/50 text-rose-900 dark:text-rose-200 border border-rose-200/80 dark:border-rose-800 hover:bg-rose-100 transition-all cursor-pointer"
+                        className="inline-flex items-center gap-1.5 text-[11.5px] font-bold px-2.5 py-1 rounded-lg bg-rose-50 text-rose-800 border border-rose-200/80 hover:bg-rose-100 transition-all cursor-pointer"
                         title="Click to copy keyword"
                       >
                         <span>{kw}</span>
@@ -416,23 +418,23 @@ export function ATSScoreMeter({
                   )}
                 </div>
 
-                <div className="bg-emerald-50 dark:bg-emerald-950/20 rounded-xl border border-emerald-200/80 dark:border-emerald-800/50 p-4 shadow-2xs space-y-2">
+                <div className="bg-[#EEF4FA] rounded-xl border border-slate-200/80 p-4 shadow-2xs space-y-2">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-emerald-600" />
-                    <h4 className="text-[13px] font-extrabold text-emerald-900 dark:text-emerald-100">
+                    <Sparkles className="w-4 h-4 text-[#D97706]" />
+                    <h4 className="text-[13px] font-extrabold text-[#0F2744]">
                       Action Plan
                     </h4>
                   </div>
-                  <p className="text-[12px] text-emerald-800 dark:text-emerald-200/80 leading-relaxed font-medium">
-                    To increase your ATS score to 95%+, add these exact keywords to your profile. If you don't have experience with them, consider learning the basics of these technologies!
+                  <p className="text-[12px] text-slate-600 leading-relaxed font-medium">
+                    To raise your ATS score further, integrate truthful matching keywords into your skills or bullets via Master Profile.
                   </p>
                 </div>
               </>
             ) : (
-              <div className="bg-white dark:bg-slate-800 rounded-xl border border-emerald-200/80 p-6 flex flex-col items-center justify-center text-center shadow-2xs">
-                <CheckCircle2 className="w-8 h-8 text-emerald-500 mb-2" />
-                <h4 className="text-[14px] font-bold text-slate-800 dark:text-slate-200">No Missing Keywords!</h4>
-                <p className="text-[12px] text-slate-500 mt-1">Your resume includes all required and preferred skills.</p>
+              <div className="bg-white rounded-xl border border-emerald-200/80 p-6 flex flex-col items-center justify-center text-center shadow-2xs">
+                <CheckCircle2 className="w-8 h-8 text-[#059669] mb-2" />
+                <h4 className="text-[14px] font-bold text-slate-900">No Missing Keywords</h4>
+                <p className="text-[12px] text-slate-500 mt-1">Your resume covers all required and preferred skills.</p>
               </div>
             )}
           </div>
@@ -440,19 +442,19 @@ export function ATSScoreMeter({
 
         {activeTab === 'evidence' && (
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 space-y-4">
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700/80 p-4 shadow-2xs space-y-2.5">
+            <div className="bg-white rounded-xl border border-slate-200/80 p-4 shadow-2xs space-y-2.5">
               <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="w-4 h-4 text-emerald-600" />
-                <h4 className="text-[13px] font-extrabold text-slate-900 dark:text-slate-100">
+                <Sparkles className="w-4 h-4 text-[#0F2744]" />
+                <h4 className="text-[13px] font-extrabold text-slate-900">
                   Scoring Evidence Log
                 </h4>
               </div>
 
               {evidence.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   {evidence.map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-2.5 text-[12.5px] font-medium text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700/50">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <div key={idx} className="flex items-start gap-2.5 text-[12.5px] font-medium text-slate-700 bg-[#F8FAFC] p-3 rounded-xl border border-slate-100">
+                      <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0 mt-0.5" />
                       <span className="leading-relaxed">{item}</span>
                     </div>
                   ))}

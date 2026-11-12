@@ -35,18 +35,18 @@ export function ManualEditModal({ isOpen, onClose, onSave, initialSkills }: Manu
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
         <div className="p-6 border-b border-slate-100 shrink-0">
-          <h2 className="text-lg font-bold text-slate-900">Manually Edit Skills</h2>
-          <p className="text-sm text-slate-500 mt-1">
-            You can override the AI's generated skills here. Ensure the format remains a valid JSON array of objects with 'category' and 'items' properties.
+          <h2 className="text-[18px] font-black text-slate-900 tracking-tight">Manually Edit Skills</h2>
+          <p className="text-[13px] font-medium text-slate-500 mt-1">
+            Override the generated skills JSON array. Ensure each item retains &apos;category&apos; and &apos;items&apos; keys.
           </p>
         </div>
         
         <div className="p-6 flex-1 overflow-auto">
           {error && (
-            <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm font-medium">
+            <div className="mb-4 p-3 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-[13px] font-semibold">
               {error}
             </div>
           )}
@@ -56,16 +56,16 @@ export function ManualEditModal({ isOpen, onClose, onSave, initialSkills }: Manu
               setJsonText(e.target.value);
               setError(null);
             }}
-            className="w-full h-full min-h-[300px] p-4 bg-slate-50 border border-slate-200 rounded-lg font-mono text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary"
+            className="w-full h-full min-h-[300px] p-4 bg-[#F8FAFC] focus:bg-white border border-slate-200 rounded-2xl font-mono text-[13px] text-slate-800 focus:outline-none focus:ring-4 focus:ring-[#0F2744]/10 focus:border-[#0F2744]"
             spellCheck={false}
           />
         </div>
 
-        <div className="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0">
-          <Button variant="outline" onClick={onClose}>
+        <div className="p-5 px-6 bg-[#F8FAFC] border-t border-slate-100 flex justify-end gap-3 shrink-0">
+          <Button variant="outline" onClick={onClose} className="rounded-xl font-bold border-slate-200 cursor-pointer">
             Cancel
           </Button>
-          <Button onClick={handleSave}>
+          <Button onClick={handleSave} className="rounded-xl font-bold bg-[#0F2744] hover:bg-[#0A1C33] text-white cursor-pointer">
             Save Changes
           </Button>
         </div>

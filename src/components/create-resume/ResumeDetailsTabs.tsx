@@ -68,13 +68,13 @@ export function ResumeDetailsTabs({
   const currentTab = (editingTab as TabKey) || activeTab
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-7 relative overflow-hidden transition-all duration-300">
+    <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-5 sm:p-7 relative overflow-hidden transition-all duration-300">
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 mb-5 border-b border-slate-100">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-[#059669]" />
             <h2 className="text-[17px] sm:text-[18px] font-black text-slate-900 tracking-tight">
               Resume Details & Master Profile
             </h2>
@@ -86,7 +86,7 @@ export function ResumeDetailsTabs({
 
         <div className="flex items-center gap-2 shrink-0">
           {editingTab ? (
-            <Button variant="outline" size="sm" onClick={onCancelEdit} className="text-[12px] h-8.5 font-bold">
+            <Button variant="outline" size="sm" onClick={onCancelEdit} className="text-[12px] h-9 px-3.5 rounded-xl font-bold cursor-pointer">
               Cancel Edit
             </Button>
           ) : (
@@ -94,7 +94,7 @@ export function ResumeDetailsTabs({
               variant="outline" 
               size="sm" 
               onClick={() => onEdit(currentTab)} 
-              className="text-[12px] h-8.5 font-bold flex items-center gap-1.5 hover:border-emerald-300 hover:text-emerald-700 hover:bg-emerald-50/50"
+              className="text-[12px] h-9 px-3.5 rounded-xl font-bold flex items-center gap-1.5 border-slate-200 hover:border-[#0F2744]/40 hover:text-[#0F2744] hover:bg-[#EEF4FA]/60 cursor-pointer"
             >
               <Pencil className="w-3.5 h-3.5" />
               <span>Edit {tabs.find(t => t.key === currentTab)?.label}</span>
@@ -104,7 +104,7 @@ export function ResumeDetailsTabs({
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-5 scrollbar-none border-b border-slate-100">
+      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-5 scrollbar-none border-b border-slate-100">
         {tabs.map((tab) => {
           const Icon = tab.icon
           const isActive = currentTab === tab.key
@@ -119,16 +119,16 @@ export function ResumeDetailsTabs({
               className={cn(
                 "flex items-center gap-2 px-3.5 py-2 rounded-xl text-[12.5px] font-bold transition-all shrink-0 cursor-pointer select-none",
                 isActive
-                  ? "bg-slate-900 text-white shadow-xs"
-                  : "bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/70"
+                  ? "bg-[#0F2744] text-white shadow-xs"
+                  : "bg-[#F8FAFC] text-slate-600 hover:bg-[#EEF4FA] hover:text-[#0F2744] border border-slate-200/80"
               )}
             >
-              <Icon className={cn("w-3.5 h-3.5", isActive ? "text-emerald-400" : "text-slate-500")} />
+              <Icon className={cn("w-3.5 h-3.5", isActive ? "text-[#F59E0B]" : "text-slate-500")} />
               <span>{tab.label}</span>
               {typeof tab.count === 'number' && (
                 <span className={cn(
-                  "text-[10px] px-1.5 py-0.2 rounded-full font-black",
-                  isActive ? "bg-white/20 text-white" : "bg-slate-200 text-slate-700"
+                  "text-[10px] px-1.5 py-0.5 rounded-full font-black tabular-nums leading-none",
+                  isActive ? "bg-white/15 text-white" : "bg-slate-200/80 text-slate-700"
                 )}>
                   {tab.count}
                 </span>

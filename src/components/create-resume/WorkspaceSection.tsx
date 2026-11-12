@@ -149,7 +149,7 @@ export function WorkspaceSection({
     <div className="flex flex-col lg:flex-row gap-6 w-full max-w-full items-start">
       {/* Sidebar Navigation */}
       <div className="w-full lg:w-72 shrink-0 relative z-10">
-        <div className="bg-[#0F2744] rounded-3xl p-5 shadow-2xl border border-[#1E3A8A] sticky top-24">
+        <div className="bg-[#0F2744] rounded-3xl p-5 shadow-xl shadow-slate-900/10 border border-[#1E3A5F] lg:sticky lg:top-32">
           <div className="mb-5 px-1">
             <h3 className="text-[11px] font-black text-amber-400 uppercase tracking-widest mb-1">Workspace Menu</h3>
             <p className="text-[12px] text-slate-300 font-medium leading-tight">Tailored tools & prep materials</p>
@@ -301,7 +301,7 @@ export function WorkspaceSection({
 
       {/* Main Content Area */}
       <div className="flex-1 min-w-0 relative">
-        <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200/80 shadow-sm p-4 sm:p-6 lg:p-8 min-h-[600px]">
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-5 sm:p-7 min-h-[580px]">
           {activeTab === 'intro' && (
             <SelfPitchSection
               interviewPrep={interviewPrep}

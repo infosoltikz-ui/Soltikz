@@ -85,38 +85,38 @@ export function CertificationsForm({
   }
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs overflow-hidden">
       {/* Card Header */}
-      <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="px-6 py-4 border-b border-slate-100 bg-[#F8FAFC] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-[15px] font-bold text-slate-900">Professional Certifications &amp; Licenses</h2>
-          <p className="text-[12px] text-slate-500 font-medium">Add verified industry credentials, cloud certifications, and technical licenses.</p>
+          <h2 className="text-[16px] font-black text-slate-900">Professional Certifications &amp; Licenses</h2>
+          <p className="text-[12.5px] text-slate-500 font-medium">Add verified industry credentials, cloud certifications, and technical licenses.</p>
         </div>
         <button 
           onClick={handleAdd} 
-          className="h-8 px-3 text-[12px] font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300 rounded-lg inline-flex items-center gap-1.5 transition-colors cursor-pointer self-start sm:self-auto"
+          className="h-9 px-3.5 text-[12px] font-bold bg-white hover:bg-[#EEF4FA] text-[#0F2744] border border-slate-200 hover:border-[#0F2744]/30 rounded-xl inline-flex items-center gap-1.5 transition-colors cursor-pointer self-start sm:self-auto"
         >
-          <Plus className="w-3.5 h-3.5 text-primary" />
+          <Plus className="w-3.5 h-3.5 text-[#D97706]" />
           Add Certification
         </button>
       </div>
 
       <div className="px-6 py-6 space-y-5">
         {certList.length === 0 ? (
-          <div className="py-8 text-center border-2 border-dashed border-slate-200 rounded-lg">
+          <div className="py-10 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-[#F8FAFC]">
             <Award className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-            <p className="text-[13px] font-semibold text-slate-700">No certifications added yet</p>
-            <p className="text-[11px] text-slate-500 mb-3">Add verified credentials like AWS, PMP, CKAD, or Google Cloud.</p>
+            <p className="text-[13.5px] font-bold text-slate-700">No certifications added yet</p>
+            <p className="text-[12px] text-slate-500 mb-4">Add verified credentials like AWS, PMP, CKAD, or Google Cloud.</p>
             <button
               onClick={handleAdd}
-              className="h-8 px-3.5 text-[12px] font-semibold bg-primary text-white rounded-lg inline-flex items-center gap-1.5 cursor-pointer"
+              className="h-9 px-4 text-[12.5px] font-bold bg-[#0F2744] hover:bg-[#0A1C33] text-white rounded-xl inline-flex items-center gap-1.5 cursor-pointer"
             >
-              <Plus className="w-3.5 h-3.5" /> Add First Certification
+              <Plus className="w-3.5 h-3.5 text-[#F59E0B]" /> Add First Certification
             </button>
           </div>
         ) : (
           certList.map((cert, index) => (
-            <div key={index} className="p-5 rounded-lg border border-slate-200 bg-slate-50/40 hover:bg-slate-50/70 transition-colors space-y-4">
+            <div key={index} className="p-5 rounded-2xl border border-slate-200/80 bg-[#F8FAFC] hover:bg-white transition-colors space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-slate-200/60">
                 <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                   Certification #{index + 1}

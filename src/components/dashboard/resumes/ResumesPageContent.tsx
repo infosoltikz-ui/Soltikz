@@ -35,6 +35,7 @@ export function ResumesPageContent() {
   const [searchQuery, setSearchQuery] = useState('')
   const [filterType, setFilterType] = useState<ResumeFilterType>('all')
   const [sortBy, setSortBy] = useState<ResumeSortBy>('newest')
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [previewResume, setPreviewResume] = useState<ResumeRow | null>(null)
   const [editingResume, setEditingResume] = useState<ResumeRow | null>(null)
 
@@ -537,11 +538,14 @@ export function ResumesPageContent() {
           onFilterChange={setFilterType}
           sortBy={sortBy}
           onSortChange={setSortBy}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
         />
         <ResumeGrid
           resumes={filteredResumes}
           loading={loading}
           hasAnyResumes={resumes.length > 0}
+          viewMode={viewMode}
           onDelete={handleDelete}
           onDuplicate={handleDuplicate}
           duplicatingId={duplicatingId}

@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader'
 import { StatCards } from '@/components/dashboard/StatCards'
 import { RecentResumes } from '@/components/dashboard/RecentResumes'
@@ -12,12 +13,15 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { FREE_TIER_CREDITS } from '@/utils/pricingPlans'
 import { ModuleHowItWorks, ModuleStep } from '@/components/dashboard/ModuleHowItWorks'
+import { FilePlus2 } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   if (!user) {
     redirect('/login')
@@ -52,19 +56,26 @@ export default async function DashboardPage() {
     for (let i = 0; i < (r.id || '').length; i++) {
       hash = (hash * 31 + (r.id || '').charCodeAt(i)) % 1000
     }
-    const score = (rawScore != null && rawScore > 0) ? rawScore : (92 + (Math.abs(hash) % 5))
+    const score =
+      rawScore != null && rawScore > 0 ? rawScore : 92 + (Math.abs(hash) % 5)
     return {
       ...r,
-      ats_analyses: [{ overall_score: score }]
+      ats_analyses: [{ overall_score: score }],
     }
   })
 
   // Calculate accurate live stats
   const totalResumes = processedResumes.length || profile?.resumes_generated || 0
 
-  const avgAts = processedResumes.length > 0
-    ? Math.round(processedResumes.reduce((sum: number, r: any) => sum + (r.ats_analyses?.[0]?.overall_score || 0), 0) / processedResumes.length)
-    : 94
+  const avgAts =
+    processedResumes.length > 0
+      ? Math.round(
+          processedResumes.reduce(
+            (sum: number, r: any) => sum + (r.ats_analyses?.[0]?.overall_score || 0),
+            0
+          ) / processedResumes.length
+        )
+      : null
 
   // Calculate profile completion accurately based on master_resume_data & profile
   const masterData = profile?.master_resume_data || {}
@@ -72,13 +83,19 @@ export default async function DashboardPage() {
   let completedSections = 0
   const totalSections = 5
 
-  if ((profile?.full_name || personalInfo.firstName) && (profile?.phone || personalInfo.phone || personalInfo.email)) {
+  if (
+    (profile?.full_name || personalInfo.firstName) &&
+    (profile?.phone || personalInfo.phone || personalInfo.email)
+  ) {
     completedSections++
   }
   if (personalInfo.summary || personalInfo.targetRole) {
     completedSections++
   }
-  if ((masterData.employment && masterData.employment.length > 0) || (masterData.experience && masterData.experience.length > 0)) {
+  if (
+    (masterData.employment && masterData.employment.length > 0) ||
+    (masterData.experience && masterData.experience.length > 0)
+  ) {
     completedSections++
   }
   if (masterData.education && masterData.education.length > 0) {
@@ -128,14 +145,28 @@ export default async function DashboardPage() {
   ]
 
   return (
-    <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-12 max-w-[1600px] mx-auto bg-slate-50/50 min-h-screen">
+    <div className="px-4 sm:px-6 lg:px-8 pt-6 pb-14 max-w-[1540px] mx-auto">
       <LoginToast />
-      <DashboardHeader title="Dashboard" greeting />
+
+      <DashboardHeader
+        eyebrow="Workspace Overview"
+        title="Dashboard"
+        greeting
+        actions={
+          <Link
+            href="/dashboard/create"
+            className="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0F2744] hover:bg-[#0A1C33] text-white text-xs font-extrabold shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+          >
+            <FilePlus2 className="w-4 h-4 text-[#F59E0B]" />
+            <span>Create Resume</span>
+          </Link>
+        }
+      />
 
       <main className="space-y-6">
         <ModuleHowItWorks
           moduleTitle="Dashboard"
-          tagline="Complete your profile, create tailored resumes, and track your job search - all in one place."
+          tagline="Complete your profile, create tailored resumes, and track your job search in one workspace."
           steps={steps}
         />
 
@@ -153,7 +184,7 @@ export default async function DashboardPage() {
           profileCompletion={profileCompletion}
         />
 
-        {/* Row 1: Recent Resumes & Current Plan (2-Bar) */}
+        {/* Row 1: Recent Resumes & Current Plan */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
           <RecentResumes resumes={processedResumes} />
           <CurrentPlanCard

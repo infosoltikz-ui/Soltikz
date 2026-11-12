@@ -53,13 +53,19 @@ export function TemplateSelector({ selectedId, onChange, isSubscribed = true, on
 
   return (
     <>
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-5 sm:p-7">
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h2 className="text-[18px] font-black text-slate-900 mb-1">Choose a Template</h2>
-            <p className="text-[13px] font-medium text-slate-500">Pick the layout your resume will be generated into. Click <strong className="text-slate-800">Preview</strong> to inspect the full A4 sheet or <strong className="text-emerald-700">Use</strong> to select.</p>
+            <h2 className="text-[17px] sm:text-[18px] font-black text-slate-900 tracking-tight mb-1">
+              Choose a Template
+            </h2>
+            <p className="text-[12.5px] font-medium text-slate-500">
+              Pick the layout your resume will be generated into. Hover to{' '}
+              <strong className="text-slate-800">Preview</strong> the full A4 sheet or{' '}
+              <strong className="text-[#0F2744]">Use</strong> to select.
+            </p>
           </div>
-          <span className="text-[12px] font-bold text-emerald-800 bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200/80 self-start sm:self-auto">
+          <span className="text-[11.5px] font-extrabold text-[#0F2744] bg-[#EEF4FA] px-3.5 py-1.5 rounded-full border border-slate-200/80 self-start sm:self-auto shrink-0">
             5 ATS Certified Layouts
           </span>
         </div>
@@ -76,7 +82,7 @@ export function TemplateSelector({ selectedId, onChange, isSubscribed = true, on
                 className={cn(
                   "relative rounded-2xl border-2 text-left transition-all duration-200 overflow-hidden group flex flex-col hover:-translate-y-1 shadow-xs hover:shadow-md cursor-pointer",
                   isSelected 
-                    ? "border-emerald-500 bg-emerald-50/10 ring-2 ring-emerald-500/20" 
+                    ? "border-[#0F2744] bg-[#EEF4FA]/25 ring-2 ring-[#0F2744]/15" 
                     : "border-slate-200 hover:border-slate-300 bg-white"
                 )}
               >
@@ -85,14 +91,14 @@ export function TemplateSelector({ selectedId, onChange, isSubscribed = true, on
                   <TemplateThumbnail id={template.id} profileData={profileData} />
                   
                   {/* Floating Action Buttons on Thumbnail Hover */}
-                  <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2 backdrop-blur-[1.5px]">
+                  <div className="absolute inset-0 bg-[#0F2744]/55 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2 backdrop-blur-[1.5px]">
                     <button
                       type="button"
                       onClick={(e) => handleTemplateClick(template.id, e)}
-                      className="bg-white/95 hover:bg-white text-slate-900 text-[12px] font-bold px-3 py-1.5 rounded-lg shadow-md backdrop-blur-sm transform translate-y-1 group-hover:translate-y-0 transition-all flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95"
+                      className="bg-white/95 hover:bg-white text-slate-900 text-[12px] font-bold px-3 py-1.5 rounded-lg shadow-md transform translate-y-1 group-hover:translate-y-0 transition-all flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95"
                       title="Preview Template"
                     >
-                      <Eye className="w-3.5 h-3.5 text-slate-700" />
+                      <Eye className="w-3.5 h-3.5 text-[#0F2744]" />
                       <span>Preview</span>
                     </button>
                     
@@ -102,8 +108,8 @@ export function TemplateSelector({ selectedId, onChange, isSubscribed = true, on
                       className={cn(
                         "text-[12px] font-bold px-3.5 py-1.5 rounded-lg shadow-md transform translate-y-1 group-hover:translate-y-0 transition-all flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95",
                         isSelected 
-                          ? "bg-emerald-600 text-white ring-1 ring-white/50" 
-                          : "bg-emerald-600 hover:bg-emerald-700 text-white"
+                          ? "bg-[#F59E0B] text-[#0F2744]" 
+                          : "bg-[#0F2744] hover:bg-[#0A1C33] text-white border border-white/20"
                       )}
                       title="Use this Template"
                     >
@@ -118,7 +124,7 @@ export function TemplateSelector({ selectedId, onChange, isSubscribed = true, on
                   <div className="flex items-center justify-between gap-1 mb-1">
                     <h3 className="text-[14px] font-black text-slate-900 leading-tight truncate">{template.name}</h3>
                     {isSelected && (
-                      <span className="text-[10.5px] font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 shrink-0">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#0F2744] bg-[#EEF4FA] px-2 py-0.5 rounded-md border border-[#0F2744]/20 shrink-0">
                         Active
                       </span>
                     )}
@@ -128,7 +134,7 @@ export function TemplateSelector({ selectedId, onChange, isSubscribed = true, on
 
                 {/* Selected Corner Badge */}
                 {isSelected && (
-                  <div className="absolute right-2.5 top-2.5 text-emerald-600 bg-white rounded-full shadow-md pointer-events-none p-0.5">
+                  <div className="absolute right-2.5 top-2.5 text-[#0F2744] bg-white rounded-full shadow-md pointer-events-none p-0.5 ring-2 ring-[#F59E0B]/40">
                     <CheckCircle2 className="w-5 h-5" fill="currentColor" stroke="white" strokeWidth={1.5} />
                   </div>
                 )}

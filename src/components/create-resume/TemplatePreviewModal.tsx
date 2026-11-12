@@ -34,13 +34,13 @@ export function TemplatePreviewModal({ templateId, onClose, onSelect, profileDat
         {/* Header Options */}
         <div className="flex items-center justify-between gap-4 px-6 py-4 bg-white border-b border-slate-200 z-10 shrink-0">
           <div className="flex items-center gap-3 min-w-0 flex-1">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-[#EEF4FA] border border-slate-200/80 flex items-center justify-center text-[#0F2744] shrink-0">
               <FileText className="w-5 h-5" />
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
                 <h2 className="text-[17px] font-black text-slate-900 whitespace-nowrap">{template.name}</h2>
-                <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 shrink-0 whitespace-nowrap">
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 border border-emerald-200 text-[#059669] shrink-0 whitespace-nowrap">
                   ATS Verified
                 </span>
               </div>
@@ -77,8 +77,8 @@ export function TemplatePreviewModal({ templateId, onClose, onSelect, profileDat
 
             <Button 
               onClick={() => onSelect(template.id)} 
-              leftIcon={<Check className="w-4 h-4 shrink-0" />}
-              className="h-10 px-5 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-lg transition-all cursor-pointer whitespace-nowrap shrink-0 inline-flex items-center justify-center gap-2"
+              leftIcon={<Check className="w-4 h-4 text-[#F59E0B] shrink-0" />}
+              className="h-10 px-5 rounded-xl font-bold bg-[#0F2744] hover:bg-[#0A1C33] text-white shadow-sm transition-all cursor-pointer whitespace-nowrap shrink-0 inline-flex items-center justify-center gap-2"
             >
               Use This Template
             </Button>

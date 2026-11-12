@@ -56,27 +56,31 @@ export function AIGenerationLoadingHUD({ currentState }: { currentState: string 
   ]
 
   return (
-    <div className="absolute inset-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl z-20 flex flex-col items-center justify-center p-6 sm:p-10 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-2xl overflow-hidden animate-in fade-in duration-300">
+    <div className="absolute inset-0 bg-white/95 backdrop-blur-xl z-20 flex flex-col items-center justify-center p-6 sm:p-10 rounded-3xl border border-slate-200/90 shadow-2xl overflow-hidden animate-in fade-in duration-300">
       
-      {/* Background Ambient Mesh Glow */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -translate-y-24 translate-x-24 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl translate-y-24 -translate-x-24 pointer-events-none" />
+      {/* Background Ambient Radial Glow */}
+      <div
+        className="pointer-events-none absolute -top-20 -right-20 w-80 h-80 rounded-full opacity-20"
+        style={{ background: 'radial-gradient(circle, #0F2744 0%, transparent 70%)' }}
+      />
+      <div
+        className="pointer-events-none absolute -bottom-20 -left-20 w-80 h-80 rounded-full opacity-20"
+        style={{ background: 'radial-gradient(circle, #F59E0B 0%, transparent 70%)' }}
+      />
 
-      {/* Main Centerpiece: Elegant Executive AI Orb */}
+      {/* Main Centerpiece: Executive AI Orb */}
       <div className="relative flex items-center justify-center mb-8 mt-4">
-        
-        {/* Ambient Core Glow */}
-        <div className="absolute w-32 h-32 rounded-full bg-emerald-500/10 blur-xl pointer-events-none" />
+        <div className="absolute w-32 h-32 rounded-full bg-[#EEF4FA] blur-xl pointer-events-none" />
         
         {/* Outer Spinning Ring */}
-        <div className="absolute w-24 h-24 rounded-full border border-slate-200/50 dark:border-slate-700/50 border-t-emerald-500 dark:border-t-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.15)] animate-[spin_3s_linear_infinite]" />
+        <div className="absolute w-24 h-24 rounded-full border-2 border-slate-200/70 border-t-[#0F2744] animate-[spin_3s_linear_infinite]" />
         
         {/* Inner Spinning Ring (Opposite direction) */}
-        <div className="absolute w-16 h-16 rounded-full border border-slate-200/50 dark:border-slate-700/50 border-b-teal-500 dark:border-b-teal-400 animate-[spin_2s_linear_infinite_reverse]" />
+        <div className="absolute w-16 h-16 rounded-full border-2 border-slate-200/70 border-b-[#F59E0B] animate-[spin_2s_linear_infinite_reverse]" />
 
-        {/* Center Glowing Core */}
-        <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/30 animate-pulse">
-          <Sparkles className="w-5 h-5 text-white" />
+        {/* Center Navy Core */}
+        <div className="relative w-11 h-11 rounded-2xl bg-[#0F2744] flex items-center justify-center shadow-lg shadow-slate-900/20">
+          <Sparkles className="w-5 h-5 text-[#F59E0B]" />
         </div>
       </div>
 
@@ -84,25 +88,25 @@ export function AIGenerationLoadingHUD({ currentState }: { currentState: string 
       <div className="text-center relative z-10 max-w-lg w-full space-y-4">
         
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800 text-[11.5px] font-bold text-emerald-800 dark:text-emerald-300 mb-2.5 shadow-2xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EEF4FA] border border-slate-200/80 text-[11.5px] font-bold text-[#0F2744] mb-2.5 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-[#059669]" />
             <span>AI Resume Intelligence Engine</span>
           </div>
 
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+          <h3 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
             Crafting Your Tailored Resume
           </h3>
 
-          <p className="text-[13.5px] font-medium text-slate-600 dark:text-slate-300 mt-1.5 h-6">
+          <p className="text-[13.5px] font-medium text-slate-600 mt-1.5 h-6">
             {currentState || 'Optimizing ATS Keywords & Bullet Points'}
-            <span className="text-emerald-600 font-bold">{dots}</span>
+            <span className="text-[#D97706] font-bold">{dots}</span>
           </p>
         </div>
 
         {/* Dynamic Progress Bar */}
-        <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 p-0.5 border border-slate-200/80 dark:border-slate-700 overflow-hidden shadow-inner">
+        <div className="w-full bg-slate-100 rounded-full h-2.5 p-0.5 border border-slate-200/80 overflow-hidden shadow-inner">
           <div 
-            className="h-full bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 rounded-full transition-all duration-700 ease-out"
+            className="h-full bg-gradient-to-r from-[#0F2744] via-[#1E3A5F] to-[#F59E0B] rounded-full transition-all duration-700 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -115,19 +119,19 @@ export function AIGenerationLoadingHUD({ currentState }: { currentState: string 
               className={cn(
                 "p-3 rounded-xl border text-[12px] transition-all flex items-start gap-2.5",
                 st.completed
-                  ? "bg-emerald-50/80 dark:bg-emerald-950/40 border-emerald-200/90 dark:border-emerald-800/80 text-emerald-900 dark:text-emerald-200 shadow-2xs" 
+                  ? "bg-emerald-50/80 border-emerald-200/90 text-emerald-950 shadow-2xs" 
                   : st.active
-                  ? "bg-white dark:bg-slate-800 border-emerald-500/80 text-slate-900 dark:text-slate-100 shadow-xs ring-1 ring-emerald-500/20"
-                  : "bg-slate-50/60 dark:bg-slate-900/40 border-slate-200/60 dark:border-slate-800 text-slate-400"
+                  ? "bg-white border-[#0F2744]/40 text-slate-900 shadow-xs ring-1 ring-[#0F2744]/15"
+                  : "bg-[#F8FAFC] border-slate-200/60 text-slate-400"
               )}
             >
               <div className="mt-0.5 shrink-0">
                 {st.completed ? (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <CheckCircle2 className="w-4 h-4 text-[#059669]" />
                 ) : st.active ? (
-                  <Loader2 className="w-4 h-4 text-emerald-600 animate-spin" />
+                  <Loader2 className="w-4 h-4 text-[#D97706] animate-spin" />
                 ) : (
-                  <div className="w-4 h-4 rounded-full border border-slate-300 dark:border-slate-600 flex items-center justify-center text-[9px] font-bold text-slate-400">
+                  <div className="w-4 h-4 rounded-full border border-slate-300 flex items-center justify-center text-[9px] font-bold text-slate-400">
                     {i + 1}
                   </div>
                 )}
@@ -136,7 +140,7 @@ export function AIGenerationLoadingHUD({ currentState }: { currentState: string 
                 <div className="font-bold text-[12.5px] leading-tight truncate">
                   {st.label}
                 </div>
-                <div className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5 truncate">
+                <div className="text-[11px] text-slate-500 leading-tight mt-0.5 truncate">
                   {st.desc}
                 </div>
               </div>
@@ -145,17 +149,17 @@ export function AIGenerationLoadingHUD({ currentState }: { currentState: string 
         </div>
 
         {/* Executive Trust Badges Footer */}
-        <div className="pt-2 flex flex-wrap items-center justify-center gap-4 text-[11.5px] font-semibold text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800">
-          <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
-            <Target className="w-3.5 h-3.5 text-emerald-600" /> 90+ ATS Score Target
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-4 text-[11.5px] font-semibold text-slate-500 border-t border-slate-100">
+          <span className="flex items-center gap-1.5 text-slate-700">
+            <Target className="w-3.5 h-3.5 text-[#059669]" /> 90+ ATS Score Target
           </span>
-          <span className="text-slate-300 dark:text-slate-700">•</span>
-          <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
-            <FileText className="w-3.5 h-3.5 text-teal-600" /> Strict 2-Line Bullets
+          <span className="text-slate-300">•</span>
+          <span className="flex items-center gap-1.5 text-slate-700">
+            <FileText className="w-3.5 h-3.5 text-[#0F2744]" /> Strict 2-Line Bullets
           </span>
-          <span className="text-slate-300 dark:text-slate-700">•</span>
-          <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
-            <ShieldCheck className="w-3.5 h-3.5 text-blue-600" /> Enterprise Privacy
+          <span className="text-slate-300">•</span>
+          <span className="flex items-center gap-1.5 text-slate-700">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#D97706]" /> Enterprise Privacy
           </span>
         </div>
 

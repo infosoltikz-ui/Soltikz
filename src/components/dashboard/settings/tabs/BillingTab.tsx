@@ -161,9 +161,9 @@ export function BillingTab({ initialYearly = false }: { initialYearly?: boolean 
               <Button
                 onClick={handleUpgrade}
                 disabled={isProcessing}
-                className="h-11 px-6 text-[13px] font-bold rounded-xl bg-white text-slate-900 hover:bg-slate-50 shadow-sm"
+                className="h-11 px-6 text-[13.5px] font-extrabold rounded-xl bg-[#F59E0B] text-[#0F2744] hover:bg-[#D97706] shadow-md shadow-amber-500/20 cursor-pointer transition-all"
               >
-                {isProcessing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Zap className="w-4 h-4 mr-2 text-amber-500" />}
+                {isProcessing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Zap className="w-4 h-4 mr-2 text-[#0F2744]" />}
                 Upgrade for {currency === 'INR' ? '₹' : '$'}{currency === 'INR' ? selectedPlan.amountInr : selectedPlan.amountUsd}/{isYearly ? 'yr' : 'mo'}
               </Button>
             </div>

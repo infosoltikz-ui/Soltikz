@@ -89,24 +89,24 @@ export function CoverLetterViewer({
   return (
     <div className="space-y-5">
       {/* Settings Toolbar */}
-      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-white border border-slate-200 rounded-xl p-2 shadow-sm">
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-white border border-slate-200/90 rounded-2xl p-2.5 shadow-xs">
         <div className="flex flex-wrap items-center gap-4 px-2">
           {/* Tone Selector */}
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0">
-              <FileSignature className="w-3 h-3" />
+            <div className="flex items-center gap-1 text-[10.5px] font-extrabold text-slate-400 uppercase tracking-wider shrink-0">
+              <FileSignature className="w-3.5 h-3.5 text-[#0F2744]" />
               <span>Tone:</span>
             </div>
-            <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200/60">
+            <div className="flex bg-[#F8FAFC] p-1 rounded-xl border border-slate-200/70">
               {content.variations.map((variation) => (
                 <button
                   key={variation.id}
                   onClick={() => setActiveVariationId(variation.id || '')}
                   className={cn(
-                    'px-2.5 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap',
+                    'px-3 py-1 rounded-lg text-[11.5px] font-bold transition-all cursor-pointer whitespace-nowrap',
                     activeVariationId === variation.id
-                      ? 'bg-white text-emerald-600 shadow-sm border border-slate-200/50'
-                      : 'text-slate-500 hover:text-slate-700'
+                      ? 'bg-[#0F2744] text-white shadow-xs'
+                      : 'text-slate-600 hover:text-[#0F2744]'
                   )}
                 >
                   {variation.name?.split(' ')[1] || variation.name}
@@ -120,20 +120,20 @@ export function CoverLetterViewer({
 
           {/* Template Selector */}
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0">
-              <LayoutTemplate className="w-3 h-3" />
+            <div className="flex items-center gap-1 text-[10.5px] font-extrabold text-slate-400 uppercase tracking-wider shrink-0">
+              <LayoutTemplate className="w-3.5 h-3.5 text-[#0F2744]" />
               <span>Style:</span>
             </div>
-            <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200/60">
+            <div className="flex bg-[#F8FAFC] p-1 rounded-xl border border-slate-200/70">
               {VISUAL_TEMPLATES.map((tpl) => (
                 <button
                   key={tpl.id}
                   onClick={() => setActiveTemplateId(tpl.id)}
                   className={cn(
-                    'flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap',
+                    'flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11.5px] font-bold transition-all cursor-pointer whitespace-nowrap',
                     activeTemplateId === tpl.id
-                      ? 'bg-slate-800 text-white shadow-sm'
-                      : 'text-slate-500 hover:text-slate-700'
+                      ? 'bg-[#0F2744] text-white shadow-xs'
+                      : 'text-slate-600 hover:text-[#0F2744]'
                   )}
                 >
                   <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: tpl.color }} />
@@ -148,25 +148,25 @@ export function CoverLetterViewer({
         <div className="flex items-center gap-2 pr-1">
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-[11px] font-bold text-slate-600 transition-all cursor-pointer shadow-xs"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-[#F8FAFC] text-[12px] font-bold text-slate-700 transition-all cursor-pointer shadow-2xs"
             title="Copy Text"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-[#059669]" /> : <Copy className="w-3.5 h-3.5" />}
             <span className="hidden sm:inline">{copied ? 'Copied' : 'Copy'}</span>
           </button>
           <button
             onClick={handleDownloadPdf}
             disabled={isDownloading}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold transition-all cursor-pointer shadow-sm disabled:opacity-60"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0F2744] hover:bg-[#0A1C33] text-white text-[12px] font-extrabold transition-all cursor-pointer shadow-xs disabled:opacity-60"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>{isDownloading ? '...' : 'PDF'}</span>
+            <Download className="w-3.5 h-3.5 text-[#F59E0B]" />
+            <span>{isDownloading ? 'Exporting...' : 'Download PDF'}</span>
           </button>
         </div>
       </div>
 
       {/* Preview Area */}
-      <div className="rounded-2xl border border-slate-200 overflow-hidden shadow-sm bg-slate-100/50 p-4 sm:p-8 flex justify-center">
+      <div className="rounded-3xl border border-slate-200/90 overflow-hidden shadow-inner bg-slate-200/60 p-4 sm:p-8 flex justify-center">
         <div className="overflow-x-auto w-full max-w-[794px] bg-white shadow-md border border-slate-200 rounded-sm">
           <div ref={letterRef} style={{ transformOrigin: 'top left', width: '100%' }}>
             {activeTemplateId === 'classic' && <ClassicCoverLetterTemplate {...sharedProps} />}

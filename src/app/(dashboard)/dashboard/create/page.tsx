@@ -583,22 +583,22 @@ export default function CreateResumePage() {
   }
 
   return (
-    <div className="pb-10 max-w-[1600px] mx-auto min-h-screen bg-slate-50/50">
+    <div className="pb-12 max-w-[1540px] mx-auto min-h-screen">
       <Modal id="paywall-modal" title="Upgrade to Pro" size="sm">
         <div className="flex flex-col items-center text-center pt-2">
-          <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4">
-            <span className="text-2xl">🚀</span>
+          <div className="w-14 h-14 bg-[#FEF3C7] border border-[#F59E0B]/30 rounded-2xl flex items-center justify-center mb-4 text-[#D97706]">
+            <Sparkles className="w-7 h-7" />
           </div>
-          <h3 className="text-xl font-bold text-slate-900 mb-2">You've reached your limit!</h3>
-          <p className="text-[13px] text-slate-500 mb-6 leading-relaxed">
-            You have used all 10 of your free AI resume generations. Upgrade to our Pro plan to unlock unlimited resumes, cover letters, and advanced ATS optimization.
+          <h3 className="text-[19px] font-black text-slate-900 mb-2 tracking-tight">Free Credits Exhausted</h3>
+          <p className="text-[13.5px] text-slate-500 mb-6 leading-relaxed">
+            You have used all 10 of your free AI resume generations. Upgrade to Pro for unlimited resumes, Word (.docx) exports, Cover Letter Studio, and Interview Prep.
           </p>
           <div className="flex gap-3 w-full">
-            <Button variant="outline" className="flex-1" onClick={() => closeModal('paywall-modal')}>
+            <Button variant="outline" className="flex-1 rounded-xl font-bold border-slate-200 cursor-pointer" onClick={() => closeModal('paywall-modal')}>
               Cancel
             </Button>
             <Link href="/dashboard/pricing" className="flex-1">
-              <Button className="w-full">
+              <Button className="w-full rounded-xl font-bold bg-[#0F2744] hover:bg-[#0A1C33] text-white cursor-pointer">
                 Upgrade Now
               </Button>
             </Link>
@@ -650,15 +650,13 @@ export default function CreateResumePage() {
               />
             </div>
 
-            <div className="flex justify-end pt-4">
+            <div className="flex justify-end pt-3">
               <Button
                 onClick={handleProceedToStep2}
-                className="relative h-14 px-10 text-[16px] font-black rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xl shadow-emerald-600/30 flex items-center gap-3 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-600/50 hover:-translate-y-1 overflow-hidden group/btn cursor-pointer"
+                className="relative h-13 px-8 text-[15px] font-black rounded-2xl bg-[#0F2744] hover:bg-[#0A1C33] text-white shadow-lg shadow-slate-900/15 flex items-center gap-3 transition-all duration-200 hover:-translate-y-0.5 overflow-hidden group/btn cursor-pointer"
               >
-                {/* Shimmer Effect */}
-                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover/btn:animate-[shimmer_1.5s_infinite]" />
-                <span className="relative z-10 tracking-wide">Next Step: Target Job & AI Generation</span>
-                <ArrowRight className="w-5 h-5 opacity-90 group-hover/btn:translate-x-1.5 transition-transform relative z-10" />
+                <span className="relative z-10 tracking-wide">Next Step: Target Job &amp; AI Generation</span>
+                <ArrowRight className="w-5 h-5 text-[#F59E0B] group-hover/btn:translate-x-1 transition-transform relative z-10" />
               </Button>
             </div>
           </div>
@@ -684,7 +682,7 @@ export default function CreateResumePage() {
             ) : (
               <div className="space-y-6">
                 {/* Step 2 Top Action & Control Header */}
-                <div className="bg-white/80 backdrop-blur-md border border-slate-200/80 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-md">
+                <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xs">
                   <div className="flex flex-wrap items-center gap-3">
                     <Button
                       onClick={() => {
@@ -694,53 +692,56 @@ export default function CreateResumePage() {
                         }
                       }}
                       variant="outline"
-                      className="h-10 px-4 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-slate-50 text-[13px] font-bold shadow-2xs flex items-center gap-2"
+                      className="h-10 px-4 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-[#F8FAFC] hover:text-[#0F2744] text-[13px] font-bold flex items-center gap-2 cursor-pointer"
                     >
                       <ArrowLeft className="w-4 h-4" />
-                      <span>Edit Target Job & Details</span>
+                      <span>Edit Target Job &amp; Details</span>
                     </Button>
 
                     <div className="flex items-center gap-2">
-                      <span className="px-3 py-1 rounded-xl text-[12px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200/80">
+                      <span className="px-3 py-1 rounded-full text-[11.5px] font-extrabold bg-[#EEF4FA] text-[#0F2744] border border-slate-200/80">
                         {getTemplateById(selectedTemplateId).name} Layout
                       </span>
-                      <span className="px-3 py-1 rounded-xl text-[12px] font-extrabold bg-slate-100 text-slate-700 border border-slate-200">
+                      <span className={resumeType === 'c2c'
+                        ? 'px-3 py-1 rounded-full text-[11.5px] font-extrabold bg-[#FEF3C7] text-[#B45309] border border-[#F59E0B]/30'
+                        : 'px-3 py-1 rounded-full text-[11.5px] font-extrabold bg-slate-100 text-slate-700 border border-slate-200'
+                      }>
                         {resumeType === 'c2c' ? 'C2C Vendor Submission' : 'Full-Time Corporate'}
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2.5 flex-wrap w-full md:w-auto justify-end">
+                  <div className="flex items-center gap-2 flex-wrap w-full md:w-auto justify-end">
                     <Button
                       onClick={() => setIsRegenerateSummaryModalOpen(true)}
                       variant="outline"
-                      className="h-10 px-3.5 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-slate-50 text-[12px] font-bold shadow-2xs"
+                      className="h-10 px-3.5 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-[#F8FAFC] hover:text-[#0F2744] text-[12px] font-bold cursor-pointer"
                     >
                       Refine Summary
                     </Button>
                     <Button
                       onClick={() => setIsManualEditModalOpen(true)}
                       variant="outline"
-                      className="h-10 px-3.5 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-slate-50 text-[12px] font-bold shadow-2xs"
+                      className="h-10 px-3.5 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-[#F8FAFC] hover:text-[#0F2744] text-[12px] font-bold cursor-pointer"
                     >
                       Edit Skills
                     </Button>
 
                     <Button
                       onClick={handlePrint}
-                      className="h-10 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md shadow-emerald-600/20 text-[13px] font-black cursor-pointer flex items-center gap-2"
+                      className="h-10 px-4 rounded-xl bg-[#0F2744] hover:bg-[#0A1C33] text-white shadow-sm text-[13px] font-extrabold cursor-pointer flex items-center gap-2 transition-all"
                     >
-                      <Download className="w-4 h-4" />
+                      <Download className="w-4 h-4 text-[#F59E0B]" />
                       <span>Download PDF</span>
                     </Button>
                     <Button
                       onClick={handleDownloadDocx}
                       disabled={isExportingDocx}
                       variant="outline"
-                      className="h-10 px-3.5 rounded-xl border-blue-200 text-blue-700 bg-blue-50/70 hover:bg-blue-100 hover:border-blue-300 text-[12.5px] font-bold shadow-2xs flex items-center gap-1.5 cursor-pointer"
+                      className="h-10 px-3.5 rounded-xl border-[#0F2744]/20 text-[#0F2744] bg-[#EEF4FA]/60 hover:bg-[#EEF4FA] text-[12.5px] font-bold flex items-center gap-1.5 cursor-pointer"
                     >
-                      {isExportingDocx ? <Loader2 className="w-4 h-4 animate-spin text-blue-600" /> : <FileText className="w-4 h-4 text-blue-600" />}
-                      <span>Download Word (.docx)</span>
+                      {isExportingDocx ? <Loader2 className="w-4 h-4 animate-spin text-[#0F2744]" /> : <FileText className="w-4 h-4 text-[#0F2744]" />}
+                      <span>Word (.docx)</span>
                     </Button>
                   </div>
                 </div>
@@ -755,14 +756,14 @@ export default function CreateResumePage() {
 
                   {/* RIGHT COLUMN: HD LIVE PRINTABLE A4 RESUME CANVAS (Col-span-7 on xl+) */}
                   <div className="w-full xl:col-span-7 space-y-4">
-                    <div className="bg-white border border-slate-200 rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xs">
+                    <div className="bg-white border border-slate-200/90 rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xs">
                       <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-emerald-600" />
-                        <span className="text-[13px] font-bold text-slate-800">Live Resume Canvas</span>
+                        <FileText className="w-4 h-4 text-[#0F2744]" />
+                        <span className="text-[13px] font-extrabold text-slate-900">Live Resume Canvas</span>
                       </div>
 
                       {/* Zoom Controls */}
-                      <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                      <div className="flex items-center gap-1 bg-[#F8FAFC] p-1 rounded-xl border border-slate-200">
                         <button
                           onClick={() => setResumeZoom(z => Math.max(Number((z - 0.1).toFixed(1)), 0.5))}
                           className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
@@ -772,7 +773,7 @@ export default function CreateResumePage() {
                         </button>
                         <button
                           onClick={() => setResumeZoom(1)}
-                          className="px-2 py-0.5 text-[11px] font-bold text-slate-700 hover:text-slate-900 transition-colors cursor-pointer"
+                          className="px-2 py-0.5 text-[11px] font-bold text-slate-700 hover:text-slate-900 transition-colors cursor-pointer tabular-nums"
                           title="Reset to Fit Width"
                         >
                           {resumeZoom === 1 ? 'Fit Width' : `${Math.round(resumeZoom * 100)}%`}
@@ -790,7 +791,7 @@ export default function CreateResumePage() {
                     {/* Document Sheet Container */}
                     <div
                       ref={canvasContainerRef}
-                      className="bg-slate-200/80 p-3 sm:p-6 rounded-3xl border border-slate-300/80 flex flex-col items-center justify-start overflow-y-auto overflow-x-auto h-[75vh] min-h-[480px] max-h-[860px] shadow-inner scrollbar-thin"
+                      className="bg-slate-200/75 p-3 sm:p-6 rounded-3xl border border-slate-300/80 flex flex-col items-center justify-start overflow-y-auto overflow-x-auto h-[75vh] min-h-[480px] max-h-[860px] shadow-inner scrollbar-thin"
                     >
                       {(() => {
                         const effectiveScale = Number((autoScale * resumeZoom).toFixed(2))
@@ -813,32 +814,34 @@ export default function CreateResumePage() {
                     </div>
 
                     {/* Proceed to Step 3 Callout Card */}
-                    <div className="relative bg-slate-900 overflow-hidden text-white rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl border border-slate-700/50 group/card transition-all duration-500 hover:border-emerald-500/50 hover:shadow-emerald-900/20">
+                    <div className="relative bg-[#0F2744] overflow-hidden text-white rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-5 shadow-xl border border-[#1E3A5F] group/card transition-all duration-300">
 
-                      {/* Animated Glow Background */}
-                      <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl opacity-50 pointer-events-none group-hover/card:bg-emerald-500/20 transition-colors duration-700 -mr-32 -mt-32" />
+                      {/* Soft Amber Radial Glow */}
+                      <div
+                        className="pointer-events-none absolute -top-16 -right-16 w-64 h-64 rounded-full opacity-20"
+                        style={{ background: 'radial-gradient(circle, #F59E0B 0%, transparent 70%)' }}
+                      />
 
                       <div className="flex items-center gap-4 relative z-10">
-                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shrink-0 shadow-lg shadow-emerald-900/50">
-                          <Sparkles className="w-7 h-7 animate-pulse" />
+                        <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center text-[#F59E0B] shrink-0">
+                          <Sparkles className="w-6 h-6" />
                         </div>
                         <div>
-                          <h4 className="text-[17px] font-black text-white tracking-tight">
-                            Ready for Interview Strategy & Cover Letter?
+                          <h4 className="text-[16.5px] font-black text-white tracking-tight">
+                            Ready for Interview Strategy &amp; Cover Letter?
                           </h4>
-                          <p className="text-[13px] font-medium text-slate-400 mt-1">
-                            Generate tailored Cover Letter, STAR Stories, Tech Q&A, and Company Notes.
+                          <p className="text-[13px] font-medium text-slate-300 mt-1">
+                            Generate tailored Cover Letter, STAR Stories, Tech Q&amp;A, and Company Notes.
                           </p>
                         </div>
                       </div>
 
                       <Button
                         onClick={() => setStep(3)}
-                        className="relative w-full sm:w-auto h-14 px-8 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-black shadow-lg shadow-emerald-500/30 text-[15px] cursor-pointer flex items-center justify-center gap-3 shrink-0 overflow-hidden group/btn hover:shadow-emerald-500/50 hover:-translate-y-0.5 transition-all duration-300"
+                        className="relative w-full sm:w-auto h-12 px-7 rounded-2xl bg-[#F59E0B] hover:bg-[#D97706] text-[#0F2744] font-black shadow-lg shadow-amber-500/20 text-[14px] cursor-pointer flex items-center justify-center gap-2.5 shrink-0 group/btn hover:-translate-y-0.5 transition-all duration-200"
                       >
-                        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent group-hover/btn:animate-[shimmer_1.5s_infinite]" />
-                        <span className="relative z-10 tracking-wide">Proceed to Step 3</span>
-                        <ArrowRight className="w-5 h-5 opacity-90 group-hover/btn:translate-x-1.5 transition-transform relative z-10" />
+                        <span className="tracking-wide">Proceed to Step 3</span>
+                        <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                       </Button>
                     </div>
                   </div>
@@ -852,15 +855,15 @@ export default function CreateResumePage() {
         {step === 3 && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Top Navigation Bar */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/80 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-md">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-xs">
+              <div className="flex flex-wrap items-center gap-3">
                 <Button
                   onClick={() => setStep(2)}
-                  className="h-9 px-4 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 bg-transparent border border-slate-200 cursor-pointer"
+                  className="h-9 px-4 rounded-xl text-slate-700 hover:text-[#0F2744] hover:bg-[#F8FAFC] bg-white border border-slate-200 cursor-pointer"
                 >
-                  <div className="flex items-center gap-1.5 text-[13px] font-semibold">
+                  <div className="flex items-center gap-1.5 text-[13px] font-bold">
                     <ArrowLeft className="w-3.5 h-3.5" />
-                    Back to Resume Preview (Step 2)
+                    Back to Resume Preview
                   </div>
                 </Button>
 
@@ -869,24 +872,24 @@ export default function CreateResumePage() {
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-[14px] font-bold text-slate-900 hidden md:inline">
-                  Step 3 of 3: Interview & Application Strategy Workspace
+                <span className="text-[13.5px] font-extrabold text-slate-900 hidden md:inline">
+                  Step 3 of 3: Interview &amp; Application Strategy Workspace
                 </span>
               </div>
 
-              <div className="flex items-center gap-2.5">
-                <Button onClick={handlePrint} className="h-9 px-5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm text-[13px] font-bold cursor-pointer flex items-center gap-1.5">
-                  <Download className="w-4 h-4" />
+              <div className="flex flex-wrap items-center gap-2">
+                <Button onClick={handlePrint} className="h-9 px-4 rounded-xl bg-[#0F2744] hover:bg-[#0A1C33] text-white shadow-xs text-[13px] font-bold cursor-pointer flex items-center gap-1.5">
+                  <Download className="w-4 h-4 text-[#F59E0B]" />
                   Download PDF
                 </Button>
                 <Button 
                   onClick={handleDownloadDocx} 
                   disabled={isExportingDocx}
                   variant="outline" 
-                  className="h-9 px-4 rounded-lg border-blue-200 text-blue-700 bg-blue-50 hover:bg-blue-100 text-[13px] font-bold cursor-pointer flex items-center gap-1.5"
+                  className="h-9 px-4 rounded-xl border-[#0F2744]/20 text-[#0F2744] bg-[#EEF4FA]/60 hover:bg-[#EEF4FA] text-[13px] font-bold cursor-pointer flex items-center gap-1.5"
                 >
-                  {isExportingDocx ? <Loader2 className="w-4 h-4 animate-spin text-blue-600" /> : <FileText className="w-4 h-4 text-blue-600" />}
-                  <span>Download Word (.docx)</span>
+                  {isExportingDocx ? <Loader2 className="w-4 h-4 animate-spin text-[#0F2744]" /> : <FileText className="w-4 h-4 text-[#0F2744]" />}
+                  <span>Word (.docx)</span>
                 </Button>
               </div>
             </div>
@@ -928,9 +931,9 @@ export default function CreateResumePage() {
         {/* Empty Profile Guard Modal */}
         {isEmptyProfileModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
-            <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 space-y-6 relative animate-in zoom-in-95 duration-200">
+            <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200/90 space-y-6 relative animate-in zoom-in-95 duration-200">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-600 shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-[#FEF3C7] border border-[#F59E0B]/30 flex items-center justify-center text-[#D97706] shrink-0">
                   <AlertTriangle className="w-6 h-6" />
                 </div>
                 <div>
@@ -944,13 +947,13 @@ export default function CreateResumePage() {
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2 text-[13px]">
+              <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-slate-200/80 space-y-2 text-[13px]">
                 <div className="font-bold text-slate-800 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-emerald-600" />
+                  <Sparkles className="w-4 h-4 text-[#D97706]" />
                   Fastest Way (Takes 10 Seconds):
                 </div>
                 <p className="text-slate-600 leading-normal">
-                  Export your LinkedIn profile using <b>"Save to PDF"</b> and import it in your <b>Master Profile</b>. All your roles, education, and skills will be auto-filled instantly!
+                  Export your LinkedIn profile using <b>&quot;Save to PDF&quot;</b> and import it in your <b>Master Profile</b>. All your roles, education, and skills will be auto-filled instantly!
                 </p>
               </div>
 
@@ -960,10 +963,10 @@ export default function CreateResumePage() {
                     setIsEmptyProfileModalOpen(false)
                     router.push('/dashboard/profile')
                   }}
-                  className="w-full sm:flex-1 h-12 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-[14px] shadow-md cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full sm:flex-1 h-12 rounded-xl bg-[#0F2744] hover:bg-[#0A1C33] text-white font-bold text-[14px] shadow-md cursor-pointer flex items-center justify-center gap-2"
                 >
                   <span>Go to Master Profile</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
                 </Button>
 
                 <Button
@@ -972,7 +975,7 @@ export default function CreateResumePage() {
                     setEditingTab('employment')
                   }}
                   variant="outline"
-                  className="w-full sm:w-auto h-12 px-5 rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-[14px] cursor-pointer"
+                  className="w-full sm:w-auto h-12 px-5 rounded-xl border-slate-200 text-slate-700 hover:bg-[#F8FAFC] font-bold text-[14px] cursor-pointer"
                 >
                   Add Job Below
                 </Button>

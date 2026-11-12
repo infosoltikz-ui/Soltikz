@@ -1,13 +1,41 @@
 'use client'
 
 import { useState } from 'react'
-import { BookOpen, ChevronRight, Sparkles, X, CheckCircle2, ArrowRight } from 'lucide-react'
-import { FileText, Send, FileStack, Pencil, DownloadCloud, UserCircle, ShieldAlert, Key, Target, LayoutDashboard, SearchCheck, LucideIcon } from 'lucide-react'
+import {
+  BookOpen,
+  ChevronRight,
+  Sparkles,
+  X,
+  CheckCircle2,
+  ArrowRight,
+  FileText,
+  Send,
+  FileStack,
+  Pencil,
+  DownloadCloud,
+  UserCircle,
+  ShieldAlert,
+  Key,
+  Target,
+  LayoutDashboard,
+  SearchCheck,
+  LucideIcon,
+} from 'lucide-react'
 import { cn } from '@/utils/cn'
 
 const iconMap: Record<string, LucideIcon> = {
-  FileText, Sparkles, Send, FileStack, Pencil, DownloadCloud,
-  UserCircle, ShieldAlert, Key, Target, LayoutDashboard, SearchCheck,
+  FileText,
+  Sparkles,
+  Send,
+  FileStack,
+  Pencil,
+  DownloadCloud,
+  UserCircle,
+  ShieldAlert,
+  Key,
+  Target,
+  LayoutDashboard,
+  SearchCheck,
 }
 
 export interface ModuleStep {
@@ -23,46 +51,71 @@ interface ModuleHowItWorksProps {
   steps: ModuleStep[]
 }
 
-function GuideModal({ open, onClose, moduleTitle, steps }: { open: boolean; onClose: () => void; moduleTitle: string; steps: ModuleStep[] }) {
+function GuideModal({
+  open,
+  onClose,
+  moduleTitle,
+  steps,
+}: {
+  open: boolean
+  onClose: () => void
+  moduleTitle: string
+  steps: ModuleStep[]
+}) {
   if (!open) return null
 
-  const colors = [
-    { color: 'text-violet-600', bg: 'bg-violet-50', border: 'border-violet-200' },
-    { color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
-    { color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
-    { color: 'text-orange-500', bg: 'bg-orange-50', border: 'border-orange-200' },
-    { color: 'text-cyan-600', bg: 'bg-cyan-50', border: 'border-cyan-200' },
-    { color: 'text-rose-600', bg: 'bg-rose-50', border: 'border-rose-200' },
+  const accents = [
+    {
+      iconColor: 'text-[#0F2744]',
+      iconBg: 'bg-[#EEF4FA]',
+      border: 'border-[#0F2744]/15',
+      checkColor: 'text-[#0F2744]',
+    },
+    {
+      iconColor: 'text-amber-700',
+      iconBg: 'bg-amber-50',
+      border: 'border-amber-200',
+      checkColor: 'text-amber-600',
+    },
+    {
+      iconColor: 'text-emerald-700',
+      iconBg: 'bg-emerald-50',
+      border: 'border-emerald-200',
+      checkColor: 'text-emerald-600',
+    },
   ]
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-slate-900/55 backdrop-blur-xs transition-opacity"
+        onClick={onClose}
+      />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[88vh] flex flex-col overflow-hidden border border-slate-200">
-
+      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[88vh] flex flex-col overflow-hidden border border-slate-200/90 animate-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="relative bg-gradient-to-br from-[#0F2744] via-[#153258] to-[#1E3A8A] px-6 pt-6 pb-5 shrink-0">
-          <div
-            className="absolute inset-0 opacity-10"
-            style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }}
-          />
+        <div className="relative bg-[#0F2744] px-6 pt-6 pb-5 shrink-0 border-b border-white/10">
           <div className="relative flex items-start justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-xl bg-amber-400/20 border border-amber-400/30 flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-amber-400" />
-                </div>
-                <span className="text-[11px] font-extrabold text-amber-400 uppercase tracking-widest">Module Guide</span>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 mb-2.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#F59E0B]" />
+                <span className="text-[10.5px] font-extrabold text-[#F59E0B] uppercase tracking-widest">
+                  Workflow Guide
+                </span>
               </div>
-              <h2 className="text-[20px] font-black text-white leading-tight mb-1">How to use - {moduleTitle}</h2>
-              <p className="text-[12px] text-slate-300 font-medium">Step-by-step guide for this module.</p>
+              <h2 className="text-xl font-black text-white tracking-tight leading-snug">
+                How to use {moduleTitle}
+              </h2>
+              <p className="text-xs text-slate-300 font-medium mt-1">
+                Follow these simple steps to get the highest ATS compatibility results.
+              </p>
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-300 hover:text-white transition-all shrink-0 mt-0.5"
+              aria-label="Close guide"
+              className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-300 hover:text-white transition-colors shrink-0 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -70,26 +123,48 @@ function GuideModal({ open, onClose, moduleTitle, steps }: { open: boolean; onCl
         </div>
 
         {/* Scrollable body */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-3 bg-slate-50/50">
+        <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-3.5 bg-[#F8FAFC]">
           {steps.map((step, index) => {
             const Icon = iconMap[step.iconName]
-            const c = colors[index % colors.length]
+            const a = accents[index % accents.length]
             return (
-              <div key={index} className={cn('bg-white rounded-xl border p-4 flex gap-4 hover:shadow-sm transition-shadow', c.border)}>
+              <div
+                key={index}
+                className={cn(
+                  'bg-white rounded-2xl border p-4 sm:p-5 flex gap-4 shadow-2xs hover:shadow-md transition-all duration-200',
+                  a.border
+                )}
+              >
                 <div className="shrink-0 flex flex-col items-center gap-1.5 pt-0.5">
-                  <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center border', c.bg, c.border)}>
-                    {Icon && <Icon className={cn('w-5 h-5', c.color)} />}
+                  <div
+                    className={cn(
+                      'w-10 h-10 rounded-xl flex items-center justify-center border',
+                      a.iconBg,
+                      a.border
+                    )}
+                  >
+                    {Icon && <Icon className={cn('w-5 h-5', a.iconColor)} strokeWidth={2.2} />}
                   </div>
-                  <span className="text-[10px] font-black text-slate-400 tracking-wider">0{index + 1}</span>
+                  <span className="text-[10px] font-black text-slate-400 tabular-nums tracking-wider">
+                    0{index + 1}
+                  </span>
                 </div>
+
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-[14px] font-black text-slate-900 mb-0.5">{step.title}</h3>
-                  <p className="text-[12px] text-slate-500 font-medium leading-relaxed mb-2">{step.description}</p>
-                  <ul className="space-y-1">
+                  <h3 className="text-[14.5px] font-extrabold text-slate-900 mb-1">
+                    {step.title}
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium leading-relaxed mb-3">
+                    {step.description}
+                  </p>
+                  <ul className="space-y-1.5">
                     {step.bullets.map((b, i) => (
-                      <li key={i} className="flex items-start gap-1.5 text-[12px] text-slate-700 font-semibold">
-                        <CheckCircle2 className={cn('w-3.5 h-3.5 mt-0.5 shrink-0', c.color)} />
-                        {b}
+                      <li
+                        key={i}
+                        className="flex items-start gap-2 text-xs text-slate-700 font-semibold"
+                      >
+                        <CheckCircle2 className={cn('w-3.5 h-3.5 mt-0.5 shrink-0', a.checkColor)} />
+                        <span>{b}</span>
                       </li>
                     ))}
                   </ul>
@@ -100,13 +175,16 @@ function GuideModal({ open, onClose, moduleTitle, steps }: { open: boolean; onCl
         </div>
 
         {/* Footer */}
-        <div className="shrink-0 border-t border-slate-200 px-5 py-3.5 bg-white flex items-center justify-between gap-3">
-          <p className="text-[11.5px] text-slate-400 font-medium">✅ Follow the steps above to get the best results.</p>
+        <div className="shrink-0 border-t border-slate-200 px-6 py-4 bg-white flex items-center justify-between gap-3">
+          <p className="text-xs text-slate-500 font-medium">
+            Tip: Keep your Master Profile complete before tailoring resumes.
+          </p>
           <button
             onClick={onClose}
-            className="flex items-center gap-1.5 h-9 px-5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[12px] font-bold rounded-xl shadow-md shadow-emerald-500/25 hover:shadow-lg hover:from-emerald-600 hover:to-teal-700 transition-all"
+            className="inline-flex items-center gap-1.5 h-9 px-5 bg-[#0F2744] hover:bg-[#0A1C33] text-white text-xs font-bold rounded-xl shadow-sm hover:shadow transition-all cursor-pointer"
           >
-            Got it <ArrowRight className="w-3.5 h-3.5" />
+            <span>Got it</span>
+            <ArrowRight className="w-3.5 h-3.5 text-[#F59E0B]" />
           </button>
         </div>
       </div>
@@ -119,38 +197,34 @@ export function ModuleHowItWorks({ moduleTitle, tagline, steps }: ModuleHowItWor
 
   return (
     <>
-      <GuideModal open={open} onClose={() => setOpen(false)} moduleTitle={moduleTitle} steps={steps} />
+      <GuideModal
+        open={open}
+        onClose={() => setOpen(false)}
+        moduleTitle={moduleTitle}
+        steps={steps}
+      />
 
-      {/* Dark horizontal bar */}
-      <div className="bg-gradient-to-r from-[#0F2744] via-[#153258] to-[#1E3A8A] border border-[#1E3A8A]/50 rounded-xl shadow-lg mb-3">
-        <div className="px-5 sm:px-6 h-14 flex items-center justify-between gap-4">
-
-          {/* Left: pulsing dot + sparkle + tagline */}
-          <div className="flex items-center gap-3 min-w-0 flex-1 overflow-hidden">
-            <span className="relative flex h-2.5 w-2.5 shrink-0">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500" />
+      {/* Sleek Editorial Guide Strip */}
+      <div className="group bg-white border border-slate-200/90 hover:border-[#0F2744]/25 rounded-2xl shadow-2xs hover:shadow-sm transition-all duration-200 mb-6 px-4 sm:px-5 py-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0F2744] text-white text-[11px] font-extrabold uppercase tracking-wider shrink-0">
+              <Sparkles className="w-3 h-3 text-[#F59E0B]" />
+              <span>{moduleTitle}</span>
             </span>
-            <Sparkles className="w-4 h-4 text-amber-400 shrink-0" style={{ animation: 'spin 5s linear infinite' }} />
-            <p className="text-[13px] font-semibold text-slate-300 whitespace-nowrap overflow-hidden text-ellipsis">
-              <span className="text-amber-400 font-extrabold">{moduleTitle}</span>
-              <span className="mx-2 text-slate-500">·</span>
+            <p className="text-[13px] font-medium text-slate-600 truncate">
               {tagline}
             </p>
           </div>
 
-          {/* Right: arrow + How it Works button */}
-          <div className="flex items-center gap-2.5 shrink-0">
-            <ChevronRight className="w-5 h-5 text-amber-400 animate-pulse" />
-            <button
-              onClick={() => setOpen(true)}
-              className="flex items-center gap-2 h-9 px-5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] text-slate-950 text-[13px] font-extrabold transition-all shadow-md shadow-amber-500/20 hover:scale-[1.03] active:scale-[0.97] select-none cursor-pointer"
-            >
-              <BookOpen className="w-4 h-4 shrink-0 text-slate-950" />
-              How it Works
-            </button>
-          </div>
-
+          <button
+            onClick={() => setOpen(true)}
+            className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-xl bg-amber-50 hover:bg-[#F59E0B] text-amber-900 hover:text-slate-950 border border-amber-200/90 hover:border-[#F59E0B] text-xs font-extrabold transition-all duration-200 shrink-0 cursor-pointer self-start sm:self-auto shadow-2xs"
+          >
+            <BookOpen className="w-3.5 h-3.5 shrink-0" />
+            <span>How it Works</span>
+            <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </button>
         </div>
       </div>
     </>

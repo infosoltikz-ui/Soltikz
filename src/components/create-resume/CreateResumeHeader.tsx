@@ -57,29 +57,43 @@ function CompactUserMenu() {
     <div className="relative shrink-0" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2.5 h-10 pl-1.5 pr-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all shadow-xs hover:shadow-sm"
+        className="flex items-center gap-2.5 h-10 pl-1.5 pr-3 rounded-xl border border-slate-200/90 bg-white hover:bg-[#F8FAFC] hover:border-slate-300 transition-all shadow-xs cursor-pointer"
       >
         {/* Avatar circle */}
-        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-[13px] font-black shrink-0 shadow-sm">
+        <div className="w-8 h-8 rounded-xl bg-[#0F2744] border border-[#F59E0B]/30 flex items-center justify-center text-white text-[12px] font-black shrink-0 shadow-xs">
           {initials}
         </div>
         {/* Name + plan */}
         <div className="hidden sm:flex flex-col items-start leading-none">
           <span className="text-[13px] font-bold text-slate-900 whitespace-nowrap max-w-[130px] truncate">{user.name}</span>
-          <span className="text-[11px] font-medium text-slate-400 mt-0.5">{user.plan}</span>
+          <span className="text-[10.5px] font-bold text-[#D97706] mt-0.5">{user.plan}</span>
         </div>
         <ChevronDown className={cn('w-3.5 h-3.5 text-slate-400 transition-transform shrink-0', open && 'rotate-180')} />
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-1.5 w-52 bg-white rounded-xl shadow-lg border border-slate-100 py-1.5 z-50 overflow-hidden">
-          <div className="px-3 py-2 border-b border-slate-100 mb-1">
-            <p className="text-[12px] font-bold text-slate-900 truncate">{user.name}</p>
+        <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-200/90 py-1.5 z-50 overflow-hidden">
+          <div className="px-3.5 py-2.5 border-b border-slate-100 mb-1 bg-[#F8FAFC]">
+            <p className="text-[12.5px] font-bold text-slate-900 truncate">{user.name}</p>
             <p className="text-[11px] text-slate-400 truncate">{user.email}</p>
           </div>
           <Link
+            href="/dashboard"
+            className="flex items-center gap-2.5 px-3.5 py-2 text-[12.5px] font-semibold text-slate-700 hover:bg-[#EEF4FA] hover:text-[#0F2744] transition-colors"
+            onClick={() => setOpen(false)}
+          >
+            <Layout className="w-3.5 h-3.5" /> Dashboard
+          </Link>
+          <Link
+            href="/dashboard/profile"
+            className="flex items-center gap-2.5 px-3.5 py-2 text-[12.5px] font-semibold text-slate-700 hover:bg-[#EEF4FA] hover:text-[#0F2744] transition-colors"
+            onClick={() => setOpen(false)}
+          >
+            <FileCheck className="w-3.5 h-3.5" /> Master Profile
+          </Link>
+          <Link
             href="/dashboard/settings"
-            className="flex items-center gap-2.5 px-3 py-2 text-[12px] font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+            className="flex items-center gap-2.5 px-3.5 py-2 text-[12.5px] font-semibold text-slate-700 hover:bg-[#EEF4FA] hover:text-[#0F2744] transition-colors"
             onClick={() => setOpen(false)}
           >
             <Settings className="w-3.5 h-3.5" /> Settings
@@ -91,9 +105,9 @@ function CompactUserMenu() {
               await supabase.auth.signOut()
               router.push('/login')
             }}
-            className="w-full flex items-center gap-2.5 px-3 py-2 text-[12px] font-semibold text-red-600 hover:bg-red-50 transition-colors"
+            className="w-full flex items-center gap-2.5 px-3.5 py-2 text-[12.5px] font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
           >
-            <LogOut className="w-3.5 h-3.5" /> Log out
+            <LogOut className="w-3.5 h-3.5" /> Sign Out
           </button>
         </div>
       )}
@@ -111,31 +125,31 @@ export function CreateResumeHeader({
   return (
     <>
     <HowToGuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-[68px] flex items-center gap-4">
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
+      <div className="max-w-[1540px] mx-auto px-4 sm:px-6 lg:px-8 h-[68px] flex items-center gap-4">
 
         {/* ── Left: back + logo ── */}
         <div className="flex items-center gap-2.5 shrink-0">
           {onBack ? (
             <button
               onClick={onBack}
-              className="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition-all shadow-xs"
+              className="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white hover:bg-[#F8FAFC] text-slate-500 hover:text-[#0F2744] transition-all shadow-xs cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
           ) : (
             <Link
               href="/dashboard"
-              className="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition-all shadow-xs"
+              className="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white hover:bg-[#F8FAFC] text-slate-500 hover:text-[#0F2744] transition-all shadow-xs"
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
           )}
 
           <div className="hidden sm:flex items-center gap-2">
-            <span className="text-[16px] font-black text-slate-900 tracking-tight">Resume Builder</span>
-            <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-              <Sparkles className="w-2.5 h-2.5" />
+            <span className="text-[16px] font-black text-slate-900 tracking-tight">Resume Studio</span>
+            <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-[#0F2744] bg-[#EEF4FA] px-2.5 py-0.5 rounded-full border border-slate-200/80">
+              <Sparkles className="w-2.5 h-2.5 text-[#D97706]" />
               AI Suite
             </span>
           </div>
@@ -161,14 +175,14 @@ export function CreateResumeHeader({
                     disabled={upcoming}
                     className={cn(
                       'flex items-center gap-2 h-9 px-4 rounded-xl text-[12px] font-bold transition-all duration-150 border select-none',
-                      active   && 'bg-[#0F2744] text-white border-[#0F2744] shadow-md shadow-[#0F2744]/25 ring-2 ring-[#F59E0B]/40',
-                      done     && 'bg-[#EEF4FA] text-[#0F2744] border-[#0F2744]/20 hover:bg-[#D97706]/10 hover:text-[#D97706] cursor-pointer',
-                      upcoming && 'bg-transparent text-slate-400 border-slate-200/60 cursor-default opacity-50',
+                      active   && 'bg-[#0F2744] text-white border-[#0F2744] shadow-sm ring-2 ring-[#F59E0B]/30',
+                      done     && 'bg-[#EEF4FA] text-[#0F2744] border-[#0F2744]/15 hover:bg-[#FEF3C7] hover:text-[#B45309] cursor-pointer',
+                      upcoming && 'bg-transparent text-slate-400 border-slate-200/60 cursor-default opacity-55',
                     )}
                   >
                     <span className="w-4 h-4 rounded flex items-center justify-center shrink-0">
                       {done
-                        ? <Check className="w-3 h-3 stroke-[3] text-[#D97706]" />
+                        ? <Check className="w-3 h-3 stroke-[3] text-[#059669]" />
                         : <Icon className={cn("w-3 h-3", active ? "text-[#F59E0B]" : "")} />
                       }
                     </span>
@@ -178,8 +192,8 @@ export function CreateResumeHeader({
 
                   {idx < STEPS.length - 1 && (
                     <div className={cn(
-                      'w-7 h-px mx-1',
-                      currentStep > item.step ? 'bg-[#D97706]' : 'bg-slate-200'
+                      'w-6 sm:w-7 h-px mx-1',
+                      currentStep > item.step ? 'bg-[#059669]' : 'bg-slate-200'
                     )} />
                   )}
                 </div>
@@ -193,9 +207,9 @@ export function CreateResumeHeader({
 
         {/* ── Right: badge + user ── */}
         <div className="flex items-center gap-2 shrink-0">
-          <div className="hidden lg:flex items-center gap-1.5 text-[12px] font-bold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
-            <FileCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-            <span>ATS Certified</span>
+          <div className="hidden lg:flex items-center gap-1.5 text-[11.5px] font-bold text-[#059669] bg-emerald-50/80 px-3 py-1.5 rounded-xl border border-emerald-200/80">
+            <FileCheck className="w-3.5 h-3.5 text-[#059669] shrink-0" />
+            <span>ATS Verified</span>
           </div>
           <CompactUserMenu />
         </div>
@@ -203,40 +217,28 @@ export function CreateResumeHeader({
       </div>
     </header>
 
-    {/* ── Animated Sub-bar ── */}
-    <div className="sticky top-[68px] z-30 bg-gradient-to-r from-[#0F2744] via-[#153258] to-[#1E3A8A] border-b border-[#1E3A8A]/50 shadow-lg">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-10 flex items-center justify-between gap-4">
+    {/* ── Executive Workflow Strip ── */}
+    <div className="sticky top-[68px] z-30 bg-[#0F2744] border-b border-white/10 shadow-sm">
+      <div className="max-w-[1540px] mx-auto px-4 sm:px-6 lg:px-8 h-10 flex items-center justify-between gap-4">
 
-        {/* Left: pulsing dot + sparkle + explanation text */}
+        {/* Left: live indicator + explanation text */}
         <div className="flex items-center gap-2.5 min-w-0 flex-1 overflow-hidden">
-          {/* Live pulsing dot */}
-          <span className="relative flex h-2 w-2 shrink-0">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
-          </span>
+          <span className="w-2 h-2 rounded-full bg-[#F59E0B] shrink-0" />
 
-          {/* Rotating sparkle icon */}
-          <Sparkles
-            className="w-3 h-3 text-amber-400 shrink-0"
-            style={{ animation: 'spin 5s linear infinite' }}
-          />
+          <Sparkles className="w-3.5 h-3.5 text-[#F59E0B] shrink-0" />
 
-          {/* Explanation text */}
-          <p className="text-[11.5px] font-semibold text-slate-300 whitespace-nowrap overflow-hidden text-ellipsis">
-            <span className="text-amber-400 font-bold">AI Resume Suite</span>
-            <span className="mx-2 text-slate-500">·</span>
-            Paste any job description - AI tailors your resume with ATS keywords, power bullets &amp; interview prep in under 3 min.
+          <p className="text-[11.5px] font-medium text-slate-300 whitespace-nowrap overflow-hidden text-ellipsis">
+            <span className="text-[#F59E0B] font-extrabold">AI Resume Studio</span>
+            <span className="mx-2 text-slate-500">/</span>
+            Paste any job description to tailor keywords, quantified bullets, and interview prep in minutes.
           </p>
         </div>
 
-        {/* Right: pulsing arrow + How it Works button */}
+        {/* Right: How it Works button */}
         <div className="flex items-center gap-2 shrink-0">
-          {/* Pulsing arrow pointing to button */}
-          <ChevronRight className="w-4 h-4 text-amber-400 animate-pulse" />
-
           <button
             onClick={() => setGuideOpen(true)}
-            className="flex items-center gap-1.5 h-7 px-3.5 rounded-lg bg-[#F59E0B] hover:bg-[#D97706] text-slate-950 text-[11.5px] font-extrabold transition-all shadow-md shadow-amber-500/20 hover:scale-[1.03] active:scale-[0.97] select-none cursor-pointer"
+            className="flex items-center gap-1.5 h-7 px-3.5 rounded-lg bg-[#F59E0B] hover:bg-[#D97706] text-[#0F2744] text-[11.5px] font-extrabold transition-all shadow-xs select-none cursor-pointer"
           >
             <BookOpen className="w-3 h-3 shrink-0" />
             How it Works
