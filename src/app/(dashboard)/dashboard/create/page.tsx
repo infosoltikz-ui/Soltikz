@@ -59,6 +59,10 @@ export default function CreateResumePage() {
   const [currentResumeId, setCurrentResumeId] = useState<string | null>(null)
   const [savedParsedJdData, setSavedParsedJdData] = useState<any>(null)
 
+  const [draftCompany, setDraftCompany] = useState('')
+  const [draftRole, setDraftRole] = useState('')
+  const [draftJd, setDraftJd] = useState('')
+
   const [isRegenerateSummaryModalOpen, setIsRegenerateSummaryModalOpen] = useState(false)
   const [isManualEditModalOpen, setIsManualEditModalOpen] = useState(false)
   const [isEmptyProfileModalOpen, setIsEmptyProfileModalOpen] = useState(false)
@@ -394,10 +398,11 @@ export default function CreateResumePage() {
       })
       const resumeGenData = await resumeRes.json()
 
-      // Handle Paywall or generation error
+      // Handle Paywall or generation error without triggering dev error overlay
       if (!resumeGenData.success) {
-        if (resumeGenData.error === 'Paywall') {
-          throw new Error('Paywall');
+        if (resumeGenData.error === 'Paywall' || resumeRes.status === 403) {
+          openModal('paywall-modal')
+          return
         }
         throw new Error(resumeGenData.message || resumeGenData.error || 'Failed to generate resume')
       }
@@ -467,11 +472,11 @@ export default function CreateResumePage() {
       setStep(2)
       toast.success('Tailored resume generated successfully!')
     } catch (error: any) {
-      console.error('Generation failed:', error)
-      if (error.message === 'Paywall') {
+      if (error?.message === 'Paywall') {
         openModal('paywall-modal')
       } else {
-        toast.error(`Failed to generate resume: ${error.message || error}`)
+        console.warn('Generation issue:', error?.message || error)
+        toast.error(`Failed to generate resume: ${error?.message || error}`)
       }
     } finally {
       setIsGenerating(false)
@@ -663,19 +668,53 @@ export default function CreateResumePage() {
         )}
 
         {step === 2 && (
-          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
             {!generatedResume ? (
               <>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-                  <div className="w-full min-w-0 space-y-6 relative">
-                    {isGenerating && (
-                      <AIGenerationLoadingHUD currentState={orchestratorState} />
-                    )}
-                    <CompanyDetailsSection onGenerate={(company, role, jd) => handleGenerate(company, role, jd)} />
+                {isGenerating && (
+                  <AIGenerationLoadingHUD
+                    currentState={orchestratorState}
+                    companyName={draftCompany}
+                    jobRole={draftRole}
+                  />
+                )}
+
+                <div
+                  className={
+                    isGenerating
+                      ? 'hidden'
+                      : 'grid grid-cols-1 lg:grid-cols-12 gap-6 items-start'
+                  }
+                >
+                  <div className="lg:col-span-7 xl:col-span-8 min-w-0">
+                    <CompanyDetailsSection
+                      onDraftChange={({ company, role, jd }) => {
+                        setDraftCompany(company)
+                        setDraftRole(role)
+                        setDraftJd(jd)
+                      }}
+                      onGenerate={(company, role, jd) => {
+                        setDraftCompany(company)
+                        setDraftRole(role)
+                        setDraftJd(jd)
+                        handleGenerate(company, role, jd)
+                      }}
+                    />
                   </div>
 
-                  <div className="w-full min-w-0 space-y-6">
-                    <CreateResumeSidebar />
+                  <div className="lg:col-span-5 xl:col-span-4 min-w-0">
+                    <CreateResumeSidebar
+                      company={draftCompany}
+                      role={draftRole}
+                      jd={draftJd}
+                      resumeType={resumeType}
+                      templateName={getTemplateById(selectedTemplateId).name}
+                      roleCount={
+                        (profileData?.master_resume_data?.employment ||
+                          profileData?.master_resume_data?.experience ||
+                          []).length
+                      }
+                    />
                   </div>
                 </div>
               </>

@@ -149,7 +149,7 @@ export function WorkspaceSection({
     <div className="flex flex-col lg:flex-row gap-6 w-full max-w-full items-start">
       {/* Sidebar Navigation */}
       <div className="w-full lg:w-72 shrink-0 relative z-10">
-        <div className="bg-[#0F2744] rounded-3xl p-5 shadow-xl shadow-slate-900/10 border border-[#1E3A5F] lg:sticky lg:top-32">
+        <div className="bg-[#0F2744] rounded-3xl p-5 shadow-xl shadow-slate-900/10 border border-[#1E3A5F] lg:sticky lg:top-24">
           <div className="mb-5 px-1">
             <h3 className="text-[11px] font-black text-amber-400 uppercase tracking-widest mb-1">Workspace Menu</h3>
             <p className="text-[12px] text-slate-300 font-medium leading-tight">Tailored tools & prep materials</p>

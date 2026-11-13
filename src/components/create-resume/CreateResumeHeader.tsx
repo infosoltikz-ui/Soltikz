@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowLeft, ChevronRight, Check, Layout, Sparkles, ShieldCheck, FileCheck, ChevronDown, Settings, LogOut, BookOpen } from 'lucide-react'
+import { ArrowLeft, ChevronRight, Check, Layout, FileCheck, ChevronDown, Settings, LogOut, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/utils/cn'
 import { useState, useRef, useEffect } from 'react'
@@ -16,9 +16,9 @@ interface CreateResumeHeaderProps {
 }
 
 const STEPS = [
-  { step: 1, label: 'Setup & Target',      icon: Layout      },
-  { step: 2, label: 'AI Resume',           icon: Sparkles    },
-  { step: 3, label: 'Interview Prep',      icon: ShieldCheck },
+  { step: 1, label: 'Setup & Target' },
+  { step: 2, label: 'Job Details' },
+  { step: 3, label: 'Interview Prep' },
 ]
 
 function CompactUserMenu() {
@@ -125,48 +125,42 @@ export function CreateResumeHeader({
   return (
     <>
     <HowToGuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
-      <div className="max-w-[1540px] mx-auto px-4 sm:px-6 lg:px-8 h-[68px] flex items-center gap-4">
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90">
+      <div className="max-w-[1540px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
-        {/* ── Left: back + logo ── */}
-        <div className="flex items-center gap-2.5 shrink-0">
+        {/* Left: Back + Title */}
+        <div className="flex items-center gap-3 shrink-0">
           {onBack ? (
             <button
               onClick={onBack}
-              className="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white hover:bg-[#F8FAFC] text-slate-500 hover:text-[#0F2744] transition-all shadow-xs cursor-pointer"
+              aria-label="Go back"
+              className="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-[#0F2744] transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
           ) : (
             <Link
               href="/dashboard"
-              className="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white hover:bg-[#F8FAFC] text-slate-500 hover:text-[#0F2744] transition-all shadow-xs"
+              aria-label="Back to dashboard"
+              className="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-[#0F2744] transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
           )}
 
-          <div className="hidden sm:flex items-center gap-2">
-            <span className="text-[16px] font-black text-slate-900 tracking-tight">Resume Studio</span>
-            <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-[#0F2744] bg-[#EEF4FA] px-2.5 py-0.5 rounded-full border border-slate-200/80">
-              <Sparkles className="w-2.5 h-2.5 text-[#D97706]" />
-              AI Suite
-            </span>
-          </div>
+          <span className="hidden sm:inline text-[15px] font-bold text-slate-900 tracking-tight">
+            Resume Studio
+          </span>
         </div>
 
-        {/* Divider */}
-        <div className="hidden sm:block w-px h-5 bg-slate-200 shrink-0" />
-
-        {/* ── Center: step pills ── */}
+        {/* Center: Step Pills */}
         <nav className="flex-1 flex items-center justify-center min-w-0" aria-label="Progress">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             {STEPS.map((item, idx) => {
-              const done     = currentStep > item.step
-              const active   = currentStep === item.step
+              const done = currentStep > item.step
+              const active = currentStep === item.step
               const upcoming = currentStep < item.step
               const clickable = done && !!onStepClick
-              const Icon = item.icon
 
               return (
                 <div key={item.step} className="flex items-center">
@@ -174,27 +168,27 @@ export function CreateResumeHeader({
                     onClick={() => clickable && onStepClick?.(item.step)}
                     disabled={upcoming}
                     className={cn(
-                      'flex items-center gap-2 h-9 px-4 rounded-xl text-[12px] font-bold transition-all duration-150 border select-none',
-                      active   && 'bg-[#0F2744] text-white border-[#0F2744] shadow-sm ring-2 ring-[#F59E0B]/30',
-                      done     && 'bg-[#EEF4FA] text-[#0F2744] border-[#0F2744]/15 hover:bg-[#FEF3C7] hover:text-[#B45309] cursor-pointer',
-                      upcoming && 'bg-transparent text-slate-400 border-slate-200/60 cursor-default opacity-55',
+                      'flex items-center gap-2 h-9 px-3.5 rounded-xl text-[12.5px] font-semibold transition-colors border select-none',
+                      active && 'bg-[#0F2744] text-white border-[#0F2744] shadow-2xs',
+                      done && 'bg-slate-50 text-[#0F2744] border-slate-200 hover:bg-slate-100 cursor-pointer',
+                      upcoming && 'bg-transparent text-slate-400 border-transparent cursor-default',
                     )}
                   >
-                    <span className="w-4 h-4 rounded flex items-center justify-center shrink-0">
-                      {done
-                        ? <Check className="w-3 h-3 stroke-[3] text-[#059669]" />
-                        : <Icon className={cn("w-3 h-3", active ? "text-[#F59E0B]" : "")} />
-                      }
+                    <span
+                      className={cn(
+                        'w-5 h-5 rounded-full text-[11px] font-bold flex items-center justify-center shrink-0',
+                        active && 'bg-white/15 text-[#F59E0B]',
+                        done && 'bg-emerald-100 text-emerald-700',
+                        upcoming && 'bg-slate-100 text-slate-400'
+                      )}
+                    >
+                      {done ? <Check className="w-3 h-3 stroke-[2.75]" /> : item.step}
                     </span>
-                    <span className="hidden md:block">{item.label}</span>
-                    <span className="md:hidden font-extrabold">{item.step}</span>
+                    <span className="hidden md:block whitespace-nowrap">{item.label}</span>
                   </button>
 
                   {idx < STEPS.length - 1 && (
-                    <div className={cn(
-                      'w-6 sm:w-7 h-px mx-1',
-                      currentStep > item.step ? 'bg-[#059669]' : 'bg-slate-200'
-                    )} />
+                    <ChevronRight className="w-3.5 h-3.5 text-slate-300 mx-0.5 shrink-0" />
                   )}
                 </div>
               )
@@ -202,51 +196,20 @@ export function CreateResumeHeader({
           </div>
         </nav>
 
-        {/* Divider */}
-        <div className="hidden lg:block w-px h-5 bg-slate-200 shrink-0" />
-
-        {/* ── Right: badge + user ── */}
-        <div className="flex items-center gap-2 shrink-0">
-          <div className="hidden lg:flex items-center gap-1.5 text-[11.5px] font-bold text-[#059669] bg-emerald-50/80 px-3 py-1.5 rounded-xl border border-emerald-200/80">
-            <FileCheck className="w-3.5 h-3.5 text-[#059669] shrink-0" />
-            <span>ATS Verified</span>
-          </div>
+        {/* Right: Guide + User */}
+        <div className="flex items-center gap-2.5 shrink-0">
+          <button
+            onClick={() => setGuideOpen(true)}
+            className="hidden sm:inline-flex items-center gap-1.5 h-9 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 hover:text-[#0F2744] text-[12.5px] font-semibold transition-colors cursor-pointer"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+            <span>How it Works</span>
+          </button>
           <CompactUserMenu />
         </div>
 
       </div>
     </header>
-
-    {/* ── Executive Workflow Strip ── */}
-    <div className="sticky top-[68px] z-30 bg-[#0F2744] border-b border-white/10 shadow-sm">
-      <div className="max-w-[1540px] mx-auto px-4 sm:px-6 lg:px-8 h-10 flex items-center justify-between gap-4">
-
-        {/* Left: live indicator + explanation text */}
-        <div className="flex items-center gap-2.5 min-w-0 flex-1 overflow-hidden">
-          <span className="w-2 h-2 rounded-full bg-[#F59E0B] shrink-0" />
-
-          <Sparkles className="w-3.5 h-3.5 text-[#F59E0B] shrink-0" />
-
-          <p className="text-[11.5px] font-medium text-slate-300 whitespace-nowrap overflow-hidden text-ellipsis">
-            <span className="text-[#F59E0B] font-extrabold">AI Resume Studio</span>
-            <span className="mx-2 text-slate-500">/</span>
-            Paste any job description to tailor keywords, quantified bullets, and interview prep in minutes.
-          </p>
-        </div>
-
-        {/* Right: How it Works button */}
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={() => setGuideOpen(true)}
-            className="flex items-center gap-1.5 h-7 px-3.5 rounded-lg bg-[#F59E0B] hover:bg-[#D97706] text-[#0F2744] text-[11.5px] font-extrabold transition-all shadow-xs select-none cursor-pointer"
-          >
-            <BookOpen className="w-3 h-3 shrink-0" />
-            How it Works
-          </button>
-        </div>
-
-      </div>
-    </div>
     </>
 
   )
