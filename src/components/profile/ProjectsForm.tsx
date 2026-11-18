@@ -87,45 +87,45 @@ export function ProjectsForm({
   }
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-[#151D28] rounded-xl border border-[#26313F] shadow-sm overflow-hidden">
       {/* Card Header */}
-      <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="px-6 py-4 border-b border-[#26313F] bg-[#101722] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-[15px] font-bold text-slate-900">Key Projects &amp; Portfolios</h2>
-          <p className="text-[12px] text-slate-500 font-medium">Showcase major software systems, client deliverables, and open-source contributions.</p>
+          <h2 className="text-[15px] font-bold text-[#E4EAF2]">Key Projects &amp; Portfolios</h2>
+          <p className="text-[12px] text-[#9FACBE] font-medium">Showcase major software systems, client deliverables, and open-source contributions.</p>
         </div>
         <button 
           onClick={handleAdd} 
-          className="h-8 px-3 text-[12px] font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300 rounded-lg inline-flex items-center gap-1.5 transition-colors cursor-pointer self-start sm:self-auto"
+          className="h-8 px-3 text-[12px] font-semibold bg-[#1A2330] hover:bg-[#222E3F] text-[#E4EAF2] border border-[#26313F] hover:border-[#3FA57C]/40 rounded-lg inline-flex items-center gap-1.5 transition-colors cursor-pointer self-start sm:self-auto"
         >
-          <Plus className="w-3.5 h-3.5 text-primary" />
+          <Plus className="w-3.5 h-3.5 text-[#3FA57C]" />
           Add Project
         </button>
       </div>
 
       <div className="px-6 py-6 space-y-5">
         {projectsList.length === 0 ? (
-          <div className="py-8 text-center border-2 border-dashed border-slate-200 rounded-lg">
-            <FolderOpen className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-            <p className="text-[13px] font-semibold text-slate-700">No projects added yet</p>
-            <p className="text-[11px] text-slate-500 mb-3">Add standout projects with tech stack and live links.</p>
+          <div className="py-8 text-center border-2 border-dashed border-[#26313F] bg-[#101722]/40 rounded-lg">
+            <FolderOpen className="w-8 h-8 text-[#78859A] mx-auto mb-2" />
+            <p className="text-[13px] font-semibold text-[#E4EAF2]">No projects added yet</p>
+            <p className="text-[11px] text-[#9FACBE] mb-3">Add standout projects with tech stack and live links.</p>
             <button
               onClick={handleAdd}
-              className="h-8 px-3.5 text-[12px] font-semibold bg-primary text-white rounded-lg inline-flex items-center gap-1.5 cursor-pointer"
+              className="h-8 px-3.5 text-[12px] font-semibold bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 rounded-lg inline-flex items-center gap-1.5 cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" /> Add First Project
             </button>
           </div>
         ) : (
           projectsList.map((proj, index) => (
-            <div key={index} className="p-5 rounded-lg border border-slate-200 bg-slate-50/40 hover:bg-slate-50/70 transition-colors space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-200/60">
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+            <div key={index} className="p-5 rounded-lg border border-[#26313F] bg-[#1A2330]/50 hover:bg-[#1A2330]/80 transition-colors space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-[#26313F]">
+                <span className="text-[11px] font-bold text-[#78859A] uppercase tracking-wider">
                   Project #{index + 1}
                 </span>
                 <button 
                   onClick={() => handleRemove(index)} 
-                  className="p-1 text-slate-400 hover:text-red-600 transition-colors rounded hover:bg-white cursor-pointer"
+                  className="p-1 text-[#78859A] hover:text-red-400 transition-colors rounded hover:bg-[#101722] cursor-pointer"
                   title="Remove project"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -134,23 +134,23 @@ export function ProjectsForm({
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
-                    Project Name <span className="text-red-500">*</span>
+                  <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">
+                    Project Name <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
-                    <FolderOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                    <FolderOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#78859A]" />
                     <input 
                       type="text" 
                       placeholder="e.g. Real-Time Analytics Platform"
                       value={proj.name}
                       onChange={(e) => handleChange(index, 'name', e.target.value)}
-                      className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 transition-colors placeholder:text-slate-400"
+                      className="w-full h-10 pl-9 pr-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] transition-colors placeholder:text-[#68768A]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
+                  <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">
                     Your Role / Title
                   </label>
                   <input 
@@ -158,73 +158,73 @@ export function ProjectsForm({
                     placeholder="e.g. Lead Full Stack Developer"
                     value={proj.role}
                     onChange={(e) => handleChange(index, 'role', e.target.value)}
-                    className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 transition-colors placeholder:text-slate-400"
+                    className="w-full h-10 px-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] transition-colors placeholder:text-[#68768A]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Live Link / Repository</label>
+                  <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">Live Link / Repository</label>
                   <div className="relative">
-                    <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                    <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#78859A]" />
                     <input 
                       type="text" 
                       placeholder="https://..."
                       value={proj.link}
                       onChange={(e) => handleChange(index, 'link', e.target.value)}
-                      className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 transition-colors placeholder:text-slate-400"
+                      className="w-full h-10 pl-9 pr-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] transition-colors placeholder:text-[#68768A]"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Start Date</label>
+                  <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">Start Date</label>
                   <input 
                     type="text" 
                     placeholder="MM/YYYY"
                     value={proj.startDate}
                     onChange={(e) => handleChange(index, 'startDate', formatMonthYear(e.target.value))}
-                    className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 transition-colors placeholder:text-slate-400"
+                    className="w-full h-10 px-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] transition-colors placeholder:text-[#68768A]"
                   />
                 </div>
                 <div>
-                  <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">End Date</label>
+                  <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">End Date</label>
                   <input 
                     type="text" 
                     placeholder="MM/YYYY"
                     value={proj.endDate}
                     onChange={(e) => handleChange(index, 'endDate', formatMonthYear(e.target.value))}
-                    className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 transition-colors placeholder:text-slate-400"
+                    className="w-full h-10 px-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] transition-colors placeholder:text-[#68768A]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Project Overview &amp; Architecture</label>
+                <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">Project Overview &amp; Architecture</label>
                 <textarea 
                   rows={3}
                   value={proj.description}
                   onChange={(e) => handleChange(index, 'description', e.target.value)}
                   placeholder="• Developed distributed queuing service using Redis & Go, reducing job processing latency by 60%..."
-                  className="w-full p-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-800 transition-colors leading-relaxed placeholder:text-slate-400"
+                  className="w-full p-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] transition-colors leading-relaxed placeholder:text-[#68768A]"
                 ></textarea>
               </div>
             </div>
           ))
         )}
 
-        <div className="flex items-center gap-3 pt-3 border-t border-slate-100">
+        <div className="flex items-center gap-3 pt-3 border-t border-[#26313F]">
           <button 
             onClick={handleSave} 
             disabled={isLoading} 
-            className="h-9 px-6 rounded-lg font-semibold text-[13px] bg-primary text-white hover:bg-primary-dark shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+            className="h-9 px-6 rounded-lg font-semibold text-[13px] bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
           >
             {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save & Continue'}
           </button>
           {onCancel && (
             <button 
               onClick={onCancel} 
-              className="h-9 px-4 rounded-lg font-semibold text-[13px] text-slate-600 hover:text-slate-900 border border-slate-200 hover:bg-slate-100 bg-white transition-colors cursor-pointer"
+              className="h-9 px-4 rounded-lg font-semibold text-[13px] text-[#E4EAF2] hover:text-white border border-[#26313F] hover:bg-[#222E3F] bg-[#1A2330] transition-colors cursor-pointer"
             >
               Cancel
             </button>

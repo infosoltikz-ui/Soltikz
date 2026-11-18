@@ -91,7 +91,7 @@ export function ProfileSidebar({
   const circumference = 2 * Math.PI * radius
   const strokeDashoffset = circumference - (completion / 100) * circumference
   const strokeColor =
-    completion >= 80 ? '#059669' : completion >= 40 ? '#F59E0B' : '#0F2744'
+    completion >= 80 ? '#3FA57C' : completion >= 40 ? '#D9A441' : '#78859A'
 
   const checklist = [
     { text: 'Personal & Contact Info', done: hasPersonalDetails, tab: 'personal' },
@@ -113,22 +113,22 @@ export function ProfileSidebar({
       />
 
       {/* Profile Strength Gauge Card */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 hover:border-slate-300 transition-colors">
-        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100">
+      <div className="bg-[#151D28] rounded-2xl border border-[#26313F] shadow-xs p-5 hover:border-[#3A495C] transition-colors">
+        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-[#26313F]">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-[#EEF4FA] text-[#0F2744] flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-[#1A2330] text-[#3FA57C] border border-[#26313F] flex items-center justify-center">
               <ShieldCheck className="w-4 h-4" />
             </div>
-            <h3 className="text-[13.5px] font-extrabold text-slate-900">Profile Health</h3>
+            <h3 className="text-[13.5px] font-extrabold text-[#E4EAF2]">Profile Health</h3>
           </div>
           <span
             className={cn(
               'text-[11px] font-extrabold px-2.5 py-0.5 rounded-lg border tabular-nums',
               completion >= 80
-                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                ? 'bg-[#123227] text-[#3FA57C] border-[#3FA57C]/30'
                 : completion >= 40
-                ? 'bg-amber-50 text-amber-800 border-amber-200'
-                : 'bg-slate-100 text-slate-600 border-slate-200'
+                ? 'bg-[#2E2616] text-[#D9A441] border-[#D9A441]/40'
+                : 'bg-[#1A2330] text-[#9FACBE] border-[#26313F]'
             )}
           >
             {completion}% Ready
@@ -136,14 +136,14 @@ export function ProfileSidebar({
         </div>
 
         {/* Circular SVG Meter */}
-        <div className="flex items-center gap-3.5 mb-4 bg-slate-50/90 p-3.5 rounded-xl border border-slate-200/70">
+        <div className="flex items-center gap-3.5 mb-4 bg-[#1A2330] p-3.5 rounded-xl border border-[#26313F]">
           <div className="relative w-16 h-16 shrink-0 flex items-center justify-center">
             <svg className="w-16 h-16 -rotate-90 transform" viewBox="0 0 80 80">
               <circle
                 cx="40"
                 cy="40"
                 r={radius}
-                className="stroke-slate-200"
+                className="stroke-[#26313F]"
                 strokeWidth="6"
                 fill="transparent"
               />
@@ -160,16 +160,16 @@ export function ProfileSidebar({
                 className="transition-all duration-700 ease-out"
               />
             </svg>
-            <span className="absolute text-[13px] font-black text-slate-900 tabular-nums">
+            <span className="absolute text-[13px] font-black text-[#E4EAF2] tabular-nums">
               {completion}%
             </span>
           </div>
 
           <div>
-            <h4 className="text-[13px] font-extrabold text-slate-900 leading-tight">
+            <h4 className="text-[13px] font-extrabold text-[#E4EAF2] leading-tight">
               {completion >= 80 ? 'Strong Foundation' : 'Add Missing Sections'}
             </h4>
-            <p className="text-[11.5px] text-slate-500 font-medium mt-1 leading-relaxed">
+            <p className="text-[11.5px] text-[#9FACBE] font-medium mt-1 leading-relaxed">
               {completion >= 80
                 ? 'Optimal data density for 90+ ATS tailoring.'
                 : 'Click any item below to jump straight to that tab.'}
@@ -184,20 +184,20 @@ export function ProfileSidebar({
               type="button"
               key={idx}
               onClick={() => onNavigateTab?.(item.tab)}
-              className="group w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-xs transition-all hover:bg-[#EEF4FA] cursor-pointer text-left"
+              className="group w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-xs transition-all hover:bg-[#1A2330] cursor-pointer text-left"
             >
               <div className="flex items-center gap-2.5 min-w-0 pr-2">
                 {item.done ? (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" strokeWidth={2.5} />
+                  <CheckCircle2 className="w-4 h-4 text-[#3FA57C] shrink-0" strokeWidth={2.5} />
                 ) : (
-                  <Circle className="w-4 h-4 text-slate-300 group-hover:text-[#0F2744] shrink-0" strokeWidth={2} />
+                  <Circle className="w-4 h-4 text-[#78859A] group-hover:text-[#E4EAF2] shrink-0" strokeWidth={2} />
                 )}
                 <span
                   className={cn(
                     'truncate',
                     item.done
-                      ? 'text-slate-700 font-semibold'
-                      : 'text-slate-500 group-hover:text-[#0F2744] font-semibold'
+                      ? 'text-[#C3CCD9] font-semibold'
+                      : 'text-[#78859A] group-hover:text-[#E4EAF2] font-semibold'
                   )}
                 >
                   {item.text}
@@ -205,7 +205,7 @@ export function ProfileSidebar({
               </div>
 
               {!item.done && onNavigateTab && (
-                <span className="text-[10px] font-extrabold text-[#0F2744] bg-white border border-[#0F2744]/15 px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0">
+                <span className="text-[10px] font-extrabold text-[#3FA57C] bg-[#123227] border border-[#3FA57C]/30 px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0">
                   Add
                 </span>
               )}
@@ -215,17 +215,17 @@ export function ProfileSidebar({
       </div>
 
       {/* LinkedIn PDF Quick Import Card */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 hover:border-slate-300 transition-colors">
+      <div className="bg-[#151D28] rounded-2xl border border-[#26313F] shadow-xs p-5 hover:border-[#3A495C] transition-colors">
         <div className="flex items-center gap-2.5 mb-2">
-          <div className="w-8 h-8 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-xl bg-[#2E2616] border border-[#D9A441]/40 text-[#D9A441] flex items-center justify-center shrink-0">
             <Sparkles className="w-4 h-4" />
           </div>
-          <h3 className="text-[13.5px] font-extrabold text-slate-900">
+          <h3 className="text-[13.5px] font-extrabold text-[#E4EAF2]">
             LinkedIn PDF Import
           </h3>
         </div>
 
-        <p className="text-xs font-medium text-slate-500 mb-3.5 leading-relaxed">
+        <p className="text-xs font-medium text-[#9FACBE] mb-3.5 leading-relaxed">
           Export your LinkedIn profile as PDF (Resources &gt; Save to PDF) and drop it here to auto-fill work &amp; education.
         </p>
 
@@ -233,7 +233,7 @@ export function ProfileSidebar({
           type="button"
           disabled={isImporting}
           onClick={() => fileInputRef.current?.click()}
-          className="w-full h-10 text-xs font-extrabold border border-[#0F2744]/20 bg-[#EEF4FA] hover:bg-[#0F2744] text-[#0F2744] hover:text-white rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-60 shadow-2xs"
+          className="w-full h-10 text-xs font-extrabold border border-[#26313F] bg-[#1A2330] hover:bg-[#0A6E4E] text-[#E4EAF2] hover:text-white rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-60 shadow-2xs"
         >
           {isImporting ? (
             <>
@@ -242,7 +242,7 @@ export function ProfileSidebar({
             </>
           ) : (
             <>
-              <UploadCloud className="w-4 h-4" />
+              <UploadCloud className="w-4 h-4 text-[#D9A441]" />
               <span>Upload LinkedIn PDF</span>
             </>
           )}
@@ -251,21 +251,21 @@ export function ProfileSidebar({
 
       {/* Next Step Studio CTA */}
       {completion >= 50 && (
-        <div className="bg-[#0F2744] rounded-2xl p-5 text-white shadow-md">
-          <div className="text-[10.5px] font-extrabold uppercase tracking-wider text-[#F59E0B] mb-1">
+        <div className="bg-[#0D131B] border border-[#26313F] rounded-2xl p-5 text-white shadow-md">
+          <div className="text-[10.5px] font-extrabold uppercase tracking-wider text-[#D9A441] mb-1">
             Ready to Tailor
           </div>
-          <h4 className="text-sm font-extrabold leading-snug mb-2">
+          <h4 className="text-sm font-extrabold text-[#E4EAF2] leading-snug mb-2">
             Turn this profile into an ATS-matched resume
           </h4>
-          <p className="text-xs text-slate-300 font-medium leading-relaxed mb-4">
+          <p className="text-xs text-[#9FACBE] font-medium leading-relaxed mb-4">
             Paste any job description and generate a tailored PDF or DOCX in seconds.
           </p>
           <Link
             href="/dashboard/create"
-            className="w-full h-9 rounded-xl bg-[#F59E0B] hover:bg-amber-400 text-slate-950 text-xs font-extrabold flex items-center justify-center gap-1.5 transition-colors"
+            className="w-full h-9 rounded-xl bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 text-xs font-extrabold flex items-center justify-center gap-1.5 transition-colors"
           >
-            <FilePlus2 className="w-3.5 h-3.5" />
+            <FilePlus2 className="w-3.5 h-3.5 text-[#D9A441]" />
             <span>Open Resume Studio</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>

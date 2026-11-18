@@ -102,15 +102,15 @@ export function AutocompleteInput({
         }}
         type="text"
         placeholder={placeholder}
-        className={`w-full h-12 ${icon ? 'pl-11' : 'pl-4'} pr-10 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-[14px] font-medium text-slate-900 transition-all placeholder:text-slate-300`}
+        className={`w-full h-10 ${icon ? 'pl-9' : 'pl-3'} pr-10 rounded-lg border border-[#26313F] bg-[#1A2330] focus:bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] transition-all placeholder:text-[#68768A]`}
         autoComplete="off"
       />
       {loading && (
-        <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 animate-spin" />
+        <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#78859A] animate-spin" />
       )}
       
       {isOpen && options.length > 0 && (
-        <ul className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-auto py-1">
+        <ul className="absolute z-50 w-full mt-1 bg-[#151D28] border border-[#26313F] rounded-xl shadow-xl max-h-60 overflow-auto py-1">
           {options.map((option, index) => (
             <li
               key={index}
@@ -118,7 +118,7 @@ export function AutocompleteInput({
                 onChange(option)
                 setIsOpen(false)
               }}
-              className="px-4 py-2 text-[14px] font-medium text-slate-700 hover:bg-slate-50 hover:text-primary cursor-pointer transition-colors"
+              className="px-4 py-2 text-[13px] font-medium text-[#E4EAF2] hover:bg-[#1A2330] hover:text-[#3FA57C] cursor-pointer transition-colors"
             >
               {option}
             </li>
@@ -127,7 +127,7 @@ export function AutocompleteInput({
       )}
       
       {isOpen && !loading && value.length >= 2 && options.length === 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg px-4 py-3 text-[14px] font-medium text-slate-500 text-center">
+        <div className="absolute z-50 w-full mt-1 bg-[#151D28] border border-[#26313F] rounded-xl shadow-xl px-4 py-3 text-[13px] font-medium text-[#9FACBE] text-center">
           No matches found
         </div>
       )}

@@ -85,45 +85,45 @@ export function CertificationsForm({
   }
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs overflow-hidden">
+    <div className="bg-[#151D28] rounded-xl border border-[#26313F] shadow-sm overflow-hidden">
       {/* Card Header */}
-      <div className="px-6 py-4 border-b border-slate-100 bg-[#F8FAFC] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="px-6 py-4 border-b border-[#26313F] bg-[#101722] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-[16px] font-black text-slate-900">Professional Certifications &amp; Licenses</h2>
-          <p className="text-[12.5px] text-slate-500 font-medium">Add verified industry credentials, cloud certifications, and technical licenses.</p>
+          <h2 className="text-[15px] font-bold text-[#E4EAF2]">Professional Certifications &amp; Licenses</h2>
+          <p className="text-[12px] text-[#9FACBE] font-medium">Add verified industry credentials, cloud certifications, and technical licenses.</p>
         </div>
         <button 
           onClick={handleAdd} 
-          className="h-9 px-3.5 text-[12px] font-bold bg-white hover:bg-[#EEF4FA] text-[#0F2744] border border-slate-200 hover:border-[#0F2744]/30 rounded-xl inline-flex items-center gap-1.5 transition-colors cursor-pointer self-start sm:self-auto"
+          className="h-8 px-3 text-[12px] font-semibold bg-[#1A2330] hover:bg-[#222E3F] text-[#E4EAF2] border border-[#26313F] hover:border-[#3FA57C]/40 rounded-lg inline-flex items-center gap-1.5 transition-colors cursor-pointer self-start sm:self-auto"
         >
-          <Plus className="w-3.5 h-3.5 text-[#D97706]" />
+          <Plus className="w-3.5 h-3.5 text-[#3FA57C]" />
           Add Certification
         </button>
       </div>
 
       <div className="px-6 py-6 space-y-5">
         {certList.length === 0 ? (
-          <div className="py-10 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-[#F8FAFC]">
-            <Award className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-            <p className="text-[13.5px] font-bold text-slate-700">No certifications added yet</p>
-            <p className="text-[12px] text-slate-500 mb-4">Add verified credentials like AWS, PMP, CKAD, or Google Cloud.</p>
+          <div className="py-8 text-center border-2 border-dashed border-[#26313F] bg-[#101722]/40 rounded-lg">
+            <Award className="w-8 h-8 text-[#78859A] mx-auto mb-2" />
+            <p className="text-[13px] font-semibold text-[#E4EAF2]">No certifications added yet</p>
+            <p className="text-[11px] text-[#9FACBE] mb-3">Add verified credentials like AWS, PMP, CKAD, or Google Cloud.</p>
             <button
               onClick={handleAdd}
-              className="h-9 px-4 text-[12.5px] font-bold bg-[#0F2744] hover:bg-[#0A1C33] text-white rounded-xl inline-flex items-center gap-1.5 cursor-pointer"
+              className="h-8 px-3.5 text-[12px] font-semibold bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 rounded-lg inline-flex items-center gap-1.5 cursor-pointer"
             >
-              <Plus className="w-3.5 h-3.5 text-[#F59E0B]" /> Add First Certification
+              <Plus className="w-3.5 h-3.5" /> Add First Certification
             </button>
           </div>
         ) : (
           certList.map((cert, index) => (
-            <div key={index} className="p-5 rounded-2xl border border-slate-200/80 bg-[#F8FAFC] hover:bg-white transition-colors space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-200/60">
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+            <div key={index} className="p-5 rounded-lg border border-[#26313F] bg-[#1A2330]/50 hover:bg-[#1A2330]/80 transition-colors space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-[#26313F]">
+                <span className="text-[11px] font-bold text-[#78859A] uppercase tracking-wider">
                   Certification #{index + 1}
                 </span>
                 <button 
                   onClick={() => handleRemove(index)} 
-                  className="p-1 text-slate-400 hover:text-red-600 transition-colors rounded hover:bg-white cursor-pointer"
+                  className="p-1 text-[#78859A] hover:text-red-400 transition-colors rounded hover:bg-[#101722] cursor-pointer"
                   title="Remove certification"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -132,33 +132,33 @@ export function CertificationsForm({
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
-                    Certification Name <span className="text-red-500">*</span>
+                  <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">
+                    Certification Name <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
-                    <Award className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                    <Award className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#78859A]" />
                     <input 
                       type="text" 
                       placeholder="e.g. AWS Certified Solutions Architect"
                       value={cert.name}
                       onChange={(e) => handleChange(index, 'name', e.target.value)}
-                      className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 transition-colors placeholder:text-slate-400"
+                      className="w-full h-10 pl-9 pr-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] transition-colors placeholder:text-[#68768A]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
-                    Issuing Organization <span className="text-red-500">*</span>
+                  <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">
+                    Issuing Organization <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
-                    <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                    <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#78859A]" />
                     <input 
                       type="text" 
                       placeholder="e.g. Amazon Web Services (AWS)"
                       value={cert.organization}
                       onChange={(e) => handleChange(index, 'organization', e.target.value)}
-                      className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 transition-colors placeholder:text-slate-400"
+                      className="w-full h-10 pl-9 pr-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] transition-colors placeholder:text-[#68768A]"
                     />
                   </div>
                 </div>
@@ -166,33 +166,33 @@ export function CertificationsForm({
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Issue Date</label>
+                  <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">Issue Date</label>
                   <input 
                     type="text" 
                     placeholder="MM/YYYY"
                     value={cert.issueDate}
                     onChange={(e) => handleChange(index, 'issueDate', formatMonthYear(e.target.value))}
-                    className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 transition-colors placeholder:text-slate-400"
+                    className="w-full h-10 px-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] transition-colors placeholder:text-[#68768A]"
                   />
                 </div>
                 <div>
-                  <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Expiration Date</label>
+                  <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">Expiration Date</label>
                   <input 
                     type="text" 
                     placeholder="MM/YYYY or Never"
                     value={cert.expiryDate}
                     onChange={(e) => handleChange(index, 'expiryDate', formatMonthYear(e.target.value))}
-                    className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 transition-colors placeholder:text-slate-400"
+                    className="w-full h-10 px-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] transition-colors placeholder:text-[#68768A]"
                   />
                 </div>
                 <div>
-                  <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Credential URL / Verification ID</label>
+                  <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">Credential URL / Verification ID</label>
                   <input 
                     type="text" 
                     placeholder="https://..."
                     value={cert.credentialUrl}
                     onChange={(e) => handleChange(index, 'credentialUrl', e.target.value)}
-                    className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 transition-colors placeholder:text-slate-400"
+                    className="w-full h-10 px-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] transition-colors placeholder:text-[#68768A]"
                   />
                 </div>
               </div>
@@ -200,18 +200,18 @@ export function CertificationsForm({
           ))
         )}
 
-        <div className="flex items-center gap-3 pt-3 border-t border-slate-100">
+        <div className="flex items-center gap-3 pt-3 border-t border-[#26313F]">
           <button 
             onClick={handleSave} 
             disabled={isLoading} 
-            className="h-9 px-6 rounded-lg font-semibold text-[13px] bg-primary text-white hover:bg-primary-dark shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+            className="h-9 px-6 rounded-lg font-semibold text-[13px] bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
           >
             {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save & Continue'}
           </button>
           {onCancel && (
             <button 
               onClick={onCancel} 
-              className="h-9 px-4 rounded-lg font-semibold text-[13px] text-slate-600 hover:text-slate-900 border border-slate-200 hover:bg-slate-100 bg-white transition-colors cursor-pointer"
+              className="h-9 px-4 rounded-lg font-semibold text-[13px] text-[#E4EAF2] hover:text-white border border-[#26313F] hover:bg-[#222E3F] bg-[#1A2330] transition-colors cursor-pointer"
             >
               Cancel
             </button>

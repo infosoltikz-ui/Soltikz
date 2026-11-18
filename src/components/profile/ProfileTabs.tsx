@@ -41,7 +41,7 @@ export function ProfileTabs({
 
   return (
     <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3 mb-6">
-      <div className="bg-white border border-slate-200/90 rounded-2xl p-1.5 flex overflow-x-auto hide-scrollbar gap-1 shadow-xs">
+      <div className="bg-[#151D28] border border-[#26313F] rounded-2xl p-1.5 flex overflow-x-auto hide-scrollbar gap-1 shadow-xs">
         {tabs.map((tab) => {
           const Icon = tab.icon
           const isActive = activeTab === tab.id
@@ -52,12 +52,12 @@ export function ProfileTabs({
               className={cn(
                 'flex items-center gap-2 px-3.5 py-2 rounded-xl font-bold text-[12.5px] sm:text-[13px] whitespace-nowrap transition-all duration-150 cursor-pointer',
                 isActive
-                  ? 'bg-[#0F2744] text-white shadow-sm'
-                  : 'text-slate-600 hover:text-[#0F2744] hover:bg-slate-100/80'
+                  ? 'bg-[#0A6E4E] text-white shadow-sm'
+                  : 'text-[#9FACBE] hover:text-[#E4EAF2] hover:bg-[#1A2330]'
               )}
             >
               <Icon
-                className={cn('w-3.5 h-3.5', isActive ? 'text-[#F59E0B]' : 'text-slate-400')}
+                className={cn('w-3.5 h-3.5', isActive ? 'text-[#D9A441]' : 'text-[#78859A]')}
                 strokeWidth={2.2}
               />
               <span>{tab.label}</span>
@@ -67,7 +67,7 @@ export function ProfileTabs({
                     'px-1.5 py-0.5 rounded-md text-[10px] font-extrabold tabular-nums leading-none',
                     isActive
                       ? 'bg-white/15 text-white'
-                      : 'bg-[#EEF4FA] text-[#0F2744]'
+                      : 'bg-[#1A2330] text-[#3FA57C] border border-[#3FA57C]/30'
                   )}
                 >
                   {tab.count}
@@ -82,9 +82,9 @@ export function ProfileTabs({
         <div className="shrink-0 self-end xl:self-auto">
           <button
             onClick={onPreview}
-            className="h-10 px-4 text-xs font-extrabold bg-white hover:bg-[#EEF4FA] text-slate-700 hover:text-[#0F2744] border border-slate-200/90 hover:border-[#0F2744]/25 rounded-xl shadow-xs inline-flex items-center gap-2 transition-all cursor-pointer"
+            className="h-10 px-4 text-xs font-extrabold bg-[#151D28] hover:bg-[#1A2330] text-[#E4EAF2] border border-[#26313F] hover:border-[#3FA57C]/30 rounded-xl shadow-xs inline-flex items-center gap-2 transition-all cursor-pointer"
           >
-            <Eye className="w-3.5 h-3.5 text-[#0F2744]" />
+            <Eye className="w-3.5 h-3.5 text-[#3FA57C]" />
             <span>View Full Dossier</span>
           </button>
         </div>

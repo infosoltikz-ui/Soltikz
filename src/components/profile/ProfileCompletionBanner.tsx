@@ -41,19 +41,19 @@ export function ProfileCompletionBanner({
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 mt-6 hover:border-slate-300 transition-colors">
+    <div className="bg-[#151D28] rounded-2xl border border-[#26313F] shadow-xs p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 mt-6 hover:border-[#3FA57C]/40 transition-colors">
       <div className="flex items-center gap-4">
         <div className="relative w-12 h-12 shrink-0">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
             <path
-              className="text-slate-100"
+              className="text-[#26313F]"
               strokeWidth="3.8"
               stroke="currentColor"
               fill="none"
               d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
             />
             <path
-              className={completion >= 80 ? 'text-emerald-600' : 'text-[#0F2744]'}
+              className={completion >= 80 ? 'text-[#3FA57C]' : 'text-[#D9A441]'}
               strokeWidth="3.8"
               strokeDasharray={`${completion}, 100`}
               strokeLinecap="round"
@@ -63,13 +63,13 @@ export function ProfileCompletionBanner({
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-xs font-black text-slate-900 tabular-nums">{completion}%</span>
+            <span className="text-xs font-black text-[#E4EAF2] tabular-nums">{completion}%</span>
           </div>
         </div>
 
         <div>
-          <h4 className="text-sm font-extrabold text-slate-900">Profile Readiness</h4>
-          <p className="text-xs text-slate-500 font-medium mt-0.5">
+          <h4 className="text-sm font-extrabold text-[#E4EAF2]">Profile Readiness</h4>
+          <p className="text-xs text-[#9FACBE] font-medium mt-0.5">
             {completion >= 80
               ? 'Profile complete! Ready to generate high-scoring ATS resumes.'
               : 'Complete your profile to maximize AI accuracy and match rates.'}
@@ -78,19 +78,19 @@ export function ProfileCompletionBanner({
       </div>
 
       {completion < 100 && (
-        <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 pt-3 md:pt-0 border-slate-100">
+        <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 pt-3 md:pt-0 border-[#26313F]">
           <div className="hidden sm:block text-right">
-            <span className="text-[10.5px] font-extrabold uppercase tracking-wider text-slate-400 block">
+            <span className="text-[10.5px] font-extrabold uppercase tracking-wider text-[#78859A] block">
               Recommended Next
             </span>
-            <span className="text-xs font-bold text-slate-800">{nextLabel}</span>
+            <span className="text-xs font-bold text-[#E4EAF2]">{nextLabel}</span>
           </div>
           <button
             onClick={() => onAction?.(nextTab)}
-            className="h-9 px-4 rounded-xl bg-[#0F2744] hover:bg-[#0A1C33] text-white text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs"
+            className="h-9 px-4 rounded-xl bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs"
           >
             <span>{nextLabel}</span>
-            <ArrowRight className="w-3.5 h-3.5 text-[#F59E0B]" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#D9A441]" />
           </button>
         </div>
       )}

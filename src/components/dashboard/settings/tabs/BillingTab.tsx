@@ -113,7 +113,7 @@ export function BillingTab({ initialYearly = false }: { initialYearly?: boolean 
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
 
       {/* Current Plan Overview */}
-      <div className={`rounded-2xl shadow-xl p-8 text-white relative overflow-hidden ${isPro ? 'bg-primary' : 'bg-slate-800'}`}>
+      <div className={`rounded-2xl shadow-xl p-8 text-white relative overflow-hidden ${isPro ? 'bg-[#151D28] border border-[#3FA57C]/40' : 'bg-[#151D28] border border-[#26313F]'}`}>
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500/20 rounded-full blur-3xl"></div>
 
@@ -142,28 +142,28 @@ export function BillingTab({ initialYearly = false }: { initialYearly?: boolean 
           {!isPro && (
             <div className="flex flex-col items-start md:items-end gap-3">
               {/* Monthly / Yearly toggle */}
-              <div className="flex items-center bg-white/10 rounded-xl p-1 text-[12px] font-bold">
+              <div className="flex items-center bg-[#1A2330] border border-[#26313F] rounded-xl p-1 text-[12px] font-bold">
                 <button
                   onClick={() => setIsYearly(false)}
-                  className={cn("px-3 py-1.5 rounded-lg transition-colors", !isYearly ? "bg-white text-slate-900" : "text-white/80")}
+                  className={cn("px-3 py-1.5 rounded-lg transition-colors cursor-pointer", !isYearly ? "bg-[#0A6E4E] text-white border border-[#3FA57C]/40" : "text-[#9FACBE] hover:text-white")}
                 >
                   Monthly
                 </button>
                 <button
                   onClick={() => setIsYearly(true)}
-                  className={cn("px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5", isYearly ? "bg-white text-slate-900" : "text-white/80")}
+                  className={cn("px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer", isYearly ? "bg-[#0A6E4E] text-white border border-[#3FA57C]/40" : "text-[#9FACBE] hover:text-white")}
                 >
                   Yearly
-                  <span className="bg-orange-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full">-20%</span>
+                  <span className="bg-[#D9A441] text-[#0D131B] text-[9px] font-black px-1.5 py-0.5 rounded-full">-20%</span>
                 </button>
               </div>
 
               <Button
                 onClick={handleUpgrade}
                 disabled={isProcessing}
-                className="h-11 px-6 text-[13.5px] font-extrabold rounded-xl bg-[#F59E0B] text-[#0F2744] hover:bg-[#D97706] shadow-md shadow-amber-500/20 cursor-pointer transition-all"
+                className="h-11 px-6 text-[13.5px] font-extrabold rounded-xl bg-[#0A6E4E] text-white hover:bg-[#0D8A62] border border-[#3FA57C]/40 shadow-md cursor-pointer transition-all"
               >
-                {isProcessing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Zap className="w-4 h-4 mr-2 text-[#0F2744]" />}
+                {isProcessing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Zap className="w-4 h-4 mr-2 text-[#D9A441]" />}
                 Upgrade for {currency === 'INR' ? '₹' : '$'}{currency === 'INR' ? selectedPlan.amountInr : selectedPlan.amountUsd}/{isYearly ? 'yr' : 'mo'}
               </Button>
             </div>

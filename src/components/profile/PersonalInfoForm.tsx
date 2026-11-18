@@ -105,12 +105,12 @@ export function PersonalInfoForm({
   }
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-[#151D28] rounded-xl border border-[#26313F] shadow-sm overflow-hidden">
       {/* Card Header */}
-      <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+      <div className="px-6 py-4 border-b border-[#26313F] bg-[#101722] flex items-center justify-between">
         <div>
-          <h2 className="text-[15px] font-bold text-slate-900">Personal &amp; Contact Details</h2>
-          <p className="text-[12px] text-slate-500 font-medium">Basic contact information positioned at the top of your tailored resumes.</p>
+          <h2 className="text-[15px] font-bold text-[#E4EAF2]">Personal &amp; Contact Details</h2>
+          <p className="text-[12px] text-[#9FACBE] font-medium">Basic contact information positioned at the top of your tailored resumes.</p>
         </div>
       </div>
 
@@ -119,11 +119,11 @@ export function PersonalInfoForm({
 
         {/* Name Row */}
         <div>
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Candidate Name</span>
+          <span className="text-[11px] font-bold text-[#78859A] uppercase tracking-wider block mb-2.5">Candidate Name</span>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
-                First Name <span className="text-red-500">*</span>
+              <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">
+                First Name <span className="text-red-400">*</span>
               </label>
               <input
                 name="firstName"
@@ -131,11 +131,11 @@ export function PersonalInfoForm({
                 onChange={handleChange}
                 type="text"
                 placeholder="e.g. John"
-                className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors"
+                className="w-full h-10 px-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] placeholder:text-[#68768A] transition-colors"
               />
             </div>
             <div>
-              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
+              <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">
                 Middle Name
               </label>
               <input
@@ -144,12 +144,12 @@ export function PersonalInfoForm({
                 onChange={handleChange}
                 type="text"
                 placeholder="Optional"
-                className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors"
+                className="w-full h-10 px-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] placeholder:text-[#68768A] transition-colors"
               />
             </div>
             <div>
-              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
-                Last Name <span className="text-red-500">*</span>
+              <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">
+                Last Name <span className="text-red-400">*</span>
               </label>
               <input
                 name="lastName"
@@ -157,7 +157,7 @@ export function PersonalInfoForm({
                 onChange={handleChange}
                 type="text"
                 placeholder="e.g. Doe"
-                className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors"
+                className="w-full h-10 px-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] placeholder:text-[#68768A] transition-colors"
               />
             </div>
           </div>
@@ -165,11 +165,11 @@ export function PersonalInfoForm({
 
         {/* Contact Row */}
         <div>
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Contact Channels</span>
+          <span className="text-[11px] font-bold text-[#78859A] uppercase tracking-wider block mb-2.5">Contact Channels</span>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
-                Email Address <span className="text-red-500">*</span>
+              <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">
+                Email Address <span className="text-red-400">*</span>
               </label>
               <input
                 name="email"
@@ -177,11 +177,11 @@ export function PersonalInfoForm({
                 onChange={handleChange}
                 type="email"
                 placeholder="you@example.com"
-                className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors"
+                className="w-full h-10 px-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] placeholder:text-[#68768A] transition-colors"
               />
             </div>
             <div>
-              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
+              <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">
                 Phone Number
               </label>
               <input
@@ -190,7 +190,7 @@ export function PersonalInfoForm({
                 onChange={handleChange}
                 type="tel"
                 placeholder="+1 (555) 000-0000"
-                className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors"
+                className="w-full h-10 px-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] placeholder:text-[#68768A] transition-colors"
               />
             </div>
           </div>
@@ -198,37 +198,37 @@ export function PersonalInfoForm({
 
         {/* Online Presence */}
         <div>
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Location &amp; Online Links</span>
+          <span className="text-[11px] font-bold text-[#78859A] uppercase tracking-wider block mb-2.5">Location &amp; Online Links</span>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
-                Current Location <span className="text-red-500">*</span>
+              <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">
+                Current Location <span className="text-red-400">*</span>
               </label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#78859A]" />
                 <input
                   name="location"
                   value={formData.location}
                   onChange={handleChange}
                   type="text"
                   placeholder="City, State, Country"
-                  className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors"
+                  className="w-full h-10 pl-9 pr-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] placeholder:text-[#68768A] transition-colors"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
+              <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1.5">
                 LinkedIn Profile URL
               </label>
               <div className="relative">
-                <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#78859A]" />
                 <input
                   name="linkedin"
                   value={formData.linkedin}
                   onChange={handleChange}
                   type="text"
                   placeholder="linkedin.com/in/username"
-                  className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors"
+                  className="w-full h-10 pl-9 pr-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] placeholder:text-[#68768A] transition-colors"
                 />
               </div>
             </div>
@@ -237,37 +237,37 @@ export function PersonalInfoForm({
 
         {/* Executive Summary */}
         <div>
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Professional Executive Summary</span>
+          <span className="text-[11px] font-bold text-[#78859A] uppercase tracking-wider block mb-2.5">Professional Executive Summary</span>
           <div>
-            <label className="block text-[12px] font-semibold text-slate-700 mb-1">
-              Executive Paragraph (4–5 lines)
+            <label className="block text-[12px] font-semibold text-[#C3CCD9] mb-1">
+              Executive Paragraph (4-5 lines)
             </label>
-            <p className="text-[11px] text-slate-500 mb-2">Concise summary highlighting years of experience, core technical stack, and specialized focus.</p>
+            <p className="text-[11px] text-[#9FACBE] mb-2">Concise summary highlighting years of experience, core technical stack, and specialized focus.</p>
             <textarea
               name="summary"
               value={formData.summary}
               onChange={handleChange}
               rows={4}
               placeholder="Results-driven Senior DevOps Engineer with 8+ years of experience designing and maintaining CI/CD pipelines..."
-              className="w-full p-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-[13px] font-medium text-slate-900 placeholder:text-slate-400 transition-colors leading-relaxed resize-y"
+              className="w-full p-3 rounded-lg border border-[#26313F] bg-[#1A2330] focus:outline-none focus:border-[#3FA57C] focus:ring-1 focus:ring-[#3FA57C] text-[13px] font-medium text-[#E4EAF2] placeholder:text-[#68768A] transition-colors leading-relaxed resize-y"
             ></textarea>
           </div>
         </div>
       </div>
 
       {/* Card Footer */}
-      <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex items-center gap-3">
+      <div className="px-6 py-4 border-t border-[#26313F] bg-[#101722] flex items-center gap-3">
         <button
           onClick={handleSave}
           disabled={isLoading}
-          className="h-9 px-6 rounded-lg font-semibold text-[13px] bg-primary text-white hover:bg-primary-dark shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+          className="h-9 px-6 rounded-lg font-semibold text-[13px] bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
         >
           {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save & Continue'}
         </button>
         {onCancel && (
           <button 
             onClick={onCancel} 
-            className="h-9 px-4 rounded-lg font-semibold text-[13px] text-slate-600 hover:text-slate-900 border border-slate-200 hover:bg-slate-100 bg-white transition-colors cursor-pointer"
+            className="h-9 px-4 rounded-lg font-semibold text-[13px] text-[#E4EAF2] hover:text-white border border-[#26313F] hover:bg-[#222E3F] bg-[#1A2330] transition-colors cursor-pointer"
           >
             Cancel
           </button>

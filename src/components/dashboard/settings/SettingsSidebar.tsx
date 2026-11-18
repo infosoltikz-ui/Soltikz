@@ -5,38 +5,38 @@ export function SettingsSidebar() {
   return (
     <div className="w-full xl:w-[320px] shrink-0 space-y-5">
       {/* Workspace Security & Tips Card */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-6 relative overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-1 bg-[#0F2744]" />
+      <div className="bg-[#151D28] rounded-3xl border border-[#26313F] shadow-xs p-6 relative overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-1 bg-[#0A6E4E]" />
 
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-[#EEF4FA] text-[#0F2744] flex items-center justify-center shrink-0 border border-slate-200/60">
+          <div className="w-10 h-10 rounded-xl bg-[#1A2330] text-[#3FA57C] flex items-center justify-center shrink-0 border border-[#26313F]">
             <ShieldCheck className="w-5 h-5" strokeWidth={2} />
           </div>
           <div>
-            <h3 className="text-[15px] font-extrabold text-slate-900 leading-tight">
+            <h3 className="text-[15px] font-extrabold text-[#E4EAF2] leading-tight">
               Account &amp; Privacy
             </h3>
-            <p className="text-[11.5px] font-medium text-slate-500">
+            <p className="text-[11.5px] font-medium text-[#9FACBE]">
               How your details are used
             </p>
           </div>
         </div>
 
-        <ul className="space-y-3 text-[12.5px] text-slate-600 leading-relaxed">
+        <ul className="space-y-3 text-[12.5px] text-[#C3CCD9] leading-relaxed">
           <li className="flex items-start gap-2.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#F59E0B] mt-2 shrink-0" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#D9A441] mt-2 shrink-0" />
             <span>
               Your display name and phone populate resume headers automatically unless overridden in your Master Profile.
             </span>
           </li>
           <li className="flex items-start gap-2.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#059669] mt-2 shrink-0" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#3FA57C] mt-2 shrink-0" />
             <span>
               Payment processing uses Razorpay encrypted checkout. Card details never touch our servers.
             </span>
           </li>
           <li className="flex items-start gap-2.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#0F2744] mt-2 shrink-0" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#0A6E4E] mt-2 shrink-0" />
             <span>
               Keep your career timeline updated so AI bullets stay grounded in verified experience.
             </span>
@@ -45,13 +45,13 @@ export function SettingsSidebar() {
 
         <Link
           href="/dashboard/profile"
-          className="mt-5 w-full flex items-center justify-between px-4 py-2.5 rounded-xl bg-[#F8FAFC] hover:bg-[#EEF4FA] border border-slate-200/80 text-[12.5px] font-bold text-[#0F2744] transition-colors group"
+          className="mt-5 w-full flex items-center justify-between px-4 py-2.5 rounded-xl bg-[#1A2330] hover:bg-[#222E3F] border border-[#26313F] text-[12.5px] font-bold text-[#E4EAF2] transition-colors group"
         >
           <span className="flex items-center gap-2">
-            <IdCard className="w-4 h-4 text-[#0F2744]" />
+            <IdCard className="w-4 h-4 text-[#3FA57C]" />
             Edit Master Profile
           </span>
-          <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-[#0F2744] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          <ArrowUpRight className="w-4 h-4 text-[#78859A] group-hover:text-[#3FA57C] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         </Link>
       </div>
 

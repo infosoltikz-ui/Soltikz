@@ -56,7 +56,7 @@ export default function SettingsPage() {
 
       <Suspense
         fallback={
-          <div className="bg-white rounded-3xl border border-slate-200/80 p-8 animate-pulse h-80" />
+          <div className="bg-[#151D28] rounded-3xl border border-[#26313F] p-8 animate-pulse h-80" />
         }
       >
         <SettingsContent />

@@ -297,33 +297,33 @@ export function ProfileHeader({
   return (
     <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 mb-6">
       {/* Left 7 Cols: Candidate Identity & Mode Switcher */}
-      <div className="xl:col-span-7 bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 sm:p-6 flex flex-col justify-between gap-4 hover:border-slate-300 transition-colors">
+      <div className="xl:col-span-7 bg-[#151D28] rounded-2xl border border-[#26313F] shadow-xs p-5 sm:p-6 flex flex-col justify-between gap-4 hover:border-[#3A495C] transition-colors">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4 min-w-0">
-            <div className="w-14 h-14 rounded-2xl bg-[#0F2744] text-[#F59E0B] font-black text-lg flex items-center justify-center shrink-0 ring-4 ring-[#EEF4FA] shadow-sm">
+            <div className="w-14 h-14 rounded-2xl bg-[#0A1017] text-[#D9A441] font-black text-lg flex items-center justify-center shrink-0 ring-4 ring-[#26313F] shadow-sm">
               {initials}
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-lg font-extrabold text-slate-900 tracking-tight truncate">
+                <h2 className="text-lg font-extrabold text-[#E4EAF2] tracking-tight truncate">
                   {fullName}
                 </h2>
-                <span className="inline-flex items-center gap-1 text-[10.5px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">
+                <span className="inline-flex items-center gap-1 text-[10.5px] font-bold bg-[#123227] text-[#3FA57C] border border-[#3FA57C]/30 px-2 py-0.5 rounded-full shrink-0">
                   <CheckCircle2 className="w-3 h-3" />
                   Synced Record
                 </span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-slate-500 mt-1">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-[#9FACBE] mt-1">
                 {pi.location && (
                   <span className="inline-flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                    <MapPin className="w-3.5 h-3.5 text-[#78859A]" />
                     {pi.location}
                   </span>
                 )}
                 {email && (
                   <span className="inline-flex items-center gap-1 truncate">
-                    <Mail className="w-3.5 h-3.5 text-slate-400" />
+                    <Mail className="w-3.5 h-3.5 text-[#78859A]" />
                     {email}
                   </span>
                 )}
@@ -334,7 +334,7 @@ export function ProfileHeader({
           {/* Mode Toggle & Preview Controls */}
           <div className="flex items-center gap-2 shrink-0">
             {onToggleViewMode && (
-              <div className="inline-flex p-1 rounded-xl bg-slate-100 border border-slate-200/80">
+              <div className="inline-flex p-1 rounded-xl bg-[#1A2330] border border-[#26313F]">
                 <button
                   type="button"
                   onClick={() => {
@@ -343,8 +343,8 @@ export function ProfileHeader({
                   className={cn(
                     'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer',
                     viewMode
-                      ? 'bg-[#0F2744] text-white shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-[#0A6E4E] text-white shadow-2xs'
+                      : 'text-[#78859A] hover:text-[#E4EAF2]'
                   )}
                 >
                   <FileText className="w-3.5 h-3.5" />
@@ -358,8 +358,8 @@ export function ProfileHeader({
                   className={cn(
                     'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer',
                     !viewMode
-                      ? 'bg-[#0F2744] text-white shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-[#0A6E4E] text-white shadow-2xs'
+                      : 'text-[#78859A] hover:text-[#E4EAF2]'
                   )}
                 >
                   <Edit3 className="w-3.5 h-3.5" />
@@ -373,7 +373,7 @@ export function ProfileHeader({
                 type="button"
                 onClick={onPreviewModal}
                 title="Open Quick Preview"
-                className="h-9 px-3 rounded-xl border border-slate-200 hover:border-[#0F2744]/30 bg-white hover:bg-[#EEF4FA] text-slate-700 hover:text-[#0F2744] text-xs font-bold inline-flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+                className="h-9 px-3 rounded-xl border border-[#26313F] bg-[#1A2330] hover:bg-[#222E3F] text-[#E4EAF2] hover:border-[#3FA57C]/30 text-xs font-bold inline-flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs"
               >
                 <Eye className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Preview</span>
@@ -382,36 +382,36 @@ export function ProfileHeader({
           </div>
         </div>
 
-        <div className="pt-3.5 border-t border-slate-100 flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-bold text-[#0F2744] bg-[#EEF4FA] border border-[#0F2744]/10 px-2.5 py-1 rounded-lg tabular-nums">
+        <div className="pt-3.5 border-t border-[#26313F] flex flex-wrap items-center gap-2">
+          <span className="text-[11px] font-bold text-[#3FA57C] bg-[#123227] border border-[#3FA57C]/30 px-2.5 py-1 rounded-lg tabular-nums">
             {jobCount} {jobCount === 1 ? 'Experience' : 'Experiences'}
           </span>
-          <span className="text-[11px] font-bold text-slate-700 bg-slate-100 border border-slate-200/80 px-2.5 py-1 rounded-lg tabular-nums">
+          <span className="text-[11px] font-bold text-[#9FACBE] bg-[#1A2330] border border-[#26313F] px-2.5 py-1 rounded-lg tabular-nums">
             {skillCount} Skill {skillCount === 1 ? 'Group' : 'Groups'}
           </span>
-          <span className="text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-lg inline-flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-amber-600" />
+          <span className="text-[11px] font-bold text-[#D9A441] bg-[#2E2616] border border-[#D9A441]/40 px-2.5 py-1 rounded-lg inline-flex items-center gap-1">
+            <Sparkles className="w-3 h-3 text-[#D9A441]" />
             ATS Ready Foundation
           </span>
         </div>
       </div>
 
       {/* Right 5 Cols: Excel Data Import Card */}
-      <div className="xl:col-span-5 bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 sm:p-6 flex flex-col justify-between gap-4 hover:border-slate-300 transition-colors">
+      <div className="xl:col-span-5 bg-[#151D28] rounded-2xl border border-[#26313F] shadow-xs p-5 sm:p-6 flex flex-col justify-between gap-4 hover:border-[#3A495C] transition-colors">
         <div className="flex items-start gap-3.5">
-          <div className="w-11 h-11 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-emerald-700 flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-2xl bg-[#123227] border border-[#3FA57C]/30 text-[#3FA57C] flex items-center justify-center shrink-0">
             <FileSpreadsheet className="w-5 h-5" strokeWidth={2.2} />
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <h3 className="text-[14.5px] font-extrabold text-slate-900">
+              <h3 className="text-[14.5px] font-extrabold text-[#E4EAF2]">
                 Bulk Excel Import
               </h3>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-[#123227] text-[#3FA57C] border border-[#3FA57C]/30">
                 Fast Setup
               </span>
             </div>
-            <p className="text-xs text-slate-500 font-medium leading-relaxed">
+            <p className="text-xs text-[#9FACBE] font-medium leading-relaxed">
               Prefer offline editing? Download our structured workbook, fill in your career sections, and upload to populate instantly.
             </p>
           </div>
@@ -428,18 +428,18 @@ export function ProfileHeader({
           <button
             type="button"
             onClick={() => setIsExcelModalOpen(true)}
-            className="flex-1 h-9 px-3.5 text-xs font-bold border border-slate-200 hover:border-[#0F2744]/30 bg-white hover:bg-slate-50 text-slate-700 hover:text-[#0F2744] rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+            className="flex-1 h-9 px-3.5 text-xs font-bold border border-[#26313F] bg-[#1A2330] hover:bg-[#222E3F] text-[#E4EAF2] hover:border-[#3FA57C]/30 rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
           >
-            <Download className="w-3.5 h-3.5 text-slate-500" />
+            <Download className="w-3.5 h-3.5 text-[#78859A]" />
             <span>Template</span>
           </button>
 
           <button
             type="button"
             onClick={() => excelInputRef.current?.click()}
-            className="flex-1 h-9 px-3.5 text-xs font-bold bg-[#0F2744] hover:bg-[#0A1C33] text-white rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
+            className="flex-1 h-9 px-3.5 text-xs font-bold bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
           >
-            <UploadCloud className="w-3.5 h-3.5 text-[#F59E0B]" />
+            <UploadCloud className="w-3.5 h-3.5 text-[#D9A441]" />
             <span>Upload Excel</span>
           </button>
 
@@ -448,7 +448,7 @@ export function ProfileHeader({
               type="button"
               onClick={onOpenImport}
               title="Import LinkedIn PDF"
-              className="h-9 px-3 text-xs font-bold border border-amber-200 bg-amber-50 hover:bg-[#F59E0B] text-amber-900 hover:text-slate-950 rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0"
+              className="h-9 px-3 text-xs font-bold border border-[#D9A441]/40 bg-[#2E2616] hover:bg-[#D9A441] text-[#D9A441] hover:text-slate-950 rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">LinkedIn PDF</span>
