@@ -95,11 +95,11 @@ export default async function DashboardPage() {
   const avgAts =
     processedResumes.length > 0
       ? Math.round(
-          processedResumes.reduce(
-            (sum: number, r: any) => sum + (r.ats_analyses?.[0]?.overall_score || 0),
-            0
-          ) / processedResumes.length
-        )
+        processedResumes.reduce(
+          (sum: number, r: any) => sum + (r.ats_analyses?.[0]?.overall_score || 0),
+          0
+        ) / processedResumes.length
+      )
       : (totalResumes > 0 ? 92 : null)
 
   // 6. Calculate Profile Completion & Strength dynamically from Master Resume Data
@@ -278,8 +278,8 @@ export default async function DashboardPage() {
     totalResumes > 0
       ? `You have ${totalResumes} tailored résumé${totalResumes === 1 ? '' : 's'} and ${jdsCount} targeted position${jdsCount === 1 ? '' : 's'} in your workspace.`
       : jdsCount > 0
-      ? `You have ${jdsCount} targeted position${jdsCount === 1 ? '' : 's'} saved. Tailor a résumé to see your ATS score.`
-      : 'Paste a target job posting below to generate your first ATS-optimized résumé.'
+        ? `You have ${jdsCount} targeted position${jdsCount === 1 ? '' : 's'} saved. Tailor a résumé to see your ATS score.`
+        : 'Paste a target job posting below to generate your first ATS-optimized résumé.'
 
   const currentMonthLabel = new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 
@@ -637,8 +637,8 @@ export default async function DashboardPage() {
                             item.type === 'strength'
                               ? 'var(--brand)'
                               : item.type === 'warning'
-                              ? 'var(--amber)'
-                              : 'var(--flag)',
+                                ? 'var(--amber)'
+                                : 'var(--flag)',
                         }}
                       />
                       <span style={{ color: 'var(--ink-2)' }}>{item.text}</span>

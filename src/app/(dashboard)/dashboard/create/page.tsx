@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, Suspense } from 'react'
 import { exportToPdf } from '@/utils/exportPdf'
 import { exportToDocx } from '@/utils/exportDocx'
 import { CreateResumeHeader } from '@/components/create-resume/CreateResumeHeader'
@@ -34,7 +34,7 @@ import { Modal } from '@/components/ui/Overlay'
 import { useUIStore } from '@/store/useUIStore'
 import Link from 'next/link'
 
-export default function CreateResumePage() {
+function CreateResumeContent() {
   const searchParams = useSearchParams()
   const resumeIdParam = searchParams?.get('id')
 
@@ -1064,5 +1064,19 @@ export default function CreateResumePage() {
         )}
       </main>
     </div>
+  )
+}
+
+export default function CreateResumePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-[500px] flex items-center justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-[#0A6E4E]" />
+        </div>
+      }
+    >
+      <CreateResumeContent />
+    </Suspense>
   )
 }

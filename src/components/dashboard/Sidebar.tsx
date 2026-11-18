@@ -15,7 +15,7 @@ import { isPremiumPlan, FREE_TIER_CREDITS } from '@/utils/pricingPlans'
 const BUILD_NAV_ITEMS = [
   { label: 'Home', href: '/dashboard', icon: 'home' },
   { label: 'Tailor a résumé', href: '/dashboard/create', icon: 'plus' },
-  { label: 'Match report', href: '/dashboard/resumes', icon: 'clock' },
+  { label: 'Match report', href: '/dashboard/match-report', icon: 'clock' },
   { label: 'My résumés', href: '/dashboard/resumes', icon: 'file' },
   { label: 'Cover letters', href: '/dashboard/cover-letters', icon: 'mail' },
 ]
