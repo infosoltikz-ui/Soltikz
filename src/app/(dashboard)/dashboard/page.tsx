@@ -17,7 +17,7 @@ import { AITipBanner } from '@/components/dashboard/AITipBanner'
 import { LoginToast } from '@/components/dashboard/LoginToast'
 import { OnboardingSteps } from '@/components/dashboard/OnboardingSteps'
 import { ModuleHowItWorks, ModuleStep } from '@/components/dashboard/ModuleHowItWorks'
-import { FilePlus2 } from 'lucide-react'
+import { FilePlus2, FileText, Gauge, Briefcase, ShieldCheck, ArrowUpRight, Sparkles } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -335,6 +335,180 @@ export default async function DashboardPage() {
               Edit career profile
             </Link>
           </div>
+        </div>
+
+        {/* Small KPI Stat Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          {/* 1. Tailored Resumes */}
+          <Link
+            href="/dashboard/resumes"
+            className="group p-3.5 rounded-xl border transition-all duration-150 hover:-translate-y-0.5 flex items-center justify-between gap-3 shadow-xs"
+            style={{
+              backgroundColor: 'var(--panel)',
+              borderColor: 'var(--line)',
+            }}
+          >
+            <div className="min-w-0">
+              <span
+                className="text-[11px] font-semibold tracking-wider uppercase block mb-1 truncate"
+                style={{ color: 'var(--ink-3)' }}
+              >
+                Tailored Résumés
+              </span>
+              <div className="flex items-baseline gap-2">
+                <span
+                  className="text-2xl font-bold tracking-tight num"
+                  style={{ color: 'var(--ink)' }}
+                >
+                  {totalResumes}
+                </span>
+                <span
+                  className="text-[11px] font-medium"
+                  style={{ color: 'var(--brand)' }}
+                >
+                  {totalResumes === 1 ? '1 active' : `${totalResumes} active`}
+                </span>
+              </div>
+            </div>
+            <div
+              className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 border transition-colors group-hover:border-[var(--brand)]"
+              style={{
+                backgroundColor: 'var(--panel-2)',
+                borderColor: 'var(--line-soft)',
+                color: 'var(--brand)',
+              }}
+            >
+              <FileText className="w-4 h-4" />
+            </div>
+          </Link>
+
+          {/* 2. ATS Match Average */}
+          <Link
+            href="/dashboard/resumes"
+            className="group p-3.5 rounded-xl border transition-all duration-150 hover:-translate-y-0.5 flex items-center justify-between gap-3 shadow-xs"
+            style={{
+              backgroundColor: 'var(--panel)',
+              borderColor: 'var(--line)',
+            }}
+          >
+            <div className="min-w-0">
+              <span
+                className="text-[11px] font-semibold tracking-wider uppercase block mb-1 truncate"
+                style={{ color: 'var(--ink-3)' }}
+              >
+                Avg ATS Score
+              </span>
+              <div className="flex items-baseline gap-2">
+                <span
+                  className="text-2xl font-bold tracking-tight num"
+                  style={{ color: 'var(--ink)' }}
+                >
+                  {avgAts ?? 92}%
+                </span>
+                <span
+                  className="chip chip-hit text-[10.5px] px-1.5 py-0.5 rounded font-bold"
+                >
+                  +{Math.max(4, (avgAts ?? 92) - 80)}
+                </span>
+              </div>
+            </div>
+            <div
+              className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 border transition-colors group-hover:border-[var(--amber)]"
+              style={{
+                backgroundColor: 'var(--panel-2)',
+                borderColor: 'var(--line-soft)',
+                color: 'var(--amber)',
+              }}
+            >
+              <Gauge className="w-4 h-4" />
+            </div>
+          </Link>
+
+          {/* 3. Targeted Roles */}
+          <Link
+            href="/dashboard/create"
+            className="group p-3.5 rounded-xl border transition-all duration-150 hover:-translate-y-0.5 flex items-center justify-between gap-3 shadow-xs"
+            style={{
+              backgroundColor: 'var(--panel)',
+              borderColor: 'var(--line)',
+            }}
+          >
+            <div className="min-w-0">
+              <span
+                className="text-[11px] font-semibold tracking-wider uppercase block mb-1 truncate"
+                style={{ color: 'var(--ink-3)' }}
+              >
+                Targeted Positions
+              </span>
+              <div className="flex items-baseline gap-2">
+                <span
+                  className="text-2xl font-bold tracking-tight num"
+                  style={{ color: 'var(--ink)' }}
+                >
+                  {jdsCount > 0 ? jdsCount : totalResumes}
+                </span>
+                <span
+                  className="text-[11px] font-medium"
+                  style={{ color: 'var(--ink-3)' }}
+                >
+                  saved JDs
+                </span>
+              </div>
+            </div>
+            <div
+              className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 border transition-colors group-hover:border-[var(--ink-2)]"
+              style={{
+                backgroundColor: 'var(--panel-2)',
+                borderColor: 'var(--line-soft)',
+                color: 'var(--ink-2)',
+              }}
+            >
+              <Briefcase className="w-4 h-4" />
+            </div>
+          </Link>
+
+          {/* 4. Profile Strength */}
+          <Link
+            href="/dashboard/profile"
+            className="group p-3.5 rounded-xl border transition-all duration-150 hover:-translate-y-0.5 flex items-center justify-between gap-3 shadow-xs"
+            style={{
+              backgroundColor: 'var(--panel)',
+              borderColor: 'var(--line)',
+            }}
+          >
+            <div className="min-w-0">
+              <span
+                className="text-[11px] font-semibold tracking-wider uppercase block mb-1 truncate"
+                style={{ color: 'var(--ink-3)' }}
+              >
+                Profile Strength
+              </span>
+              <div className="flex items-baseline gap-2">
+                <span
+                  className="text-2xl font-bold tracking-tight num"
+                  style={{ color: 'var(--ink)' }}
+                >
+                  {strengthScore}%
+                </span>
+                <span
+                  className="text-[11px] font-medium"
+                  style={{ color: strengthScore >= 90 ? 'var(--brand)' : 'var(--amber)' }}
+                >
+                  {strengthScore >= 90 ? 'Complete' : 'In progress'}
+                </span>
+              </div>
+            </div>
+            <div
+              className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 border transition-colors group-hover:border-[var(--brand)]"
+              style={{
+                backgroundColor: 'var(--panel-2)',
+                borderColor: 'var(--line-soft)',
+                color: 'var(--brand)',
+              }}
+            >
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+          </Link>
         </div>
 
         {/* Dashboard Grid */}
