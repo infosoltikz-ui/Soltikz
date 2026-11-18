@@ -48,32 +48,32 @@ export function DashboardHeader({
   }, [])
 
   return (
-    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-5 border-b border-slate-200/80">
+    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-5 border-b border-[#26313F]">
       <div className="min-w-0">
-        <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.1em] text-[#0F2744]/70 mb-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#F59E0B]" />
+        <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.1em] text-[#D9A441] mb-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#D9A441]" />
           <span>{eyebrow || 'Soltkiz Career Studio'}</span>
         </div>
 
-        <h1 className="text-2xl sm:text-[28px] font-black text-slate-900 tracking-tight leading-tight">
+        <h1 className="text-2xl sm:text-[28px] font-black text-[#E4EAF2] tracking-tight leading-tight">
           {title}
         </h1>
 
         {greeting && (
-          <p className="text-[13px] font-medium text-slate-500 mt-1 flex items-center gap-1.5 flex-wrap">
+          <p className="text-[13px] font-medium text-[#9FACBE] mt-1 flex items-center gap-1.5 flex-wrap">
             <span>Welcome back,</span>
-            <span className="font-bold text-[#0F2744] bg-[#EEF4FA] border border-[#0F2744]/10 px-2 py-0.5 rounded-md">
+            <span className="font-bold text-[#3FA57C] bg-[#123227] border border-[#3FA57C]/30 px-2 py-0.5 rounded-md">
               {fullName}
             </span>
-            <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded-md">
-              <Sparkles className="w-3 h-3 text-amber-600" />
+            <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-semibold text-[#D9A441] bg-[#2E2616] border border-[#D9A441]/40 px-2 py-0.5 rounded-md">
+              <Sparkles className="w-3 h-3 text-[#D9A441]" />
               Ready to tailor
             </span>
           </p>
         )}
 
         {!greeting && subtitle && (
-          <p className="text-[13px] font-medium text-slate-500 mt-1 max-w-2xl leading-relaxed">
+          <p className="text-[13px] font-medium text-[#9FACBE] mt-1 max-w-2xl leading-relaxed">
             {subtitle}
           </p>
         )}

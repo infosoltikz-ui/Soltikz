@@ -80,23 +80,23 @@ export function UserMenu() {
         type="button"
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         className={cn(
-          'group flex items-center gap-3 cursor-pointer bg-white border px-3 sm:px-3.5 py-2 rounded-2xl transition-all duration-200 shadow-xs hover:shadow-md text-left',
+          'group flex items-center gap-3 cursor-pointer bg-[#151D28] border px-3 sm:px-3.5 py-2 rounded-2xl transition-all duration-200 shadow-xs hover:border-[#3A495C] text-left',
           isDropdownOpen
-            ? 'border-[#0F2744]/40 ring-2 ring-[#0F2744]/10'
-            : 'border-slate-200/90 hover:border-slate-300'
+            ? 'border-[#3FA57C] ring-2 ring-[#3FA57C]/20'
+            : 'border-[#26313F] hover:border-[#3A495C]'
         )}
       >
-        <div className="w-9 h-9 rounded-xl bg-[#0F2744] text-[#F59E0B] font-black text-xs flex items-center justify-center shrink-0 ring-2 ring-[#F59E0B]/25 shadow-xs group-hover:scale-105 transition-transform">
+        <div className="w-9 h-9 rounded-xl bg-[#0A1017] text-[#D9A441] font-black text-xs flex items-center justify-center shrink-0 ring-2 ring-[#D9A441]/25 shadow-xs group-hover:scale-105 transition-transform">
           {initials}
         </div>
 
         <div className="hidden sm:block pr-1">
-          <div className="text-[13.5px] font-extrabold text-slate-900 leading-tight flex items-center gap-1.5">
+          <div className="text-[13.5px] font-extrabold text-[#E4EAF2] leading-tight flex items-center gap-1.5">
             <span className="max-w-[140px] truncate">{userData.name}</span>
             <ChevronDown
               className={cn(
-                'w-3.5 h-3.5 text-slate-400 transition-transform duration-200',
-                isDropdownOpen && 'rotate-180 text-[#0F2744]'
+                'w-3.5 h-3.5 text-[#78859A] transition-transform duration-200',
+                isDropdownOpen && 'rotate-180 text-[#3FA57C]'
               )}
             />
           </div>
@@ -105,11 +105,11 @@ export function UserMenu() {
               className={cn(
                 'inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider px-1.5 py-px rounded',
                 userData.isPro
-                  ? 'bg-amber-50 text-amber-800 border border-amber-200'
-                  : 'bg-slate-100 text-slate-600 border border-slate-200/80'
+                  ? 'bg-[#2E2616] text-[#D9A441] border border-[#D9A441]/40'
+                  : 'bg-[#1A2330] text-[#9FACBE] border border-[#26313F]'
               )}
             >
-              {userData.isPro && <Crown className="w-2.5 h-2.5 text-amber-600" />}
+              {userData.isPro && <Crown className="w-2.5 h-2.5 text-[#D9A441]" />}
               {userData.isPro ? 'Pro Plan' : 'Free Plan'}
             </span>
           </div>
@@ -118,56 +118,56 @@ export function UserMenu() {
 
       {/* Dropdown Menu */}
       {isDropdownOpen && (
-        <div className="absolute right-0 mt-2.5 w-64 bg-white rounded-2xl shadow-xl shadow-slate-900/10 border border-slate-200/90 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-          <div className="px-4 py-3 border-b border-slate-100 mb-1.5">
-            <p className="text-[13.5px] font-extrabold text-slate-900 truncate">{userData.name}</p>
-            <p className="text-[12px] font-medium text-slate-500 truncate mt-0.5">{userData.email}</p>
+        <div className="absolute right-0 mt-2.5 w-64 bg-[#151D28] rounded-2xl shadow-xl shadow-black/40 border border-[#26313F] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+          <div className="px-4 py-3 border-b border-[#26313F] mb-1.5">
+            <p className="text-[13.5px] font-extrabold text-[#E4EAF2] truncate">{userData.name}</p>
+            <p className="text-[12px] font-medium text-[#78859A] truncate mt-0.5">{userData.email}</p>
           </div>
 
           <div className="px-1.5 space-y-0.5">
             <Link
               href="/dashboard/profile"
               onClick={() => setIsDropdownOpen(false)}
-              className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#0F2744] transition-colors"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-semibold text-[#C3CCD9] hover:bg-[#1A2330] hover:text-[#E4EAF2] transition-colors"
             >
-              <IdCard className="w-4 h-4 text-slate-400" />
+              <IdCard className="w-4 h-4 text-[#78859A]" />
               <span>Master Profile</span>
             </Link>
 
             <Link
               href="/dashboard/resumes"
               onClick={() => setIsDropdownOpen(false)}
-              className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#0F2744] transition-colors"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-semibold text-[#C3CCD9] hover:bg-[#1A2330] hover:text-[#E4EAF2] transition-colors"
             >
-              <Files className="w-4 h-4 text-slate-400" />
+              <Files className="w-4 h-4 text-[#78859A]" />
               <span>My Resumes</span>
             </Link>
 
             <Link
               href="/dashboard/pricing"
               onClick={() => setIsDropdownOpen(false)}
-              className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-amber-50/70 hover:text-amber-900 transition-colors"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-semibold text-[#C3CCD9] hover:bg-[#2E2616] hover:text-[#D9A441] transition-colors"
             >
-              <Crown className="w-4 h-4 text-amber-600" />
+              <Crown className="w-4 h-4 text-[#D9A441]" />
               <span>{userData.isPro ? 'Manage Subscription' : 'Upgrade to Pro'}</span>
             </Link>
 
             <Link
               href="/dashboard/settings"
               onClick={() => setIsDropdownOpen(false)}
-              className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#0F2744] transition-colors"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-semibold text-[#C3CCD9] hover:bg-[#1A2330] hover:text-[#E4EAF2] transition-colors"
             >
-              <Settings2 className="w-4 h-4 text-slate-400" />
+              <Settings2 className="w-4 h-4 text-[#78859A]" />
               <span>Account Settings</span>
             </Link>
           </div>
 
-          <div className="h-px bg-slate-100 my-1.5 mx-3" />
+          <div className="h-px bg-[#26313F] my-1.5 mx-3" />
 
           <div className="px-1.5">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-bold text-rose-600 hover:bg-rose-50 transition-colors text-left cursor-pointer"
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-bold text-rose-400 hover:bg-rose-500/10 transition-colors text-left cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
               <span>Sign Out</span>

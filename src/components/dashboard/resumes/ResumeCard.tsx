@@ -132,11 +132,11 @@ export function ResumeCard({
   const daysRemaining = 20 - daysOld
 
   return (
-    <div className="group bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-xl hover:shadow-slate-900/[0.06] hover:border-[#0F2744]/25 hover:-translate-y-0.5 transition-all duration-200 flex flex-col">
+    <div className="group bg-[#151D28] rounded-2xl border border-[#26313F] overflow-hidden shadow-xs hover:border-[#3A495C] hover:-translate-y-0.5 transition-all duration-200 flex flex-col">
       {/* Top Preview Canvas */}
       <div
         onClick={() => onPreview?.()}
-        className="relative h-52 bg-slate-50 border-b border-slate-200/80 overflow-hidden cursor-pointer select-none"
+        className="relative h-52 bg-[#0A1017] border-b border-[#26313F] overflow-hidden cursor-pointer select-none"
       >
         <div className="absolute inset-0 transform scale-[0.3] origin-top-left w-[333.33%] h-[333.33%] pointer-events-none bg-white">
           {(() => {
@@ -214,7 +214,7 @@ export function ResumeCard({
         </div>
 
         {/* ATS Score Pill */}
-        <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-lg border border-slate-200/90 shadow-xs flex items-center gap-1.5 z-10">
+        <div className="absolute top-3 right-3 bg-[#151D28]/95 backdrop-blur-xs px-2.5 py-1 rounded-lg border border-[#26313F] shadow-xs flex items-center gap-1.5 z-10">
           <div
             className={cn(
               'w-2 h-2 rounded-full',
@@ -224,23 +224,23 @@ export function ResumeCard({
                 ? 'bg-amber-500'
                 : data.atsScore > 0
                 ? 'bg-rose-500'
-                : 'bg-slate-300'
+                : 'bg-slate-500'
             )}
           />
-          <span className="text-[11px] font-black text-slate-900 tabular-nums">
+          <span className="text-[11px] font-black text-[#E4EAF2] tabular-nums">
             {data.atsScore > 0 ? `${data.atsScore}% ATS` : '- ATS'}
           </span>
         </div>
 
         {/* Hover Studio Overlay */}
-        <div className="absolute inset-0 bg-[#0F2744]/75 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2.5 backdrop-blur-[2px] z-20">
+        <div className="absolute inset-0 bg-[#0D131B]/80 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2.5 backdrop-blur-[2px] z-20">
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation()
               onPreview?.()
             }}
-            className="w-10 h-10 bg-white text-[#0F2744] rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-md cursor-pointer"
+            className="w-10 h-10 bg-[#1A2330] border border-[#26313F] text-[#E4EAF2] rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-md cursor-pointer hover:bg-[#222E3F]"
             title="Preview Resume"
           >
             <Eye className="w-4 h-4" strokeWidth={2.4} />
@@ -251,7 +251,7 @@ export function ResumeCard({
               e.stopPropagation()
               onEdit?.()
             }}
-            className="w-10 h-10 bg-[#F59E0B] text-slate-950 rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-md cursor-pointer"
+            className="w-10 h-10 bg-[#D9A441] text-slate-950 rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-md cursor-pointer"
             title="Edit Resume"
           >
             <Edit3 className="w-4 h-4" strokeWidth={2.4} />
@@ -263,7 +263,7 @@ export function ResumeCard({
               onDownload?.()
             }}
             disabled={isDownloading}
-            className="w-10 h-10 bg-slate-900 border border-white/20 text-white rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-md cursor-pointer disabled:opacity-50"
+            className="w-10 h-10 bg-[#0A6E4E] border border-[#3FA57C]/40 text-white rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-md cursor-pointer disabled:opacity-50"
             title="Download PDF"
           >
             {isDownloading ? (
@@ -279,7 +279,7 @@ export function ResumeCard({
       <div className="p-4 sm:p-5 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-2 mb-2">
           <h3
-            className="text-[15px] font-extrabold text-slate-900 line-clamp-1 group-hover:text-[#0F2744] transition-colors"
+            className="text-[15px] font-extrabold text-[#E4EAF2] line-clamp-1 group-hover:text-[#3FA57C] transition-colors"
             title={data.name}
           >
             {data.name}
@@ -287,7 +287,7 @@ export function ResumeCard({
           <div className="shrink-0 flex items-center gap-1">
             {data.isPublic && (
               <span
-                className="flex items-center gap-0.5 text-[10px] font-extrabold text-[#0F2744] bg-[#EEF4FA] border border-[#0F2744]/15 px-2 py-0.5 rounded-md"
+                className="flex items-center gap-0.5 text-[10px] font-extrabold text-[#3FA57C] bg-[#123227] border border-[#3FA57C]/30 px-2 py-0.5 rounded-md"
                 title="Public share link enabled"
               >
                 <Share2 className="w-2.5 h-2.5" />
@@ -296,7 +296,7 @@ export function ResumeCard({
             )}
             {data.versionNumber != null && data.versionNumber > 1 && (
               <span
-                className="flex items-center gap-0.5 text-[10px] font-extrabold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded-md tabular-nums"
+                className="flex items-center gap-0.5 text-[10px] font-extrabold text-[#9FACBE] bg-[#1A2330] border border-[#26313F] px-1.5 py-0.5 rounded-md tabular-nums"
                 title="Version"
               >
                 <GitBranch className="w-2.5 h-2.5" />
@@ -312,52 +312,52 @@ export function ResumeCard({
             className={cn(
               'px-2 py-0.5 rounded-md text-[10.5px] font-extrabold border',
               isFullTime
-                ? 'bg-[#EEF4FA] text-[#0F2744] border-[#0F2744]/15'
-                : 'bg-amber-50 text-amber-800 border-amber-200'
+                ? 'bg-[#123227] text-[#3FA57C] border-[#3FA57C]/30'
+                : 'bg-[#2E2616] text-[#D9A441] border-[#D9A441]/30'
             )}
           >
             {data.type}
           </span>
-          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md">
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#3FA57C] bg-[#123227] border border-[#3FA57C]/30 px-2 py-0.5 rounded-md">
             <CheckCircle2 className="w-3 h-3" strokeWidth={2.5} />
             {data.status}
           </span>
         </div>
 
         {/* Metadata List */}
-        <div className="space-y-1.5 mb-4 text-xs text-slate-600">
+        <div className="space-y-1.5 mb-4 text-xs text-[#9FACBE]">
           <div className="flex items-center gap-2">
-            <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span className="font-semibold truncate">{data.company}</span>
+            <Building2 className="w-3.5 h-3.5 text-[#78859A] shrink-0" />
+            <span className="font-semibold truncate text-[#C3CCD9]">{data.company}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Target className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span className="font-semibold truncate">{data.role}</span>
+            <Target className="w-3.5 h-3.5 text-[#78859A] shrink-0" />
+            <span className="font-semibold truncate text-[#C3CCD9]">{data.role}</span>
           </div>
           <div className="flex items-center gap-2">
-            <FileText className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span className="font-medium text-slate-500 truncate">{data.template}</span>
+            <FileText className="w-3.5 h-3.5 text-[#78859A] shrink-0" />
+            <span className="font-medium text-[#78859A] truncate">{data.template}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Cpu className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span className="font-medium text-slate-500 truncate">{aiInfo.displayName}</span>
+            <Cpu className="w-3.5 h-3.5 text-[#78859A] shrink-0" />
+            <span className="font-medium text-[#78859A] truncate">{aiInfo.displayName}</span>
           </div>
         </div>
 
         {/* Footer Actions */}
-        <div className="mt-auto pt-3.5 border-t border-slate-100 flex items-center justify-between gap-2">
+        <div className="mt-auto pt-3.5 border-t border-[#26313F] flex items-center justify-between gap-2">
           <div className="flex flex-col min-w-0">
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 truncate">
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#78859A] truncate">
               <Calendar className="w-3 h-3 shrink-0" />
               <span className="truncate">{data.lastUpdated}</span>
             </div>
             {data.createdAt && daysRemaining <= 5 && daysRemaining > 0 && (
-              <span className="text-[10px] font-bold text-amber-600 mt-0.5">
+              <span className="text-[10px] font-bold text-[#D9A441] mt-0.5">
                 Expires in {daysRemaining} {daysRemaining === 1 ? 'day' : 'days'}
               </span>
             )}
             {data.createdAt && daysRemaining <= 0 && (
-              <span className="text-[10px] font-bold text-rose-600 mt-0.5">
+              <span className="text-[10px] font-bold text-rose-400 mt-0.5">
                 Pending cleanup
               </span>
             )}
@@ -371,7 +371,7 @@ export function ResumeCard({
                 onDownload?.()
               }}
               disabled={isDownloading}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-[#0F2744] hover:bg-[#EEF4FA] transition-colors cursor-pointer disabled:opacity-50"
+              className="p-1.5 rounded-lg text-[#78859A] hover:text-[#E4EAF2] hover:bg-[#1A2330] transition-colors cursor-pointer disabled:opacity-50"
               title="Download PDF"
             >
               {isDownloading ? (
@@ -386,7 +386,7 @@ export function ResumeCard({
                 e.preventDefault()
                 onEdit?.()
               }}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-[#0F2744] hover:bg-[#EEF4FA] transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg text-[#78859A] hover:text-[#E4EAF2] hover:bg-[#1A2330] transition-colors cursor-pointer"
               title="Edit Resume"
             >
               <Edit3 className="w-3.5 h-3.5" />
@@ -395,7 +395,7 @@ export function ResumeCard({
               type="button"
               onClick={onDuplicate}
               disabled={isDuplicating}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-[#0F2744] hover:bg-[#EEF4FA] transition-colors cursor-pointer disabled:opacity-50"
+              className="p-1.5 rounded-lg text-[#78859A] hover:text-[#E4EAF2] hover:bg-[#1A2330] transition-colors cursor-pointer disabled:opacity-50"
               title="Duplicate"
             >
               {isDuplicating ? (
@@ -411,8 +411,8 @@ export function ResumeCard({
               className={cn(
                 'p-1.5 rounded-lg transition-colors cursor-pointer disabled:opacity-50',
                 data.isPublic
-                  ? 'text-[#0F2744] bg-[#EEF4FA]'
-                  : 'text-slate-400 hover:text-[#0F2744] hover:bg-[#EEF4FA]'
+                  ? 'text-[#3FA57C] bg-[#123227]'
+                  : 'text-[#78859A] hover:text-[#E4EAF2] hover:bg-[#1A2330]'
               )}
               title={data.isPublic ? 'Make private' : 'Share public link'}
             >
@@ -425,7 +425,7 @@ export function ResumeCard({
             <button
               type="button"
               onClick={onDelete}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg text-[#78859A] hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
               title="Delete"
             >
               <Trash2 className="w-3.5 h-3.5" />

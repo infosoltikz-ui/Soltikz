@@ -47,9 +47,9 @@ export default function MyResumesPage() {
         actions={
           <Link
             href="/dashboard/create"
-            className="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0F2744] hover:bg-[#0A1C33] text-white text-xs font-extrabold shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+            className="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 text-xs font-extrabold shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
           >
-            <FilePlus2 className="w-4 h-4 text-[#F59E0B]" />
+            <FilePlus2 className="w-4 h-4 text-[#D9A441]" />
             <span>New Tailored Resume</span>
           </Link>
         }

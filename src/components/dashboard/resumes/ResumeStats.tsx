@@ -124,77 +124,77 @@ export function ResumeStats() {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
       {/* Total Resumes */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
+      <div className="bg-[#151D28] rounded-2xl p-5 border border-[#26313F] shadow-xs hover:border-[#3A495C] transition-all flex flex-col justify-between">
         <div className="flex items-center justify-between gap-2 mb-3">
-          <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+          <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78859A]">
             Total Resumes
           </span>
-          <div className="w-8 h-8 rounded-xl bg-[#EEF4FA] text-[#0F2744] flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-xl bg-[#1A2330] text-[#3FA57C] border border-[#26313F] flex items-center justify-center shrink-0">
             <FileText className="w-4 h-4" strokeWidth={2.2} />
           </div>
         </div>
-        <div className="text-3xl font-black text-slate-900 tracking-tight tabular-nums">
+        <div className="text-3xl font-black text-[#E4EAF2] tracking-tight tabular-nums">
           {totalResumes}
         </div>
       </div>
 
       {/* Full-Time Resumes */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
+      <div className="bg-[#151D28] rounded-2xl p-5 border border-[#26313F] shadow-xs hover:border-[#3A495C] transition-all flex flex-col justify-between">
         <div className="flex items-center justify-between gap-2 mb-3">
-          <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+          <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78859A]">
             Full-Time
           </span>
-          <div className="w-8 h-8 rounded-xl bg-[#EEF4FA] text-[#0F2744] flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-xl bg-[#123227] text-[#3FA57C] border border-[#3FA57C]/30 flex items-center justify-center shrink-0">
             <Briefcase className="w-4 h-4" strokeWidth={2.2} />
           </div>
         </div>
-        <div className="text-3xl font-black text-slate-900 tracking-tight tabular-nums">
+        <div className="text-3xl font-black text-[#E4EAF2] tracking-tight tabular-nums">
           {fullTimeCount}
         </div>
       </div>
 
       {/* C2C Resumes */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
+      <div className="bg-[#151D28] rounded-2xl p-5 border border-[#26313F] shadow-xs hover:border-[#3A495C] transition-all flex flex-col justify-between">
         <div className="flex items-center justify-between gap-2 mb-3">
-          <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+          <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78859A]">
             C2C / Contract
           </span>
-          <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 border border-amber-200/60 flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-xl bg-[#2E2616] text-[#D9A441] border border-[#D9A441]/40 flex items-center justify-center shrink-0">
             <Users className="w-4 h-4" strokeWidth={2.2} />
           </div>
         </div>
-        <div className="text-3xl font-black text-slate-900 tracking-tight tabular-nums">
+        <div className="text-3xl font-black text-[#E4EAF2] tracking-tight tabular-nums">
           {c2cCount}
         </div>
       </div>
 
       {/* Downloads */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
+      <div className="bg-[#151D28] rounded-2xl p-5 border border-[#26313F] shadow-xs hover:border-[#3A495C] transition-all flex flex-col justify-between">
         <div className="flex items-center justify-between gap-2 mb-3">
-          <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+          <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78859A]">
             Exports
           </span>
-          <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-xl bg-[#1A2330] text-[#9FACBE] border border-[#26313F] flex items-center justify-center shrink-0">
             <Download className="w-4 h-4" strokeWidth={2.2} />
           </div>
         </div>
-        <div className="text-3xl font-black text-slate-900 tracking-tight tabular-nums">
+        <div className="text-3xl font-black text-[#E4EAF2] tracking-tight tabular-nums">
           {totalDownloads}
         </div>
       </div>
 
       {/* Average ATS Score */}
-      <div className="col-span-2 sm:col-span-1 bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex items-center justify-between gap-3">
+      <div className="col-span-2 sm:col-span-1 bg-[#151D28] rounded-2xl p-5 border border-[#26313F] shadow-xs hover:border-[#3A495C] transition-all flex items-center justify-between gap-3">
         <div className="flex flex-col h-full justify-between">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200/60 flex items-center justify-center shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-[#123227] text-[#3FA57C] border border-[#3FA57C]/30 flex items-center justify-center shrink-0">
               <Activity className="w-3.5 h-3.5" strokeWidth={2.4} />
             </div>
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78859A]">
               Avg ATS
             </span>
           </div>
-          <div className="text-3xl font-black text-slate-900 tracking-tight tabular-nums">
+          <div className="text-3xl font-black text-[#E4EAF2] tracking-tight tabular-nums">
             {avgAtsScore > 0 ? `${avgAtsScore}%` : '-'}
           </div>
         </div>
@@ -202,14 +202,14 @@ export function ResumeStats() {
         <div className="relative w-12 h-12 shrink-0">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
             <path
-              className="text-slate-100"
+              className="text-[#26313F]"
               strokeWidth="3.8"
               stroke="currentColor"
               fill="none"
               d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
             />
             <path
-              className={avgAtsScore >= 85 ? 'text-emerald-600' : 'text-[#0F2744]'}
+              className={avgAtsScore >= 85 ? 'text-[#3FA57C]' : 'text-[#D9A441]'}
               strokeDasharray={`${avgAtsScore}, 100`}
               strokeWidth="3.8"
               strokeLinecap="round"

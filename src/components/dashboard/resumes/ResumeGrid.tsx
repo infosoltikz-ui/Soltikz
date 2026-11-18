@@ -119,28 +119,28 @@ export function ResumeGrid({
 }: ResumeGridProps) {
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200/90 p-20 flex flex-col items-center justify-center gap-3 shadow-xs">
-        <Loader2 className="w-8 h-8 animate-spin text-[#0F2744]" />
-        <p className="text-xs font-bold text-slate-500">Loading your resume vault...</p>
+      <div className="bg-[#151D28] rounded-2xl border border-[#26313F] p-20 flex flex-col items-center justify-center gap-3 shadow-xs">
+        <Loader2 className="w-8 h-8 animate-spin text-[#3FA57C]" />
+        <p className="text-xs font-bold text-[#9FACBE]">Loading your resume vault...</p>
       </div>
     )
   }
 
   if (!hasAnyResumes) {
     return (
-      <div className="bg-white rounded-3xl border border-dashed border-slate-300 p-12 sm:p-16 flex flex-col items-center justify-center text-center shadow-2xs">
-        <div className="w-16 h-16 bg-[#EEF4FA] border border-[#0F2744]/10 rounded-2xl flex items-center justify-center mb-5">
-          <FilePlus2 className="w-8 h-8 text-[#0F2744]" strokeWidth={1.9} />
+      <div className="bg-[#151D28] rounded-3xl border border-dashed border-[#26313F] p-12 sm:p-16 flex flex-col items-center justify-center text-center shadow-xs">
+        <div className="w-16 h-16 bg-[#1A2330] border border-[#26313F] rounded-2xl flex items-center justify-center mb-5 text-[#3FA57C]">
+          <FilePlus2 className="w-8 h-8" strokeWidth={1.9} />
         </div>
-        <h3 className="text-xl font-black text-slate-900 mb-2">No resumes created yet</h3>
-        <p className="text-xs sm:text-sm text-slate-500 max-w-sm mb-7 font-medium leading-relaxed">
+        <h3 className="text-xl font-black text-[#E4EAF2] mb-2">No resumes created yet</h3>
+        <p className="text-xs sm:text-sm text-[#9FACBE] max-w-sm mb-7 font-medium leading-relaxed">
           Start by pasting a job description in our studio to generate your first ATS-tailored resume.
         </p>
         <button
           onClick={() => (window.location.href = '/dashboard/create')}
-          className="h-11 px-7 font-extrabold text-xs sm:text-sm rounded-xl bg-[#0F2744] hover:bg-[#0A1C33] text-white shadow-md hover:-translate-y-0.5 transition-all inline-flex items-center gap-2 cursor-pointer"
+          className="h-11 px-7 font-extrabold text-xs sm:text-sm rounded-xl bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 shadow-md hover:-translate-y-0.5 transition-all inline-flex items-center gap-2 cursor-pointer"
         >
-          <FilePlus2 className="w-4 h-4 text-[#F59E0B]" />
+          <FilePlus2 className="w-4 h-4 text-[#D9A441]" />
           <span>Create Your First Resume</span>
         </button>
       </div>
@@ -149,14 +149,14 @@ export function ResumeGrid({
 
   if (resumes.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-12 flex flex-col items-center justify-center text-center">
-        <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mb-4">
-          <SearchX className="w-8 h-8 text-slate-400" strokeWidth={2} />
+      <div className="bg-[#151D28] rounded-2xl border border-dashed border-[#26313F] p-12 flex flex-col items-center justify-center text-center">
+        <div className="w-16 h-16 bg-[#1A2330] border border-[#26313F] rounded-2xl flex items-center justify-center mb-4">
+          <SearchX className="w-8 h-8 text-[#78859A]" strokeWidth={2} />
         </div>
-        <h3 className="text-lg font-extrabold text-slate-900 mb-1.5">
+        <h3 className="text-lg font-extrabold text-[#E4EAF2] mb-1.5">
           No resumes match your filter
         </h3>
-        <p className="text-xs text-slate-500 max-w-xs font-medium">
+        <p className="text-xs text-[#9FACBE] max-w-xs font-medium">
           Try a different search keyword or reset your filters to see all documents.
         </p>
       </div>
@@ -165,16 +165,16 @@ export function ResumeGrid({
 
   if (viewMode === 'list') {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden divide-y divide-slate-100">
+      <div className="bg-[#151D28] rounded-2xl border border-[#26313F] shadow-xs overflow-hidden divide-y divide-[#26313F]">
         {resumes.map((resume) => {
           const meta = normalizeResumeMeta(resume)
           return (
             <div
               key={resume.id}
-              className="group p-4 sm:px-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-50/70 transition-colors"
+              className="group p-4 sm:px-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-[#1A2330]/70 transition-colors"
             >
               <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                <div className="w-10 h-11 rounded-xl bg-[#EEF4FA] border border-[#0F2744]/10 text-[#0F2744] flex items-center justify-center shrink-0">
+                <div className="w-10 h-11 rounded-xl bg-[#1A2330] border border-[#26313F] text-[#3FA57C] flex items-center justify-center shrink-0">
                   <FileText className="w-4.5 h-4.5" />
                 </div>
                 <div className="min-w-0">
@@ -182,7 +182,7 @@ export function ResumeGrid({
                     <button
                       type="button"
                       onClick={() => onPreview?.(resume)}
-                      className="text-sm font-extrabold text-slate-900 hover:text-[#0F2744] truncate text-left cursor-pointer"
+                      className="text-sm font-extrabold text-[#E4EAF2] hover:text-[#3FA57C] truncate text-left cursor-pointer"
                     >
                       {resume.title || 'Tailored Resume'}
                     </button>
@@ -190,22 +190,22 @@ export function ResumeGrid({
                       className={cn(
                         'px-2 py-0.5 rounded-md text-[10px] font-extrabold border',
                         !meta.isC2C
-                          ? 'bg-[#EEF4FA] text-[#0F2744] border-[#0F2744]/15'
-                          : 'bg-amber-50 text-amber-800 border-amber-200'
+                          ? 'bg-[#123227] text-[#3FA57C] border-[#3FA57C]/30'
+                          : 'bg-[#2E2616] text-[#D9A441] border-[#D9A441]/30'
                       )}
                     >
                       {meta.normalizedType}
                     </span>
-                    <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-extrabold px-2 py-0.5 rounded-md tabular-nums">
+                    <span className="bg-[#123227] text-[#3FA57C] border border-[#3FA57C]/30 text-[10px] font-extrabold px-2 py-0.5 rounded-md tabular-nums">
                       {meta.atsScore > 0 ? `${meta.atsScore}% ATS` : '- ATS'}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-slate-500 font-medium mt-1 flex-wrap">
-                    <span className="font-semibold text-slate-700">{meta.company}</span>
+                  <div className="flex items-center gap-2 text-xs text-[#9FACBE] font-medium mt-1 flex-wrap">
+                    <span className="font-semibold text-[#C3CCD9]">{meta.company}</span>
                     <span>·</span>
                     <span>{meta.role}</span>
                     <span>·</span>
-                    <span className="text-slate-400">{lastUpdatedLabel(meta.dateString)}</span>
+                    <span className="text-[#78859A]">{lastUpdatedLabel(meta.dateString)}</span>
                   </div>
                 </div>
               </div>
@@ -214,7 +214,7 @@ export function ResumeGrid({
                 <button
                   type="button"
                   onClick={() => onPreview?.(resume)}
-                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-[#EEF4FA] text-slate-700 hover:text-[#0F2744] transition-colors inline-flex items-center gap-1.5 cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#1A2330] hover:bg-[#222E3F] text-[#E4EAF2] border border-[#26313F] transition-colors inline-flex items-center gap-1.5 cursor-pointer"
                 >
                   <Eye className="w-3.5 h-3.5" />
                   <span>Preview</span>
@@ -222,16 +222,16 @@ export function ResumeGrid({
                 <button
                   type="button"
                   onClick={() => onEdit?.(resume)}
-                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0F2744] hover:bg-[#0A1C33] text-white transition-colors inline-flex items-center gap-1.5 cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 transition-colors inline-flex items-center gap-1.5 cursor-pointer"
                 >
-                  <Edit3 className="w-3.5 h-3.5 text-[#F59E0B]" />
+                  <Edit3 className="w-3.5 h-3.5 text-[#D9A441]" />
                   <span>Edit</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => onDownload?.(resume)}
                   disabled={downloadingId === resume.id}
-                  className="p-2 rounded-xl text-slate-500 hover:text-[#0F2744] hover:bg-[#EEF4FA] transition-colors cursor-pointer disabled:opacity-50"
+                  className="p-2 rounded-xl text-[#78859A] hover:text-[#E4EAF2] hover:bg-[#1A2330] transition-colors cursor-pointer disabled:opacity-50"
                   title="Download PDF"
                 >
                   {downloadingId === resume.id ? (
@@ -244,7 +244,7 @@ export function ResumeGrid({
                   type="button"
                   onClick={() => onDuplicate(resume)}
                   disabled={duplicatingId === resume.id}
-                  className="p-2 rounded-xl text-slate-500 hover:text-[#0F2744] hover:bg-[#EEF4FA] transition-colors cursor-pointer disabled:opacity-50"
+                  className="p-2 rounded-xl text-[#78859A] hover:text-[#E4EAF2] hover:bg-[#1A2330] transition-colors cursor-pointer disabled:opacity-50"
                   title="Duplicate"
                 >
                   {duplicatingId === resume.id ? (
@@ -260,8 +260,8 @@ export function ResumeGrid({
                   className={cn(
                     'p-2 rounded-xl transition-colors cursor-pointer disabled:opacity-50',
                     resume.is_public
-                      ? 'text-[#0F2744] bg-[#EEF4FA]'
-                      : 'text-slate-500 hover:text-[#0F2744] hover:bg-[#EEF4FA]'
+                      ? 'text-[#3FA57C] bg-[#123227]'
+                      : 'text-[#78859A] hover:text-[#E4EAF2] hover:bg-[#1A2330]'
                   )}
                   title={resume.is_public ? 'Make private' : 'Share public link'}
                 >
@@ -274,7 +274,7 @@ export function ResumeGrid({
                 <button
                   type="button"
                   onClick={() => onDelete(resume.id)}
-                  className="p-2 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                  className="p-2 rounded-xl text-[#78859A] hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
                   title="Delete"
                 >
                   <Trash2 className="w-4 h-4" />
