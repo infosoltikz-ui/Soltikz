@@ -1,67 +1,155 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
-  LayoutDashboard,
-  IdCard,
-  FilePlus2,
-  Files,
-  FileSignature,
-  Crown,
-  Settings2,
   LogOut,
-  ChevronLeft,
-  ChevronRight,
-  Pin,
   X,
-  Plus,
 } from 'lucide-react'
 import { cn } from '@/utils/cn'
-import { PoweredBySoltkiz } from '@/components/ui/PoweredBySoltkiz'
 import { createClient } from '@/utils/supabase/client'
+import { isPremiumPlan, FREE_TIER_CREDITS } from '@/utils/pricingPlans'
 
-const WORKSPACE_NAV_ITEMS = [
-  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'Master Profile', href: '/dashboard/profile', icon: IdCard },
-  { label: 'Create Resume', href: '/dashboard/create', icon: FilePlus2 },
-  { label: 'My Resumes', href: '/dashboard/resumes', icon: Files },
-  { label: 'Cover Letters', href: '/dashboard/cover-letters', icon: FileSignature },
+const BUILD_NAV_ITEMS = [
+  { label: 'Home', href: '/dashboard', icon: 'home' },
+  { label: 'Tailor a résumé', href: '/dashboard/create', icon: 'plus' },
+  { label: 'Match report', href: '/dashboard/resumes', icon: 'clock' },
+  { label: 'My résumés', href: '/dashboard/resumes', icon: 'file' },
+  { label: 'Cover letters', href: '/dashboard/cover-letters', icon: 'mail' },
 ]
 
-const ACCOUNT_NAV_ITEMS = [
-  { label: 'Pricing & Plans', href: '/dashboard/pricing', icon: Crown },
-  { label: 'Settings', href: '/dashboard/settings', icon: Settings2 },
+const DETAILS_NAV_ITEMS = [
+  { label: 'Career profile', href: '/dashboard/profile', icon: 'user' },
+  { label: 'Pricing & plans', href: '/dashboard/pricing', icon: 'crown' },
+  { label: 'Settings', href: '/dashboard/settings', icon: 'gear' },
 ]
+
+function RailIcon({ type, isActive }: { type: string; isActive: boolean }) {
+  const strokeClass = isActive ? 'text-[#4FBE92]' : 'text-current opacity-75'
+  if (type === 'home') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className={cn('w-4 h-4 shrink-0', strokeClass)}>
+        <rect x="3" y="3" width="7" height="9" rx="1.5" />
+        <rect x="14" y="3" width="7" height="5" rx="1.5" />
+        <rect x="14" y="12" width="7" height="9" rx="1.5" />
+        <rect x="3" y="16" width="7" height="5" rx="1.5" />
+      </svg>
+    )
+  }
+  if (type === 'plus') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className={cn('w-4 h-4 shrink-0', strokeClass)}>
+        <path d="M12 5v14M5 12h14" />
+      </svg>
+    )
+  }
+  if (type === 'clock') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className={cn('w-4 h-4 shrink-0', strokeClass)}>
+        <path d="M12 3a9 9 0 1 0 9 9" />
+        <path d="M12 8v4l3 2" />
+      </svg>
+    )
+  }
+  if (type === 'file') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className={cn('w-4 h-4 shrink-0', strokeClass)}>
+        <path d="M4 4h11l5 5v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" />
+        <path d="M14 4v6h6" />
+      </svg>
+    )
+  }
+  if (type === 'mail') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className={cn('w-4 h-4 shrink-0', strokeClass)}>
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="m3 7 9 6 9-6" />
+      </svg>
+    )
+  }
+  if (type === 'user') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className={cn('w-4 h-4 shrink-0', strokeClass)}>
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" />
+      </svg>
+    )
+  }
+  if (type === 'crown') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className={cn('w-4 h-4 shrink-0', strokeClass)}>
+        <path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7z" />
+      </svg>
+    )
+  }
+  if (type === 'gear') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className={cn('w-4 h-4 shrink-0', strokeClass)}>
+        <circle cx="12" cy="12" r="3" />
+        <path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.5 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 13.9H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7.5l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3.6V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1.3z" />
+      </svg>
+    )
+  }
+  return null
+}
 
 interface SidebarProps {
+  isMobileOpen?: boolean
+  setIsMobileOpen?: (val: boolean) => void
   isCollapsed?: boolean
   isDockedExpanded?: boolean
   isHoverExpanded?: boolean
   onToggleDocked?: () => void
   onMouseEnter?: () => void
   onMouseLeave?: () => void
-  isMobileOpen?: boolean
-  setIsMobileOpen?: (val: boolean) => void
 }
 
 export function Sidebar({
-  isCollapsed = false,
-  isDockedExpanded = true,
-  isHoverExpanded = false,
-  onToggleDocked,
-  onMouseEnter,
-  onMouseLeave,
   isMobileOpen = false,
   setIsMobileOpen,
 }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const [showLogoutModal, setShowLogoutModal] = useState(false)
+  const [userName, setUserName] = useState<string>('User')
+  const [userInitial, setUserInitial] = useState<string>('U')
+  const [planName, setPlanName] = useState<string>('Free plan')
+  const [creditsUsed, setCreditsUsed] = useState<number>(0)
+  const [maxCredits, setMaxCredits] = useState<number>(FREE_TIER_CREDITS)
+  const [isPro, setIsPro] = useState<boolean>(false)
 
-  // Always show full labels when the mobile slide-over drawer is open
-  const compact = isCollapsed && !isMobileOpen
+  useEffect(() => {
+    async function loadUserData() {
+      try {
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .single()
+
+          const fullName = profile?.full_name || user.user_metadata?.full_name || 'Balaji Rockzzz'
+          setUserName(fullName)
+          setUserInitial(fullName.trim().charAt(0).toUpperCase() || 'B')
+
+          const premium = isPremiumPlan(profile?.plan_id)
+          setIsPro(premium)
+          setPlanName(premium ? 'Pro plan' : 'Free plan')
+
+          const remaining = profile?.credits_remaining ?? FREE_TIER_CREDITS
+          const used = Math.max(0, FREE_TIER_CREDITS - remaining)
+          setCreditsUsed(used)
+          setMaxCredits(FREE_TIER_CREDITS)
+        }
+      } catch (err) {
+        console.warn('Could not load user data for sidebar', err)
+      }
+    }
+    loadUserData()
+  }, [])
 
   const handleLogout = async () => {
     const supabase = createClient()
@@ -75,51 +163,23 @@ export function Sidebar({
     router.refresh()
   }
 
-  const renderNavItem = (item: { label: string; href: string; icon: any }) => {
+  const renderItem = (item: { label: string; href: string; icon: string }) => {
     const isActive = pathname === item.href
-    const Icon = item.icon
-
     return (
       <Link
         key={item.label}
         href={item.href}
-        title={compact ? item.label : undefined}
-        onClick={() => {
-          setIsMobileOpen?.(false)
-          if (
-            item.href === '/dashboard/create' &&
-            typeof window !== 'undefined' &&
-            window.location.pathname === '/dashboard/create'
-          ) {
-            window.location.href = '/dashboard/create'
-          }
-        }}
+        aria-current={isActive ? 'true' : undefined}
+        onClick={() => setIsMobileOpen?.(false)}
         className={cn(
-          'group relative flex items-center rounded-xl text-[14px] font-bold transition-all duration-200',
-          compact ? 'justify-center px-2.5 py-2.5' : 'gap-3.5 px-3.5 py-2.5',
+          'flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg text-[13.5px] transition-colors',
           isActive
-            ? 'bg-[#0F2744] text-white shadow-md shadow-[#0F2744]/15'
-            : 'text-slate-600 hover:bg-slate-100/90 hover:text-[#0F2744] hover:translate-x-0.5'
+            ? 'bg-[#1E2938] text-white font-medium'
+            : 'text-[#C3CCD9] hover:bg-[#1E2938] hover:text-white'
         )}
       >
-        {isActive && !compact && (
-          <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-[#F59E0B]" />
-        )}
-        <div
-          className={cn(
-            'w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-200',
-            isActive
-              ? 'bg-white/10 text-[#F59E0B]'
-              : 'bg-slate-100/80 text-slate-500 group-hover:bg-white group-hover:text-[#0F2744] group-hover:shadow-2xs'
-          )}
-        >
-          <Icon className="w-[18px] h-[18px]" strokeWidth={2.2} />
-        </div>
-        {!compact && (
-          <span className="overflow-hidden whitespace-nowrap tracking-tight flex-1">
-            {item.label}
-          </span>
-        )}
+        <RailIcon type={item.icon} isActive={isActive} />
+        <span>{item.label}</span>
       </Link>
     )
   }
@@ -129,20 +189,17 @@ export function Sidebar({
       {/* Mobile Backdrop */}
       {isMobileOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 transition-opacity"
+          className="md:hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 transition-opacity"
           onClick={() => setIsMobileOpen?.(false)}
         />
       )}
 
+      {/* ========================================================================= */}
+      {/* ACTIVE REDESIGN PROTOTYPE RAIL SIDEBAR (FROM DESKTOP/RESUME MOCKUP) */}
+      {/* ========================================================================= */}
       <aside
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
         className={cn(
-          'h-screen bg-white border-r border-slate-200/90 flex flex-col fixed left-0 top-0 z-50 transition-[width,transform,box-shadow] duration-300 ease-in-out',
-          isHoverExpanded
-            ? 'shadow-[10px_0_30px_-10px_rgba(15,39,68,0.14)]'
-            : 'shadow-[4px_0_24px_-12px_rgba(15,39,68,0.06)]',
-          compact ? 'w-[276px] md:w-[84px]' : 'w-[276px]',
+          'rail w-[236px] bg-[#151E2B] text-[#C3CCD9] flex flex-col p-3.5 fixed top-0 bottom-0 left-0 z-50 transition-transform duration-300 ease-in-out select-none',
           isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         )}
       >
@@ -150,123 +207,113 @@ export function Sidebar({
         <button
           onClick={() => setIsMobileOpen?.(false)}
           aria-label="Close sidebar"
-          className="md:hidden absolute top-5 right-4 p-2 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+          className="md:hidden absolute top-4 right-3 p-1.5 rounded-lg bg-[#1E2938] text-[#9FACBE] hover:text-white cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
 
-        {/* Desktop Pin / Collapse Toggle */}
-        {onToggleDocked && (
-          <button
-            onClick={onToggleDocked}
-            title={
-              isDockedExpanded
-                ? 'Collapse to icon rail'
-                : isHoverExpanded
-                ? 'Pin sidebar open'
-                : 'Expand & pin sidebar'
-            }
-            aria-label={
-              isDockedExpanded
-                ? 'Collapse sidebar'
-                : isHoverExpanded
-                ? 'Pin sidebar open'
-                : 'Expand sidebar'
-            }
-            className="hidden md:flex absolute -right-3.5 top-6 w-7 h-7 bg-white border border-slate-200/90 rounded-full items-center justify-center text-slate-500 hover:text-[#0F2744] hover:border-[#0F2744]/40 hover:scale-110 shadow-sm z-50 transition-all cursor-pointer"
-          >
-            {isDockedExpanded ? (
-              <ChevronLeft className="w-3.5 h-3.5" />
-            ) : isHoverExpanded ? (
-              <Pin className="w-3.5 h-3.5 text-[#0F2744]" />
-            ) : (
-              <ChevronRight className="w-3.5 h-3.5" />
-            )}
-          </button>
-        )}
-
-        {/* Brand Identity Header */}
-        <div
-          className={cn(
-            'h-[90px] flex items-center border-b border-slate-100 shrink-0 overflow-hidden',
-            compact ? 'justify-center px-2' : 'px-5'
-          )}
+        {/* Brand Header */}
+        <Link
+          href="/dashboard"
+          onClick={() => setIsMobileOpen?.(false)}
+          className="brand flex items-center gap-2.5 px-1.5 pt-1 pb-5 group"
         >
-          <Link href="/" className="flex items-center justify-center group w-full">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={compact ? '/icon.png' : '/LOGO.png'}
-              alt="ResumeBuilderOne.com"
-              className={cn(
-                'object-contain transition-all duration-200 group-hover:scale-[1.03]',
-                compact ? 'h-11 w-11 rounded-xl' : 'h-16 w-auto max-w-full'
-              )}
-            />
-          </Link>
-        </div>
-
-        {/* Quick Create Action */}
-        <div className={cn('pt-5 pb-2.5 shrink-0', compact ? 'px-3' : 'px-4')}>
-          <Link
-            href="/dashboard/create"
-            title={compact ? 'New Tailored Resume' : undefined}
-            onClick={() => setIsMobileOpen?.(false)}
-            className={cn(
-              'group flex items-center justify-center rounded-xl bg-gradient-to-r from-[#0F2744] to-[#173861] hover:from-[#0A1C33] hover:to-[#0F2744] text-white font-bold text-[13.5px] shadow-md shadow-[#0F2744]/15 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border border-[#0F2744] overflow-hidden',
-              compact ? 'w-full h-11 px-0' : 'w-full py-3 px-4 gap-2'
-            )}
-          >
-            <Plus className="w-4 h-4 text-[#F59E0B] group-hover:rotate-90 transition-transform duration-200 shrink-0" strokeWidth={2.75} />
-            {!compact && <span className="whitespace-nowrap">New Tailored Resume</span>}
-          </Link>
-        </div>
-
-        {/* Navigation Links */}
-        <nav className="flex-1 px-3.5 py-3 overflow-y-auto overflow-x-hidden space-y-5">
+          <div className="brand-mark w-[30px] h-[30px] rounded-[7px] shrink-0 bg-gradient-to-br from-[#0A6E4E] via-[#0D8A62] to-[#D9791F] grid place-items-center text-white font-bold text-[13px] tracking-tight shadow-sm">
+            R1
+          </div>
           <div>
-            {!compact && (
-              <div className="px-3 mb-2.5 text-[10.5px] font-extrabold uppercase tracking-[0.12em] text-slate-400 whitespace-nowrap">
-                Workspace
-              </div>
-            )}
-            <div className="space-y-1.5">
-              {WORKSPACE_NAV_ITEMS.map(renderNavItem)}
+            <div className="brand-name text-white font-semibold text-[14.5px] tracking-tight leading-tight group-hover:text-emerald-400 transition-colors">
+              ResumeBuilderOne
+            </div>
+            <div className="brand-sub text-[#6F7D8F] text-[11px] leading-tight">
+              From résumé to dream job
             </div>
           </div>
+        </Link>
 
-          <div className="pt-3 border-t border-slate-100">
-            {!compact && (
-              <div className="px-3 mb-2.5 mt-1 text-[10.5px] font-extrabold uppercase tracking-[0.12em] text-slate-400 whitespace-nowrap">
-                Account
-              </div>
-            )}
-            <div className="space-y-1.5">
-              {ACCOUNT_NAV_ITEMS.map(renderNavItem)}
-            </div>
+        {/* Group 1: Build */}
+        <div className="rail-group mb-3.5">
+          <div className="rail-label text-[11px] text-[#68768A] px-2 pb-1.5 tracking-wide uppercase font-semibold">
+            Build
           </div>
-        </nav>
+          <nav className="rail-nav flex flex-col gap-0.5">
+            {BUILD_NAV_ITEMS.map(renderItem)}
+          </nav>
+        </div>
 
-        {/* Bottom Actions & Branding */}
-        <div className="p-3.5 border-t border-slate-100 bg-slate-50/40 space-y-2.5 shrink-0 overflow-hidden">
-          <button
-            title={compact ? 'Sign Out' : undefined}
-            onClick={() => setShowLogoutModal(true)}
-            className={cn(
-              'group w-full flex items-center rounded-xl text-[14px] font-bold text-slate-600 hover:text-rose-600 hover:bg-rose-50/90 transition-all duration-200 cursor-pointer',
-              compact ? 'justify-center p-2.5' : 'gap-3.5 px-3.5 py-2.5'
-            )}
-          >
-            <div className="w-8 h-8 rounded-lg bg-white border border-slate-200/80 group-hover:border-rose-200 group-hover:bg-rose-100/70 flex items-center justify-center shrink-0 transition-colors">
-              <LogOut className="w-4 h-4 text-slate-500 group-hover:text-rose-600 transition-colors" strokeWidth={2.2} />
-            </div>
-            {!compact && <span className="whitespace-nowrap">Sign Out</span>}
-          </button>
+        {/* Group 2: Your Details */}
+        <div className="rail-group mb-3.5">
+          <div className="rail-label text-[11px] text-[#68768A] px-2 pb-1.5 tracking-wide uppercase font-semibold">
+            Your details
+          </div>
+          <nav className="rail-nav flex flex-col gap-0.5">
+            {DETAILS_NAV_ITEMS.map(renderItem)}
+          </nav>
+        </div>
 
-          {!compact && (
-            <div className="hidden md:flex justify-center pt-0.5">
-              <PoweredBySoltkiz className="w-full justify-center py-1.5 px-3 border-slate-200/80 bg-white/90" />
+        <div className="rail-spacer flex-1" />
+
+        {/* Plan Usage Card */}
+        <div className="plan-card bg-[#1E2938] rounded-[10px] p-3 mb-2.5 border border-[#26313F]/50">
+          <div className="plan-top flex justify-between items-baseline mb-2">
+            <strong className="text-white text-[13px] font-semibold">{planName}</strong>
+            <span className="text-[11.5px] text-[#7C8A9D] num">
+              {isPro ? 'Unlimited' : `${creditsUsed} of ${maxCredits} used`}
+            </span>
+          </div>
+          {!isPro && (
+            <div className="plan-bar h-1 rounded-sm bg-[#2C3949] overflow-hidden mb-2.5">
+              <i
+                className="block h-full bg-[#4FBE92] transition-all duration-300"
+                style={{ width: `${Math.min(100, Math.round((creditsUsed / maxCredits) * 100))}%` }}
+              />
             </div>
           )}
+          <p className="text-[11.5px] text-[#8C99AB] mb-2.5 leading-snug">
+            {isPro
+              ? 'Full ATS matching and unlimited exports.'
+              : `${Math.max(0, maxCredits - creditsUsed)} tailored résumés left. Pro removes the cap and unlocks the full match report.`}
+          </p>
+          {!isPro ? (
+            <Link
+              href="/dashboard/pricing"
+              onClick={() => setIsMobileOpen?.(false)}
+              className="btn btn-primary w-full justify-center py-2 px-3 rounded-[7px] text-[12.5px] font-semibold shadow-xs"
+            >
+              Upgrade - $9/month
+            </Link>
+          ) : (
+            <Link
+              href="/dashboard/pricing"
+              onClick={() => setIsMobileOpen?.(false)}
+              className="btn btn-quiet w-full justify-center py-1.5 px-3 rounded-[7px] text-[12.5px] font-medium bg-[#2C3949] hover:bg-[#38485C] text-white transition-colors"
+            >
+              Manage plan
+            </Link>
+          )}
+        </div>
+
+        {/* User Footer with Sign Out */}
+        <div className="rail-foot flex items-center gap-2.5 px-1 py-1.5 border-t border-[#1E2938]">
+          <div className="avatar w-7 h-7 rounded-full bg-[#2E4A3E] text-[#8FD3B6] grid place-items-center text-[11px] font-semibold shrink-0">
+            {userInitial}
+          </div>
+          <div className="min-w-0 flex-1">
+            <b className="block text-white text-[12.5px] font-medium truncate leading-tight">
+              {userName}
+            </b>
+            <span className="text-[11px] text-[#6F7D8F] leading-tight block">
+              Signed in
+            </span>
+          </div>
+          <button
+            onClick={() => setShowLogoutModal(true)}
+            title="Sign out"
+            aria-label="Sign out"
+            className="icon-btn p-1.5 rounded text-[#7B8698] hover:text-rose-400 hover:bg-[#1E2938] transition-colors cursor-pointer"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+          </button>
         </div>
       </aside>
 
@@ -274,31 +321,31 @@ export function Sidebar({
       {showLogoutModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div
-            className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
             onClick={() => setShowLogoutModal(false)}
           />
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200/90 w-full max-w-sm overflow-hidden z-10 animate-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-sm overflow-hidden z-10 animate-in zoom-in-95 duration-200">
             <div className="p-6 text-center">
-              <div className="w-14 h-14 bg-rose-50 border border-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-2xs">
-                <LogOut className="w-7 h-7" strokeWidth={2} />
+              <div className="w-12 h-12 bg-rose-50 border border-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-2xs">
+                <LogOut className="w-6 h-6" strokeWidth={2} />
               </div>
-              <h3 className="text-lg font-extrabold text-slate-900 tracking-tight mb-1.5">
-                Sign out of your workspace?
+              <h3 className="text-base font-bold text-slate-900 tracking-tight mb-1">
+                Sign out of ResumeBuilderOne?
               </h3>
-              <p className="text-xs text-slate-500 font-medium leading-relaxed px-3">
-                Your master profile and tailored resumes are safely saved. You can sign back in anytime.
+              <p className="text-xs text-slate-500 font-medium leading-relaxed px-2">
+                Your profile and tailored resumes are safely saved. You can sign back in anytime.
               </p>
             </div>
-            <div className="flex border-t border-slate-100 bg-slate-50/70 p-4 gap-3">
+            <div className="flex border-t border-slate-100 bg-slate-50/70 p-3.5 gap-2.5">
               <button
                 onClick={() => setShowLogoutModal(false)}
-                className="flex-1 px-4 py-2.5 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer"
+                className="flex-1 px-3 py-2 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold transition-all shadow-2xs cursor-pointer"
               >
                 Stay Signed In
               </button>
               <button
                 onClick={handleLogout}
-                className="flex-1 px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm hover:shadow cursor-pointer"
+                className="flex-1 px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold transition-all shadow-sm hover:shadow cursor-pointer"
               >
                 Sign Out
               </button>
@@ -306,6 +353,25 @@ export function Sidebar({
           </div>
         </div>
       )}
+
+      {/* ========================================================================= */}
+      {/* PREVIOUS WHITE SIDEBAR UI (KEPT FOR CLIENT REVERT) */}
+      {/* ========================================================================= */}
+      {/*
+      <aside className="hidden h-screen bg-white border-r border-slate-200/90 flex flex-col fixed left-0 top-0 z-50">
+        <div className="h-[90px] flex items-center border-b border-slate-100 px-5">
+          <img src="/LOGO.png" alt="ResumeBuilderOne" className="h-16 w-auto" />
+        </div>
+        <div className="p-4">
+          <Link href="/dashboard/create" className="w-full py-3 px-4 bg-[#0F2744] text-white rounded-xl">
+            New Tailored Resume
+          </Link>
+        </div>
+      </aside>
+      */}
+      {/* ========================================================================= */}
+      {/* END PREVIOUS WHITE SIDEBAR UI */}
+      {/* ========================================================================= */}
     </>
   )
 }
