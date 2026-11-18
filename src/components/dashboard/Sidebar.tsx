@@ -133,9 +133,9 @@ export function Sidebar({
             .eq('id', user.id)
             .single()
 
-          const fullName = profile?.full_name || user.user_metadata?.full_name || 'Balaji Rockzzz'
+          const fullName = profile?.full_name || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Candidate'
           setUserName(fullName)
-          setUserInitial(fullName.trim().charAt(0).toUpperCase() || 'B')
+          setUserInitial(fullName.trim().charAt(0).toUpperCase() || 'C')
 
           const premium = isPremiumPlan(profile?.plan_id)
           setIsPro(premium)

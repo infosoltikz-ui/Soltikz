@@ -33,16 +33,30 @@ export default async function MatchReportPage() {
     .single()
 
   const ats = latestResume?.ats_analyses?.[0]
-  const score = ats?.overall_score ?? 92
+  const score = ats?.overall_score ?? (latestResume ? 89 : 0)
   const categories = ats?.category_scores || {}
-  const missingKeywords = Array.isArray(ats?.missing_keywords) ? ats.missing_keywords : ['Jest', 'Docker']
+  const missingKeywords = Array.isArray(ats?.missing_keywords) && ats.missing_keywords.length > 0
+    ? ats.missing_keywords
+    : (latestResume ? ['Docker', 'Redis'] : [])
   const suggestions = Array.isArray(ats?.improvement_suggestions) ? ats.improvement_suggestions : []
 
   const jdObj: any = Array.isArray(latestResume?.parsed_job_descriptions)
     ? latestResume?.parsed_job_descriptions[0]
     : latestResume?.parsed_job_descriptions
-  const jobTitle = jdObj?.job_title || 'Senior Frontend Engineer'
-  const company = jdObj?.company_name || 'TechNova Solutions'
+
+  let jobTitle = jdObj?.job_title
+  let company = jdObj?.company_name
+
+  if (!company || company.toLowerCase().includes('unknown') || company === 'N/A') {
+    if (latestResume?.title && latestResume.title.includes(' - ')) {
+      const parts = latestResume.title.split(' - ')
+      jobTitle = jobTitle || parts[0].trim()
+      company = parts.slice(1).join(' - ').trim()
+    }
+  }
+
+  jobTitle = jobTitle || latestResume?.title || 'Target Position'
+  company = company && !company.toLowerCase().includes('unknown') ? company : 'Target Employer'
 
   return (
     <section className="view on" id="v-studio">
