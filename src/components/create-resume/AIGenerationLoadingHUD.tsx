@@ -88,20 +88,20 @@ export function AIGenerationLoadingHUD({
 
   return (
     <div className="max-w-3xl mx-auto py-4 sm:py-6 animate-in fade-in slide-in-from-bottom-3 duration-300">
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-lg shadow-slate-900/5 overflow-hidden">
+      <div className="bg-[#151D28] rounded-2xl border border-[#26313F] shadow-lg overflow-hidden">
         {/* Top Executive Progress Banner */}
-        <div className="bg-[#0F2744] text-white px-6 py-5 flex items-center justify-between gap-4">
+        <div className="bg-[#0A1017] text-[#E4EAF2] px-6 py-5 flex items-center justify-between gap-4 border-b border-[#26313F]">
           <div className="min-w-0">
-            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#F59E0B] mb-1">
+            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#D9A441] mb-1">
               <Sparkles className="w-3.5 h-3.5" />
               <span>AI Resume Synthesis</span>
             </div>
-            <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight truncate">
+            <h3 className="text-lg sm:text-xl font-bold text-[#E4EAF2] tracking-tight truncate">
               {jobRole && companyName
                 ? `Tailoring for ${jobRole} at ${companyName}`
                 : 'Building Your Tailored Resume'}
             </h3>
-            <p className="text-xs text-slate-300 mt-0.5 truncate">
+            <p className="text-xs text-[#9FACBE] mt-0.5 truncate">
               {currentState || 'Preparing tailored resume sections...'}
             </p>
           </div>
@@ -293,27 +293,27 @@ export function AIGenerationLoadingHUD({
                   className={cn(
                     'relative flex items-start gap-3.5 rounded-xl p-3 transition-all duration-300',
                     stage.active
-                      ? 'bg-white border border-[#0F2744]/20 shadow-xs'
+                      ? 'bg-[#1A2330] border border-[#3FA57C]/40 shadow-xs'
                       : stage.completed
-                      ? 'bg-emerald-50/40 border border-emerald-200/60'
+                      ? 'bg-[#123227]/40 border border-[#3FA57C]/20'
                       : 'bg-transparent border border-transparent opacity-60'
                   )}
                 >
                   {/* Step Node Circle */}
                   <div className="relative z-10 mt-0.5 shrink-0">
                     {stage.completed ? (
-                      <div className="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-xs animate-in zoom-in-75 duration-200">
+                      <div className="w-7 h-7 rounded-full bg-[#0A6E4E] text-white flex items-center justify-center shadow-xs animate-in zoom-in-75 duration-200">
                         <Check className="w-3.5 h-3.5 stroke-[3]" />
                       </div>
                     ) : stage.active ? (
-                      <div className="relative w-7 h-7 rounded-full bg-[#0F2744] text-[#F59E0B] flex items-center justify-center shadow-xs">
-                        <span className="absolute inset-0 rounded-full bg-[#F59E0B]/30 animate-ping" />
+                      <div className="relative w-7 h-7 rounded-full bg-[#0A6E4E] text-[#D9A441] flex items-center justify-center shadow-xs">
+                        <span className="absolute inset-0 rounded-full bg-[#D9A441]/30 animate-ping" />
                         <span className="relative text-[11px] font-extrabold tabular-nums">
                           {idx + 1}
                         </span>
                       </div>
                     ) : (
-                      <div className="w-7 h-7 rounded-full bg-white border-2 border-slate-200 text-slate-400 flex items-center justify-center text-[11px] font-bold tabular-nums">
+                      <div className="w-7 h-7 rounded-full bg-[#1A2330] border-2 border-[#26313F] text-[#78859A] flex items-center justify-center text-[11px] font-bold tabular-nums">
                         {idx + 1}
                       </div>
                     )}
@@ -325,7 +325,7 @@ export function AIGenerationLoadingHUD({
                       <h4
                         className={cn(
                           'text-[13.5px] font-bold',
-                          stage.active || stage.completed ? 'text-slate-900' : 'text-slate-500'
+                          stage.active || stage.completed ? 'text-[#E4EAF2]' : 'text-[#78859A]'
                         )}
                       >
                         {stage.title}

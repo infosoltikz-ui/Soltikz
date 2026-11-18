@@ -68,25 +68,25 @@ export function ResumeDetailsTabs({
   const currentTab = (editingTab as TabKey) || activeTab
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-5 sm:p-7 relative overflow-hidden transition-all duration-300">
+    <div className="bg-[#151D28] rounded-3xl border border-[#26313F] shadow-sm p-5 sm:p-7 relative overflow-hidden transition-all duration-300">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 mb-5 border-b border-slate-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 mb-5 border-b border-[#26313F]">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#059669]" />
-            <h2 className="text-[17px] sm:text-[18px] font-black text-slate-900 tracking-tight">
+            <span className="w-2 h-2 rounded-full bg-[#3FA57C]" />
+            <h2 className="text-[17px] sm:text-[18px] font-bold text-[#E4EAF2] tracking-tight">
               Resume Details & Master Profile
             </h2>
           </div>
-          <p className="text-[12.5px] font-medium text-slate-600 mt-0.5">
+          <p className="text-[12.5px] font-medium text-[#9FACBE] mt-0.5">
             Review and verify your master profile information before generating your tailored resume.
           </p>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
           {editingTab ? (
-            <Button variant="outline" size="sm" onClick={onCancelEdit} className="text-[12px] h-9 px-3.5 rounded-xl font-bold cursor-pointer">
+            <Button variant="outline" size="sm" onClick={onCancelEdit} className="text-[12px] h-9 px-3.5 rounded-xl font-bold border-[#26313F] bg-[#1A2330] text-[#E4EAF2] hover:bg-[#222E3F] cursor-pointer">
               Cancel Edit
             </Button>
           ) : (
@@ -94,7 +94,7 @@ export function ResumeDetailsTabs({
               variant="outline" 
               size="sm" 
               onClick={() => onEdit(currentTab)} 
-              className="text-[12px] h-9 px-3.5 rounded-xl font-bold flex items-center gap-1.5 border-slate-200 hover:border-[#0F2744]/40 hover:text-[#0F2744] hover:bg-[#EEF4FA]/60 cursor-pointer"
+              className="text-[12px] h-9 px-3.5 rounded-xl font-bold flex items-center gap-1.5 border-[#26313F] bg-[#1A2330] text-[#E4EAF2] hover:bg-[#222E3F] hover:border-[#3FA57C]/40 hover:text-[#8FD3B6] cursor-pointer"
             >
               <Pencil className="w-3.5 h-3.5" />
               <span>Edit {tabs.find(t => t.key === currentTab)?.label}</span>
@@ -104,7 +104,7 @@ export function ResumeDetailsTabs({
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-5 scrollbar-none border-b border-slate-100">
+      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-5 scrollbar-none border-b border-[#26313F]">
         {tabs.map((tab) => {
           const Icon = tab.icon
           const isActive = currentTab === tab.key
@@ -119,16 +119,16 @@ export function ResumeDetailsTabs({
               className={cn(
                 "flex items-center gap-2 px-3.5 py-2 rounded-xl text-[12.5px] font-bold transition-all shrink-0 cursor-pointer select-none",
                 isActive
-                  ? "bg-[#0F2744] text-white shadow-xs"
-                  : "bg-[#F8FAFC] text-slate-600 hover:bg-[#EEF4FA] hover:text-[#0F2744] border border-slate-200/80"
+                  ? "bg-[#0A6E4E] text-white shadow-xs"
+                  : "bg-[#1A2330] text-[#9FACBE] hover:bg-[#222E3F] hover:text-[#E4EAF2] border border-[#26313F]"
               )}
             >
-              <Icon className={cn("w-3.5 h-3.5", isActive ? "text-[#F59E0B]" : "text-slate-500")} />
+              <Icon className={cn("w-3.5 h-3.5", isActive ? "text-[#D9A441]" : "text-[#78859A]")} />
               <span>{tab.label}</span>
               {typeof tab.count === 'number' && (
                 <span className={cn(
                   "text-[10px] px-1.5 py-0.5 rounded-full font-black tabular-nums leading-none",
-                  isActive ? "bg-white/15 text-white" : "bg-slate-200/80 text-slate-700"
+                  isActive ? "bg-white/20 text-white" : "bg-[#26313F] text-[#9FACBE]"
                 )}>
                   {tab.count}
                 </span>
@@ -157,27 +157,27 @@ export function ResumeDetailsTabs({
                 />
               ) : (
                 <div className="space-y-3.5">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 rounded-xl bg-slate-50/70 border border-slate-200/70">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 rounded-xl bg-[#1A2330] border border-[#26313F]">
                     <div>
-                      <h4 className="text-[16px] font-black text-slate-900">{fullName || 'Candidate Name'}</h4>
+                      <h4 className="text-[16px] font-bold text-[#E4EAF2]">{fullName || 'Candidate Name'}</h4>
                       {pi.targetRole && (
-                        <p className="text-[12.5px] font-bold text-emerald-700 mt-0.5">{pi.targetRole}</p>
+                        <p className="text-[12.5px] font-bold text-[#8FD3B6] mt-0.5">{pi.targetRole}</p>
                       )}
                     </div>
                     <div className="flex flex-wrap items-center gap-2 text-[12px]">
                       {email && (
-                        <span className="inline-flex items-center gap-1.5 font-medium text-slate-700 bg-white border border-slate-200 px-2.5 py-1 rounded-lg">
-                          <Mail className="w-3 h-3 text-slate-400" /> {email}
+                        <span className="inline-flex items-center gap-1.5 font-medium text-[#9FACBE] bg-[#151D28] border border-[#26313F] px-2.5 py-1 rounded-lg">
+                          <Mail className="w-3 h-3 text-[#78859A]" /> {email}
                         </span>
                       )}
                       {phone && (
-                        <span className="inline-flex items-center gap-1.5 font-medium text-slate-700 bg-white border border-slate-200 px-2.5 py-1 rounded-lg">
-                          <Phone className="w-3 h-3 text-slate-400" /> {phone}
+                        <span className="inline-flex items-center gap-1.5 font-medium text-[#9FACBE] bg-[#151D28] border border-[#26313F] px-2.5 py-1 rounded-lg">
+                          <Phone className="w-3 h-3 text-[#78859A]" /> {phone}
                         </span>
                       )}
                       {pi.location && (
-                        <span className="inline-flex items-center gap-1.5 font-medium text-slate-700 bg-white border border-slate-200 px-2.5 py-1 rounded-lg">
-                          <MapPin className="w-3 h-3 text-slate-400" /> {pi.location}
+                        <span className="inline-flex items-center gap-1.5 font-medium text-[#9FACBE] bg-[#151D28] border border-[#26313F] px-2.5 py-1 rounded-lg">
+                          <MapPin className="w-3 h-3 text-[#78859A]" /> {pi.location}
                         </span>
                       )}
                       {pi.linkedin && (
@@ -185,7 +185,7 @@ export function ResumeDetailsTabs({
                           href={pi.linkedin} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg hover:underline"
+                          className="inline-flex items-center gap-1.5 font-medium text-[#8FD3B6] bg-[#123227] border border-[#3FA57C]/40 px-2.5 py-1 rounded-lg hover:underline"
                         >
                           <LinkIcon className="w-3 h-3" /> LinkedIn Profile
                         </a>
@@ -194,11 +194,11 @@ export function ResumeDetailsTabs({
                   </div>
 
                   {pi.summary && (
-                    <div className="p-4 rounded-xl bg-white border border-slate-200/80">
-                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+                    <div className="p-4 rounded-xl bg-[#1A2330] border border-[#26313F]">
+                      <span className="text-[11px] font-bold text-[#78859A] uppercase tracking-wider block mb-1">
                         Professional Executive Summary
                       </span>
-                      <p className="text-[13px] text-slate-700 leading-relaxed font-normal">
+                      <p className="text-[13px] text-[#C3CCD9] leading-relaxed font-normal">
                         {pi.summary}
                       </p>
                     </div>
@@ -220,25 +220,25 @@ export function ResumeDetailsTabs({
               ) : (
                 <div className="space-y-3.5 max-h-[380px] overflow-y-auto pr-1">
                   {data.employment.map((job: any, i: number) => (
-                    <div key={i} className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/70 hover:bg-slate-50 transition-colors">
+                    <div key={i} className="p-4 rounded-xl bg-[#1A2330] border border-[#26313F] hover:bg-[#1E2938] transition-colors">
                       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 mb-2">
                         <div>
-                          <h4 className="text-[14.5px] font-black text-slate-900 leading-tight">
+                          <h4 className="text-[14.5px] font-bold text-[#E4EAF2] leading-tight">
                             {job.title || 'Role Title'}
                           </h4>
-                          <p className="text-[12.5px] font-bold text-emerald-700 mt-0.5 flex items-center gap-1.5">
-                            <Building2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <p className="text-[12.5px] font-bold text-[#8FD3B6] mt-0.5 flex items-center gap-1.5">
+                            <Building2 className="w-3.5 h-3.5 text-[#3FA57C]" />
                             {job.company || 'Company Name'}
-                            {job.location && <span className="text-slate-400 font-normal">• {job.location}</span>}
+                            {job.location && <span className="text-[#78859A] font-normal">• {job.location}</span>}
                           </p>
                         </div>
-                        <span className="text-[11px] font-bold text-slate-600 bg-white border border-slate-200 px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 shrink-0 self-start">
-                          <Calendar className="w-3 h-3 text-slate-400" />
-                          {job.startDate || '-'} - {job.current ? <strong className="text-emerald-700 font-black">Present</strong> : (job.endDate || '-')}
+                        <span className="text-[11px] font-bold text-[#9FACBE] bg-[#151D28] border border-[#26313F] px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 shrink-0 self-start">
+                          <Calendar className="w-3 h-3 text-[#78859A]" />
+                          {job.startDate || '-'} - {job.current ? <strong className="text-[#8FD3B6] font-bold">Present</strong> : (job.endDate || '-')}
                         </span>
                       </div>
                       {job.responsibilities && (
-                        <p className="text-[12.5px] text-slate-600 leading-relaxed line-clamp-3 whitespace-pre-line bg-white p-2.5 rounded-lg border border-slate-100">
+                        <p className="text-[12.5px] text-[#C3CCD9] leading-relaxed line-clamp-3 whitespace-pre-line bg-[#151D28] p-2.5 rounded-lg border border-[#26313F]">
                           {job.responsibilities}
                         </p>
                       )}
@@ -259,16 +259,16 @@ export function ResumeDetailsTabs({
                   onAction={() => onEdit('skills')} 
                 />
               ) : (
-                <div className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/70 space-y-4 max-h-[380px] overflow-y-auto">
+                <div className="p-4 rounded-xl bg-[#1A2330] border border-[#26313F] space-y-4 max-h-[380px] overflow-y-auto">
                   {Array.isArray(data.skills) && typeof data.skills[0] === 'object' && Array.isArray(data.skills[0].items) ? (
                     data.skills.map((cat: any, i: number) => (
-                      <div key={i} className={i > 0 ? 'pt-3 border-t border-slate-200/60' : ''}>
-                        <h5 className="text-[11px] font-black text-slate-500 uppercase tracking-wider mb-2">
+                      <div key={i} className={i > 0 ? 'pt-3 border-t border-[#26313F]' : ''}>
+                        <h5 className="text-[11px] font-bold text-[#78859A] uppercase tracking-wider mb-2">
                           {cat.category || 'Skill Group'}
                         </h5>
                         <div className="flex flex-wrap gap-1.5">
                           {cat.items?.map((item: string, j: number) => (
-                            <span key={j} className="text-[12px] font-semibold bg-white text-slate-800 border border-slate-200 px-2.5 py-1 rounded-lg shadow-2xs">
+                            <span key={j} className="text-[12px] font-semibold bg-[#151D28] text-[#8FD3B6] border border-[#26313F] px-2.5 py-1 rounded-lg shadow-2xs">
                               {item}
                             </span>
                           ))}
@@ -281,7 +281,7 @@ export function ResumeDetailsTabs({
                         const label = typeof skill === 'string' ? skill : (skill?.name || skill?.skill || '')
                         if (!label) return null
                         return (
-                          <span key={i} className="text-[12px] font-semibold bg-white text-slate-800 border border-slate-200 px-2.5 py-1 rounded-lg shadow-2xs">
+                          <span key={i} className="text-[12px] font-semibold bg-[#151D28] text-[#8FD3B6] border border-[#26313F] px-2.5 py-1 rounded-lg shadow-2xs">
                             {label}
                           </span>
                         )
@@ -305,25 +305,25 @@ export function ResumeDetailsTabs({
               ) : (
                 <div className="space-y-3 max-h-[380px] overflow-y-auto">
                   {data.education.map((edu: any, i: number) => (
-                    <div key={i} className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/70 flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+                    <div key={i} className="p-4 rounded-xl bg-[#1A2330] border border-[#26313F] flex flex-col sm:flex-row sm:items-start justify-between gap-2">
                       <div>
-                        <h4 className="text-[14.5px] font-black text-slate-900 leading-tight">
+                        <h4 className="text-[14.5px] font-bold text-[#E4EAF2] leading-tight">
                           {edu.degree || 'Degree Program'}
                         </h4>
-                        <p className="text-[12.5px] font-bold text-emerald-700 mt-0.5">
+                        <p className="text-[12.5px] font-bold text-[#8FD3B6] mt-0.5">
                           {edu.institution || 'University / Institution'}
                         </p>
                         {edu.description && (
-                          <p className="text-[12px] text-slate-600 mt-1.5 leading-relaxed">{edu.description}</p>
+                          <p className="text-[12px] text-[#C3CCD9] mt-1.5 leading-relaxed">{edu.description}</p>
                         )}
                       </div>
                       <div className="text-right shrink-0">
-                        <span className="text-[11px] font-bold text-slate-600 bg-white border border-slate-200 px-2.5 py-1 rounded-lg">
+                        <span className="text-[11px] font-bold text-[#9FACBE] bg-[#151D28] border border-[#26313F] px-2.5 py-1 rounded-lg">
                           {edu.startDate || '-'} - {edu.endDate || '-'}
                         </span>
                         {edu.grade && (
-                          <div className="text-[11px] text-slate-500 font-medium mt-1">
-                            GPA: <strong className="text-slate-800 font-bold">{edu.grade}</strong>
+                          <div className="text-[11px] text-[#78859A] font-medium mt-1">
+                            GPA: <strong className="text-[#E4EAF2] font-bold">{edu.grade}</strong>
                           </div>
                         )}
                       </div>
@@ -346,25 +346,25 @@ export function ResumeDetailsTabs({
               ) : (
                 <div className="space-y-3 max-h-[380px] overflow-y-auto">
                   {data.projects.map((proj: any, i: number) => (
-                    <div key={i} className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/70">
+                    <div key={i} className="p-4 rounded-xl bg-[#1A2330] border border-[#26313F]">
                       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1 mb-1">
                         <div>
-                          <h4 className="text-[14px] font-black text-slate-900">{proj.name}</h4>
-                          {proj.role && <p className="text-[12px] font-bold text-emerald-700">{proj.role}</p>}
+                          <h4 className="text-[14px] font-bold text-[#E4EAF2]">{proj.name}</h4>
+                          {proj.role && <p className="text-[12px] font-bold text-[#8FD3B6]">{proj.role}</p>}
                         </div>
                         {proj.link && (
                           <a 
                             href={proj.link} 
                             target="_blank" 
                             rel="noopener noreferrer" 
-                            className="text-[11.5px] font-bold text-emerald-700 hover:underline"
+                            className="text-[11.5px] font-bold text-[#3FA57C] hover:underline"
                           >
                             Project Link ↗
                           </a>
                         )}
                       </div>
                       {proj.description && (
-                        <p className="text-[12px] text-slate-600 leading-relaxed mt-1">{proj.description}</p>
+                        <p className="text-[12px] text-[#C3CCD9] leading-relaxed mt-1">{proj.description}</p>
                       )}
                     </div>
                   ))}
@@ -385,18 +385,18 @@ export function ResumeDetailsTabs({
               ) : (
                 <div className="space-y-3 max-h-[380px] overflow-y-auto">
                   {data.certifications.map((cert: any, i: number) => (
-                    <div key={i} className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/70 flex items-start justify-between gap-3">
+                    <div key={i} className="p-4 rounded-xl bg-[#1A2330] border border-[#26313F] flex items-start justify-between gap-3">
                       <div>
-                        <h4 className="text-[14px] font-black text-slate-900">{cert.name}</h4>
-                        {cert.organization && <p className="text-[12px] font-medium text-slate-600 mt-0.5">{cert.organization}</p>}
+                        <h4 className="text-[14px] font-bold text-[#E4EAF2]">{cert.name}</h4>
+                        {cert.organization && <p className="text-[12px] font-medium text-[#9FACBE] mt-0.5">{cert.organization}</p>}
                         {cert.credentialUrl && (
-                          <a href={cert.credentialUrl} target="_blank" rel="noopener noreferrer" className="text-[11.5px] font-bold text-emerald-700 hover:underline mt-1 inline-block">
+                          <a href={cert.credentialUrl} target="_blank" rel="noopener noreferrer" className="text-[11.5px] font-bold text-[#3FA57C] hover:underline mt-1 inline-block">
                             Verify Credential ↗
                           </a>
                         )}
                       </div>
                       {(cert.issueDate || cert.expiryDate) && (
-                        <span className="text-[11px] font-semibold text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded-md">
+                        <span className="text-[11px] font-semibold text-[#9FACBE] bg-[#151D28] border border-[#26313F] px-2 py-0.5 rounded-md">
                           {cert.issueDate || '-'}
                         </span>
                       )}
@@ -416,12 +416,12 @@ export function ResumeDetailsTabs({
 
 function EmptyState({ title, actionLabel, onAction }: { title: string; actionLabel: string; onAction: () => void }) {
   return (
-    <div className="text-center py-7 px-4 bg-slate-50/70 rounded-xl border border-dashed border-slate-200">
-      <p className="text-[13px] text-slate-500 font-medium mb-2.5">{title}</p>
+    <div className="text-center py-7 px-4 bg-[#1A2330]/50 rounded-xl border border-dashed border-[#26313F]">
+      <p className="text-[13px] text-[#78859A] font-medium mb-2.5">{title}</p>
       <button
         type="button"
         onClick={onAction}
-        className="text-[12.5px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+        className="text-[12.5px] font-bold text-[#8FD3B6] hover:text-white bg-[#123227] border border-[#3FA57C]/40 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
       >
         {actionLabel}
       </button>

@@ -658,10 +658,10 @@ function CreateResumeContent() {
             <div className="flex justify-end pt-3">
               <Button
                 onClick={handleProceedToStep2}
-                className="relative h-13 px-8 text-[15px] font-black rounded-2xl bg-[#0F2744] hover:bg-[#0A1C33] text-white shadow-lg shadow-slate-900/15 flex items-center gap-3 transition-all duration-200 hover:-translate-y-0.5 overflow-hidden group/btn cursor-pointer"
+                className="relative h-13 px-8 text-[15px] font-bold rounded-2xl bg-[#0A6E4E] hover:bg-[#0D8A62] border border-[#3FA57C]/40 text-white shadow-lg shadow-emerald-950/20 flex items-center gap-3 transition-all duration-200 hover:-translate-y-0.5 overflow-hidden group/btn cursor-pointer"
               >
                 <span className="relative z-10 tracking-wide">Next Step: Target Job &amp; AI Generation</span>
-                <ArrowRight className="w-5 h-5 text-[#F59E0B] group-hover/btn:translate-x-1 transition-transform relative z-10" />
+                <ArrowRight className="w-5 h-5 text-[#D9A441] group-hover/btn:translate-x-1 transition-transform relative z-10" />
               </Button>
             </div>
           </div>
@@ -721,7 +721,7 @@ function CreateResumeContent() {
             ) : (
               <div className="space-y-6">
                 {/* Step 2 Top Action & Control Header */}
-                <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xs">
+                <div className="bg-[#151D28]/95 backdrop-blur-md border border-[#26313F] rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
                   <div className="flex flex-wrap items-center gap-3">
                     <Button
                       onClick={() => {
@@ -731,19 +731,19 @@ function CreateResumeContent() {
                         }
                       }}
                       variant="outline"
-                      className="h-10 px-4 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-[#F8FAFC] hover:text-[#0F2744] text-[13px] font-bold flex items-center gap-2 cursor-pointer"
+                      className="h-10 px-4 rounded-xl border-[#26313F] text-[#E4EAF2] bg-[#1A2330] hover:bg-[#222E3F] text-[13px] font-bold flex items-center gap-2 cursor-pointer"
                     >
                       <ArrowLeft className="w-4 h-4" />
                       <span>Edit Target Job &amp; Details</span>
                     </Button>
 
                     <div className="flex items-center gap-2">
-                      <span className="px-3 py-1 rounded-full text-[11.5px] font-extrabold bg-[#EEF4FA] text-[#0F2744] border border-slate-200/80">
+                      <span className="px-3 py-1 rounded-full text-[11.5px] font-extrabold bg-[#1A2330] text-[#8FD3B6] border border-[#3FA57C]/30">
                         {getTemplateById(selectedTemplateId).name} Layout
                       </span>
                       <span className={resumeType === 'c2c'
-                        ? 'px-3 py-1 rounded-full text-[11.5px] font-extrabold bg-[#FEF3C7] text-[#B45309] border border-[#F59E0B]/30'
-                        : 'px-3 py-1 rounded-full text-[11.5px] font-extrabold bg-slate-100 text-slate-700 border border-slate-200'
+                        ? 'px-3 py-1 rounded-full text-[11.5px] font-extrabold bg-[#2E2616] text-[#D9A441] border border-[#D9A441]/30'
+                        : 'px-3 py-1 rounded-full text-[11.5px] font-extrabold bg-[#1A2330] text-[#E4EAF2] border border-[#26313F]'
                       }>
                         {resumeType === 'c2c' ? 'C2C Vendor Submission' : 'Full-Time Corporate'}
                       </span>
@@ -754,32 +754,32 @@ function CreateResumeContent() {
                     <Button
                       onClick={() => setIsRegenerateSummaryModalOpen(true)}
                       variant="outline"
-                      className="h-10 px-3.5 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-[#F8FAFC] hover:text-[#0F2744] text-[12px] font-bold cursor-pointer"
+                      className="h-10 px-3.5 rounded-xl border-[#26313F] text-[#E4EAF2] bg-[#1A2330] hover:bg-[#222E3F] text-[12px] font-bold cursor-pointer"
                     >
                       Refine Summary
                     </Button>
                     <Button
                       onClick={() => setIsManualEditModalOpen(true)}
                       variant="outline"
-                      className="h-10 px-3.5 rounded-xl border-slate-200 text-slate-700 bg-white hover:bg-[#F8FAFC] hover:text-[#0F2744] text-[12px] font-bold cursor-pointer"
+                      className="h-10 px-3.5 rounded-xl border-[#26313F] text-[#E4EAF2] bg-[#1A2330] hover:bg-[#222E3F] text-[12px] font-bold cursor-pointer"
                     >
                       Edit Skills
                     </Button>
 
                     <Button
                       onClick={handlePrint}
-                      className="h-10 px-4 rounded-xl bg-[#0F2744] hover:bg-[#0A1C33] text-white shadow-sm text-[13px] font-extrabold cursor-pointer flex items-center gap-2 transition-all"
+                      className="h-10 px-4 rounded-xl bg-[#0A6E4E] hover:bg-[#0D8A62] text-white shadow-sm text-[13px] font-bold cursor-pointer flex items-center gap-2 transition-all border border-[#3FA57C]/30"
                     >
-                      <Download className="w-4 h-4 text-[#F59E0B]" />
+                      <Download className="w-4 h-4 text-[#D9A441]" />
                       <span>Download PDF</span>
                     </Button>
                     <Button
                       onClick={handleDownloadDocx}
                       disabled={isExportingDocx}
                       variant="outline"
-                      className="h-10 px-3.5 rounded-xl border-[#0F2744]/20 text-[#0F2744] bg-[#EEF4FA]/60 hover:bg-[#EEF4FA] text-[12.5px] font-bold flex items-center gap-1.5 cursor-pointer"
+                      className="h-10 px-3.5 rounded-xl border-[#26313F] text-[#8FD3B6] bg-[#1A2330] hover:bg-[#222E3F] text-[12.5px] font-bold flex items-center gap-1.5 cursor-pointer"
                     >
-                      {isExportingDocx ? <Loader2 className="w-4 h-4 animate-spin text-[#0F2744]" /> : <FileText className="w-4 h-4 text-[#0F2744]" />}
+                      {isExportingDocx ? <Loader2 className="w-4 h-4 animate-spin text-[#3FA57C]" /> : <FileText className="w-4 h-4 text-[#3FA57C]" />}
                       <span>Word (.docx)</span>
                     </Button>
                   </div>
@@ -795,31 +795,31 @@ function CreateResumeContent() {
 
                   {/* RIGHT COLUMN: HD LIVE PRINTABLE A4 RESUME CANVAS (Col-span-7 on xl+) */}
                   <div className="w-full xl:col-span-7 space-y-4">
-                    <div className="bg-white border border-slate-200/90 rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xs">
+                    <div className="bg-[#151D28] border border-[#26313F] rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xs">
                       <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-[#0F2744]" />
-                        <span className="text-[13px] font-extrabold text-slate-900">Live Resume Canvas</span>
+                        <FileText className="w-4 h-4 text-[#3FA57C]" />
+                        <span className="text-[13px] font-bold text-[#E4EAF2]">Live Resume Canvas</span>
                       </div>
 
                       {/* Zoom Controls */}
-                      <div className="flex items-center gap-1 bg-[#F8FAFC] p-1 rounded-xl border border-slate-200">
+                      <div className="flex items-center gap-1 bg-[#1A2330] p-1 rounded-xl border border-[#26313F]">
                         <button
                           onClick={() => setResumeZoom(z => Math.max(Number((z - 0.1).toFixed(1)), 0.5))}
-                          className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
+                          className="p-1 hover:bg-[#222E3F] rounded-lg text-[#9FACBE] hover:text-[#E4EAF2] transition-all cursor-pointer"
                           title="Zoom Out"
                         >
                           <ZoomOut className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => setResumeZoom(1)}
-                          className="px-2 py-0.5 text-[11px] font-bold text-slate-700 hover:text-slate-900 transition-colors cursor-pointer tabular-nums"
+                          className="px-2 py-0.5 text-[11px] font-bold text-[#E4EAF2] hover:text-white transition-colors cursor-pointer tabular-nums"
                           title="Reset to Fit Width"
                         >
                           {resumeZoom === 1 ? 'Fit Width' : `${Math.round(resumeZoom * 100)}%`}
                         </button>
                         <button
                           onClick={() => setResumeZoom(z => Math.min(Number((z + 0.1).toFixed(1)), 1.5))}
-                          className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
+                          className="p-1 hover:bg-[#222E3F] rounded-lg text-[#9FACBE] hover:text-[#E4EAF2] transition-all cursor-pointer"
                           title="Zoom In"
                         >
                           <ZoomIn className="w-3.5 h-3.5" />
@@ -830,7 +830,7 @@ function CreateResumeContent() {
                     {/* Document Sheet Container */}
                     <div
                       ref={canvasContainerRef}
-                      className="bg-slate-200/75 p-3 sm:p-6 rounded-3xl border border-slate-300/80 flex flex-col items-center justify-start overflow-y-auto overflow-x-auto h-[75vh] min-h-[480px] max-h-[860px] shadow-inner scrollbar-thin"
+                      className="bg-[#0A1017] p-3 sm:p-6 rounded-3xl border border-[#26313F] flex flex-col items-center justify-start overflow-y-auto overflow-x-auto h-[75vh] min-h-[480px] max-h-[860px] shadow-inner scrollbar-thin"
                     >
                       {(() => {
                         const effectiveScale = Number((autoScale * resumeZoom).toFixed(2))
@@ -894,11 +894,11 @@ function CreateResumeContent() {
         {step === 3 && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Top Navigation Bar */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-xs">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-[#151D28]/95 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-[#26313F] shadow-sm">
               <div className="flex flex-wrap items-center gap-3">
                 <Button
                   onClick={() => setStep(2)}
-                  className="h-9 px-4 rounded-xl text-slate-700 hover:text-[#0F2744] hover:bg-[#F8FAFC] bg-white border border-slate-200 cursor-pointer"
+                  className="h-9 px-4 rounded-xl text-[#E4EAF2] hover:text-white hover:bg-[#222E3F] bg-[#1A2330] border border-[#26313F] cursor-pointer"
                 >
                   <div className="flex items-center gap-1.5 text-[13px] font-bold">
                     <ArrowLeft className="w-3.5 h-3.5" />
@@ -911,23 +911,23 @@ function CreateResumeContent() {
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-[13.5px] font-extrabold text-slate-900 hidden md:inline">
+                <span className="text-[13.5px] font-bold text-[#E4EAF2] hidden md:inline">
                   Step 3 of 3: Interview &amp; Application Strategy Workspace
                 </span>
               </div>
 
               <div className="flex flex-wrap items-center gap-2">
-                <Button onClick={handlePrint} className="h-9 px-4 rounded-xl bg-[#0F2744] hover:bg-[#0A1C33] text-white shadow-xs text-[13px] font-bold cursor-pointer flex items-center gap-1.5">
-                  <Download className="w-4 h-4 text-[#F59E0B]" />
+                <Button onClick={handlePrint} className="h-9 px-4 rounded-xl bg-[#0A6E4E] hover:bg-[#0D8A62] text-white shadow-xs text-[13px] font-bold cursor-pointer flex items-center gap-1.5 border border-[#3FA57C]/40">
+                  <Download className="w-4 h-4 text-[#D9A441]" />
                   Download PDF
                 </Button>
                 <Button 
                   onClick={handleDownloadDocx} 
                   disabled={isExportingDocx}
                   variant="outline" 
-                  className="h-9 px-4 rounded-xl border-[#0F2744]/20 text-[#0F2744] bg-[#EEF4FA]/60 hover:bg-[#EEF4FA] text-[13px] font-bold cursor-pointer flex items-center gap-1.5"
+                  className="h-9 px-4 rounded-xl border-[#26313F] text-[#8FD3B6] bg-[#1A2330] hover:bg-[#222E3F] text-[13px] font-bold cursor-pointer flex items-center gap-1.5"
                 >
-                  {isExportingDocx ? <Loader2 className="w-4 h-4 animate-spin text-[#0F2744]" /> : <FileText className="w-4 h-4 text-[#0F2744]" />}
+                  {isExportingDocx ? <Loader2 className="w-4 h-4 animate-spin text-[#3FA57C]" /> : <FileText className="w-4 h-4 text-[#3FA57C]" />}
                   <span>Word (.docx)</span>
                 </Button>
               </div>

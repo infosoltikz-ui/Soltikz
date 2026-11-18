@@ -57,55 +57,55 @@ function CompactUserMenu() {
     <div className="relative shrink-0" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2.5 h-10 pl-1.5 pr-3 rounded-xl border border-slate-200/90 bg-white hover:bg-[#F8FAFC] hover:border-slate-300 transition-all shadow-xs cursor-pointer"
+        className="flex items-center gap-2.5 h-10 pl-1.5 pr-3 rounded-xl border border-[#26313F] bg-[#1A2330] hover:bg-[#222E3F] transition-all shadow-xs cursor-pointer"
       >
         {/* Avatar circle */}
-        <div className="w-8 h-8 rounded-xl bg-[#0F2744] border border-[#F59E0B]/30 flex items-center justify-center text-white text-[12px] font-black shrink-0 shadow-xs">
+        <div className="w-8 h-8 rounded-xl bg-[#0A6E4E] border border-[#3FA57C]/30 flex items-center justify-center text-white text-[12px] font-black shrink-0 shadow-xs">
           {initials}
         </div>
         {/* Name + plan */}
         <div className="hidden sm:flex flex-col items-start leading-none">
-          <span className="text-[13px] font-bold text-slate-900 whitespace-nowrap max-w-[130px] truncate">{user.name}</span>
-          <span className="text-[10.5px] font-bold text-[#D97706] mt-0.5">{user.plan}</span>
+          <span className="text-[13px] font-bold text-[#E4EAF2] whitespace-nowrap max-w-[130px] truncate">{user.name}</span>
+          <span className="text-[10.5px] font-bold text-[#D9A441] mt-0.5">{user.plan}</span>
         </div>
-        <ChevronDown className={cn('w-3.5 h-3.5 text-slate-400 transition-transform shrink-0', open && 'rotate-180')} />
+        <ChevronDown className={cn('w-3.5 h-3.5 text-[#78859A] transition-transform shrink-0', open && 'rotate-180')} />
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-200/90 py-1.5 z-50 overflow-hidden">
-          <div className="px-3.5 py-2.5 border-b border-slate-100 mb-1 bg-[#F8FAFC]">
-            <p className="text-[12.5px] font-bold text-slate-900 truncate">{user.name}</p>
-            <p className="text-[11px] text-slate-400 truncate">{user.email}</p>
+        <div className="absolute right-0 top-full mt-2 w-56 bg-[#151D28] rounded-2xl shadow-2xl border border-[#26313F] py-1.5 z-50 overflow-hidden">
+          <div className="px-3.5 py-2.5 border-b border-[#26313F] mb-1 bg-[#1A2330]">
+            <p className="text-[12.5px] font-bold text-[#E4EAF2] truncate">{user.name}</p>
+            <p className="text-[11px] text-[#78859A] truncate">{user.email}</p>
           </div>
           <Link
             href="/dashboard"
-            className="flex items-center gap-2.5 px-3.5 py-2 text-[12.5px] font-semibold text-slate-700 hover:bg-[#EEF4FA] hover:text-[#0F2744] transition-colors"
+            className="flex items-center gap-2.5 px-3.5 py-2 text-[12.5px] font-semibold text-[#9FACBE] hover:bg-[#1A2330] hover:text-[#E4EAF2] transition-colors"
             onClick={() => setOpen(false)}
           >
             <Layout className="w-3.5 h-3.5" /> Dashboard
           </Link>
           <Link
             href="/dashboard/profile"
-            className="flex items-center gap-2.5 px-3.5 py-2 text-[12.5px] font-semibold text-slate-700 hover:bg-[#EEF4FA] hover:text-[#0F2744] transition-colors"
+            className="flex items-center gap-2.5 px-3.5 py-2 text-[12.5px] font-semibold text-[#9FACBE] hover:bg-[#1A2330] hover:text-[#E4EAF2] transition-colors"
             onClick={() => setOpen(false)}
           >
             <FileCheck className="w-3.5 h-3.5" /> Master Profile
           </Link>
           <Link
             href="/dashboard/settings"
-            className="flex items-center gap-2.5 px-3.5 py-2 text-[12.5px] font-semibold text-slate-700 hover:bg-[#EEF4FA] hover:text-[#0F2744] transition-colors"
+            className="flex items-center gap-2.5 px-3.5 py-2 text-[12.5px] font-semibold text-[#9FACBE] hover:bg-[#1A2330] hover:text-[#E4EAF2] transition-colors"
             onClick={() => setOpen(false)}
           >
             <Settings className="w-3.5 h-3.5" /> Settings
           </Link>
-          <div className="h-px bg-slate-100 my-1 mx-3" />
+          <div className="h-px bg-[#26313F] my-1 mx-3" />
           <button
             onClick={async () => {
               const supabase = createClient()
               await supabase.auth.signOut()
               router.push('/login')
             }}
-            className="w-full flex items-center gap-2.5 px-3.5 py-2 text-[12.5px] font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+            className="w-full flex items-center gap-2.5 px-3.5 py-2 text-[12.5px] font-semibold text-rose-400 hover:bg-rose-950/30 transition-colors cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5" /> Sign Out
           </button>
@@ -125,7 +125,7 @@ export function CreateResumeHeader({
   return (
     <>
     <HowToGuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90">
+    <header className="sticky top-0 z-40 bg-[#151D28]/95 backdrop-blur-md border-b border-[#26313F]">
       <div className="max-w-[1540px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
         {/* Left: Back + Title */}
@@ -134,7 +134,7 @@ export function CreateResumeHeader({
             <button
               onClick={onBack}
               aria-label="Go back"
-              className="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-[#0F2744] transition-colors cursor-pointer"
+              className="flex items-center justify-center w-9 h-9 rounded-xl border border-[#26313F] bg-[#1A2330] hover:bg-[#222E3F] text-[#E4EAF2] hover:text-white transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
@@ -142,13 +142,13 @@ export function CreateResumeHeader({
             <Link
               href="/dashboard"
               aria-label="Back to dashboard"
-              className="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-[#0F2744] transition-colors"
+              className="flex items-center justify-center w-9 h-9 rounded-xl border border-[#26313F] bg-[#1A2330] hover:bg-[#222E3F] text-[#E4EAF2] hover:text-white transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
           )}
 
-          <span className="hidden sm:inline text-[15px] font-bold text-slate-900 tracking-tight">
+          <span className="hidden sm:inline text-[15px] font-bold text-[#E4EAF2] tracking-tight">
             Resume Studio
           </span>
         </div>
@@ -169,17 +169,17 @@ export function CreateResumeHeader({
                     disabled={upcoming}
                     className={cn(
                       'flex items-center gap-2 h-9 px-3.5 rounded-xl text-[12.5px] font-semibold transition-colors border select-none',
-                      active && 'bg-[#0F2744] text-white border-[#0F2744] shadow-2xs',
-                      done && 'bg-slate-50 text-[#0F2744] border-slate-200 hover:bg-slate-100 cursor-pointer',
-                      upcoming && 'bg-transparent text-slate-600 border-transparent cursor-default',
+                      active && 'bg-[#0A6E4E] text-white border-[#0D8A62] shadow-2xs',
+                      done && 'bg-[#1A2330] text-[#8FD3B6] border-[#26313F] hover:bg-[#222E3F] cursor-pointer',
+                      upcoming && 'bg-transparent text-[#78859A] border-transparent cursor-default',
                     )}
                   >
                     <span
                       className={cn(
                         'w-5 h-5 rounded-full text-[11px] font-bold flex items-center justify-center shrink-0',
-                        active && 'bg-white/15 text-[#F59E0B]',
-                        done && 'bg-emerald-100 text-emerald-700',
-                        upcoming && 'bg-slate-200/90 text-slate-700'
+                        active && 'bg-white/20 text-[#D9A441]',
+                        done && 'bg-[#123227] text-[#8FD3B6]',
+                        upcoming && 'bg-[#1A2330] text-[#78859A]'
                       )}
                     >
                       {done ? <Check className="w-3 h-3 stroke-[2.75]" /> : item.step}
@@ -188,7 +188,7 @@ export function CreateResumeHeader({
                   </button>
 
                   {idx < STEPS.length - 1 && (
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-300 mx-0.5 shrink-0" />
+                    <ChevronRight className="w-3.5 h-3.5 text-[#3F4D60] mx-0.5 shrink-0" />
                   )}
                 </div>
               )
@@ -200,9 +200,9 @@ export function CreateResumeHeader({
         <div className="flex items-center gap-2.5 shrink-0">
           <button
             onClick={() => setGuideOpen(true)}
-            className="hidden sm:inline-flex items-center gap-1.5 h-9 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 hover:text-[#0F2744] text-[12.5px] font-semibold transition-colors cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-1.5 h-9 px-3 rounded-xl border border-[#26313F] bg-[#1A2330] hover:bg-[#222E3F] text-[#E4EAF2] hover:text-white text-[12.5px] font-semibold transition-colors cursor-pointer"
           >
-            <BookOpen className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+            <BookOpen className="w-3.5 h-3.5 text-[#78859A] shrink-0" />
             <span>How it Works</span>
           </button>
           <CompactUserMenu />

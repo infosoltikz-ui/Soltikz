@@ -301,7 +301,7 @@ export function WorkspaceSection({
 
       {/* Main Content Area */}
       <div className="flex-1 min-w-0 relative">
-        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-5 sm:p-7 min-h-[580px]">
+        <div className="bg-[#151D28] rounded-3xl border border-[#26313F] shadow-sm p-5 sm:p-7 min-h-[580px]">
           {activeTab === 'intro' && (
             <SelfPitchSection
               interviewPrep={interviewPrep}
