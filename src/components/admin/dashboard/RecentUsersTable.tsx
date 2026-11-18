@@ -482,28 +482,30 @@ export function RecentUsersTable() {
 
       {/* Upgrade to Pro Modal */}
       {confirmUpgradeUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-[#151D28] rounded-2xl shadow-2xl border border-[#26313F] w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
             <div className="p-6">
-              <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mb-4">
                 <Crown className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-black text-slate-900 mb-2">Upgrade to Pro</h3>
-              <p className="text-[14px] text-slate-600 mb-6">
-                Are you sure you want to upgrade <span className="font-bold text-slate-900">{confirmUpgradeUser.name || 'this user'}</span> to the PRO plan? This will grant them lifetime access to all premium features.
+              <h3 className="text-xl font-black text-[#E4EAF2] mb-2" style={{ color: '#E4EAF2' }}>Upgrade to Pro</h3>
+              <p className="text-[14px] text-[#9FACBE] mb-6" style={{ color: '#9FACBE' }}>
+                Are you sure you want to upgrade <span className="font-bold text-[#E4EAF2]">{confirmUpgradeUser.name || 'this user'}</span> to the PRO plan? This will grant them lifetime access to all premium features.
               </p>
               
               <div className="flex gap-3 justify-end">
                 <button
                   onClick={() => setConfirmUpgradeUser(null)}
-                  className="px-4 py-2.5 rounded-xl text-[14px] font-bold text-slate-600 hover:bg-slate-100 transition-colors"
+                  className="px-4 py-2.5 rounded-xl text-[14px] font-bold text-[#E4EAF2] bg-[#1A2330] hover:bg-[#222E3F] border border-[#26313F] transition-colors cursor-pointer"
+                  style={{ color: '#E4EAF2' }}
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => executeUpgradeToPro(confirmUpgradeUser.id)}
                   disabled={upgradingId === confirmUpgradeUser.id}
-                  className="px-5 py-2.5 rounded-xl text-[14px] font-bold text-white bg-amber-500 hover:bg-amber-600 transition-colors flex items-center gap-2 shadow-sm shadow-amber-500/20 disabled:opacity-50"
+                  className="px-5 py-2.5 rounded-xl text-[14px] font-bold text-white bg-amber-500 hover:bg-amber-600 transition-colors flex items-center gap-2 shadow-sm shadow-amber-500/20 disabled:opacity-50 cursor-pointer"
+                  style={{ color: '#FFFFFF' }}
                 >
                   {upgradingId === confirmUpgradeUser.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Crown className="w-4 h-4" />}
                   {upgradingId === confirmUpgradeUser.id ? 'Upgrading...' : 'Yes, Upgrade to Pro'}

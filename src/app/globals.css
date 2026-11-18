@@ -345,12 +345,21 @@ body{
 /* Previous global heading override (preserved for instant revert):
 h1,h2,h3,h4{margin:0; font-weight:600; letter-spacing:-.015em; color:var(--ink)!important}
 */
-h1,h2,h3,h4{margin:0; font-weight:600; letter-spacing:-.015em; color:var(--ink)}
+/* Global heading default - zero specificity so Tailwind text-* classes always win */
+:where(h1,h2,h3,h4):not([class*="text-"]){margin:0; font-weight:600; letter-spacing:-.015em; color:var(--ink)}
 
-/* Ensure headings and text inside white/light cards retain strong dark contrast */
+/* Ensure headings, paragraphs, and buttons inside white/light cards retain crisp contrast */
 .bg-white :is(h1,h2,h3,h4):not([class*="text-"]),
 .bg-slate-50 :is(h1,h2,h3,h4):not([class*="text-"]) {
   color: #0F172A;
+}
+.bg-white p:not([class*="text-"]),
+.bg-slate-50 p:not([class*="text-"]) {
+  color: #475569;
+}
+.bg-white button:not([class*="text-"]),
+.bg-slate-50 button:not([class*="text-"]) {
+  color: #1E293B;
 }
 p{margin:0}
 button{font:inherit; color:inherit; cursor:pointer}

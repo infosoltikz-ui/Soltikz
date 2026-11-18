@@ -103,27 +103,29 @@ export function AdminSidebar() {
       
       {/* Logout Confirmation Modal */}
       {isLogoutModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+          <div className="bg-[#151D28] rounded-2xl shadow-2xl border border-[#26313F] w-full max-w-sm overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             <div className="p-6 text-center">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <LogOut className="w-8 h-8 text-red-600" />
+              <div className="w-16 h-16 bg-red-500/10 border border-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <LogOut className="w-8 h-8 text-red-400" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">Ready to Leave?</h3>
-              <p className="text-sm text-slate-500 mb-6">Are you sure you want to log out of the Admin Portal?</p>
+              <h3 className="text-xl font-bold text-[#E4EAF2] mb-2" style={{ color: '#E4EAF2' }}>Ready to Leave?</h3>
+              <p className="text-sm text-[#9FACBE] mb-6" style={{ color: '#9FACBE' }}>Are you sure you want to log out of the Admin Portal?</p>
               
               <div className="flex gap-3">
                 <button 
                   onClick={() => setIsLogoutModalOpen(false)}
                   disabled={isLoggingOut}
-                  className="flex-1 px-4 py-3 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
+                  className="flex-1 px-4 py-3 rounded-xl font-bold text-[#E4EAF2] bg-[#1A2330] hover:bg-[#222E3F] border border-[#26313F] transition-colors cursor-pointer"
+                  style={{ color: '#E4EAF2' }}
                 >
                   Cancel
                 </button>
                 <button 
                   onClick={handleLogout}
                   disabled={isLoggingOut}
-                  className="flex-1 px-4 py-3 rounded-xl font-bold text-white bg-red-600 hover:bg-red-700 transition-colors"
+                  className="flex-1 px-4 py-3 rounded-xl font-bold text-white bg-red-600 hover:bg-red-700 transition-colors cursor-pointer shadow-xs"
+                  style={{ color: '#FFFFFF' }}
                 >
                   {isLoggingOut ? 'Logging out...' : 'Yes, Logout'}
                 </button>

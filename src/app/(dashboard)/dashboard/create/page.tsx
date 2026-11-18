@@ -591,19 +591,27 @@ function CreateResumeContent() {
     <div className="pb-12 max-w-[1540px] mx-auto min-h-screen">
       <Modal id="paywall-modal" title="Upgrade to Pro" size="sm">
         <div className="flex flex-col items-center text-center pt-2">
-          <div className="w-14 h-14 bg-[#FEF3C7] border border-[#F59E0B]/30 rounded-2xl flex items-center justify-center mb-4 text-[#D97706]">
+          <div className="w-14 h-14 bg-[#2E2616] border border-[#D9A441]/40 rounded-2xl flex items-center justify-center mb-4 text-[#D9A441]">
             <Sparkles className="w-7 h-7" />
           </div>
-          <h3 className="text-[19px] font-black text-slate-900 mb-2 tracking-tight">Free Credits Exhausted</h3>
-          <p className="text-[13.5px] text-slate-500 mb-6 leading-relaxed">
+          <h3 className="text-[19px] font-black text-[#E4EAF2] mb-2 tracking-tight" style={{ color: '#E4EAF2' }}>Free Credits Exhausted</h3>
+          <p className="text-[13.5px] text-[#9FACBE] mb-6 leading-relaxed" style={{ color: '#9FACBE' }}>
             You have used all 10 of your free AI resume generations. Upgrade to Pro for unlimited resumes, Word (.docx) exports, Cover Letter Studio, and Interview Prep.
           </p>
           <div className="flex gap-3 w-full">
-            <Button variant="outline" className="flex-1 rounded-xl font-bold border-slate-200 cursor-pointer" onClick={() => closeModal('paywall-modal')}>
+            <Button
+              variant="outline"
+              className="flex-1 rounded-xl font-bold bg-[#1A2330] hover:bg-[#222E3F] text-[#E4EAF2] border-[#26313F] cursor-pointer"
+              onClick={() => closeModal('paywall-modal')}
+              style={{ color: '#E4EAF2' }}
+            >
               Cancel
             </Button>
             <Link href="/dashboard/pricing" className="flex-1">
-              <Button className="w-full rounded-xl font-bold bg-[#0F2744] hover:bg-[#0A1C33] text-white cursor-pointer">
+              <Button
+                className="w-full rounded-xl font-bold bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 cursor-pointer shadow-xs"
+                style={{ color: '#FFFFFF' }}
+              >
                 Upgrade Now
               </Button>
             </Link>
@@ -969,30 +977,30 @@ function CreateResumeContent() {
 
         {/* Empty Profile Guard Modal */}
         {isEmptyProfileModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
-            <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200/90 space-y-6 relative animate-in zoom-in-95 duration-200">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-[#151D28] rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-[#26313F] space-y-6 relative animate-in zoom-in-95 duration-200">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#FEF3C7] border border-[#F59E0B]/30 flex items-center justify-center text-[#D97706] shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-[#2E2616] border border-[#D9A441]/40 flex items-center justify-center text-[#D9A441] shrink-0">
                   <AlertTriangle className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-[19px] font-black text-slate-900 tracking-tight">
+                  <h3 className="text-[19px] font-black text-[#E4EAF2] tracking-tight" style={{ color: '#E4EAF2' }}>
                     Work Experience Missing
                   </h3>
-                  <p className="text-[13px] font-medium text-slate-500 mt-1 leading-relaxed">
-                    Our Enterprise AI strictly adheres to your real career history and <span className="font-bold text-slate-700">never fabricates fake companies</span>. 
+                  <p className="text-[13px] font-medium text-[#9FACBE] mt-1 leading-relaxed" style={{ color: '#9FACBE' }}>
+                    Our Enterprise AI strictly adheres to your real career history and <span className="font-bold text-[#E4EAF2]">never fabricates fake companies</span>. 
                     Generating now without work experience will produce an empty work history.
                   </p>
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-slate-200/80 space-y-2 text-[13px]">
-                <div className="font-bold text-slate-800 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-[#D97706]" />
+              <div className="p-4 rounded-2xl bg-[#101722] border border-[#26313F] space-y-2 text-[13px]">
+                <div className="font-bold text-[#E4EAF2] flex items-center gap-2" style={{ color: '#E4EAF2' }}>
+                  <Sparkles className="w-4 h-4 text-[#D9A441]" />
                   Fastest Way (Takes 10 Seconds):
                 </div>
-                <p className="text-slate-600 leading-normal">
-                  Export your LinkedIn profile using <b>&quot;Save to PDF&quot;</b> and import it in your <b>Master Profile</b>. All your roles, education, and skills will be auto-filled instantly!
+                <p className="text-[#9FACBE] leading-normal" style={{ color: '#9FACBE' }}>
+                  Export your LinkedIn profile using <b className="text-[#E4EAF2]">&quot;Save to PDF&quot;</b> and import it in your <b className="text-[#E4EAF2]">Master Profile</b>. All your roles, education, and skills will be auto-filled instantly!
                 </p>
               </div>
 
@@ -1002,10 +1010,11 @@ function CreateResumeContent() {
                     setIsEmptyProfileModalOpen(false)
                     router.push('/dashboard/profile')
                   }}
-                  className="w-full sm:flex-1 h-12 rounded-xl bg-[#0F2744] hover:bg-[#0A1C33] text-white font-bold text-[14px] shadow-md cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full sm:flex-1 h-12 rounded-xl bg-[#0A6E4E] hover:bg-[#0D8A62] text-white font-bold text-[14px] border border-[#3FA57C]/40 shadow-md cursor-pointer flex items-center justify-center gap-2"
+                  style={{ color: '#FFFFFF' }}
                 >
                   <span>Go to Master Profile</span>
-                  <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
+                  <ArrowRight className="w-4 h-4 text-[#D9A441]" />
                 </Button>
 
                 <Button
@@ -1014,7 +1023,8 @@ function CreateResumeContent() {
                     setEditingTab('employment')
                   }}
                   variant="outline"
-                  className="w-full sm:w-auto h-12 px-5 rounded-xl border-slate-200 text-slate-700 hover:bg-[#F8FAFC] font-bold text-[14px] cursor-pointer"
+                  className="w-full sm:w-auto h-12 px-5 rounded-xl border-[#26313F] bg-[#1A2330] hover:bg-[#222E3F] text-[#E4EAF2] font-bold text-[14px] cursor-pointer"
+                  style={{ color: '#E4EAF2' }}
                 >
                   Add Job Below
                 </Button>
@@ -1026,7 +1036,8 @@ function CreateResumeContent() {
                     setIsEmptyProfileModalOpen(false)
                     setStep(2)
                   }}
-                  className="text-[12px] font-semibold text-slate-400 hover:text-slate-600 underline cursor-pointer transition-colors"
+                  className="text-[12px] font-semibold text-[#78859A] hover:text-[#E4EAF2] underline cursor-pointer transition-colors"
+                  style={{ color: '#78859A' }}
                 >
                   Proceed anyway without work experience
                 </button>

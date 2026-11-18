@@ -33,38 +33,46 @@ export function RegenerateSummaryModal({ isOpen, onClose, onRegenerate, initialP
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        <div className="p-6 border-b border-slate-100">
-          <h2 className="text-[18px] font-black text-slate-900 tracking-tight">Refine Executive Summary</h2>
-          <p className="text-[13px] font-medium text-slate-500 mt-1">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+      <div className="bg-[#151D28] rounded-3xl border border-[#26313F] shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="p-6 border-b border-[#26313F] bg-[#101722]">
+          <h2 className="text-[18px] font-black text-[#E4EAF2] tracking-tight" style={{ color: '#E4EAF2' }}>Refine Executive Summary</h2>
+          <p className="text-[13px] font-medium text-[#9FACBE] mt-1" style={{ color: '#9FACBE' }}>
             Write your ideal opening line. AI will regenerate supporting summary points matching your framing.
           </p>
         </div>
         
         <div className="p-6">
-          <label className="block text-[12.5px] font-extrabold text-slate-800 mb-2">
+          <label className="block text-[12.5px] font-extrabold text-[#E4EAF2] mb-2" style={{ color: '#E4EAF2' }}>
             Your Opening Line
           </label>
           <textarea
             value={firstPoint}
             onChange={(e) => setFirstPoint(e.target.value)}
             placeholder="e.g. Senior Software Engineer with 8+ years of experience architecting..."
-            className="w-full h-32 p-3.5 bg-[#F8FAFC] focus:bg-white border border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-[#0F2744]/10 focus:border-[#0F2744] text-[13.5px] font-medium text-slate-900"
+            className="w-full h-32 p-3.5 bg-[#101722] focus:bg-[#1A2330] border border-[#26313F] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#3FA57C]/40 focus:border-[#3FA57C] text-[13.5px] font-medium text-[#E4EAF2] placeholder:text-[#6F7D8F]"
+            style={{ color: '#E4EAF2' }}
           />
-          <p className="text-[11.5px] font-medium text-slate-400 mt-2">
+          <p className="text-[11.5px] font-medium text-[#78859A] mt-2">
             Tip: Combine role seniority, years of experience, and primary core stack.
           </p>
         </div>
 
-        <div className="p-5 px-6 bg-[#F8FAFC] border-t border-slate-100 flex justify-end gap-3">
-          <Button variant="outline" onClick={onClose} disabled={isRegenerating} className="rounded-xl font-bold border-slate-200 cursor-pointer">
+        <div className="p-5 px-6 bg-[#101722] border-t border-[#26313F] flex justify-end gap-3">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            disabled={isRegenerating}
+            className="rounded-xl font-bold bg-[#1A2330] hover:bg-[#222E3F] text-[#E4EAF2] border-[#26313F] cursor-pointer"
+            style={{ color: '#E4EAF2' }}
+          >
             Cancel
           </Button>
           <Button
             onClick={handleRegenerate}
             disabled={!firstPoint.trim() || isRegenerating}
-            className="rounded-xl font-bold bg-[#0F2744] hover:bg-[#0A1C33] text-white cursor-pointer"
+            className="rounded-xl font-bold bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 cursor-pointer shadow-xs"
+            style={{ color: '#FFFFFF' }}
           >
             {isRegenerating ? (
               <>

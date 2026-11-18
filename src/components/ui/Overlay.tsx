@@ -69,34 +69,33 @@ export function Modal({
             variants={modalPanel}
             initial="hidden" animate="visible" exit="exit"
             className={cn(
-              'relative w-full rounded-2xl shadow-card-hover overflow-hidden',
-              'bg-white dark:bg-dark-card',
-              'border border-surface-border dark:border-dark-border',
+              'relative w-full rounded-2xl shadow-2xl overflow-hidden',
+              'bg-[#151D28] text-[#E4EAF2]',
+              'border border-[#26313F]',
               sizeMap[size],
             )}
           >
             {/* Header */}
             {(title || closeable) && (
-              <div className="flex items-start justify-between p-6 pb-4">
+              <div className="flex items-start justify-between p-6 pb-4 border-b border-[#26313F] bg-[#101722]">
                 <div>
                   {title && (
                     <h2 id={`${id}-title`}
-                      className="text-lg font-bold"
-                      style={{ color: 'var(--color-heading)' }}>
+                      className="text-lg font-bold text-[#E4EAF2]"
+                      style={{ color: '#E4EAF2' }}>
                       {title}
                     </h2>
                   )}
                   {description && (
-                    <p className="text-sm text-muted mt-1">{description}</p>
+                    <p className="text-sm text-[#9FACBE] mt-1" style={{ color: '#9FACBE' }}>{description}</p>
                   )}
                 </div>
                 {closeable && (
                   <button
                     onClick={() => closeModal(id)}
                     aria-label="Close modal"
-                    className="ml-4 shrink-0 p-1.5 rounded-lg text-muted
-                               hover:bg-surface-muted dark:hover:bg-dark-muted
-                               hover:text-heading transition-colors"
+                    className="ml-4 shrink-0 p-1.5 rounded-lg text-[#9FACBE]
+                               hover:bg-[#1A2330] hover:text-[#E4EAF2] transition-colors"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -106,12 +105,12 @@ export function Modal({
 
             {/* Body */}
             {children && (
-              <div className="px-6 pb-6">{children}</div>
+              <div className="px-6 pb-6 pt-4">{children}</div>
             )}
 
             {/* Footer */}
             {footer && (
-              <div className="px-6 py-4 border-t border-surface-border dark:border-dark-border
+              <div className="px-6 py-4 border-t border-[#26313F] bg-[#101722]
                              flex items-center justify-end gap-3">
                 {footer}
               </div>

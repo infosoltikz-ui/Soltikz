@@ -325,31 +325,35 @@ export function Sidebar({
       {mounted && typeof document !== 'undefined' && showLogoutModal && createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div
-            className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity"
             onClick={() => setShowLogoutModal(false)}
           />
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-sm overflow-hidden z-10 animate-in zoom-in-95 duration-200">
+          <div className="bg-[#151D28] rounded-2xl shadow-2xl border border-[#26313F] w-full max-w-sm overflow-hidden z-10 animate-in zoom-in-95 duration-200">
             <div className="p-6 text-center">
-              <div className="w-12 h-12 bg-rose-50 border border-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-2xs">
-                <LogOut className="w-6 h-6" strokeWidth={2} />
+              <div className="w-12 h-12 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-xs">
+                <LogOut className="w-6 h-6 text-rose-400" strokeWidth={2} />
               </div>
-              <h3 className="text-base font-bold text-slate-900 tracking-tight mb-1">
+              <h3 className="text-[17px] font-bold text-[#E4EAF2] tracking-tight mb-1.5" style={{ color: '#E4EAF2' }}>
                 Sign out of ResumeBuilderOne?
               </h3>
-              <p className="text-xs text-slate-500 font-medium leading-relaxed px-2">
+              <p className="text-[12.5px] text-[#9FACBE] font-medium leading-relaxed px-2" style={{ color: '#9FACBE' }}>
                 Your profile and tailored resumes are safely saved. You can sign back in anytime.
               </p>
             </div>
-            <div className="flex border-t border-slate-100 bg-slate-50/70 p-3.5 gap-2.5">
+            <div className="flex border-t border-[#26313F] bg-[#101722] p-3.5 gap-2.5">
               <button
+                type="button"
                 onClick={() => setShowLogoutModal(false)}
-                className="flex-1 px-3 py-2 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold transition-all shadow-2xs cursor-pointer"
+                className="flex-1 px-3 py-2.5 bg-[#1A2330] hover:bg-[#222E3F] border border-[#26313F] text-[#E4EAF2] rounded-xl text-[12.5px] font-semibold transition-all shadow-xs cursor-pointer"
+                style={{ color: '#E4EAF2' }}
               >
                 Stay Signed In
               </button>
               <button
+                type="button"
                 onClick={handleLogout}
-                className="flex-1 px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold transition-all shadow-sm hover:shadow cursor-pointer"
+                className="flex-1 px-3 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-[12.5px] font-semibold transition-all shadow-xs hover:shadow cursor-pointer"
+                style={{ color: '#FFFFFF' }}
               >
                 Sign Out
               </button>
