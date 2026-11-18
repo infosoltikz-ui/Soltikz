@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { FREE_TIER_CREDITS } from '@/utils/pricingPlans'
+import { ProfileStrengthGauge } from '@/components/dashboard/ProfileStrengthGauge'
 
 // Previous UI Component Imports (Kept for instant revert)
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader'
@@ -309,23 +310,7 @@ export default async function DashboardPage() {
             <div className="panel">
               <div className="panel-body">
                 <div className="strength">
-                  <div className="ring">
-                    <svg width="74" height="74" viewBox="0 0 74 74">
-                      <circle cx="37" cy="37" r="31" fill="none" stroke="var(--line-soft)" strokeWidth="7" />
-                      <circle
-                        cx="37"
-                        cy="37"
-                        r="31"
-                        fill="none"
-                        stroke="var(--brand)"
-                        strokeWidth="7"
-                        strokeLinecap="round"
-                        strokeDasharray={ringCircumference}
-                        strokeDashoffset={strengthOffset}
-                      />
-                    </svg>
-                    <div className="val num">{strengthScore}</div>
-                  </div>
+                  <ProfileStrengthGauge score={strengthScore} />
                   <div className="txt">
                     <b>Profile strength</b>
                     Three things are holding your scores down across every application.
