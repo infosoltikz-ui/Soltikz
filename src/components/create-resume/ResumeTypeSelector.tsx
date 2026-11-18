@@ -16,9 +16,9 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <h2 className="text-[15px] sm:text-[16px] font-black text-slate-900">Select Resume Type</h2>
-            <span className="text-[11px] font-semibold text-slate-400 hidden md:inline">• Corporate vs Vendor Submission</span>
+            <span className="text-[11px] font-semibold text-slate-500 hidden md:inline">• Corporate vs Vendor Submission</span>
           </div>
-          <p className="text-[12px] font-medium text-slate-500 mt-0.5">
+          <p className="text-[12px] font-medium text-slate-600 mt-0.5">
             Choose format to enforce ATS structure, summary length & recruiter constraints.
           </p>
         </div>
@@ -75,7 +75,7 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
                   <span>Selected</span>
                 </div>
               ) : (
-                <span className="text-[11px] font-bold text-slate-400 group-hover:text-emerald-600 shrink-0">
+                <span className="text-[11px] font-bold text-slate-500 group-hover:text-emerald-600 shrink-0">
                   Select
                 </span>
               )}

@@ -59,10 +59,10 @@ export function TemplateSelector({ selectedId, onChange, isSubscribed = true, on
             <h2 className="text-[17px] sm:text-[18px] font-black text-slate-900 tracking-tight mb-1">
               Choose a Template
             </h2>
-            <p className="text-[12.5px] font-medium text-slate-500">
+            <p className="text-[12.5px] font-medium text-slate-600">
               Pick the layout your resume will be generated into. Hover to{' '}
-              <strong className="text-slate-800">Preview</strong> the full A4 sheet or{' '}
-              <strong className="text-[#0F2744]">Use</strong> to select.
+              <strong className="text-slate-900 font-bold">Preview</strong> the full A4 sheet or{' '}
+              <strong className="text-[#0F2744] font-bold">Use</strong> to select.
             </p>
           </div>
           <span className="text-[11.5px] font-extrabold text-[#0F2744] bg-[#EEF4FA] px-3.5 py-1.5 rounded-full border border-slate-200/80 self-start sm:self-auto shrink-0">
@@ -129,7 +129,7 @@ export function TemplateSelector({ selectedId, onChange, isSubscribed = true, on
                       </span>
                     )}
                   </div>
-                  <p className="text-[12px] font-medium text-slate-500 leading-snug">{template.description}</p>
+                  <p className="text-[12px] font-medium text-slate-600 leading-snug">{template.description}</p>
                 </div>
 
                 {/* Selected Corner Badge */}

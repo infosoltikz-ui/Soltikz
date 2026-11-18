@@ -171,7 +171,7 @@ export function CreateResumeHeader({
                       'flex items-center gap-2 h-9 px-3.5 rounded-xl text-[12.5px] font-semibold transition-colors border select-none',
                       active && 'bg-[#0F2744] text-white border-[#0F2744] shadow-2xs',
                       done && 'bg-slate-50 text-[#0F2744] border-slate-200 hover:bg-slate-100 cursor-pointer',
-                      upcoming && 'bg-transparent text-slate-400 border-transparent cursor-default',
+                      upcoming && 'bg-transparent text-slate-600 border-transparent cursor-default',
                     )}
                   >
                     <span
@@ -179,7 +179,7 @@ export function CreateResumeHeader({
                         'w-5 h-5 rounded-full text-[11px] font-bold flex items-center justify-center shrink-0',
                         active && 'bg-white/15 text-[#F59E0B]',
                         done && 'bg-emerald-100 text-emerald-700',
-                        upcoming && 'bg-slate-100 text-slate-400'
+                        upcoming && 'bg-slate-200/90 text-slate-700'
                       )}
                     >
                       {done ? <Check className="w-3 h-3 stroke-[2.75]" /> : item.step}

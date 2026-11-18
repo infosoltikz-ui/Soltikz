@@ -79,7 +79,7 @@ export function ResumeDetailsTabs({
               Resume Details & Master Profile
             </h2>
           </div>
-          <p className="text-[12.5px] font-medium text-slate-500 mt-0.5">
+          <p className="text-[12.5px] font-medium text-slate-600 mt-0.5">
             Review and verify your master profile information before generating your tailored resume.
           </p>
         </div>

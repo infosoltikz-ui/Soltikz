@@ -342,7 +342,16 @@ body{
   font-family:var(--ui); font-size:14px; line-height:1.5;
   -webkit-font-smoothing:antialiased;
 }
+/* Previous global heading override (preserved for instant revert):
 h1,h2,h3,h4{margin:0; font-weight:600; letter-spacing:-.015em; color:var(--ink)!important}
+*/
+h1,h2,h3,h4{margin:0; font-weight:600; letter-spacing:-.015em; color:var(--ink)}
+
+/* Ensure headings and text inside white/light cards retain strong dark contrast */
+.bg-white :is(h1,h2,h3,h4):not([class*="text-"]),
+.bg-slate-50 :is(h1,h2,h3,h4):not([class*="text-"]) {
+  color: #0F172A;
+}
 p{margin:0}
 button{font:inherit; color:inherit; cursor:pointer}
 a{color:inherit; text-decoration:none}
