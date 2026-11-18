@@ -203,25 +203,25 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
   const horizontalMargin = (794 * effectiveScale - 794) / 2
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div 
-        className="relative w-full max-w-5xl h-[92vh] max-h-[950px] bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-5xl h-[92vh] max-h-[950px] bg-[#151D28] rounded-2xl border border-[#26313F] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Action Bar */}
-        <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 py-3 flex items-center justify-between gap-3 shrink-0">
+        <div className="bg-[#101722] border-b border-[#26313F] px-4 sm:px-6 py-3 flex items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-[#1A2330] text-[#3FA57C] border border-[#26313F] flex items-center justify-center shrink-0">
               <FileText className="w-5 h-5" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="text-[15px] font-bold text-slate-900 dark:text-slate-100 truncate">
+                <h3 className="text-[15px] font-bold text-[#E4EAF2] truncate">
                   {resume.title || 'Tailored Resume Preview'}
                 </h3>
                 <span className={cn(
                   "px-2 py-0.5 rounded-md text-[10.5px] font-bold uppercase tracking-wider shrink-0",
-                  isC2C ? "bg-orange-50 text-orange-700 border border-orange-200" : "bg-primary/10 text-primary border border-primary/20"
+                  isC2C ? "bg-[#1A2330] text-[#D9A441] border border-[#D9A441]/40" : "bg-[#1A2330] text-[#3FA57C] border border-[#3FA57C]/40"
                 )}>
                   {isC2C ? 'C2C' : 'Full-Time'}
                 </span>
@@ -232,8 +232,8 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
                       className={cn(
                         "flex items-center gap-1 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border shrink-0",
                         aiInfo.isClaude
-                          ? "bg-amber-500/10 text-amber-700 border-amber-300/60 dark:text-amber-400"
-                          : "bg-emerald-500/10 text-emerald-700 border-emerald-300/60 dark:text-emerald-400"
+                          ? "bg-[#1A2330] text-[#D9A441] border-[#D9A441]/40"
+                          : "bg-[#1A2330] text-[#3FA57C] border-[#3FA57C]/40"
                       )}
                       title={`Generated with ${aiInfo.displayName} (${aiInfo.fullModel})`}
                     >
@@ -243,7 +243,7 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
                   )
                 })()}
               </div>
-              <p className="text-[11.5px] text-slate-500 truncate">
+              <p className="text-[11.5px] text-[#9FACBE] truncate">
                 {template.name} • {profileData?.full_name || 'Executive Candidate'}
               </p>
             </div>
@@ -252,30 +252,30 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
           {/* Right Controls */}
           <div className="flex items-center gap-2 shrink-0">
             {/* ATS Score Meter Pill */}
-            <div className="hidden sm:flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200/80 px-2.5 py-1 rounded-lg text-[12px] font-bold">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <div className="hidden sm:flex items-center gap-1.5 bg-[#1A2330] text-[#3FA57C] border border-[#3FA57C]/40 px-2.5 py-1 rounded-lg text-[12px] font-bold">
+              <span className="w-2 h-2 rounded-full bg-[#3FA57C] animate-pulse"></span>
               <span>{atsScore > 0 ? `${atsScore}% ATS Match` : 'Analyzing...'}</span>
             </div>
 
             {/* Zoom Controls */}
-            <div className="hidden md:flex items-center gap-0.5 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700">
+            <div className="hidden md:flex items-center gap-0.5 bg-[#1A2330] p-0.5 rounded-lg border border-[#26313F]">
               <button
                 onClick={() => setZoom(z => Math.max(Number((z - 0.1).toFixed(1)), 0.6))}
-                className="p-1 hover:bg-white dark:hover:bg-slate-700 rounded text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
+                className="p-1 hover:bg-[#222E3F] rounded text-[#9FACBE] hover:text-[#E4EAF2] transition-all cursor-pointer"
                 title="Zoom Out"
               >
                 <ZoomOut className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => setZoom(1)}
-                className="px-2 py-0.5 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:text-slate-900 transition-colors cursor-pointer"
+                className="px-2 py-0.5 text-[11px] font-bold text-[#E4EAF2] hover:text-white transition-colors cursor-pointer"
                 title="Reset Zoom"
               >
                 {zoom === 1 ? 'Fit' : `${Math.round(zoom * 100)}%`}
               </button>
               <button
                 onClick={() => setZoom(z => Math.min(Number((z + 0.1).toFixed(1)), 1.5))}
-                className="p-1 hover:bg-white dark:hover:bg-slate-700 rounded text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
+                className="p-1 hover:bg-[#222E3F] rounded text-[#9FACBE] hover:text-[#E4EAF2] transition-all cursor-pointer"
                 title="Zoom In"
               >
                 <ZoomIn className="w-3.5 h-3.5" />
@@ -286,9 +286,9 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
             <Button
               onClick={handlePrint}
               disabled={loading || isExportingPdf}
-              className="h-8.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-sm"
+              className="h-8.5 px-3 rounded-lg bg-[#1A2330] hover:bg-[#222E3F] text-[#E4EAF2] hover:text-white border border-[#26313F] text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-sm"
             >
-              {isExportingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+              {isExportingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5 text-[#3FA57C]" />}
               <span>PDF</span>
             </Button>
             {/* Download Word */}
@@ -296,9 +296,9 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
               onClick={handleDownloadDocx}
               disabled={loading || isExportingDocx}
               variant="outline"
-              className="h-8.5 px-3 rounded-lg border-blue-200 text-blue-700 bg-blue-50 hover:bg-blue-100 text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs"
+              className="h-8.5 px-3 rounded-lg border-[#26313F] text-[#E4EAF2] bg-[#1A2330] hover:bg-[#222E3F] text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs"
             >
-              {isExportingDocx ? <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" /> : <FileText className="w-3.5 h-3.5 text-blue-600" />}
+              {isExportingDocx ? <Loader2 className="w-3.5 h-3.5 animate-spin text-[#3FA57C]" /> : <FileText className="w-3.5 h-3.5 text-[#3FA57C]" />}
               <span>Word</span>
             </Button>
 
@@ -312,19 +312,19 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
                   router.push(`/dashboard/create?id=${resume.id}`)
                 }
               }}
-              className="h-8.5 px-3 rounded-lg bg-primary hover:bg-primary/90 text-white text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-sm"
+              className="h-8.5 px-3 rounded-lg bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-sm"
             >
-              <Edit3 className="w-3.5 h-3.5" />
+              <Edit3 className="w-3.5 h-3.5 text-[#D9A441]" />
               <span className="hidden lg:inline">Edit Resume</span>
             </Button>
 
             {/* Close */}
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors ml-1 cursor-pointer"
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-[#9FACBE] hover:text-[#E4EAF2] hover:bg-[#1A2330] border border-[#26313F] transition-colors ml-1 cursor-pointer"
               title="Close Preview (Esc)"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -332,7 +332,7 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
         {/* Canvas Body */}
         <div
           ref={containerRef}
-          className="flex-1 bg-slate-200/70 dark:bg-slate-950 p-4 sm:p-6 overflow-y-auto overflow-x-hidden flex flex-col items-center justify-start shadow-inner scrollbar-thin"
+          className="flex-1 bg-[#0D131B] p-4 sm:p-6 overflow-y-auto overflow-x-hidden flex flex-col items-center justify-start shadow-inner scrollbar-thin"
         >
           {loading ? (
             <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-slate-500 gap-3">
