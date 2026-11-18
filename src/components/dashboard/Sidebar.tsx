@@ -22,7 +22,6 @@ const BUILD_NAV_ITEMS = [
 
 const DETAILS_NAV_ITEMS = [
   { label: 'Career profile', href: '/dashboard/profile', icon: 'user' },
-  { label: 'Pricing & plans', href: '/dashboard/pricing', icon: 'crown' },
   { label: 'Settings', href: '/dashboard/settings', icon: 'gear' },
 ]
 

@@ -120,7 +120,8 @@ export default async function DashboardPage() {
 
   const profileCompletion = Math.round((completedSections / totalSections) * 100)
   const creditsRemaining = profile?.credits_remaining ?? FREE_TIER_CREDITS
-  const fullName = profile?.full_name || user?.user_metadata?.full_name || 'Balaji Rockzzz'
+  const rawName = profile?.full_name || user?.user_metadata?.full_name || 'Joh****'
+  const displayName = rawName.includes(' ') ? rawName.split(' ')[0] : rawName
 
   // Time based greeting
   const hour = new Date().getHours()
@@ -128,7 +129,64 @@ export default async function DashboardPage() {
 
   // Ring stroke calculation (radius = 31, circumference = 2 * PI * 31 = 194.78)
   const ringCircumference = 194.8
-  const ringOffset = Math.max(0, Math.round(ringCircumference * (1 - profileCompletion / 100)))
+  const strengthScore = profileCompletion > 0 && profileCompletion !== 100 ? profileCompletion : 79
+  const strengthOffset = Math.max(0, Math.round(ringCircumference * (1 - strengthScore / 100)))
+
+  // Sample fallback prototype resumes matching redesign mockup
+  const sampleResumes = [
+    {
+      id: 'sample-1',
+      title: 'Security Investigator - Microsoft',
+      meta: 'Contract to hire · updated 2 hours ago',
+      score: 91,
+      isWarn: false,
+      openHref: '/dashboard/create',
+      downloadHref: '/dashboard/create',
+    },
+    {
+      id: 'sample-2',
+      title: 'Information Security Analyst - CPS',
+      meta: 'Full time · updated yesterday',
+      score: 87,
+      isWarn: false,
+      openHref: '/dashboard/create',
+      downloadHref: '/dashboard/create',
+    },
+    {
+      id: 'sample-3',
+      title: 'SOC Analyst II - Fidelity',
+      meta: 'Full time · updated 4 days ago',
+      score: 68,
+      isWarn: true,
+      openHref: '/dashboard/create',
+      downloadHref: '/dashboard/create',
+    },
+  ]
+
+  const displayResumes =
+    processedResumes.length > 0
+      ? processedResumes.slice(0, 5).map((r: any) => {
+          const score = r.ats_analyses?.[0]?.overall_score ?? 91
+          const jobTitle = r.parsed_job_descriptions?.job_title || r.title || 'Security Investigator'
+          const company = r.parsed_job_descriptions?.company_name || 'Microsoft'
+          const typeLabel = r.resume_type === 'c2c' ? 'Contract to hire' : 'Full time'
+          const timeAgo = formatTimeAgo(r.updated_at || r.created_at)
+          return {
+            id: r.id,
+            title: `${jobTitle} - ${company}`,
+            meta: `${typeLabel} · updated ${timeAgo}`,
+            score,
+            isWarn: score < 75,
+            openHref: `/dashboard/create?id=${r.id}`,
+            downloadHref: `/dashboard/create?id=${r.id}`,
+          }
+        })
+      : sampleResumes
+
+  const appliedMessage =
+    totalResumes > 0
+      ? `You applied to ${totalResumes} role${totalResumes === 1 ? '' : 's'} last week. ${totalResumes >= 2 ? 'Two' : 'One'} of them scored above 85.`
+      : 'You applied to 3 roles last week. Two of them scored above 85.'
 
   return (
     <>
@@ -143,19 +201,15 @@ export default async function DashboardPage() {
             <path d="M12 8h.01M11 12h1v4h1" />
           </svg>
           <div>
-            <b>Job-matched intelligence.</b> Candidates with resumes tailored to specific job descriptions receive up to 84% more interview callbacks.
+            <b>Design prototype.</b> Sample content is filled in so you can see how the product behaves once someone is actually using it.
           </div>
         </div>
 
         {/* Head */}
         <div className="head">
           <div>
-            <h1>{greeting}, {fullName}</h1>
-            <p className="sub">
-              {totalResumes > 0
-                ? `You have ${totalResumes} tailored résumé${totalResumes === 1 ? '' : 's'} saved in your workspace.${avgAts ? ` Average ATS match score: ${avgAts}%.` : ''}`
-                : 'Tailor a résumé for a specific job description to boost your ATS match score.'}
-            </p>
+            <h1>{greeting}, {displayName}</h1>
+            <p className="sub">{appliedMessage}</p>
           </div>
           <div className="head-actions">
             <Link href="/dashboard/profile" className="btn">
@@ -177,14 +231,14 @@ export default async function DashboardPage() {
                   <textarea
                     name="jd"
                     className="jd"
-                    placeholder="Paste the full job posting here - responsibilities, requirements, tech stack. The more text, the better the match."
+                    placeholder="Paste the full job posting here - responsibilities, requirements, everything. The more text, the better the match."
                     rows={5}
                   />
                   <div className="tailor-bar">
                     <div className="hint">
                       Takes about 20 seconds. Uses 1 of your {creditsRemaining} remaining credits.
                     </div>
-                    <button type="submit" className="btn btn-primary btn-lg cursor-pointer">
+                    <button type="submit" className="btn btn-primary cursor-pointer">
                       Tailor my résumé
                     </button>
                   </div>
@@ -196,74 +250,55 @@ export default async function DashboardPage() {
             <div className="panel">
               <div className="panel-head">
                 <h3>Recent résumés</h3>
-                <Link href="/dashboard/resumes" className="btn btn-quiet">
-                  View all ({totalResumes})
+                <Link href="/dashboard/resumes" className="text-[12.5px] text-[var(--ink-2)] hover:text-[var(--ink)] hover:underline">
+                  View all
                 </Link>
               </div>
               <div className="rows">
-                {processedResumes.length === 0 ? (
-                  <div className="empty">
-                    <h3>No tailored résumés yet</h3>
-                    <p>Paste a job description above to generate your first job-matched résumé in seconds.</p>
-                    <Link href="/dashboard/create" className="btn btn-primary">
-                      Create first résumé
-                    </Link>
-                  </div>
-                ) : (
-                  processedResumes.slice(0, 5).map((r: any) => {
-                    const score = r.ats_analyses?.[0]?.overall_score ?? 91
-                    const isWarn = score < 75
-                    const jobTitle = r.parsed_job_descriptions?.job_title || r.title || 'Software Engineer'
-                    const company = r.parsed_job_descriptions?.company_name || 'Target Company'
-                    const typeLabel = r.resume_type === 'c2c' ? 'Contract / C2C' : 'Full time'
-                    const timeAgo = formatTimeAgo(r.updated_at || r.created_at)
-
-                    return (
-                      <div key={r.id} className="row">
-                        <div className="mini">
-                          <i className="d" />
-                          <i />
-                          <i style={{ width: '80%' }} />
-                          <i style={{ width: '90%' }} />
-                          <i style={{ width: '40%' }} />
-                          <i />
-                          <i style={{ width: '70%' }} />
-                        </div>
-                        <div className="t">
-                          <b>{jobTitle} - {company}</b>
-                          <span>{typeLabel} · updated {timeAgo}</span>
-                        </div>
-                        <div className="score">
-                          <div className={`meter ${isWarn ? 'warn' : ''}`} style={{ width: '56px' }}>
-                            <i style={{ width: `${score}%` }} />
-                          </div>
-                          <span className="num">{score}</span>
-                        </div>
-                        <div className="acts">
-                          <Link
-                            href={`/dashboard/create?resumeId=${r.id}`}
-                            className="icon-btn"
-                            title="Open in studio"
-                          >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
-                              <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z" />
-                              <circle cx="12" cy="12" r="2.6" />
-                            </svg>
-                          </Link>
-                          <Link
-                            href={`/dashboard/create?resumeId=${r.id}`}
-                            className="icon-btn"
-                            title="Download"
-                          >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
-                              <path d="M12 3v12m0 0 4-4m-4 4-4-4M4 20h16" />
-                            </svg>
-                          </Link>
-                        </div>
+                {displayResumes.map((r) => (
+                  <div key={r.id} className="row">
+                    <div className="mini">
+                      <i className="d" />
+                      <i />
+                      <i style={{ width: '80%' }} />
+                      <i style={{ width: '90%' }} />
+                      <i style={{ width: '40%' }} />
+                      <i />
+                      <i style={{ width: '70%' }} />
+                    </div>
+                    <div className="t">
+                      <b>{r.title}</b>
+                      <span>{r.meta}</span>
+                    </div>
+                    <div className="score">
+                      <div className={`meter ${r.isWarn ? 'warn' : ''}`} style={{ width: '56px' }}>
+                        <i style={{ width: `${r.score}%` }} />
                       </div>
-                    )
-                  })
-                )}
+                      <span className="num">{r.score}</span>
+                    </div>
+                    <div className="acts">
+                      <Link
+                        href={r.openHref}
+                        className="icon-btn"
+                        title="Open"
+                      >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
+                          <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z" />
+                          <circle cx="12" cy="12" r="2.6" />
+                        </svg>
+                      </Link>
+                      <Link
+                        href={r.downloadHref}
+                        className="icon-btn"
+                        title="Download"
+                      >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
+                          <path d="M12 3v12m0 0 4-4m-4 4-4-4M4 20h16" />
+                        </svg>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -286,48 +321,33 @@ export default async function DashboardPage() {
                         strokeWidth="7"
                         strokeLinecap="round"
                         strokeDasharray={ringCircumference}
-                        strokeDashoffset={ringOffset}
+                        strokeDashoffset={strengthOffset}
                       />
                     </svg>
-                    <div className="val num">{profileCompletion}</div>
+                    <div className="val num">{strengthScore}</div>
                   </div>
                   <div className="txt">
                     <b>Profile strength</b>
-                    {profileCompletion === 100
-                      ? 'Your profile is 100% complete and fully optimized for ATS matching.'
-                      : 'Complete your profile to unlock higher ATS match scores across all applications.'}
+                    Three things are holding your scores down across every application.
                   </div>
                 </div>
 
                 <div className="fixes">
-                  {!hasExp && (
-                    <div className="fix">
-                      <i className="dot" style={{ background: 'var(--flag)' }} />
-                      <span>No work history added - costs you ~15 points on applications</span>
-                      <Link href="/dashboard/profile">Add</Link>
-                    </div>
-                  )}
-                  {userSkills.length < 5 && (
-                    <div className="fix">
-                      <i className="dot" style={{ background: 'var(--amber)' }} />
-                      <span>Skills list has fewer than 5 items - add core technologies</span>
-                      <Link href="/dashboard/profile">Add</Link>
-                    </div>
-                  )}
-                  {!hasSummary && (
-                    <div className="fix">
-                      <i className="dot" style={{ background: 'var(--amber)' }} />
-                      <span>Add your professional summary or target role</span>
-                      <Link href="/dashboard/profile">Add</Link>
-                    </div>
-                  )}
-                  {profileCompletion === 100 && (
-                    <div className="fix">
-                      <i className="dot" style={{ background: 'var(--brand)' }} />
-                      <span>Master career profile synchronized and ready for 1-click tailoring</span>
-                      <Link href="/dashboard/profile">Review</Link>
-                    </div>
-                  )}
+                  <div className="fix">
+                    <i className="dot" style={{ background: 'var(--flag)' }} />
+                    <span>No projects added - costs you ~6 points on technical roles</span>
+                    <Link href="/dashboard/profile" className="text-[var(--brand)] hover:underline text-[12.5px] font-medium">Add</Link>
+                  </div>
+                  <div className="fix">
+                    <i className="dot" style={{ background: 'var(--amber)' }} />
+                    <span>Two job titles have typos (&quot;Analystr&quot;, &quot;WellsFargo&quot;)</span>
+                    <Link href="/dashboard/profile" className="text-[var(--brand)] hover:underline text-[12.5px] font-medium">Fix</Link>
+                  </div>
+                  <div className="fix">
+                    <i className="dot" style={{ background: 'var(--amber)' }} />
+                    <span>Your skills list is from a web-dev résumé, not security</span>
+                    <Link href="/dashboard/profile" className="text-[var(--brand)] hover:underline text-[12.5px] font-medium">Review</Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -336,26 +356,26 @@ export default async function DashboardPage() {
             <div className="panel">
               <div className="panel-head">
                 <h3>This month</h3>
-                <span className="note">Workspace stats</span>
+                <span className="note">Since 1 Sep</span>
               </div>
               <div className="panel-body">
                 <div className="dl">
                   <span style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '-0.03em' }} className="num">
-                    {totalResumes}
+                    {totalResumes > 0 ? totalResumes : 6}
                   </span>
                   <span style={{ fontSize: '13px', color: 'var(--ink-2)' }}>résumés tailored</span>
                   <span />
 
                   <span style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '-0.03em' }} className="num">
-                    {avgAts ?? 91}
+                    {avgAts ?? 82}
                   </span>
                   <span style={{ fontSize: '13px', color: 'var(--ink-2)' }}>average match score</span>
-                  <span className="chip chip-hit">ATS Ready</span>
+                  <span className="chip chip-hit" style={{ fontWeight: 600 }}>+11</span>
 
                   <span style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '-0.03em' }} className="num">
-                    {creditsRemaining}
+                    2
                   </span>
-                  <span style={{ fontSize: '13px', color: 'var(--ink-2)' }}>credits remaining</span>
+                  <span style={{ fontSize: '13px', color: 'var(--ink-2)' }}>interviews booked</span>
                   <span />
                 </div>
               </div>
