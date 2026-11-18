@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
@@ -118,8 +119,10 @@ export function Sidebar({
   const [creditsUsed, setCreditsUsed] = useState<number>(0)
   const [maxCredits, setMaxCredits] = useState<number>(FREE_TIER_CREDITS)
   const [isPro, setIsPro] = useState<boolean>(false)
+  const [mounted, setMounted] = useState<boolean>(false)
 
   useEffect(() => {
+    setMounted(true)
     async function loadUserData() {
       try {
         const supabase = createClient()
@@ -186,12 +189,13 @@ export function Sidebar({
 
   return (
     <>
-      {/* Mobile Backdrop */}
-      {isMobileOpen && (
+      {/* Mobile Backdrop (Portalled so it never disrupts CSS grid layout) */}
+      {mounted && typeof document !== 'undefined' && isMobileOpen && createPortal(
         <div
           className="md:hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 transition-opacity"
           onClick={() => setIsMobileOpen?.(false)}
-        />
+        />,
+        document.body
       )}
 
       {/* ========================================================================= */}
@@ -199,8 +203,9 @@ export function Sidebar({
       {/* ========================================================================= */}
       <aside
         className={cn(
-          'rail w-[236px] bg-[#151E2B] text-[#C3CCD9] flex flex-col p-3.5 fixed top-0 bottom-0 left-0 z-50 transition-transform duration-300 ease-in-out select-none',
-          isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+          'rail select-none z-50',
+          'max-md:fixed max-md:top-0 max-md:bottom-0 max-md:left-0 max-md:w-[260px] max-md:transition-transform max-md:duration-300',
+          isMobileOpen ? 'max-md:translate-x-0' : 'max-md:-translate-x-full'
         )}
       >
         {/* Mobile Close Button */}
@@ -317,8 +322,8 @@ export function Sidebar({
         </div>
       </aside>
 
-      {/* Logout Confirmation Modal */}
-      {showLogoutModal && (
+      {/* Logout Confirmation Modal (Portalled so it never disrupts CSS grid layout) */}
+      {mounted && typeof document !== 'undefined' && showLogoutModal && createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div
             className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
@@ -351,7 +356,8 @@ export function Sidebar({
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ========================================================================= */}

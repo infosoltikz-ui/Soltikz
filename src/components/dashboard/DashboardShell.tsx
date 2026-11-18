@@ -9,15 +9,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-[var(--desk,#E7EBF0)] text-[var(--ink,#16202E)] relative overflow-x-clip font-sans selection:bg-[#0A6E4E] selection:text-white">
-      {/* ========================================================================= */}
-      {/* ACTIVE REDESIGN PROTOTYPE SHELL */}
-      {/* ========================================================================= */}
-      <Sidebar
-        isMobileOpen={isMobileOpen}
-        setIsMobileOpen={setIsMobileOpen}
-      />
-
+    <div className="min-h-screen bg-[var(--desk,#E7EBF0)] text-[var(--ink,#16202E)]">
       {/* Sleek Mobile Header Utility Bar */}
       <div className="md:hidden fixed top-0 inset-x-0 h-14 bg-[#151E2B] text-white z-40 px-4 flex items-center justify-between border-b border-[#26313F]">
         <div className="flex items-center gap-3">
@@ -45,9 +37,16 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         </Link>
       </div>
 
-      {/* Main Canvas Area */}
-      <div className="min-w-0 pt-14 md:pt-0 md:pl-[236px] min-h-screen">
-        <main className="canvas mx-auto">
+      {/* Grid container: rail sidebar (236px) and canvas (1fr) */}
+      <div className="app">
+        {/* Rail Sidebar */}
+        <Sidebar
+          isMobileOpen={isMobileOpen}
+          setIsMobileOpen={setIsMobileOpen}
+        />
+
+        {/* Main Canvas Area */}
+        <main className="canvas max-md:pt-16">
           {children}
         </main>
       </div>
