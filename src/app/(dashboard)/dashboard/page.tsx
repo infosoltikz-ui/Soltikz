@@ -3,6 +3,7 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { FREE_TIER_CREDITS } from '@/utils/pricingPlans'
 import { ProfileStrengthGauge } from '@/components/dashboard/ProfileStrengthGauge'
+import { DashboardGreeting } from '@/components/dashboard/DashboardGreeting'
 
 // Previous UI Component Imports (Kept for instant revert)
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader'
@@ -208,12 +209,9 @@ export default async function DashboardPage() {
 
         {/* Head */}
         <div className="head">
-          <div>
-            <h1>{greeting}, {displayName}</h1>
-            <p className="sub">{appliedMessage}</p>
-          </div>
+          <DashboardGreeting name={displayName} subtitle={appliedMessage} />
           <div className="head-actions">
-            <Link href="/dashboard/profile" className="btn">
+            <Link href="/dashboard/profile" className="btn" style={{ color: 'var(--ink)' }}>
               Edit career profile
             </Link>
           </div>
@@ -226,17 +224,18 @@ export default async function DashboardPage() {
             {/* Tailor Card */}
             <div className="tailor">
               <div className="tailor-top">
-                <h2>Paste a job description</h2>
-                <p>Your profile is already saved. Drop in the posting and you will get a résumé written for that specific role.</p>
+                <h2 style={{ color: 'var(--ink)' }}>Paste a job description</h2>
+                <p style={{ color: 'var(--ink-2)' }}>Your profile is already saved. Drop in the posting and you will get a résumé written for that specific role.</p>
                 <form action="/dashboard/create" method="GET">
                   <textarea
                     name="jd"
                     className="jd"
                     placeholder="Paste the full job posting here - responsibilities, requirements, everything. The more text, the better the match."
                     rows={5}
+                    style={{ color: 'var(--ink)', backgroundColor: 'var(--panel-2)', borderColor: 'var(--line)' }}
                   />
                   <div className="tailor-bar">
-                    <div className="hint">
+                    <div className="hint" style={{ color: 'var(--ink-3)' }}>
                       Takes about 20 seconds. Uses 1 of your {creditsRemaining} remaining credits.
                     </div>
                     <button type="submit" className="btn btn-primary cursor-pointer">
@@ -250,8 +249,8 @@ export default async function DashboardPage() {
             {/* Recent Resumes Panel */}
             <div className="panel">
               <div className="panel-head">
-                <h3>Recent résumés</h3>
-                <Link href="/dashboard/resumes" className="text-[12.5px] text-[var(--ink-2)] hover:text-[var(--ink)] hover:underline">
+                <h3 style={{ color: 'var(--ink)' }}>Recent résumés</h3>
+                <Link href="/dashboard/resumes" className="text-[12.5px] hover:underline" style={{ color: 'var(--ink-2)' }}>
                   View all
                 </Link>
               </div>
@@ -268,20 +267,21 @@ export default async function DashboardPage() {
                       <i style={{ width: '70%' }} />
                     </div>
                     <div className="t">
-                      <b>{r.title}</b>
-                      <span>{r.meta}</span>
+                      <b style={{ color: 'var(--ink)' }}>{r.title}</b>
+                      <span style={{ color: 'var(--ink-3)' }}>{r.meta}</span>
                     </div>
                     <div className="score">
                       <div className={`meter ${r.isWarn ? 'warn' : ''}`} style={{ width: '56px' }}>
                         <i style={{ width: `${r.score}%` }} />
                       </div>
-                      <span className="num">{r.score}</span>
+                      <span className="num" style={{ color: 'var(--ink)' }}>{r.score}</span>
                     </div>
                     <div className="acts">
                       <Link
                         href={r.openHref}
                         className="icon-btn"
                         title="Open"
+                        style={{ color: 'var(--ink-3)' }}
                       >
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
                           <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z" />
@@ -292,6 +292,7 @@ export default async function DashboardPage() {
                         href={r.downloadHref}
                         className="icon-btn"
                         title="Download"
+                        style={{ color: 'var(--ink-3)' }}
                       >
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
                           <path d="M12 3v12m0 0 4-4m-4 4-4-4M4 20h16" />
@@ -312,26 +313,28 @@ export default async function DashboardPage() {
                 <div className="strength">
                   <ProfileStrengthGauge score={strengthScore} />
                   <div className="txt">
-                    <b>Profile strength</b>
-                    Three things are holding your scores down across every application.
+                    <b style={{ color: 'var(--ink)' }}>Profile strength</b>
+                    <span style={{ color: 'var(--ink-2)' }}>
+                      Three things are holding your scores down across every application.
+                    </span>
                   </div>
                 </div>
 
                 <div className="fixes">
                   <div className="fix">
                     <i className="dot" style={{ background: 'var(--flag)' }} />
-                    <span>No projects added - costs you ~6 points on technical roles</span>
-                    <Link href="/dashboard/profile" className="text-[var(--brand)] hover:underline text-[12.5px] font-medium">Add</Link>
+                    <span style={{ color: 'var(--ink-2)' }}>No projects added - costs you ~6 points on technical roles</span>
+                    <Link href="/dashboard/profile" className="hover:underline text-[12.5px] font-medium" style={{ color: 'var(--brand)' }}>Add</Link>
                   </div>
                   <div className="fix">
                     <i className="dot" style={{ background: 'var(--amber)' }} />
-                    <span>Two job titles have typos (&quot;Analystr&quot;, &quot;WellsFargo&quot;)</span>
-                    <Link href="/dashboard/profile" className="text-[var(--brand)] hover:underline text-[12.5px] font-medium">Fix</Link>
+                    <span style={{ color: 'var(--ink-2)' }}>Two job titles have typos (&quot;Analystr&quot;, &quot;WellsFargo&quot;)</span>
+                    <Link href="/dashboard/profile" className="hover:underline text-[12.5px] font-medium" style={{ color: 'var(--brand)' }}>Fix</Link>
                   </div>
                   <div className="fix">
                     <i className="dot" style={{ background: 'var(--amber)' }} />
-                    <span>Your skills list is from a web-dev résumé, not security</span>
-                    <Link href="/dashboard/profile" className="text-[var(--brand)] hover:underline text-[12.5px] font-medium">Review</Link>
+                    <span style={{ color: 'var(--ink-2)' }}>Your skills list is from a web-dev résumé, not security</span>
+                    <Link href="/dashboard/profile" className="hover:underline text-[12.5px] font-medium" style={{ color: 'var(--brand)' }}>Review</Link>
                   </div>
                 </div>
               </div>
@@ -340,24 +343,24 @@ export default async function DashboardPage() {
             {/* This Month Activity Panel */}
             <div className="panel">
               <div className="panel-head">
-                <h3>This month</h3>
-                <span className="note">Since 1 Sep</span>
+                <h3 style={{ color: 'var(--ink)' }}>This month</h3>
+                <span className="note" style={{ color: 'var(--ink-3)' }}>Since 1 Sep</span>
               </div>
               <div className="panel-body">
                 <div className="dl">
-                  <span style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '-0.03em' }} className="num">
+                  <span style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)' }} className="num">
                     {totalResumes > 0 ? totalResumes : 6}
                   </span>
                   <span style={{ fontSize: '13px', color: 'var(--ink-2)' }}>résumés tailored</span>
                   <span />
 
-                  <span style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '-0.03em' }} className="num">
+                  <span style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)' }} className="num">
                     {avgAts ?? 82}
                   </span>
                   <span style={{ fontSize: '13px', color: 'var(--ink-2)' }}>average match score</span>
                   <span className="chip chip-hit" style={{ fontWeight: 600 }}>+11</span>
 
-                  <span style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '-0.03em' }} className="num">
+                  <span style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)' }} className="num">
                     2
                   </span>
                   <span style={{ fontSize: '13px', color: 'var(--ink-2)' }}>interviews booked</span>

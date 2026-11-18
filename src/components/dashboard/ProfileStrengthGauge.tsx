@@ -112,3 +112,4 @@ export function ProfileStrengthGauge({ score = 79 }: ProfileStrengthGaugeProps) 
     </div>
   )
 }
+
