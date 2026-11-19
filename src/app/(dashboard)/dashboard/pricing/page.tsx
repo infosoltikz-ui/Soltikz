@@ -17,9 +17,10 @@ export default function PricingPage() {
         actions={
           <Link
             href="/dashboard/settings?tab=billing"
-            className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-[#F8FAFC] hover:border-slate-300 text-slate-700 hover:text-[#0F2744] text-[13px] font-bold shadow-xs transition-all"
+            className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-[#26313F] bg-[#151D28] hover:bg-[#1A2330] hover:border-[#3FA57C]/40 text-[#E4EAF2] text-[13px] font-bold shadow-xs transition-all cursor-pointer"
+            style={{ color: '#E4EAF2' }}
           >
-            <CreditCard className="w-4 h-4 text-[#0F2744]" />
+            <CreditCard className="w-4 h-4 text-[#3FA57C]" />
             <span>Manage Billing</span>
           </Link>
         }

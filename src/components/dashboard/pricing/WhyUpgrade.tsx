@@ -6,32 +6,32 @@ const BENEFITS = [
     title: 'Unlimited Tailoring',
     description:
       'Generate a fresh, role-aligned resume version for every job application without watching credit counters.',
-    accent: 'border-t-[#0F2744]',
-    iconStyle: 'bg-[#EEF4FA] text-[#0F2744]',
+    accent: 'border-t-[#3FA57C]',
+    iconStyle: 'bg-[#123227] text-[#3FA57C]',
   },
   {
     icon: ShieldCheck,
     title: 'Full ATS Diagnostics',
     description:
       'See required vs preferred skill gaps, exact missing keywords, and instant section fixes to beat screening filters.',
-    accent: 'border-t-[#059669]',
-    iconStyle: 'bg-emerald-50 text-[#059669]',
+    accent: 'border-t-[#3FA57C]',
+    iconStyle: 'bg-[#123227] text-[#3FA57C]',
   },
   {
     icon: Sparkles,
     title: 'Cover Letters & Word Export',
     description:
       'Export clean Word (.docx) files alongside matching cover letters tailored directly to each hiring company.',
-    accent: 'border-t-[#F59E0B]',
-    iconStyle: 'bg-[#FEF3C7] text-[#D97706]',
+    accent: 'border-t-[#D9A441]',
+    iconStyle: 'bg-[#2E2616] text-[#D9A441]',
   },
   {
     icon: BriefcaseBusiness,
     title: 'Interview Strategy Pack',
     description:
       'Unlock personalized STAR stories, role-specific technical Q&A, HR prompts, and company pitch talking points.',
-    accent: 'border-t-[#0F2744]',
-    iconStyle: 'bg-slate-100 text-slate-700',
+    accent: 'border-t-[#3FA57C]',
+    iconStyle: 'bg-[#1A2330] text-[#8FD3B6]',
   },
 ]
 
@@ -39,10 +39,10 @@ export function WhyUpgrade() {
   return (
     <section className="mb-14">
       <div className="text-center mb-7">
-        <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+        <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78859A]">
           Career ROI
         </span>
-        <h2 className="text-2xl font-black text-slate-900 mt-1 tracking-tight">
+        <h2 className="text-2xl font-black text-[#E4EAF2] mt-1 tracking-tight" style={{ color: '#E4EAF2' }}>
           Why Upgrade to Pro?
         </h2>
       </div>
@@ -53,17 +53,17 @@ export function WhyUpgrade() {
           return (
             <div
               key={item.title}
-              className={`bg-white rounded-2xl border border-slate-200/90 border-t-4 ${item.accent} p-6 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col`}
+              className={`bg-[#151D28] rounded-2xl border border-[#26313F] border-t-4 ${item.accent} p-6 shadow-xs hover:border-[#3FA57C]/40 hover:-translate-y-0.5 transition-all duration-200 flex flex-col`}
             >
               <div
                 className={`w-11 h-11 rounded-xl ${item.iconStyle} flex items-center justify-center mb-4`}
               >
                 <Icon className="w-5 h-5" strokeWidth={2.2} />
               </div>
-              <h3 className="text-[15.5px] font-extrabold text-slate-900 mb-2">
+              <h3 className="text-[15.5px] font-extrabold text-[#E4EAF2] mb-2" style={{ color: '#E4EAF2' }}>
                 {item.title}
               </h3>
-              <p className="text-[13px] text-slate-500 font-medium leading-relaxed">
+              <p className="text-[13px] text-[#9FACBE] font-medium leading-relaxed" style={{ color: '#9FACBE' }}>
                 {item.description}
               </p>
             </div>
