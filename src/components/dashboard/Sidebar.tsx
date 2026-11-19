@@ -216,23 +216,18 @@ export function Sidebar({
           <X className="w-4 h-4" />
         </button>
 
-        {/* Brand Header */}
+        {/* Brand Header with Official Logo */}
         <Link
           href="/dashboard"
           onClick={() => setIsMobileOpen?.(false)}
-          className="brand flex items-center gap-2.5 px-1.5 pt-1 pb-5 group"
+          className="brand flex items-center px-1 pt-1 pb-5 group"
         >
-          <div className="brand-mark w-[30px] h-[30px] rounded-[7px] shrink-0 bg-gradient-to-br from-[#0A6E4E] via-[#0D8A62] to-[#D9791F] grid place-items-center text-white font-bold text-[13px] tracking-tight shadow-sm">
-            R1
-          </div>
-          <div>
-            <div className="brand-name text-white font-semibold text-[14.5px] tracking-tight leading-tight group-hover:text-emerald-400 transition-colors">
-              ResumeBuilderOne
-            </div>
-            <div className="brand-sub text-[#6F7D8F] text-[11px] leading-tight">
-              From résumé to dream job
-            </div>
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/LOGO-dark.png"
+            alt="ResumeBuilderOne"
+            className="h-11 w-auto max-w-[200px] object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+          />
         </Link>
 
         {/* Group 1: Build */}
