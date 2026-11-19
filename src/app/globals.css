@@ -368,7 +368,7 @@ a{color:inherit; text-decoration:none}
 .num{font-variant-numeric:tabular-nums}
 
 /* ---------- shell ---------- */
-.app{display:grid; grid-template-columns:236px 1fr; min-height:100vh}
+.app{display:grid; grid-template-columns:244px 1fr; min-height:100vh}
 .rail{
   background:var(--rail); color:var(--rail-ink);
   display:flex; flex-direction:column; padding:18px 14px 14px;

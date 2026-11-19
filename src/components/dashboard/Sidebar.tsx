@@ -220,13 +220,13 @@ export function Sidebar({
         <Link
           href="/dashboard"
           onClick={() => setIsMobileOpen?.(false)}
-          className="brand flex items-center px-1 pt-1 pb-5 group"
+          className="brand flex items-center px-0.5 pt-0.5 pb-5 group"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/LOGO-dark.png"
             alt="ResumeBuilderOne"
-            className="h-11 w-auto max-w-[200px] object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+            className="h-14 sm:h-16 w-auto max-w-[212px] object-contain object-left transition-transform duration-200 group-hover:scale-[1.02]"
           />
         </Link>
 
