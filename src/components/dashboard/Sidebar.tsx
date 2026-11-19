@@ -154,8 +154,12 @@ export function Sidebar({
   }, [])
 
   const handleLogout = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
+    try {
+      const supabase = createClient()
+      await supabase.auth.signOut({ scope: 'local' }).catch(() => {})
+    } catch {
+      // Silently ignore signout network errors
+    }
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem('soltkiz_session_active')
       sessionStorage.removeItem('soltkiz_session_start')

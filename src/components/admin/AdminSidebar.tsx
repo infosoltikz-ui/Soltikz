@@ -24,8 +24,12 @@ export function AdminSidebar() {
 
   const handleLogout = async () => {
     setIsLoggingOut(true)
-    const supabase = createClient()
-    await supabase.auth.signOut()
+    try {
+      const supabase = createClient()
+      await supabase.auth.signOut({ scope: 'local' }).catch(() => {})
+    } catch {
+      // Silently ignore
+    }
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem('soltkiz_session_active')
       sessionStorage.removeItem('soltkiz_session_start')

@@ -25,9 +25,9 @@ export function SessionManager() {
     const triggerLogout = async (reason: 'expired' | 'session_ended') => {
       try {
         const supabase = createClient()
-        await supabase.auth.signOut()
-      } catch (err) {
-        console.error('Error signing out:', err)
+        await supabase.auth.signOut({ scope: 'local' }).catch(() => {})
+      } catch {
+        // Silently ignore any signOut network issues
       }
       if (typeof window !== 'undefined') {
         sessionStorage.removeItem('soltkiz_session_active')
@@ -51,19 +51,16 @@ export function SessionManager() {
       return
     }
 
-    // 2. Check if user left the website / closed tab (sessionStorage was cleared)
-    // If cookie was set in the last 15 seconds, treat it as a fresh login handshake
-    const recentAuth = cookieSessionStart && (Date.now() - parseInt(cookieSessionStart, 10) < 15000)
-
-    if (!sessionActive && !recentAuth) {
-      // User closed tab/browser and reopened directly to dashboard -> require re-login
+    // 2. If cookieSessionStart is missing, session ended
+    if (!cookieSessionStart) {
       triggerLogout('session_ended')
       return
     }
 
-    if (!sessionActive && recentAuth) {
-      sessionStorage.setItem('soltkiz_session_active', 'true')
-      sessionStorage.setItem('soltkiz_session_start', cookieSessionStart!)
+    // Sync session state to sessionStorage
+    sessionStorage.setItem('soltkiz_session_active', 'true')
+    if (!sessionStorage.getItem('soltkiz_session_start')) {
+      sessionStorage.setItem('soltkiz_session_start', cookieSessionStart)
     }
 
     // 3. Check 3-hour expiry on mount
