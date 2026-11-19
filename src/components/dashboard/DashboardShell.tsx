@@ -22,9 +22,9 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           </button>
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#0A6E4E] via-[#0D8A62] to-[#D9791F] grid place-items-center text-white font-bold text-xs">
-              R1
+              SZ
             </div>
-            <span className="font-semibold text-sm text-white">ResumeBuilderOne</span>
+            <span className="font-semibold text-sm text-white">Soltikz Resume Builder</span>
           </div>
         </div>
 

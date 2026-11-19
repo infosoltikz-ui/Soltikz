@@ -99,7 +99,7 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
           const { data: prof } = await supabase.from('profiles').select('*').eq('id', user.id).single()
           if (prof) {
             const pInfo = prof.master_resume_data?.personal_info || {}
-            const fullName = prof.full_name || `${pInfo.firstName || ''} ${pInfo.lastName || ''}`.trim() || pInfo.fullName || 'Balaji Rockzzz'
+            const fullName = prof.full_name || `${pInfo.firstName || ''} ${pInfo.lastName || ''}`.trim() || pInfo.fullName || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Candidate'
             userProfile = {
               ...prof,
               full_name: fullName,

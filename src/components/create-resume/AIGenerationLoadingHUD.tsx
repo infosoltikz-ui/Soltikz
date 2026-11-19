@@ -146,7 +146,7 @@ export function AIGenerationLoadingHUD({
         </div>
 
         {/* Main Split Animation Body */}
-        <div className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-12 gap-7 items-center bg-gradient-to-b from-slate-50/50 to-white">
+        <div className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-12 gap-7 items-center bg-[#101722]">
           {/* Left: Animated Live Page Assembly Visual */}
           <div className="md:col-span-5 flex flex-col items-center">
             {/* Floating Keywords Weaving Into Sheet */}
@@ -155,7 +155,7 @@ export function AIGenerationLoadingHUD({
                 <span
                   key={`${token}-${idx}`}
                   style={{ animationDelay: `${idx * 0.7}s` }}
-                  className="px-2.5 py-0.5 rounded-full bg-[#EEF4FA] border border-[#0F2744]/15 text-[10.5px] font-bold text-[#0F2744] truncate max-w-[110px] animate-[weave-drop_2.8s_ease-in-out_infinite]"
+                  className="px-2.5 py-0.5 rounded-full bg-[#1A2330] border border-[#26313F] text-[10.5px] font-bold text-[#8FD3B6] truncate max-w-[110px] animate-[weave-drop_2.8s_ease-in-out_infinite]"
                 >
                   {token}
                 </span>
@@ -166,7 +166,7 @@ export function AIGenerationLoadingHUD({
             <div className="w-full max-w-[240px] relative animate-[float-slow_4s_ease-in-out_infinite]">
               <div
                 aria-hidden="true"
-                className="absolute inset-x-3 -bottom-2 h-full rounded-xl bg-slate-200/70 border border-slate-200"
+                className="absolute inset-x-3 -bottom-2 h-full rounded-xl bg-[#151D28] border border-[#26313F]"
               />
               <div className="relative bg-white rounded-xl border border-slate-200/90 shadow-md p-4 space-y-3">
                 {/* Header Block (Stage 1) */}
@@ -279,9 +279,9 @@ export function AIGenerationLoadingHUD({
           {/* Right: Continuous Connected Milestone Rail */}
           <div className="md:col-span-7 relative pl-1">
             {/* Vertical Connecting Track */}
-            <div className="absolute left-[15px] top-4 bottom-4 w-0.5 bg-slate-200 rounded-full overflow-hidden">
+            <div className="absolute left-[15px] top-4 bottom-4 w-0.5 bg-[#26313F] rounded-full overflow-hidden">
               <div
-                className="w-full bg-gradient-to-b from-emerald-500 via-[#0F2744] to-[#F59E0B] transition-all duration-700 ease-out"
+                className="w-full bg-gradient-to-b from-[#0A6E4E] via-[#3FA57C] to-[#D9A441] transition-all duration-700 ease-out"
                 style={{ height: `${railHeightPercent}%` }}
               />
             </div>
@@ -331,19 +331,19 @@ export function AIGenerationLoadingHUD({
                         {stage.title}
                       </h4>
                       {stage.active && (
-                        <span className="text-[10.5px] font-bold text-[#D97706] bg-[#FEF3C7] px-2 py-0.5 rounded-full">
+                        <span className="text-[10.5px] font-bold text-[#D9A441] bg-[#2E2616] border border-[#D9A441]/30 px-2 py-0.5 rounded-full">
                           In Progress
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-slate-500 mt-0.5 leading-snug">
+                    <p className="text-xs text-[#9FACBE] mt-0.5 leading-snug">
                       {stage.detail}
                     </p>
 
                     {/* Active Indeterminate Shimmer Track */}
                     {stage.active && (
-                      <div className="mt-2.5 h-1 w-full bg-slate-100 rounded-full overflow-hidden">
-                        <div className="h-full w-2/5 bg-gradient-to-r from-[#0F2744] to-[#F59E0B] rounded-full animate-[bar-indeterminate_1.6s_ease-in-out_infinite]" />
+                      <div className="mt-2.5 h-1 w-full bg-[#1A2330] rounded-full overflow-hidden">
+                        <div className="h-full w-2/5 bg-gradient-to-r from-[#0A6E4E] to-[#D9A441] rounded-full animate-[bar-indeterminate_1.6s_ease-in-out_infinite]" />
                       </div>
                     )}
                   </div>

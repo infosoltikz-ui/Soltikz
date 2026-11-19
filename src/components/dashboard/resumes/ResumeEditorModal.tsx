@@ -217,8 +217,8 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
 
         // 1. Fetch user profile
         let userProfile: any = {
-          full_name: 'Balaji Rockzzz',
-          email: '',
+          full_name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Candidate',
+          email: user?.email || '',
           phone: '',
           location: '',
           linkedin: '',
@@ -228,7 +228,7 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
           const { data: prof } = await supabase.from('profiles').select('*').eq('id', user.id).single()
           if (prof) {
             const pInfo = prof.master_resume_data?.personal_info || {}
-            const fullName = prof.full_name || `${pInfo.firstName || ''} ${pInfo.lastName || ''}`.trim() || pInfo.fullName || 'Balaji Rockzzz'
+            const fullName = prof.full_name || `${pInfo.firstName || ''} ${pInfo.lastName || ''}`.trim() || pInfo.fullName || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Candidate'
             userProfile = {
               ...prof,
               full_name: fullName,
@@ -984,7 +984,7 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
                       value={profileData.full_name || ''}
                       onChange={(e) => setProfileData((p: any) => ({ ...p, full_name: e.target.value }))}
                       className="w-full px-3 py-2 text-[13px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-primary focus:outline-hidden"
-                      placeholder="e.g. Balaji Rockzzz"
+                      placeholder="e.g. Alex Johnson"
                     />
                   </div>
 
@@ -1041,7 +1041,7 @@ export function ResumeEditorModal({ resume, onClose, onSaved }: ResumeEditorModa
                         value={profileData.linkedin || ''}
                         onChange={(e) => setProfileData((p: any) => ({ ...p, linkedin: e.target.value }))}
                         className="w-full px-3 py-2 text-[13px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-primary focus:outline-hidden"
-                        placeholder="linkedin.com/in/balajirockzzz"
+                        placeholder="linkedin.com/in/username"
                       />
                     </div>
                   </div>

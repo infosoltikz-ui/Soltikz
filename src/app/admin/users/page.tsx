@@ -52,9 +52,9 @@ export default function UserManagementPage() {
         <footer className="mt-12 pt-8 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-[12px] font-bold text-slate-400">
           <div>Soltikz Admin Portal v1.0</div>
           <div className="flex gap-4">
-            <a href="#" className="hover:text-slate-600 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-slate-600 transition-colors">Terms</a>
-            <a href="#" className="hover:text-slate-600 transition-colors">Support</a>
+            <a href="/privacy" className="hover:text-slate-600 transition-colors">Privacy Policy</a>
+            <a href="/terms" className="hover:text-slate-600 transition-colors">Terms</a>
+            <a href="/contact" className="hover:text-slate-600 transition-colors">Support</a>
           </div>
         </footer>
       </div>

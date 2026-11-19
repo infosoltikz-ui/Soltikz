@@ -217,28 +217,28 @@ export function ATSScoreMeter({
   if (!atsData) {
     if (variant === 'compact') {
       return (
-        <div className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full border shadow-2xs transition-all bg-slate-100 border-slate-200 animate-pulse", className)}>
-          <span className="text-[11px] font-bold text-slate-400">Analyzing ATS...</span>
+        <div className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full border shadow-2xs transition-all bg-[#1A2330] border-[#26313F] animate-pulse", className)}>
+          <span className="text-[11px] font-bold text-[#78859A]">Analyzing ATS...</span>
         </div>
       )
     }
     return (
-       <div className={cn("bg-white rounded-3xl p-6 border shadow-xl flex items-center justify-center min-h-[400px]", className)}>
-          <span className="text-slate-400 font-bold animate-pulse">Running deterministic ATS analysis...</span>
+       <div className={cn("bg-[#151D28] rounded-3xl p-6 border border-[#26313F] shadow-xl flex items-center justify-center min-h-[400px]", className)}>
+          <span className="text-[#78859A] font-bold animate-pulse">Running deterministic ATS analysis...</span>
        </div>
     )
   }
 
   if (variant === 'compact') {
     return (
-      <div className={cn("inline-flex items-center gap-2 px-3 py-1.5 rounded-full border shadow-2xs transition-all bg-white border-slate-200/90", className)}>
+      <div className={cn("inline-flex items-center gap-2 px-3 py-1.5 rounded-full border shadow-2xs transition-all bg-[#151D28] border-[#26313F]", className)}>
         <div className="relative w-5 h-5 flex items-center justify-center shrink-0">
           <svg className="w-5 h-5 -rotate-90 transform" viewBox="0 0 24 24">
             <circle
               cx="12"
               cy="12"
               r="9"
-              className="stroke-slate-200"
+              className="stroke-[#26313F]"
               strokeWidth="2.5"
               fill="transparent"
             />
@@ -257,8 +257,8 @@ export function ATSScoreMeter({
           </svg>
         </div>
         <div className="flex items-center gap-1.5 whitespace-nowrap">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">ATS Match:</span>
-          <span className={cn("text-[12.5px] font-black tabular-nums", displayScore >= 75 ? "text-[#059669]" : displayScore >= 50 ? "text-[#D97706]" : "text-rose-600")}>
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[#9FACBE]">ATS Match:</span>
+          <span className={cn("text-[12.5px] font-black tabular-nums", displayScore >= 75 ? "text-[#3FA57C]" : displayScore >= 50 ? "text-[#D9A441]" : "text-rose-400")}>
             {targetScore}/100
           </span>
         </div>
@@ -267,8 +267,8 @@ export function ATSScoreMeter({
   }
 
   return (
-    <div className={cn("bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden transition-all w-full", className)}>
-      <div className="p-5 sm:p-6 border-b border-slate-200/80 bg-[#0F2744] text-white relative overflow-hidden">
+    <div className={cn("bg-[#151D28] rounded-3xl border border-[#26313F] shadow-sm overflow-hidden transition-all w-full", className)}>
+      <div className="p-5 sm:p-6 border-b border-[#26313F] bg-[#101722] text-white relative overflow-hidden">
         <div
           className="pointer-events-none absolute -top-16 -right-16 w-56 h-56 rounded-full opacity-20"
           style={{ background: 'radial-gradient(circle, #F59E0B 0%, transparent 70%)' }}
@@ -314,25 +314,25 @@ export function ATSScoreMeter({
         </div>
       </div>
 
-      <div className="p-4 sm:p-5 bg-[#F8FAFC]">
+      <div className="p-4 sm:p-5 bg-[#0D131B]">
         
         {/* Navigation Tabs */}
-        <div className="flex bg-slate-200/60 p-1 rounded-xl mb-4">
+        <div className="flex bg-[#151D28] border border-[#26313F] p-1 rounded-xl mb-4">
           <button 
             onClick={() => setActiveTab('metrics')}
-            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'metrics' ? "bg-white text-[#0F2744] shadow-xs" : "text-slate-500 hover:text-slate-800")}
+            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'metrics' ? "bg-[#26313F] text-[#E4EAF2] shadow-xs" : "text-[#78859A] hover:text-[#E4EAF2]")}
           >
             Diagnostic Metrics
           </button>
           <button 
             onClick={() => setActiveTab('missing')}
-            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'missing' ? "bg-white text-[#0F2744] shadow-xs" : "text-slate-500 hover:text-slate-800")}
+            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'missing' ? "bg-[#26313F] text-[#E4EAF2] shadow-xs" : "text-[#78859A] hover:text-[#E4EAF2]")}
           >
             Missing ({missingKw.length})
           </button>
           <button 
             onClick={() => setActiveTab('evidence')}
-            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'evidence' ? "bg-white text-[#0F2744] shadow-xs" : "text-slate-500 hover:text-slate-800")}
+            className={cn("flex-1 text-[12px] font-extrabold py-2 px-2 text-center rounded-lg transition-all cursor-pointer", activeTab === 'evidence' ? "bg-[#26313F] text-[#E4EAF2] shadow-xs" : "text-[#78859A] hover:text-[#E4EAF2]")}
           >
             Evidence Log
           </button>
@@ -341,8 +341,8 @@ export function ATSScoreMeter({
         {activeTab === 'metrics' && (
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-[13px] font-extrabold text-slate-900 flex items-center gap-2">
-                <Layers className="w-4 h-4 text-[#0F2744]" />
+              <h4 className="text-[13px] font-extrabold text-[#E4EAF2] flex items-center gap-2">
+                <Layers className="w-4 h-4 text-[#3FA57C]" />
                 <span>Diagnostic Breakdown</span>
               </h4>
             </div>
@@ -352,14 +352,14 @@ export function ATSScoreMeter({
                 const displayLabel = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
                 const { textColor, barColor } = getScoreBadge(val);
                 return (
-                  <div key={key} className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
-                    <div className="flex items-center justify-between text-[12px] font-bold text-slate-800 mb-1.5 gap-2">
+                  <div key={key} className="p-3 bg-[#151D28] rounded-xl border border-[#26313F] shadow-2xs">
+                    <div className="flex items-center justify-between text-[12px] font-bold text-[#E4EAF2] mb-1.5 gap-2">
                       <span className="truncate" title={displayLabel}>{displayLabel}</span>
                       <span className={cn("font-extrabold shrink-0 tabular-nums", textColor)}>
                         {val}%
                       </span>
                     </div>
-                    <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="w-full h-2 bg-[#1A2330] rounded-full overflow-hidden">
                       <div 
                         className={cn("h-full rounded-full bg-gradient-to-r transition-all duration-1000 ease-out", barColor)}
                         style={{ width: `${Math.max(val === 0 ? 0 : 3, Math.min(100, val))}%` }}
@@ -376,11 +376,11 @@ export function ATSScoreMeter({
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 space-y-4">
             {missingKw.length > 0 ? (
               <>
-                <div className="bg-white rounded-xl border border-slate-200/80 p-4 shadow-2xs space-y-2.5">
+                <div className="bg-[#151D28] rounded-xl border border-[#26313F] p-4 shadow-2xs space-y-2.5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Target className="w-4 h-4 text-rose-500" />
-                      <h4 className="text-[13px] font-extrabold text-slate-900">
+                      <Target className="w-4 h-4 text-rose-400" />
+                      <h4 className="text-[13px] font-extrabold text-[#E4EAF2]">
                         Missing Requirements
                       </h4>
                     </div>
@@ -391,14 +391,14 @@ export function ATSScoreMeter({
                       <button
                         key={i}
                         onClick={() => handleCopy(kw, `kw-${i}`)}
-                        className="inline-flex items-center gap-1.5 text-[11.5px] font-bold px-2.5 py-1 rounded-lg bg-rose-50 text-rose-800 border border-rose-200/80 hover:bg-rose-100 transition-all cursor-pointer"
+                        className="inline-flex items-center gap-1.5 text-[11.5px] font-bold px-2.5 py-1 rounded-lg bg-rose-950/40 text-rose-300 border border-rose-800/40 hover:bg-rose-900/40 transition-all cursor-pointer"
                         title="Click to copy keyword"
                       >
                         <span>{kw}</span>
                         {copiedKey === `kw-${i}` ? (
-                          <Check className="w-3 h-3 text-rose-600 shrink-0" />
+                          <Check className="w-3 h-3 text-rose-400 shrink-0" />
                         ) : (
-                          <Copy className="w-3 h-3 text-rose-600/60 shrink-0" />
+                          <Copy className="w-3 h-3 text-rose-400/70 shrink-0" />
                         )}
                       </button>
                     ))}
@@ -407,7 +407,7 @@ export function ATSScoreMeter({
                   {missingKw.length > 10 && (
                     <button
                       onClick={() => setShowAllKeywords(!showAllKeywords)}
-                      className="text-[11.5px] font-bold text-rose-600 hover:underline flex items-center gap-1 mt-1 cursor-pointer"
+                      className="text-[11.5px] font-bold text-rose-400 hover:underline flex items-center gap-1 mt-1 cursor-pointer"
                     >
                       {showAllKeywords ? (
                         <>Show Less <ChevronUp className="w-3.5 h-3.5" /></>
@@ -418,23 +418,23 @@ export function ATSScoreMeter({
                   )}
                 </div>
 
-                <div className="bg-[#EEF4FA] rounded-xl border border-slate-200/80 p-4 shadow-2xs space-y-2">
+                <div className="bg-[#151D28] rounded-xl border border-[#26313F] p-4 shadow-2xs space-y-2">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-[#D97706]" />
-                    <h4 className="text-[13px] font-extrabold text-[#0F2744]">
+                    <Sparkles className="w-4 h-4 text-[#D9A441]" />
+                    <h4 className="text-[13px] font-extrabold text-[#E4EAF2]">
                       Action Plan
                     </h4>
                   </div>
-                  <p className="text-[12px] text-slate-600 leading-relaxed font-medium">
+                  <p className="text-[12px] text-[#9FACBE] leading-relaxed font-medium">
                     To raise your ATS score further, integrate truthful matching keywords into your skills or bullets via Master Profile.
                   </p>
                 </div>
               </>
             ) : (
-              <div className="bg-white rounded-xl border border-emerald-200/80 p-6 flex flex-col items-center justify-center text-center shadow-2xs">
-                <CheckCircle2 className="w-8 h-8 text-[#059669] mb-2" />
-                <h4 className="text-[14px] font-bold text-slate-900">No Missing Keywords</h4>
-                <p className="text-[12px] text-slate-500 mt-1">Your resume covers all required and preferred skills.</p>
+              <div className="bg-[#151D28] rounded-xl border border-[#3FA57C]/40 p-6 flex flex-col items-center justify-center text-center shadow-2xs">
+                <CheckCircle2 className="w-8 h-8 text-[#3FA57C] mb-2" />
+                <h4 className="text-[14px] font-bold text-[#E4EAF2]">No Missing Keywords</h4>
+                <p className="text-[12px] text-[#9FACBE] mt-1">Your resume covers all required and preferred skills.</p>
               </div>
             )}
           </div>
@@ -442,10 +442,10 @@ export function ATSScoreMeter({
 
         {activeTab === 'evidence' && (
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 space-y-4">
-            <div className="bg-white rounded-xl border border-slate-200/80 p-4 shadow-2xs space-y-2.5">
+            <div className="bg-[#151D28] rounded-xl border border-[#26313F] p-4 shadow-2xs space-y-2.5">
               <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="w-4 h-4 text-[#0F2744]" />
-                <h4 className="text-[13px] font-extrabold text-slate-900">
+                <Sparkles className="w-4 h-4 text-[#3FA57C]" />
+                <h4 className="text-[13px] font-extrabold text-[#E4EAF2]">
                   Scoring Evidence Log
                 </h4>
               </div>
@@ -453,15 +453,15 @@ export function ATSScoreMeter({
               {evidence.length > 0 ? (
                 <div className="space-y-2.5">
                   {evidence.map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-2.5 text-[12.5px] font-medium text-slate-700 bg-[#F8FAFC] p-3 rounded-xl border border-slate-100">
-                      <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0 mt-0.5" />
+                    <div key={idx} className="flex items-start gap-2.5 text-[12.5px] font-medium text-[#E4EAF2] bg-[#101722] p-3 rounded-xl border border-[#26313F]">
+                      <CheckCircle2 className="w-4 h-4 text-[#3FA57C] shrink-0 mt-0.5" />
                       <span className="leading-relaxed">{item}</span>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="text-center p-4">
-                  <p className="text-[12px] text-slate-500">No scoring evidence available.</p>
+                  <p className="text-[12px] text-[#78859A]">No scoring evidence available.</p>
                 </div>
               )}
             </div>

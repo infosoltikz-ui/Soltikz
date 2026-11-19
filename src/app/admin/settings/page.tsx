@@ -61,9 +61,9 @@ export default function SettingsPage() {
             <footer className="mt-12 pt-8 pb-32 border-t border-slate-100 flex items-center justify-between gap-4 text-[12px] font-bold text-slate-400">
               <div>Soltikz Admin Portal v1.0 • Settings Module</div>
               <div className="flex gap-4">
-                <a href="#" className="hover:text-slate-600 transition-colors">Documentation</a>
-                <a href="#" className="hover:text-slate-600 transition-colors">API Reference</a>
-                <a href="#" className="hover:text-slate-600 transition-colors">Support Ticket</a>
+                <a href="/admin/settings" className="hover:text-slate-600 transition-colors">Documentation</a>
+                <a href="/admin/settings" className="hover:text-slate-600 transition-colors">API Reference</a>
+                <a href="/contact" className="hover:text-slate-600 transition-colors">Support Ticket</a>
               </div>
             </footer>
             

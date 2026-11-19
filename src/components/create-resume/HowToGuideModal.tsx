@@ -140,10 +140,10 @@ export function HowToGuideModal({ open, onClose }: GuideModalProps) {
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[88vh] flex flex-col overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative bg-[#151D28] rounded-2xl shadow-2xl w-full max-w-3xl max-h-[88vh] flex flex-col overflow-hidden border border-[#26313F] animate-in fade-in zoom-in-95 duration-200">
 
         {/* Header */}
-        <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 px-6 pt-6 pb-5 shrink-0">
+        <div className="relative bg-gradient-to-br from-[#0B111A] via-[#101722] to-[#142334] px-6 pt-6 pb-5 shrink-0 border-b border-[#26313F]">
           <div className="absolute inset-0 opacity-10"
             style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }}
           />
@@ -156,7 +156,7 @@ export function HowToGuideModal({ open, onClose }: GuideModalProps) {
                 <span className="text-[11px] font-extrabold text-emerald-400 uppercase tracking-widest">AI Resume Suite</span>
               </div>
               <h2 className="text-[22px] font-black text-white leading-tight mb-1">How to Generate Your Resume</h2>
-              <p className="text-[13px] text-slate-300 font-medium">Complete guide - from setup to download in under 3 minutes.</p>
+              <p className="text-[13px] text-[#9FACBE] font-medium">Complete guide - from setup to download in under 3 minutes.</p>
             </div>
             <button
               onClick={onClose}
@@ -175,8 +175,8 @@ export function HowToGuideModal({ open, onClose }: GuideModalProps) {
                 className={cn(
                   'px-4 py-1.5 rounded-lg text-[12px] font-bold transition-all border',
                   tab === t
-                    ? 'bg-white text-slate-900 border-white/80 shadow-sm'
-                    : 'bg-white/10 text-slate-300 border-white/10 hover:bg-white/20'
+                    ? 'bg-[#26313F] text-white border-[#3FA57C]/40 shadow-sm'
+                    : 'bg-[#1A2330] text-[#9FACBE] border-[#26313F] hover:bg-[#222E3F]'
                 )}
               >
                 {t === 'guide' ? '📋 Step-by-Step Guide' : '💡 Pro Tips'}
@@ -186,30 +186,30 @@ export function HowToGuideModal({ open, onClose }: GuideModalProps) {
         </div>
 
         {/* Scrollable body */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-3 bg-slate-50/50">
+        <div className="flex-1 overflow-y-auto p-5 space-y-3 bg-[#0D131B]">
           {tab === 'guide' ? (
             FEATURES.map((feat) => {
               const Icon = feat.icon
               return (
                 <div
                   key={feat.step}
-                  className={cn('bg-white rounded-xl border p-4 flex gap-4 hover:shadow-sm transition-shadow', feat.border)}
+                  className="bg-[#151D28] rounded-xl border border-[#26313F] p-4 flex gap-4 hover:border-[#3FA57C]/30 transition-all"
                 >
                   {/* Step number + icon */}
                   <div className="shrink-0 flex flex-col items-center gap-1.5 pt-0.5">
                     <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center border', feat.bg, feat.border)}>
                       <Icon className={cn('w-5 h-5', feat.color)} />
                     </div>
-                    <span className="text-[10px] font-black text-slate-400 tracking-wider">{feat.step}</span>
+                    <span className="text-[10px] font-black text-[#78859A] tracking-wider">{feat.step}</span>
                   </div>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-[14px] font-black text-slate-900 mb-0.5">{feat.title}</h3>
-                    <p className="text-[12px] text-slate-500 font-medium leading-relaxed mb-2">{feat.desc}</p>
+                    <h3 className="text-[14px] font-black text-[#E4EAF2] mb-0.5">{feat.title}</h3>
+                    <p className="text-[12px] text-[#9FACBE] font-medium leading-relaxed mb-2">{feat.desc}</p>
                     <ul className="space-y-1">
                       {feat.bullets.map((b, i) => (
-                        <li key={i} className="flex items-start gap-1.5 text-[12px] text-slate-700 font-semibold">
+                        <li key={i} className="flex items-start gap-1.5 text-[12px] text-[#CFD7E2] font-semibold">
                           <CheckCircle2 className={cn('w-3.5 h-3.5 mt-0.5 shrink-0', feat.color)} />
                           {b}
                         </li>
@@ -221,22 +221,22 @@ export function HowToGuideModal({ open, onClose }: GuideModalProps) {
             })
           ) : (
             <div className="space-y-3">
-              <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-xl p-4 mb-2">
-                <p className="text-[13px] font-bold text-emerald-800">🚀 These tips will maximize your resume quality and ATS score.</p>
+              <div className="bg-[#123227]/40 border border-[#3FA57C]/30 rounded-xl p-4 mb-2">
+                <p className="text-[13px] font-bold text-[#8FD3B6]">🚀 These tips will maximize your resume quality and ATS score.</p>
               </div>
               {TIPS.map((tip, i) => {
                 const Icon = tip.icon
                 return (
-                  <div key={i} className="bg-white rounded-xl border border-slate-200 p-4 flex items-start gap-3 hover:shadow-sm transition-shadow">
-                    <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0">
-                      <Icon className="w-4.5 h-4.5 text-amber-500" />
+                  <div key={i} className="bg-[#151D28] rounded-xl border border-[#26313F] p-4 flex items-start gap-3 hover:border-[#3FA57C]/30 transition-all">
+                    <div className="w-9 h-9 rounded-xl bg-[#2E2616] border border-[#D9A441]/30 flex items-center justify-center shrink-0">
+                      <Icon className="w-4.5 h-4.5 text-[#D9A441]" />
                     </div>
-                    <p className="text-[13px] text-slate-700 font-semibold leading-relaxed pt-1.5">{tip.text}</p>
+                    <p className="text-[13px] text-[#E4EAF2] font-semibold leading-relaxed pt-1.5">{tip.text}</p>
                   </div>
                 )
               })}
-              <div className="bg-slate-900 rounded-xl p-4 mt-2">
-                <p className="text-[12px] text-slate-400 font-medium leading-relaxed">
+              <div className="bg-[#101722] border border-[#26313F] rounded-xl p-4 mt-2">
+                <p className="text-[12px] text-[#9FACBE] font-medium leading-relaxed">
                   💼 <span className="text-white font-bold">C2C Users:</span> Select the C2C resume type and a C2C template. The AI will use vendor-submission language, list the client company and contract duration, and format your environment/tech stack as a separate line per role.
                 </p>
               </div>
@@ -245,13 +245,13 @@ export function HowToGuideModal({ open, onClose }: GuideModalProps) {
         </div>
 
         {/* Footer */}
-        <div className="shrink-0 border-t border-slate-200 px-5 py-3.5 bg-white flex items-center justify-between gap-3">
-          <p className="text-[11.5px] text-slate-400 font-medium">
-            ✅ Your profile is pre-loaded. Just paste the JD and click <strong className="text-slate-700">Generate</strong>.
+        <div className="shrink-0 border-t border-[#26313F] px-5 py-3.5 bg-[#151D28] flex items-center justify-between gap-3">
+          <p className="text-[11.5px] text-[#78859A] font-medium">
+            ✅ Your profile is pre-loaded. Just paste the JD and click <strong className="text-[#E4EAF2]">Generate</strong>.
           </p>
           <button
             onClick={onClose}
-            className="flex items-center gap-1.5 h-9 px-5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[12px] font-bold rounded-xl shadow-md shadow-emerald-500/25 hover:shadow-lg hover:from-emerald-600 hover:to-teal-700 transition-all"
+            className="flex items-center gap-1.5 h-9 px-5 bg-[#0A6E4E] hover:bg-[#0D8A62] text-white text-[12px] font-bold rounded-xl shadow-sm transition-all"
           >
             Got it - Let's build
             <ArrowRight className="w-3.5 h-3.5" />

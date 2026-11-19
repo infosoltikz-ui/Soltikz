@@ -46,15 +46,15 @@ export function SelfPitchSection({ interviewPrep, isRegeneratingPrep, onRegenera
   const readingTimeMin = Math.max(1, Math.round((wordCount / 130) * 10) / 10)
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden animate-in fade-in duration-300">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-6 pt-5 pb-4 border-b border-slate-100">
+    <div className="bg-[#151D28] rounded-2xl border border-[#26313F] shadow-xs overflow-hidden animate-in fade-in duration-300">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-6 pt-5 pb-4 border-b border-[#26313F]">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#EEF4FA] flex items-center justify-center text-[#0F2744] shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-[#1A2330] border border-[#26313F] flex items-center justify-center text-[#3FA57C] shrink-0">
             <MessageSquare className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-[17px] font-black text-slate-900">Self Pitch Interview Guide</h3>
-            <p className="text-[12px] font-medium text-slate-500 mt-0.5">Your personalized elevator script tailored to this role</p>
+            <h3 className="text-[17px] font-black text-[#E4EAF2]">Self Pitch Interview Guide</h3>
+            <p className="text-[12px] font-medium text-[#9FACBE] mt-0.5">Your personalized elevator script tailored to this role</p>
           </div>
         </div>
 
@@ -62,9 +62,9 @@ export function SelfPitchSection({ interviewPrep, isRegeneratingPrep, onRegenera
           onClick={onRegeneratePrep}
           disabled={isRegeneratingPrep}
           variant="outline"
-          className="h-9 px-3.5 rounded-xl border-slate-200 text-[#0F2744] hover:bg-[#EEF4FA] shadow-2xs text-[12.5px] font-bold shrink-0 self-start sm:self-auto cursor-pointer"
+          className="h-9 px-3.5 rounded-xl border-[#26313F] text-[#E4EAF2] hover:bg-[#1A2330] shadow-2xs text-[12.5px] font-bold shrink-0 self-start sm:self-auto cursor-pointer"
         >
-          {isRegeneratingPrep ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <Sparkles className="w-3.5 h-3.5 text-[#D97706] mr-1.5" />}
+          {isRegeneratingPrep ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <Sparkles className="w-3.5 h-3.5 text-[#D9A441] mr-1.5" />}
           {isRegeneratingPrep ? 'Upgrading...' : 'Refresh Pitch'}
         </Button>
       </div>
@@ -72,29 +72,29 @@ export function SelfPitchSection({ interviewPrep, isRegeneratingPrep, onRegenera
       <div className="p-5 sm:p-6">
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-            <div className="flex items-center gap-2 text-[12px] text-slate-500 font-medium tabular-nums">
-              <Clock className="w-3.5 h-3.5 text-[#0F2744]" />
+            <div className="flex items-center gap-2 text-[12px] text-[#9FACBE] font-medium tabular-nums">
+              <Clock className="w-3.5 h-3.5 text-[#3FA57C]" />
               <span>~{readingTimeMin} min / {wordCount} words</span>
-              <span className="px-2.5 py-0.5 bg-[#EEF4FA] text-[#0F2744] rounded-full text-[10.5px] font-extrabold">
+              <span className="px-2.5 py-0.5 bg-[#1A2330] border border-[#26313F] text-[#8FD3B6] rounded-full text-[10.5px] font-extrabold">
                 {selfIntroFull.split('\n\n').filter(Boolean).length} paragraphs
               </span>
             </div>
             <button
               onClick={() => handleCopy(selfIntroFull, 'intro-full', 'Full intro copied!')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 hover:border-[#0F2744]/30 bg-[#F8FAFC] hover:bg-[#EEF4FA] text-[12px] font-bold text-slate-700 hover:text-[#0F2744] transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#26313F] hover:border-[#3FA57C]/40 bg-[#1A2330] hover:bg-[#222E3F] text-[12px] font-bold text-[#E4EAF2] transition-all cursor-pointer"
             >
-              {copiedKey === 'intro-full' ? <><Check className="w-3.5 h-3.5 text-[#059669]" /><span className="text-[#059669]">Copied!</span></> : <><Copy className="w-3.5 h-3.5" /><span>Copy Script</span></>}
+              {copiedKey === 'intro-full' ? <><Check className="w-3.5 h-3.5 text-[#3FA57C]" /><span className="text-[#3FA57C]">Copied!</span></> : <><Copy className="w-3.5 h-3.5" /><span>Copy Script</span></>}
             </button>
           </div>
           {selfIntroFull.split('\n\n').filter(Boolean).map((para: string, i: number) => (
-            <div key={i} className="flex items-start gap-3.5 p-4 rounded-xl bg-[#F8FAFC] border border-slate-200/70 hover:bg-white hover:border-[#0F2744]/25 transition-all">
-              <span className="w-6 h-6 rounded-lg bg-[#0F2744] text-white text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5 tabular-nums">{i + 1}</span>
-              <p className="text-[14px] text-slate-800 leading-[1.8] font-medium">{para}</p>
+            <div key={i} className="flex items-start gap-3.5 p-4 rounded-xl bg-[#101722] border border-[#26313F] hover:border-[#3FA57C]/30 transition-all">
+              <span className="w-6 h-6 rounded-lg bg-[#0A6E4E] text-white text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5 tabular-nums">{i + 1}</span>
+              <p className="text-[14px] text-[#CFD7E2] leading-[1.8] font-medium">{para}</p>
             </div>
           ))}
-          <div className="p-4 rounded-xl bg-[#FEF3C7]/60 border border-[#F59E0B]/30 flex items-start gap-2.5">
-            <Sparkles className="w-4 h-4 text-[#D97706] shrink-0 mt-0.5" />
-            <p className="text-[12.5px] text-slate-700 font-medium">Use this when asked <strong>&quot;Tell me about yourself&quot;</strong>. Each block frames who you are, key achievements, company alignment, and team impact.</p>
+          <div className="p-4 rounded-xl bg-[#2E2616]/40 border border-[#D9A441]/30 flex items-start gap-2.5">
+            <Sparkles className="w-4 h-4 text-[#D9A441] shrink-0 mt-0.5" />
+            <p className="text-[12.5px] text-[#E4EAF2] font-medium">Use this when asked <strong>&quot;Tell me about yourself&quot;</strong>. Each block frames who you are, key achievements, company alignment, and team impact.</p>
           </div>
         </div>
       </div>

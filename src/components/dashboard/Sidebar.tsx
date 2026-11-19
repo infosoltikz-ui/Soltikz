@@ -333,7 +333,7 @@ export function Sidebar({
                 <LogOut className="w-6 h-6 text-rose-400" strokeWidth={2} />
               </div>
               <h3 className="text-[17px] font-bold text-[#E4EAF2] tracking-tight mb-1.5" style={{ color: '#E4EAF2' }}>
-                Sign out of ResumeBuilderOne?
+                Sign out of Soltikz Resume Builder?
               </h3>
               <p className="text-[12.5px] text-[#9FACBE] font-medium leading-relaxed px-2" style={{ color: '#9FACBE' }}>
                 Your profile and tailored resumes are safely saved. You can sign back in anytime.

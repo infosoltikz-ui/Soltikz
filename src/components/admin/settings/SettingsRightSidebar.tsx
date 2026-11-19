@@ -64,7 +64,7 @@ export function SettingsRightSidebar() {
             </span>
           </div>
         </div>
-        <a href="#" className="mt-6 flex items-center justify-center gap-2 text-[12px] font-bold text-primary hover:underline">
+        <a href="/admin/settings" className="mt-6 flex items-center justify-center gap-2 text-[12px] font-bold text-primary hover:underline">
           View Changelog <ExternalLink className="w-3 h-3" />
         </a>
       </div>
