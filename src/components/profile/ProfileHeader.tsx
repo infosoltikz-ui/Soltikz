@@ -296,8 +296,8 @@ export function ProfileHeader({
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 mb-6">
-      {/* Left 7 Cols: Candidate Identity & Mode Switcher */}
-      <div className="xl:col-span-7 bg-[#151D28] rounded-2xl border border-[#26313F] shadow-xs p-5 sm:p-6 flex flex-col justify-between gap-4 hover:border-[#3A495C] transition-colors">
+      {/* Candidate Identity & Mode Switcher */}
+      <div className="xl:col-span-12 bg-[#151D28] rounded-2xl border border-[#26313F] shadow-xs p-5 sm:p-6 flex flex-col justify-between gap-4 hover:border-[#3A495C] transition-colors">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4 min-w-0">
             <div className="w-14 h-14 rounded-2xl bg-[#0A1017] text-[#D9A441] font-black text-lg flex items-center justify-center shrink-0 ring-4 ring-[#26313F] shadow-sm">
@@ -396,7 +396,7 @@ export function ProfileHeader({
         </div>
       </div>
 
-      {/* Right 5 Cols: Excel Data Import Card */}
+      {/* Bulk Excel Import Card (Commented out)
       <div className="xl:col-span-5 bg-[#151D28] rounded-2xl border border-[#26313F] shadow-xs p-5 sm:p-6 flex flex-col justify-between gap-4 hover:border-[#3A495C] transition-colors">
         <div className="flex items-start gap-3.5">
           <div className="w-11 h-11 rounded-2xl bg-[#123227] border border-[#3FA57C]/30 text-[#3FA57C] flex items-center justify-center shrink-0">
@@ -456,6 +456,7 @@ export function ProfileHeader({
           )}
         </div>
       </div>
+      */}
 
       {/* Excel Instructions Modal */}
       <ExcelTemplateModal
