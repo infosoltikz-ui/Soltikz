@@ -9,7 +9,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-[var(--desk,#E7EBF0)] text-[var(--ink,#16202E)]">
+    <div className="min-h-screen bg-[#0D131B] text-[#E4EAF2]">
       {/* Sleek Mobile Header Utility Bar */}
       <div className="md:hidden fixed top-0 inset-x-0 h-14 bg-[#151E2B] text-white z-40 px-4 flex items-center justify-between border-b border-[#26313F]">
         <div className="flex items-center gap-3">

@@ -125,7 +125,7 @@ export function CreateResumeHeader({
   return (
     <>
     <HowToGuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />
-    <header className="sticky top-0 z-40 bg-[#151D28]/95 backdrop-blur-md border-b border-[#26313F]">
+    <header className="sticky top-0 z-40 bg-[#151D28]/95 backdrop-blur-md border border-[#26313F] rounded-2xl mb-6 shadow-sm">
       <div className="max-w-[1540px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
         {/* Left: Back + Title */}

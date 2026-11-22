@@ -104,7 +104,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" data-theme="dark" style={{ colorScheme: 'dark' }} suppressHydrationWarning>
       <head>
         <meta name="google-site-verification" content="U3ySGlGG2fC3L4rUpVCAkRHi-6a8myCH2Y26qQ8tpME" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -112,7 +112,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet" />
         <JsonLd />
       </head>
-      <body className={`${inter.className} antialiased min-h-screen bg-background text-foreground`} suppressHydrationWarning>
+      <body className={`${inter.className} antialiased min-h-screen bg-[#0D131B] text-[#E4EAF2]`} suppressHydrationWarning>
         <Providers>
           {children}
         </Providers>

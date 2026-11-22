@@ -8,11 +8,13 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <DashboardShell>
-      <Suspense fallback={null}>
-        <SessionManager />
-      </Suspense>
-      {children}
-    </DashboardShell>
+    <div className="min-h-screen bg-[#0D131B] text-[#E4EAF2]">
+      <DashboardShell>
+        <Suspense fallback={null}>
+          <SessionManager />
+        </Suspense>
+        {children}
+      </DashboardShell>
+    </div>
   )
 }
