@@ -1,18 +1,13 @@
 'use client'
 
-import { useRef, useState } from 'react'
 import Link from 'next/link'
 import {
   CheckCircle2,
   Circle,
-  Loader2,
-  UploadCloud,
   ShieldCheck,
-  Sparkles,
   ArrowRight,
   FilePlus2,
 } from 'lucide-react'
-import { toast } from 'react-hot-toast'
 import { cn } from '@/utils/cn'
 
 export function ProfileSidebar({
@@ -24,37 +19,6 @@ export function ProfileSidebar({
   onImport?: (parsedData: any) => void
   onNavigateTab?: (tab: string) => void
 }) {
-  const [isImporting, setIsImporting] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    e.target.value = ''
-    if (!file) return
-
-    setIsImporting(true)
-    const toastId = toast.loading('Parsing LinkedIn PDF profile...')
-    try {
-      const formData = new FormData()
-      formData.append('file', file)
-
-      const res = await fetch('/api/ai/parse-linkedin-pdf', {
-        method: 'POST',
-        body: formData,
-      })
-      const data = await res.json()
-      if (!data.success) throw new Error(data.error || 'Failed to parse LinkedIn PDF')
-
-      onImport?.(data.parsed_data)
-      toast.success('LinkedIn profile imported - please review and save each section.', {
-        id: toastId,
-      })
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to import LinkedIn profile', { id: toastId })
-    } finally {
-      setIsImporting(false)
-    }
-  }
 
   const masterData = profile?.master_resume_data || {}
   const personalInfo = masterData?.personal_info || {}
@@ -104,14 +68,6 @@ export function ProfileSidebar({
 
   return (
     <div className="space-y-4 lg:sticky lg:top-6">
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="application/pdf"
-        className="hidden"
-        onChange={handleFileSelected}
-      />
-
       {/* Profile Strength Gauge Card */}
       <div className="bg-[#151D28] rounded-2xl border border-[#26313F] shadow-xs p-5 hover:border-[#3A495C] transition-colors">
         <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-[#26313F]">
@@ -212,41 +168,6 @@ export function ProfileSidebar({
             </button>
           ))}
         </div>
-      </div>
-
-      {/* LinkedIn PDF Quick Import Card */}
-      <div className="bg-[#151D28] rounded-2xl border border-[#26313F] shadow-xs p-5 hover:border-[#3A495C] transition-colors">
-        <div className="flex items-center gap-2.5 mb-2">
-          <div className="w-8 h-8 rounded-xl bg-[#2E2616] border border-[#D9A441]/40 text-[#D9A441] flex items-center justify-center shrink-0">
-            <Sparkles className="w-4 h-4" />
-          </div>
-          <h3 className="text-[13.5px] font-extrabold text-[#E4EAF2]">
-            LinkedIn PDF Import
-          </h3>
-        </div>
-
-        <p className="text-xs font-medium text-[#9FACBE] mb-3.5 leading-relaxed">
-          Export your LinkedIn profile as PDF (Resources &gt; Save to PDF) and drop it here to auto-fill work &amp; education.
-        </p>
-
-        <button
-          type="button"
-          disabled={isImporting}
-          onClick={() => fileInputRef.current?.click()}
-          className="w-full h-10 text-xs font-extrabold border border-[#26313F] bg-[#1A2330] hover:bg-[#0A6E4E] text-[#E4EAF2] hover:text-white rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-60 shadow-2xs"
-        >
-          {isImporting ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Parsing PDF...</span>
-            </>
-          ) : (
-            <>
-              <UploadCloud className="w-4 h-4 text-[#D9A441]" />
-              <span>Upload LinkedIn PDF</span>
-            </>
-          )}
-        </button>
       </div>
 
       {/* Next Step Studio CTA */}
