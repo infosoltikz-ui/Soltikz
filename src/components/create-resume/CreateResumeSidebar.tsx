@@ -70,7 +70,7 @@ export function CreateResumeSidebar({
 
   return (
     <div className="space-y-4">
-      {/* Live Tailoring Blueprint Card */}
+      {/* Live Tailoring Blueprint Card (Commented out)
       <div className="bg-[#151D28] rounded-2xl border border-[#26313F] shadow-sm p-5 sm:p-6 transition-all duration-300 hover:border-[#3A495C]">
         <div className="flex items-center justify-between gap-3 pb-4 mb-5 border-b border-[#26313F]">
           <div>
@@ -92,7 +92,6 @@ export function CreateResumeSidebar({
             </p>
           </div>
 
-          {/* Animated SVG Readiness Gauge */}
           <div className="relative w-12 h-12 flex items-center justify-center shrink-0">
             <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
               <circle
@@ -122,16 +121,13 @@ export function CreateResumeSidebar({
           </div>
         </div>
 
-        {/* Layered Interactive Target Document Preview */}
         <div className="relative group/card perspective-[900px]">
-          {/* Subtle offset back sheet for tactile paper depth */}
           <div
             aria-hidden="true"
             className="absolute inset-x-2 -bottom-1.5 h-full rounded-xl bg-[#1A2330]/80 border border-[#26313F] transition-transform duration-300 group-hover/card:translate-y-0.5"
           />
 
           <div className="relative rounded-xl border border-[#26313F] bg-[#1A2330] p-4 space-y-3.5 transition-transform duration-300 group-hover/card:-translate-y-0.5">
-            {/* Layer 1: Target Company & Role */}
             <div
               className={cn(
                 'rounded-xl border p-3 transition-all duration-300',
@@ -176,7 +172,6 @@ export function CreateResumeSidebar({
               </div>
             </div>
 
-            {/* Layer 2: Live JD Keyword Signals */}
             <div
               className={cn(
                 'rounded-xl border p-3 transition-all duration-300',
@@ -216,7 +211,6 @@ export function CreateResumeSidebar({
               )}
             </div>
 
-            {/* Layer 3: Active Architecture Config */}
             <div className="rounded-xl border border-[#26313F] bg-[#151D28] p-3 flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 min-w-0">
                 <div className="w-7 h-7 rounded-lg bg-[#0A6E4E] text-[#D9A441] flex items-center justify-center shrink-0">
@@ -241,6 +235,7 @@ export function CreateResumeSidebar({
           </div>
         </div>
       </div>
+      */}
 
       {/* Included Deliverables Summary */}
       <div className="bg-[#151D28] rounded-2xl border border-[#26313F] p-4 space-y-2.5">
