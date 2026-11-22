@@ -635,7 +635,7 @@ function CreateResumeContent() {
         } : undefined}
       />
 
-      <main className="px-4 sm:px-6 lg:px-8 pt-6">
+      <div className="w-full">
 
         {step === 1 && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -1050,7 +1050,7 @@ function CreateResumeContent() {
             })()}
           </div>
         )}
-      </main>
+      </div>
     </div>
   )
 }
