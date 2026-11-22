@@ -14,9 +14,9 @@ import { isPremiumPlan, FREE_TIER_CREDITS } from '@/utils/pricingPlans'
 
 const BUILD_NAV_ITEMS = [
   { label: 'Home', href: '/dashboard', icon: 'home' },
-  { label: 'Tailor a résumé', href: '/dashboard/create', icon: 'plus' },
+  { label: 'Tailor a resume', href: '/dashboard/create', icon: 'plus' },
   { label: 'Match report', href: '/dashboard/match-report', icon: 'clock' },
-  { label: 'My résumés', href: '/dashboard/resumes', icon: 'file' },
+  { label: 'My resumes', href: '/dashboard/resumes', icon: 'file' },
   { label: 'Cover letters', href: '/dashboard/cover-letters', icon: 'mail' },
 ]
 
@@ -275,7 +275,7 @@ export function Sidebar({
           <p className="text-[11.5px] text-[#8C99AB] mb-2.5 leading-snug">
             {isPro
               ? 'Full ATS matching and unlimited exports.'
-              : `${Math.max(0, maxCredits - creditsUsed)} tailored résumés left. Pro removes the cap and unlocks the full match report.`}
+              : `${Math.max(0, maxCredits - creditsUsed)} tailored resumes left. Pro removes the cap and unlocks the full match report.`}
           </p>
           {!isPro ? (
             <Link

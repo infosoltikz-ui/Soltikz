@@ -232,7 +232,7 @@ const CANDIDATE_PROFILES: CandidateProfile[] = [
       contact: 'Austin, TX • marcus.pm@email.com',
       summaryTitle: 'Summary',
       summaryText: 'Passionate and detail-oriented product manager with experience leading agile teams and delivering software projects on schedule.',
-      summaryFlaw: 'Cliché phrases ("passionate", "detail-oriented") without revenue or product KPIs',
+      summaryFlaw: 'Cliche phrases ("passionate", "detail-oriented") without revenue or product KPIs',
       expRole: 'Product Manager',
       expDate: '2021 - Present',
       expBullets: [

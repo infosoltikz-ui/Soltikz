@@ -276,10 +276,10 @@ export default async function DashboardPage() {
   // Dynamic Subtitle under Greeting
   const appliedMessage =
     totalResumes > 0
-      ? `You have ${totalResumes} tailored résumé${totalResumes === 1 ? '' : 's'} and ${jdsCount} targeted position${jdsCount === 1 ? '' : 's'} in your workspace.`
+      ? `You have ${totalResumes} tailored resume${totalResumes === 1 ? '' : 's'} and ${jdsCount} targeted position${jdsCount === 1 ? '' : 's'} in your workspace.`
       : jdsCount > 0
-        ? `You have ${jdsCount} targeted position${jdsCount === 1 ? '' : 's'} saved. Tailor a résumé to see your ATS score.`
-        : 'Paste a target job posting below to generate your first ATS-optimized résumé.'
+        ? `You have ${jdsCount} targeted position${jdsCount === 1 ? '' : 's'} saved. Tailor a resume to see your ATS score.`
+        : 'Paste a target job posting below to generate your first ATS-optimized resume.'
 
   const currentMonthLabel = new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 
@@ -313,7 +313,7 @@ export default async function DashboardPage() {
           <div style={{ color: 'var(--ink)' }}>
             {creditsRemaining === 0 ? (
               <>
-                <b>Free Plan:</b> You have 0 tailored résumé credits remaining.{' '}
+                <b>Free Plan:</b> You have 0 tailored resume credits remaining.{' '}
                 <Link href="/dashboard/pricing" className="underline font-semibold" style={{ color: 'var(--brand)' }}>
                   Upgrade to Pro
                 </Link>{' '}
@@ -321,7 +321,7 @@ export default async function DashboardPage() {
               </>
             ) : (
               <>
-                <b>AI Match Engine:</b> You have {creditsRemaining} credit{creditsRemaining === 1 ? '' : 's'} available. Tailoring your résumé directly to target job descriptions increases recruiter interview callbacks by up to 84%.
+                <b>AI Match Engine:</b> You have {creditsRemaining} credit{creditsRemaining === 1 ? '' : 's'} available. Tailoring your resume directly to target job descriptions increases recruiter interview callbacks by up to 84%.
               </>
             )}
           </div>
@@ -353,7 +353,7 @@ export default async function DashboardPage() {
                 className="text-[11px] font-semibold tracking-wider uppercase block mb-1 truncate"
                 style={{ color: 'var(--ink-3)' }}
               >
-                Tailored Résumés
+                Tailored Resumes
               </span>
               <div className="flex items-baseline gap-2">
                 <span
@@ -519,7 +519,7 @@ export default async function DashboardPage() {
             <div className="tailor">
               <div className="tailor-top">
                 <h2 style={{ color: 'var(--ink)' }}>Paste a job description</h2>
-                <p style={{ color: 'var(--ink-2)' }}>Your profile is already saved. Drop in the posting and you will get a résumé written for that specific role.</p>
+                <p style={{ color: 'var(--ink-2)' }}>Your profile is already saved. Drop in the posting and you will get a resume written for that specific role.</p>
                 <form action="/dashboard/create" method="GET">
                   <textarea
                     name="jd"
@@ -533,7 +533,7 @@ export default async function DashboardPage() {
                       Takes about 20 seconds. Uses 1 of your {creditsRemaining} remaining credits.
                     </div>
                     <button type="submit" className="btn btn-primary cursor-pointer">
-                      Tailor my résumé
+                      Tailor my resume
                     </button>
                   </div>
                 </form>
@@ -543,7 +543,7 @@ export default async function DashboardPage() {
             {/* Recent Resumes Panel */}
             <div className="panel">
               <div className="panel-head">
-                <h3 style={{ color: 'var(--ink)' }}>Recent résumés</h3>
+                <h3 style={{ color: 'var(--ink)' }}>Recent resumes</h3>
                 <Link href="/dashboard/resumes" className="text-[12.5px] hover:underline" style={{ color: 'var(--ink-2)' }}>
                   View all ({totalResumes})
                 </Link>
@@ -599,10 +599,10 @@ export default async function DashboardPage() {
                 ) : (
                   <div className="p-8 text-center flex flex-col items-center justify-center">
                     <p className="text-xs mb-3" style={{ color: 'var(--ink-2)' }}>
-                      No tailored résumés created yet.
+                      No tailored resumes created yet.
                     </p>
                     <Link href="/dashboard/create" className="btn btn-primary text-xs">
-                      Create your first tailored résumé
+                      Create your first tailored resume
                     </Link>
                   </div>
                 )}
@@ -621,7 +621,7 @@ export default async function DashboardPage() {
                     <b style={{ color: 'var(--ink)' }}>Profile strength</b>
                     <span style={{ color: 'var(--ink-2)' }}>
                       {strengthScore >= 95
-                        ? 'Your master profile is complete and optimized for AI résumé tailoring.'
+                        ? 'Your master profile is complete and optimized for AI resume tailoring.'
                         : 'Key profile additions will maximize your ATS keyword match score.'}
                     </span>
                   </div>
@@ -666,7 +666,7 @@ export default async function DashboardPage() {
                   <span style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)' }} className="num">
                     {totalResumes}
                   </span>
-                  <span style={{ fontSize: '13px', color: 'var(--ink-2)' }}>résumés tailored</span>
+                  <span style={{ fontSize: '13px', color: 'var(--ink-2)' }}>resumes tailored</span>
                   <span />
 
                   <span style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)' }} className="num">

@@ -10,7 +10,7 @@ export function ResumeTypesSection() {
         <div className="mb-24">
           <div className="max-w-3xl mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-[1.1] tracking-tight">
-              Two résumé types. One difference, and it's the part recruiters read first.
+              Two resume types. One difference, and it's the part recruiters read first.
             </h2>
             <p className="text-lg text-slate-500 leading-relaxed">
               Pick full time or contract before you generate. Everything below the professional summary follows the same rules - the summary itself is built two different ways.
@@ -199,7 +199,7 @@ export function ResumeTypesSection() {
               <div>
                 <h3 className="text-[17px] font-bold text-slate-900 mb-2">Contact details, only the ones you choose</h3>
                 <p className="text-sm text-slate-500 leading-relaxed">
-                  Phone, email, location and LinkedIn sit directly under your name. Select any combination - the résumé shows exactly what you picked and nothing else.
+                  Phone, email, location and LinkedIn sit directly under your name. Select any combination - the resume shows exactly what you picked and nothing else.
                 </p>
               </div>
 

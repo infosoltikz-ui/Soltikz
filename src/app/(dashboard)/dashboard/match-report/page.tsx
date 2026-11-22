@@ -73,7 +73,7 @@ export default async function MatchReportPage() {
             Open in Editor
           </Link>
           <Link href="/dashboard/resumes" className="btn btn-primary">
-            View All Résumés
+            View All Resumes
           </Link>
         </div>
       </div>
