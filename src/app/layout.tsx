@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Providers } from "@/components/providers/Providers"
 import { JsonLd } from "@/components/seo/JsonLd"
+import { FloatingThemeToggle } from "@/components/theme/FloatingThemeToggle"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"], display: 'swap' })
@@ -104,18 +105,41 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark" data-theme="dark" style={{ colorScheme: 'dark' }} suppressHydrationWarning>
+    <html lang="en" className="dark" data-theme="dark" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var t = localStorage.getItem('soltikz_theme');
+                  if (t === 'light') {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    document.documentElement.style.colorScheme = 'light';
+                  } else {
+                    document.documentElement.classList.remove('light');
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    document.documentElement.style.colorScheme = 'dark';
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         <meta name="google-site-verification" content="U3ySGlGG2fC3L4rUpVCAkRHi-6a8myCH2Y26qQ8tpME" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet" />
         <JsonLd />
       </head>
-      <body className={`${inter.className} antialiased min-h-screen bg-[#0D131B] text-[#E4EAF2]`} suppressHydrationWarning>
+      <body className={`${inter.className} antialiased min-h-screen bg-[var(--desk)] text-[var(--ink)]`} suppressHydrationWarning>
         <Providers>
           {children}
         </Providers>
+        <FloatingThemeToggle />
         <Analytics />
         <SpeedInsights />
       </body>

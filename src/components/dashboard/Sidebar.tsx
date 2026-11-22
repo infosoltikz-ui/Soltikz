@@ -11,6 +11,7 @@ import {
 import { cn } from '@/utils/cn'
 import { createClient } from '@/utils/supabase/client'
 import { isPremiumPlan, FREE_TIER_CREDITS } from '@/utils/pricingPlans'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
 
 const BUILD_NAV_ITEMS = [
   { label: 'Home', href: '/dashboard', icon: 'home' },
@@ -294,6 +295,11 @@ export function Sidebar({
               Manage plan
             </Link>
           )}
+        </div>
+
+        {/* Theme Mode Switcher */}
+        <div className="mb-2.5 px-0.5">
+          <ThemeToggle className="w-full justify-between" />
         </div>
 
         {/* User Footer with Sign Out */}

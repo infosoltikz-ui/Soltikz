@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/client'
 import { useState, useEffect } from 'react'
 import { UserMenu } from './UserMenu'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
 import { Sparkles } from 'lucide-react'
 
 interface DashboardHeaderProps {
@@ -81,6 +82,7 @@ export function DashboardHeader({
 
       <div className="flex items-center gap-3 shrink-0 self-start sm:self-center">
         {actions}
+        <ThemeToggle />
         <UserMenu />
       </div>
     </header>

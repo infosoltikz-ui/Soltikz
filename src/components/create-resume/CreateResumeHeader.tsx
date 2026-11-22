@@ -8,6 +8,7 @@ import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import { isPremiumPlan } from '@/utils/pricingPlans'
 import { HowToGuideModal } from './HowToGuideModal'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
 
 interface CreateResumeHeaderProps {
   currentStep?: number
@@ -196,8 +197,9 @@ export function CreateResumeHeader({
           </div>
         </nav>
 
-        {/* Right: Guide + User */}
+        {/* Right: Guide + Theme + User */}
         <div className="flex items-center gap-2.5 shrink-0">
+          <ThemeToggle />
           <button
             onClick={() => setGuideOpen(true)}
             className="hidden sm:inline-flex items-center gap-1.5 h-9 px-3 rounded-xl border border-[#26313F] bg-[#1A2330] hover:bg-[#222E3F] text-[#E4EAF2] hover:text-white text-[12.5px] font-semibold transition-colors cursor-pointer"

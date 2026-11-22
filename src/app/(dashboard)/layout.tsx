@@ -8,7 +8,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-[#0D131B] text-[#E4EAF2]">
+    <div className="min-h-screen bg-[var(--desk)] text-[var(--ink)]">
       <DashboardShell>
         <Suspense fallback={null}>
           <SessionManager />

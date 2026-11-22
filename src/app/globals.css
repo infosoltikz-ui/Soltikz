@@ -73,7 +73,8 @@
   --ring: #3FA57C;
 }
 
-.dark {
+.dark,
+:root[data-theme="dark"] {
   --background: #0D131B;
   --foreground: #E4EAF2;
 
@@ -91,6 +92,27 @@
 
   --border: #26313F;
   --ring: #3FA57C;
+}
+
+.light,
+:root[data-theme="light"] {
+  --background: #E7EBF0;
+  --foreground: #16202E;
+
+  --primary: #0A6E4E;
+  --primary-foreground: #FFFFFF;
+
+  --accent: #B7791F;
+  --accent-foreground: #FFFFFF;
+
+  --card: #FFFFFF;
+  --card-foreground: #16202E;
+
+  --muted: #F4F6F9;
+  --muted-foreground: #4B5768;
+
+  --border: #D8DEE7;
+  --ring: #0A6E4E;
 }
 
 @layer base {
@@ -322,6 +344,162 @@
   --amber:#D9A441; --amber-wash:#2E2616;
   --flag:#D97B6E; --flag-wash:#33201D;
   --shadow-paper:0 1px 2px rgba(0,0,0,.5), 0 16px 34px -12px rgba(0,0,0,.7);
+}
+
+:root[data-theme="light"],
+.light {
+  --color-heading: #16202E;
+  --color-body: #4B5768;
+  --color-muted: #7B8698;
+  --desk:#E7EBF0;
+  --panel:#FFFFFF;
+  --panel-2:#F4F6F9;
+  --ink:#16202E;
+  --ink-2:#4B5768;
+  --ink-3:#7B8698;
+  --line:#D8DEE7;
+  --line-soft:#E7EBF1;
+  --rail:#0A1017;
+  --rail-2:#141D28;
+  --rail-ink:#9FACBE;
+  --brand:#0A6E4E;
+  --brand-ink:#06412F;
+  --brand-wash:#E6F2ED;
+  --amber:#B7791F;
+  --amber-wash:#FBF2DF;
+  --flag:#B0453A;
+  --flag-wash:#FBEBE9;
+  --shadow-paper:0 1px 2px rgba(21,30,43,.10), 0 12px 28px -10px rgba(21,30,43,.28);
+}
+
+/* ========================================================================= */
+/* LIGHT THEME UTILITY OVERRIDES (Matching exact client light UI)             */
+/* ========================================================================= */
+
+html.light body,
+html[data-theme="light"] body {
+  background-color: #E7EBF0 !important;
+  color: #16202E !important;
+}
+
+/* Desk Background */
+html.light .bg-\[\#0D131B\],
+html[data-theme="light"] .bg-\[\#0D131B\] {
+  background-color: #E7EBF0 !important;
+}
+
+/* White Panels & Cards */
+html.light .bg-\[\#151D28\],
+html[data-theme="light"] .bg-\[\#151D28\] {
+  background-color: #FFFFFF !important;
+}
+
+/* Light Gray Inner Controls & Tabs */
+html.light .bg-\[\#1A2330\],
+html[data-theme="light"] .bg-\[\#1A2330\] {
+  background-color: #F4F6F9 !important;
+}
+
+/* Secondary dark chips/accents inside cards */
+html.light .bg-\[\#0A1017\],
+html[data-theme="light"] .bg-\[\#0A1017\] {
+  background-color: #EEF2F6 !important;
+}
+
+/* Borders */
+html.light .border-\[\#26313F\],
+html[data-theme="light"] .border-\[\#26313F\] {
+  border-color: #D8DEE7 !important;
+}
+
+html.light .border-\[\#1F2833\],
+html[data-theme="light"] .border-\[\#1F2833\] {
+  border-color: #E7EBF1 !important;
+}
+
+/* Primary Dark Text */
+html.light .text-\[\#E4EAF2\],
+html[data-theme="light"] .text-\[\#E4EAF2\] {
+  color: #16202E !important;
+}
+
+/* Secondary Muted Text */
+html.light .text-\[\#9FACBE\],
+html[data-theme="light"] .text-\[\#9FACBE\] {
+  color: #4B5768 !important;
+}
+
+/* Tertiary Slate Text */
+html.light .text-\[\#78859A\],
+html[data-theme="light"] .text-\[\#78859A\] {
+  color: #64748B !important;
+}
+
+html.light .text-\[\#8C99AB\],
+html[data-theme="light"] .text-\[\#8C99AB\] {
+  color: #64748B !important;
+}
+
+html.light .text-\[\#C3CCD9\],
+html[data-theme="light"] .text-\[\#C3CCD9\] {
+  color: #334155 !important;
+}
+
+/* Interactive Hovers */
+html.light .hover\:bg-\[\#222E3F\]:hover,
+html[data-theme="light"] .hover\:bg-\[\#222E3F\]:hover {
+  background-color: #E2E8F0 !important;
+}
+
+html.light .hover\:bg-\[\#1A2330\]:hover,
+html[data-theme="light"] .hover\:bg-\[\#1A2330\]:hover {
+  background-color: #EEF2F6 !important;
+}
+
+html.light .hover\:border-\[\#3A495C\]:hover,
+html[data-theme="light"] .hover\:border-\[\#3A495C\]:hover {
+  border-color: #CBD5E1 !important;
+}
+
+/* Inputs, Textareas, Selects in Light Mode */
+html.light input:not([type="checkbox"]):not([type="radio"]),
+html.light textarea,
+html.light select,
+html[data-theme="light"] input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="light"] textarea,
+html[data-theme="light"] select {
+  background-color: #FFFFFF !important;
+  border-color: #D8DEE7 !important;
+  color: #16202E !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder,
+html[data-theme="light"] input::placeholder,
+html[data-theme="light"] textarea::placeholder {
+  color: #94A3B8 !important;
+}
+
+/* Keep Sidebar Rail dark so the dark logo and nav items stay crystal clear */
+.rail {
+  background: #0A1017 !important;
+  color: #9FACBE !important;
+}
+.rail .text-\[\#E4EAF2\],
+.rail .text-white {
+  color: #FFFFFF !important;
+}
+.rail .bg-\[\#1E2938\] {
+  background-color: #1E2938 !important;
+}
+.rail .border-\[\#26313F\]\/50,
+.rail .border-\[\#26313F\] {
+  border-color: rgba(38, 49, 63, 0.6) !important;
+}
+.rail .text-\[\#7C8A9D\],
+.rail .text-\[\#8C99AB\],
+.rail .text-\[\#6F7D8F\] {
+  color: #8C99AB !important;
 }
 
 *{box-sizing:border-box}

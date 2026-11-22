@@ -4,12 +4,13 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Sidebar } from './Sidebar'
 import { Menu, FilePlus2 } from 'lucide-react'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-[#0D131B] text-[#E4EAF2]">
+    <div className="min-h-screen bg-[var(--desk)] text-[var(--ink)]">
       {/* Sleek Mobile Header Utility Bar */}
       <div className="md:hidden fixed top-0 inset-x-0 h-14 bg-[#151E2B] text-white z-40 px-4 flex items-center justify-between border-b border-[#26313F]">
         <div className="flex items-center gap-3">
@@ -28,13 +29,16 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        <Link
-          href="/dashboard/create"
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#0A6E4E] hover:bg-[#06412F] text-white text-xs font-medium transition-colors"
-        >
-          <FilePlus2 className="w-3.5 h-3.5" />
-          <span>Tailor</span>
-        </Link>
+        <div className="flex items-center gap-2">
+          <ThemeToggle compact showLabel={false} />
+          <Link
+            href="/dashboard/create"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#0A6E4E] hover:bg-[#06412F] text-white text-xs font-medium transition-colors"
+          >
+            <FilePlus2 className="w-3.5 h-3.5" />
+            <span>Tailor</span>
+          </Link>
+        </div>
       </div>
 
       {/* Grid container: rail sidebar (236px) and canvas (1fr) */}

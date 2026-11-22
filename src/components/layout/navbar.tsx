@@ -8,6 +8,7 @@ import {
   ArrowRight,
   ShieldCheck
 } from 'lucide-react';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 const MAIN_NAV_LINKS = [
   { label: 'About', href: '/about' },
@@ -93,7 +94,8 @@ export function Header() {
 
             {/* ── Right: Auth & CTA Micro-Bar ── */}
             <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
-              
+              <ThemeToggle compact showLabel={false} />
+
               {/* Log In Button */}
               <Link
                 href="/login"
