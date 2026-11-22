@@ -41,7 +41,7 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
           )}
         >
           <div>
-            <div className="flex items-start justify-between gap-3 mb-2">
+            <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2.5">
                 <div className={cn(
                   "p-2 rounded-lg transition-all shrink-0",
@@ -80,19 +80,6 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
                 </span>
               )}
             </div>
-
-            {/* Compact feature chips */}
-            <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-[#26313F]">
-              <span className="text-[11px] font-semibold text-[#9FACBE] bg-[#1A2330] border border-[#26313F] px-2 py-0.5 rounded-md">
-                5-Sentence Prose Summary
-              </span>
-              <span className="text-[11px] font-semibold text-[#9FACBE] bg-[#1A2330] border border-[#26313F] px-2 py-0.5 rounded-md">
-                6-8 Bullets Per Role
-              </span>
-              <span className="text-[11px] font-semibold text-[#9FACBE] bg-[#1A2330] border border-[#26313F] px-2 py-0.5 rounded-md">
-                1-2 Page Compact Layout
-              </span>
-            </div>
           </div>
         </div>
 
@@ -107,7 +94,7 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
           )}
         >
           <div>
-            <div className="flex items-start justify-between gap-3 mb-2">
+            <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2.5">
                 <div className={cn(
                   "p-2 rounded-lg transition-all shrink-0",
@@ -145,22 +132,6 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
                   Select
                 </span>
               )}
-            </div>
-
-            {/* Compact feature chips */}
-            <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-[#26313F]">
-              <span className="text-[11px] font-semibold text-[#9FACBE] bg-[#1A2330] border border-[#26313F] px-2 py-0.5 rounded-md">
-                10-Bullet Summary
-              </span>
-              <span className="text-[11px] font-semibold text-[#9FACBE] bg-[#1A2330] border border-[#26313F] px-2 py-0.5 rounded-md">
-                10 Bullets Per Role
-              </span>
-              <span className="text-[11px] font-semibold text-[#9FACBE] bg-[#1A2330] border border-[#26313F] px-2 py-0.5 rounded-md">
-                Tech Environment Stack
-              </span>
-              <span className="text-[11px] font-semibold text-[#9FACBE] bg-[#1A2330] border border-[#26313F] px-2 py-0.5 rounded-md">
-                3-4 Page Exhaustive
-              </span>
             </div>
           </div>
         </div>
