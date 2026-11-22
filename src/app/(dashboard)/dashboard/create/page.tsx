@@ -753,7 +753,7 @@ function CreateResumeContent() {
                         ? 'px-3 py-1 rounded-full text-[11.5px] font-extrabold bg-[#2E2616] text-[#D9A441] border border-[#D9A441]/30'
                         : 'px-3 py-1 rounded-full text-[11.5px] font-extrabold bg-[#1A2330] text-[#E4EAF2] border border-[#26313F]'
                       }>
-                        {resumeType === 'c2c' ? 'C2C Vendor Submission' : 'Full-Time Corporate'}
+                        {resumeType === 'c2c' ? 'C2C Resumes' : 'Full time Resume'}
                       </span>
                     </div>
                   </div>

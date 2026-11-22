@@ -16,7 +16,7 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <h2 className="text-[15px] sm:text-[16px] font-bold text-[#E4EAF2]">Select Resume Type</h2>
-            <span className="text-[11px] font-semibold text-[#78859A] hidden md:inline">• Corporate vs Vendor Submission</span>
+            <span className="text-[11px] font-semibold text-[#78859A] hidden md:inline">• Full Time vs C2C</span>
           </div>
           <p className="text-[12px] font-medium text-[#9FACBE] mt-0.5">
             Choose format to enforce ATS structure, summary length & recruiter constraints.
@@ -41,7 +41,7 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
           )}
         >
           <div>
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2.5">
                 <div className={cn(
                   "p-2 rounded-lg transition-all shrink-0",
@@ -51,22 +51,7 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
                 )}>
                   <Briefcase className="w-4 h-4 stroke-[2.2]" />
                 </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-[14px] font-bold text-[#E4EAF2] leading-tight">Full-Time Corporate</h3>
-                    <span className={cn(
-                      "text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider border",
-                      selectedType === 'fulltime'
-                        ? "bg-[#0A6E4E] text-white border-[#0A6E4E]"
-                        : "bg-[#26313F] text-[#9FACBE] border-[#26313F]"
-                    )}>
-                      Direct-Hire
-                    </span>
-                  </div>
-                  <p className="text-[11.5px] font-medium text-[#9FACBE] mt-0.5">
-                    For direct-hire roles at US & global tech enterprises
-                  </p>
-                </div>
+                <h3 className="text-[14px] font-bold text-[#E4EAF2] leading-tight">Full time Resume</h3>
               </div>
 
               {selectedType === 'fulltime' ? (
@@ -94,7 +79,7 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
           )}
         >
           <div>
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2.5">
                 <div className={cn(
                   "p-2 rounded-lg transition-all shrink-0",
@@ -104,22 +89,7 @@ export function ResumeTypeSelector({ selectedType, onChange }: ResumeTypeSelecto
                 )}>
                   <FileText className="w-4 h-4 stroke-[2.2]" />
                 </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-[14px] font-bold text-[#E4EAF2] leading-tight">C2C (Contract to Hire)</h3>
-                    <span className={cn(
-                      "text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider border",
-                      selectedType === 'c2c'
-                        ? "bg-[#B7791F] text-white border-[#B7791F]"
-                        : "bg-[#26313F] text-[#9FACBE] border-[#26313F]"
-                    )}>
-                      Vendor / Staffing
-                    </span>
-                  </div>
-                  <p className="text-[11.5px] font-medium text-[#9FACBE] mt-0.5">
-                    For US IT Staffing, Prime Vendor & C2C submissions
-                  </p>
-                </div>
+                <h3 className="text-[14px] font-bold text-[#E4EAF2] leading-tight">C2C Resumes</h3>
               </div>
 
               {selectedType === 'c2c' ? (

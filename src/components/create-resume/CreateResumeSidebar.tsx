@@ -227,7 +227,7 @@ export function CreateResumeSidebar({
                     {templateName} Layout
                   </p>
                   <p className="text-[11px] text-[#78859A] truncate">
-                    {resumeType === 'c2c' ? 'C2C Contract Format' : 'Full-Time Corporate'}
+                    {resumeType === 'c2c' ? 'C2C Resumes' : 'Full time Resume'}
                   </p>
                 </div>
               </div>
