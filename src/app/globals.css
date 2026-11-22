@@ -399,6 +399,19 @@ html[data-theme="light"] [class*="bg-[#151D28]"]:not(.rail):not(.rail *) {
   background-color: #FFFFFF !important;
 }
 
+/* Headers, Footers & Accents (#101722) */
+html.light [class*="bg-[#101722]"]:not(.rail):not(.rail *),
+html[data-theme="light"] [class*="bg-[#101722]"]:not(.rail):not(.rail *) {
+  background-color: #F8FAFC !important;
+  border-color: #D8DEE7 !important;
+}
+
+html.light [class*="bg-[#101722]/40"]:not(.rail):not(.rail *),
+html[data-theme="light"] [class*="bg-[#101722]/40"]:not(.rail):not(.rail *) {
+  background-color: #F1F5F9 !important;
+  border-color: #D8DEE7 !important;
+}
+
 /* Sticky Headers / Capsule Navs in Light Mode */
 html.light header[class*="bg-[#151D28]"],
 html[data-theme="light"] header[class*="bg-[#151D28]"],

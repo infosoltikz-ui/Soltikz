@@ -203,25 +203,27 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
   const horizontalMargin = (794 * effectiveScale - 794) / 2
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
       <div 
-        className="relative w-full max-w-5xl h-[92vh] max-h-[950px] bg-[#151D28] rounded-2xl border border-[#26313F] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-5xl h-[92vh] max-h-[950px] bg-white dark:bg-[#151D28] rounded-2xl border border-[#D8DEE7] dark:border-[#26313F] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Action Bar */}
-        <div className="bg-[#101722] border-b border-[#26313F] px-4 sm:px-6 py-3 flex items-center justify-between gap-3 shrink-0">
+        <div className="bg-slate-50 dark:bg-[#101722] border-b border-[#D8DEE7] dark:border-[#26313F] px-4 sm:px-6 py-3 flex items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-[#1A2330] text-[#3FA57C] border border-[#26313F] flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-white dark:bg-[#1A2330] text-[#0A6E4E] dark:text-[#3FA57C] border border-[#D8DEE7] dark:border-[#26313F] flex items-center justify-center shadow-2xs shrink-0">
               <FileText className="w-5 h-5" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="text-[15px] font-bold text-[#E4EAF2] truncate">
+                <h3 className="text-[15px] font-bold text-[#16202E] dark:text-[#E4EAF2] truncate">
                   {resume.title || 'Tailored Resume Preview'}
                 </h3>
                 <span className={cn(
                   "px-2 py-0.5 rounded-md text-[10.5px] font-bold uppercase tracking-wider shrink-0",
-                  isC2C ? "bg-[#1A2330] text-[#D9A441] border border-[#D9A441]/40" : "bg-[#1A2330] text-[#3FA57C] border border-[#3FA57C]/40"
+                  isC2C 
+                    ? "bg-amber-50 dark:bg-[#1A2330] text-amber-800 dark:text-[#D9A441] border border-amber-200 dark:border-[#D9A441]/40" 
+                    : "bg-emerald-50 dark:bg-[#1A2330] text-[#0A6E4E] dark:text-[#3FA57C] border border-emerald-200 dark:border-[#3FA57C]/40"
                 )}>
                   {isC2C ? 'C2C' : 'Full-Time'}
                 </span>
@@ -232,8 +234,8 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
                       className={cn(
                         "flex items-center gap-1 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border shrink-0",
                         aiInfo.isClaude
-                          ? "bg-[#1A2330] text-[#D9A441] border-[#D9A441]/40"
-                          : "bg-[#1A2330] text-[#3FA57C] border-[#3FA57C]/40"
+                          ? "bg-amber-50 dark:bg-[#1A2330] text-amber-800 dark:text-[#D9A441] border border-amber-200 dark:border-[#D9A441]/40"
+                          : "bg-emerald-50 dark:bg-[#1A2330] text-[#0A6E4E] dark:text-[#3FA57C] border border-emerald-200 dark:border-[#3FA57C]/40"
                       )}
                       title={`Generated with ${aiInfo.displayName} (${aiInfo.fullModel})`}
                     >
@@ -243,7 +245,7 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
                   )
                 })()}
               </div>
-              <p className="text-[11.5px] text-[#9FACBE] truncate">
+              <p className="text-[11.5px] text-[#64748B] dark:text-[#9FACBE] truncate">
                 {template.name} • {profileData?.full_name || 'Executive Candidate'}
               </p>
             </div>
@@ -252,30 +254,30 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
           {/* Right Controls */}
           <div className="flex items-center gap-2 shrink-0">
             {/* ATS Score Meter Pill */}
-            <div className="hidden sm:flex items-center gap-1.5 bg-[#1A2330] text-[#3FA57C] border border-[#3FA57C]/40 px-2.5 py-1 rounded-lg text-[12px] font-bold">
-              <span className="w-2 h-2 rounded-full bg-[#3FA57C] animate-pulse"></span>
+            <div className="hidden sm:flex items-center gap-1.5 bg-emerald-50 dark:bg-[#1A2330] text-[#0A6E4E] dark:text-[#3FA57C] border border-emerald-200 dark:border-[#3FA57C]/40 px-2.5 py-1 rounded-lg text-[12px] font-bold shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-[#0A6E4E] dark:bg-[#3FA57C] animate-pulse"></span>
               <span>{atsScore > 0 ? `${atsScore}% ATS Match` : 'Analyzing...'}</span>
             </div>
 
             {/* Zoom Controls */}
-            <div className="hidden md:flex items-center gap-0.5 bg-[#1A2330] p-0.5 rounded-lg border border-[#26313F]">
+            <div className="hidden md:flex items-center gap-0.5 bg-white dark:bg-[#1A2330] p-0.5 rounded-lg border border-[#D8DEE7] dark:border-[#26313F] shadow-2xs">
               <button
                 onClick={() => setZoom(z => Math.max(Number((z - 0.1).toFixed(1)), 0.6))}
-                className="p-1 hover:bg-[#222E3F] rounded text-[#9FACBE] hover:text-[#E4EAF2] transition-all cursor-pointer"
+                className="p-1 hover:bg-slate-100 dark:hover:bg-[#222E3F] rounded text-[#64748B] hover:text-[#16202E] dark:text-[#9FACBE] dark:hover:text-[#E4EAF2] transition-all cursor-pointer"
                 title="Zoom Out"
               >
                 <ZoomOut className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => setZoom(1)}
-                className="px-2 py-0.5 text-[11px] font-bold text-[#E4EAF2] hover:text-white transition-colors cursor-pointer"
+                className="px-2 py-0.5 text-[11px] font-bold text-[#16202E] dark:text-[#E4EAF2] hover:text-[#0A6E4E] dark:hover:text-white transition-colors cursor-pointer"
                 title="Reset Zoom"
               >
                 {zoom === 1 ? 'Fit' : `${Math.round(zoom * 100)}%`}
               </button>
               <button
                 onClick={() => setZoom(z => Math.min(Number((z + 0.1).toFixed(1)), 1.5))}
-                className="p-1 hover:bg-[#222E3F] rounded text-[#9FACBE] hover:text-[#E4EAF2] transition-all cursor-pointer"
+                className="p-1 hover:bg-slate-100 dark:hover:bg-[#222E3F] rounded text-[#64748B] hover:text-[#16202E] dark:text-[#9FACBE] dark:hover:text-[#E4EAF2] transition-all cursor-pointer"
                 title="Zoom In"
               >
                 <ZoomIn className="w-3.5 h-3.5" />
@@ -286,9 +288,9 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
             <Button
               onClick={handlePrint}
               disabled={loading || isExportingPdf}
-              className="h-8.5 px-3 rounded-lg bg-[#1A2330] hover:bg-[#222E3F] text-[#E4EAF2] hover:text-white border border-[#26313F] text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-sm"
+              className="h-8.5 px-3 rounded-lg bg-white dark:bg-[#1A2330] hover:bg-slate-100 dark:hover:bg-[#222E3F] text-[#16202E] dark:text-[#E4EAF2] border border-[#D8DEE7] dark:border-[#26313F] text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs"
             >
-              {isExportingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5 text-[#3FA57C]" />}
+              {isExportingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5 text-[#0A6E4E] dark:text-[#3FA57C]" />}
               <span>PDF</span>
             </Button>
             {/* Download Word */}
@@ -296,9 +298,9 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
               onClick={handleDownloadDocx}
               disabled={loading || isExportingDocx}
               variant="outline"
-              className="h-8.5 px-3 rounded-lg border-[#26313F] text-[#E4EAF2] bg-[#1A2330] hover:bg-[#222E3F] text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs"
+              className="h-8.5 px-3 rounded-lg border-[#D8DEE7] dark:border-[#26313F] text-[#16202E] dark:text-[#E4EAF2] bg-white dark:bg-[#1A2330] hover:bg-slate-100 dark:hover:bg-[#222E3F] text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs"
             >
-              {isExportingDocx ? <Loader2 className="w-3.5 h-3.5 animate-spin text-[#3FA57C]" /> : <FileText className="w-3.5 h-3.5 text-[#3FA57C]" />}
+              {isExportingDocx ? <Loader2 className="w-3.5 h-3.5 animate-spin text-[#0A6E4E] dark:text-[#3FA57C]" /> : <FileText className="w-3.5 h-3.5 text-[#0A6E4E] dark:text-[#3FA57C]" />}
               <span>Word</span>
             </Button>
 
@@ -312,7 +314,7 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
                   router.push(`/dashboard/create?id=${resume.id}`)
                 }
               }}
-              className="h-8.5 px-3 rounded-lg bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#3FA57C]/40 text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-sm"
+              className="h-8.5 px-3 rounded-lg bg-[#0A6E4E] hover:bg-[#0D8A62] text-white border border-[#0D8A62] dark:border-[#3FA57C]/40 text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-sm"
             >
               <Edit3 className="w-3.5 h-3.5 text-[#D9A441]" />
               <span className="hidden lg:inline">Edit Resume</span>
@@ -321,7 +323,7 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
             {/* Close */}
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-[#9FACBE] hover:text-[#E4EAF2] hover:bg-[#1A2330] border border-[#26313F] transition-colors ml-1 cursor-pointer"
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-[#64748B] hover:text-[#16202E] dark:text-[#9FACBE] dark:hover:text-[#E4EAF2] bg-white dark:bg-[#1A2330] hover:bg-slate-100 dark:hover:bg-[#222E3F] border border-[#D8DEE7] dark:border-[#26313F] transition-colors ml-1 cursor-pointer shadow-2xs"
               title="Close Preview (Esc)"
             >
               <X className="w-4 h-4" />
@@ -332,7 +334,7 @@ export function ResumePreviewModal({ resume, onClose, onEdit }: ResumePreviewMod
         {/* Canvas Body */}
         <div
           ref={containerRef}
-          className="flex-1 bg-[#0D131B] p-4 sm:p-6 overflow-y-auto overflow-x-hidden flex flex-col items-center justify-start shadow-inner scrollbar-thin"
+          className="flex-1 bg-[#E8EEF5] dark:bg-[#0D131B] p-4 sm:p-6 overflow-y-auto overflow-x-hidden flex flex-col items-center justify-start shadow-inner scrollbar-thin"
         >
           {loading ? (
             <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-slate-500 gap-3">
