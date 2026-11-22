@@ -8,9 +8,10 @@ interface ThemeToggleProps {
   className?: string
   showLabel?: boolean
   compact?: boolean
+  variant?: 'default' | 'rail'
 }
 
-export function ThemeToggle({ className, showLabel = true, compact = false }: ThemeToggleProps) {
+export function ThemeToggle({ className, showLabel = true, compact = false, variant = 'default' }: ThemeToggleProps) {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
   const [mounted, setMounted] = useState(false)
 
@@ -58,6 +59,22 @@ export function ThemeToggle({ className, showLabel = true, compact = false }: Th
   }
 
   if (!mounted) {
+    if (variant === 'rail') {
+      return (
+        <button
+          type="button"
+          aria-label="Toggle theme"
+          className={cn(
+            'inline-flex items-center gap-2 px-2.5 py-2 rounded-xl border border-[#26313F] bg-[#1E2938] text-[#9FACBE] text-xs font-bold transition-all shadow-2xs',
+            className
+          )}
+        >
+          <Moon className="w-3.5 h-3.5 text-[#D9A441]" />
+          {showLabel && !compact && <span>Dark Mode</span>}
+        </button>
+      )
+    }
+
     return (
       <button
         type="button"
@@ -74,6 +91,42 @@ export function ThemeToggle({ className, showLabel = true, compact = false }: Th
   }
 
   const isDark = theme === 'dark'
+
+  if (variant === 'rail') {
+    return (
+      <button
+        type="button"
+        onClick={toggleTheme}
+        aria-label={`Switch to ${isDark ? 'Light' : 'Dark'} theme`}
+        title={`Switch to ${isDark ? 'Light' : 'Dark'} theme`}
+        className={cn(
+          'group inline-flex items-center gap-2.5 px-3 py-2 rounded-xl border border-[#26313F] bg-[#1E2938] hover:bg-[#253244] text-[#E4EAF2] hover:border-[#3FA57C]/40 transition-all duration-200 cursor-pointer shadow-2xs select-none',
+          className
+        )}
+      >
+        <div
+          className={cn(
+            'w-5 h-5 rounded-lg flex items-center justify-center shrink-0 border transition-transform duration-300 group-hover:scale-110',
+            isDark
+              ? 'bg-[#2E2616] text-[#D9A441] border-[#D9A441]/30'
+              : 'bg-[#152538] text-[#60A5FA] border-[#60A5FA]/30'
+          )}
+        >
+          {isDark ? (
+            <Sun className="w-3 h-3 text-[#D9A441] transition-transform duration-300 group-hover:rotate-45" />
+          ) : (
+            <Moon className="w-3 h-3 text-[#60A5FA] transition-transform duration-300 group-hover:-rotate-12" />
+          )}
+        </div>
+
+        {showLabel && (
+          <span className="text-[12px] font-bold text-[#C3CCD9] group-hover:text-white transition-colors">
+            {isDark ? 'Light Mode' : 'Dark Mode'}
+          </span>
+        )}
+      </button>
+    )
+  }
 
   return (
     <button

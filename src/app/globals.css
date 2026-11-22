@@ -593,9 +593,23 @@ aside.rail {
 .rail .text-white {
   color: #FFFFFF !important;
 }
-.rail [class*="bg-[#1E2938]"],
-.rail .bg-\[\#1E2938\] {
+.rail .plan-card {
   background-color: #1E2938 !important;
+}
+.rail-nav a:not([aria-current="true"]),
+.rail-nav button:not([aria-current="true"]) {
+  background-color: transparent !important;
+  color: #9FACBE !important;
+}
+.rail-nav a:not([aria-current="true"]):hover,
+.rail-nav button:not([aria-current="true"]):hover {
+  background-color: rgba(30, 41, 56, 0.7) !important;
+  color: #FFFFFF !important;
+}
+.rail-nav a[aria-current="true"],
+.rail-nav button[aria-current="true"] {
+  background-color: #1E2938 !important;
+  color: #FFFFFF !important;
 }
 .rail [class*="border-[#26313F]"],
 .rail .border-\[\#26313F\] {
@@ -657,14 +671,19 @@ a{color:inherit; text-decoration:none}
 .rail-group{margin-bottom:14px}
 .rail-label{font-size:11px;color:#68768A;padding:0 8px 6px;letter-spacing:.01em}
 .rail-nav{display:flex;flex-direction:column;gap:1px}
+.rail-nav a,
 .rail-nav button{
   display:flex;align-items:center;gap:10px;width:100%;
   background:none;border:0;padding:8px 9px;border-radius:7px;
-  color:var(--rail-ink);font-size:13.5px;text-align:left
+  color:var(--rail-ink);font-size:13.5px;text-align:left;
+  transition:background-color 0.15s ease, color 0.15s ease;
 }
+.rail-nav a:hover,
 .rail-nav button:hover{background:var(--rail-2);color:#fff}
-.rail-nav button[aria-current="true"]{background:var(--rail-2);color:#fff;font-weight:500}
+.rail-nav a[aria-current="true"],
+.rail-nav button[aria-current="true"]{background:var(--rail-2);color:#fff;font-weight:600}
 .rail-nav svg{width:16px;height:16px;flex:none;opacity:.75}
+.rail-nav a[aria-current="true"] svg,
 .rail-nav button[aria-current="true"] svg{opacity:1;color:#4FBE92}
 .rail-spacer{flex:1}
 .plan-card{background:var(--rail-2);border-radius:10px;padding:12px;margin-bottom:10px}

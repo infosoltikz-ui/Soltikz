@@ -181,8 +181,8 @@ export function Sidebar({
         className={cn(
           'flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg text-[13.5px] transition-colors',
           isActive
-            ? 'bg-[#1E2938] text-white font-medium'
-            : 'text-[#C3CCD9] hover:bg-[#1E2938] hover:text-white'
+            ? 'bg-[#1E2938] text-white font-semibold shadow-xs'
+            : 'bg-transparent text-[#9FACBE] hover:bg-[#1E2938]/60 hover:text-white'
         )}
       >
         <RailIcon type={item.icon} isActive={isActive} />
@@ -299,7 +299,7 @@ export function Sidebar({
 
         {/* Theme Mode Switcher */}
         <div className="mb-2.5 px-0.5">
-          <ThemeToggle className="w-full justify-between" />
+          <ThemeToggle variant="rail" className="w-full justify-between" />
         </div>
 
         {/* User Footer with Sign Out */}
