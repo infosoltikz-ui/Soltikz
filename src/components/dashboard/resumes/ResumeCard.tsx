@@ -132,11 +132,11 @@ export function ResumeCard({
   const daysRemaining = 20 - daysOld
 
   return (
-    <div className="group bg-[#151D28] rounded-2xl border border-[#26313F] overflow-hidden shadow-xs hover:border-[#3A495C] hover:-translate-y-0.5 transition-all duration-200 flex flex-col">
+    <div className="group bg-white dark:bg-[#151D28] rounded-2xl border border-[#D8DEE7] dark:border-[#26313F] overflow-hidden shadow-xs hover:border-[#94A3B8] dark:hover:border-[#3A495C] hover:-translate-y-0.5 transition-all duration-200 flex flex-col">
       {/* Top Preview Canvas */}
       <div
         onClick={() => onPreview?.()}
-        className="relative h-52 bg-[#0A1017] border-b border-[#26313F] overflow-hidden cursor-pointer select-none"
+        className="relative h-52 bg-[#F1F5F9] dark:bg-[#0A1017] border-b border-[#D8DEE7] dark:border-[#26313F] overflow-hidden cursor-pointer select-none"
       >
         <div className="absolute inset-0 transform scale-[0.3] origin-top-left w-[333.33%] h-[333.33%] pointer-events-none bg-white">
           {(() => {
@@ -214,7 +214,7 @@ export function ResumeCard({
         </div>
 
         {/* ATS Score Pill */}
-        <div className="absolute top-3 right-3 bg-[#151D28]/95 backdrop-blur-xs px-2.5 py-1 rounded-lg border border-[#26313F] shadow-xs flex items-center gap-1.5 z-10">
+        <div className="absolute top-3 right-3 bg-white/95 dark:bg-[#151D28]/95 backdrop-blur-xs px-2.5 py-1 rounded-lg border border-[#D8DEE7] dark:border-[#26313F] shadow-xs flex items-center gap-1.5 z-10">
           <div
             className={cn(
               'w-2 h-2 rounded-full',
@@ -227,20 +227,20 @@ export function ResumeCard({
                 : 'bg-slate-500'
             )}
           />
-          <span className="text-[11px] font-black text-[#E4EAF2] tabular-nums">
+          <span className="text-[11px] font-black text-[#16202E] dark:text-[#E4EAF2] tabular-nums">
             {data.atsScore > 0 ? `${data.atsScore}% ATS` : '- ATS'}
           </span>
         </div>
 
         {/* Hover Studio Overlay */}
-        <div className="absolute inset-0 bg-[#0D131B]/80 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2.5 backdrop-blur-[2px] z-20">
+        <div className="absolute inset-0 bg-white/85 dark:bg-[#0D131B]/80 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2.5 backdrop-blur-[2px] z-20">
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation()
               onPreview?.()
             }}
-            className="w-10 h-10 bg-[#1A2330] border border-[#26313F] text-[#E4EAF2] rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-md cursor-pointer hover:bg-[#222E3F]"
+            className="w-10 h-10 bg-[#F8FAFC] dark:bg-[#1A2330] border border-[#D8DEE7] dark:border-[#26313F] text-[#16202E] dark:text-[#E4EAF2] rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-md cursor-pointer hover:bg-[#EEF2F6] dark:hover:bg-[#222E3F]"
             title="Preview Resume"
           >
             <Eye className="w-4 h-4" strokeWidth={2.4} />
@@ -279,7 +279,7 @@ export function ResumeCard({
       <div className="p-4 sm:p-5 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-2 mb-2">
           <h3
-            className="text-[15px] font-extrabold text-[#E4EAF2] line-clamp-1 group-hover:text-[#3FA57C] transition-colors"
+            className="text-[15px] font-extrabold text-[#16202E] dark:text-[#E4EAF2] line-clamp-1 group-hover:text-[#0A6E4E] dark:group-hover:text-[#3FA57C] transition-colors"
             title={data.name}
           >
             {data.name}
@@ -287,7 +287,7 @@ export function ResumeCard({
           <div className="shrink-0 flex items-center gap-1">
             {data.isPublic && (
               <span
-                className="flex items-center gap-0.5 text-[10px] font-extrabold text-[#3FA57C] bg-[#123227] border border-[#3FA57C]/30 px-2 py-0.5 rounded-md"
+                className="flex items-center gap-0.5 text-[10px] font-extrabold text-[#0F5132] dark:text-[#3FA57C] bg-[#E6F4EA] dark:bg-[#123227] border border-[#CEEAD6] dark:border-[#3FA57C]/30 px-2 py-0.5 rounded-md"
                 title="Public share link enabled"
               >
                 <Share2 className="w-2.5 h-2.5" />
@@ -296,7 +296,7 @@ export function ResumeCard({
             )}
             {data.versionNumber != null && data.versionNumber > 1 && (
               <span
-                className="flex items-center gap-0.5 text-[10px] font-extrabold text-[#9FACBE] bg-[#1A2330] border border-[#26313F] px-1.5 py-0.5 rounded-md tabular-nums"
+                className="flex items-center gap-0.5 text-[10px] font-extrabold text-[#4B5768] dark:text-[#9FACBE] bg-[#F8FAFC] dark:bg-[#1A2330] border border-[#D8DEE7] dark:border-[#26313F] px-1.5 py-0.5 rounded-md tabular-nums"
                 title="Version"
               >
                 <GitBranch className="w-2.5 h-2.5" />
@@ -312,13 +312,13 @@ export function ResumeCard({
             className={cn(
               'px-2 py-0.5 rounded-md text-[10.5px] font-extrabold border',
               isFullTime
-                ? 'bg-[#123227] text-[#3FA57C] border-[#3FA57C]/30'
-                : 'bg-[#2E2616] text-[#D9A441] border-[#D9A441]/30'
+                ? 'bg-[#E6F4EA] dark:bg-[#123227] text-[#0F5132] dark:text-[#3FA57C] border-[#CEEAD6] dark:border-[#3FA57C]/30'
+                : 'bg-[#FEF3C7] dark:bg-[#2E2616] text-[#92400E] dark:text-[#D9A441] border-[#FDE68A] dark:border-[#D9A441]/30'
             )}
           >
             {data.type}
           </span>
-          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#3FA57C] bg-[#123227] border border-[#3FA57C]/30 px-2 py-0.5 rounded-md">
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0F5132] dark:text-[#3FA57C] bg-[#E6F4EA] dark:bg-[#123227] border border-[#CEEAD6] dark:border-[#3FA57C]/30 px-2 py-0.5 rounded-md">
             <CheckCircle2 className="w-3 h-3" strokeWidth={2.5} />
             {data.status}
           </span>
