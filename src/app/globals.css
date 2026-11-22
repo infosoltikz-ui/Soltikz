@@ -915,26 +915,12 @@ mark.n{background:#FAEBCB;color:inherit;padding:0 1px;border-radius:2px}
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
-@media (max-width:1080px){
-  .tpl-grid{grid-template-columns:repeat(3,1fr)}
-  .studio{grid-template-columns:1fr}
-  .dash{grid-template-columns:1fr}
-}
-@media (max-width:820px){
-  .app{grid-template-columns:1fr}
-  .rail{position:static;height:auto;flex-direction:column;padding:14px}
-  .rail-nav{flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:2px}
-  .rail-nav button{white-space:nowrap;padding:7px 11px}
-  .rail-group{margin-bottom:8px}
-  .rail-label,.plan-card,.rail-spacer{display:none}
-  .brand{padding-bottom:12px}
-  .canvas{padding:20px 16px 50px}
-  .grid-2,.plans,.pick,.grid-3{grid-template-columns:1fr}
-  .steps{flex-direction:column}
-  .step{border-right:0;border-bottom:1px solid var(--line-soft)}
-  .tpl-grid{grid-template-columns:repeat(2,1fr)}
-  .head{flex-direction:column;align-items:flex-start;gap:14px}
-  .sheet{padding:24px 22px;font-size:11px}
-  .row{grid-template-columns:34px 1fr auto;gap:10px}
-  .row .acts{display:none}
+/* Uniform Mobile Breakpoint (strictly < 768px for phones; all laptops and desktops share the exact same UI) */
+@media (max-width: 767px) {
+  .app {
+    display: block !important;
+  }
+  .canvas {
+    padding: 16px 12px 40px !important;
+  }
 }
