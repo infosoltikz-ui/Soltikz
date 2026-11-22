@@ -687,43 +687,20 @@ function CreateResumeContent() {
                   />
                 )}
 
-                <div
-                  className={
-                    isGenerating
-                      ? 'hidden'
-                      : 'grid grid-cols-1 lg:grid-cols-12 gap-6 items-start'
-                  }
-                >
-                  <div className="lg:col-span-7 xl:col-span-8 min-w-0">
-                    <CompanyDetailsSection
-                      onDraftChange={({ company, role, jd }) => {
-                        setDraftCompany(company)
-                        setDraftRole(role)
-                        setDraftJd(jd)
-                      }}
-                      onGenerate={(company, role, jd) => {
-                        setDraftCompany(company)
-                        setDraftRole(role)
-                        setDraftJd(jd)
-                        handleGenerate(company, role, jd)
-                      }}
-                    />
-                  </div>
-
-                  <div className="lg:col-span-5 xl:col-span-4 min-w-0">
-                    <CreateResumeSidebar
-                      company={draftCompany}
-                      role={draftRole}
-                      jd={draftJd}
-                      resumeType={resumeType}
-                      templateName={getTemplateById(selectedTemplateId).name}
-                      roleCount={
-                        (profileData?.master_resume_data?.employment ||
-                          profileData?.master_resume_data?.experience ||
-                          []).length
-                      }
-                    />
-                  </div>
+                <div className={isGenerating ? 'hidden' : 'w-full'}>
+                  <CompanyDetailsSection
+                    onDraftChange={({ company, role, jd }) => {
+                      setDraftCompany(company)
+                      setDraftRole(role)
+                      setDraftJd(jd)
+                    }}
+                    onGenerate={(company, role, jd) => {
+                      setDraftCompany(company)
+                      setDraftRole(role)
+                      setDraftJd(jd)
+                      handleGenerate(company, role, jd)
+                    }}
+                  />
                 </div>
               </>
             ) : (

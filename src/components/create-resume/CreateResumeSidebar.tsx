@@ -237,7 +237,7 @@ export function CreateResumeSidebar({
       </div>
       */}
 
-      {/* Included Deliverables Summary */}
+      {/* Included Deliverables Summary (Commented out)
       <div className="bg-[#151D28] rounded-2xl border border-[#26313F] p-4 space-y-2.5">
         <div className="flex items-center gap-2 text-xs font-bold text-[#E4EAF2]">
           <Sparkles className="w-3.5 h-3.5 text-[#D9A441]" />
@@ -254,6 +254,7 @@ export function CreateResumeSidebar({
           </div>
         </div>
       </div>
+      */}
     </div>
   )
 }
