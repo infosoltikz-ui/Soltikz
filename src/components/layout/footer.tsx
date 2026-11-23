@@ -61,15 +61,13 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-12 pb-10 border-b border-slate-800/80">
           {/* Brand Column (Span 2 on large screens) */}
           <div className="lg:col-span-2 flex flex-col items-start pr-0 lg:pr-6">
-            <Link href="/" className="inline-block mb-4 group">
-              <div className="bg-white px-3 py-1.5 rounded-xl inline-flex items-center shadow-xs group-hover:shadow-[0_0_20px_rgba(255,255,255,0.25)] group-hover:scale-[1.02] transition-all duration-200">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/LOGO.png"
-                  alt="Soltkiz Resume Builder"
-                  className="h-7 w-auto object-contain"
-                />
-              </div>
+            <Link href="/" className="inline-flex items-center mb-4 group">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/LOGO-dark.png"
+                alt="ResumeBuilderOne"
+                className="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-[1.02]"
+              />
             </Link>
 
             <p className="text-slate-400 text-xs sm:text-[13px] leading-relaxed max-w-sm mb-5">
@@ -272,7 +270,7 @@ export function Footer() {
         {/* ── BOTTOM BAR: COPYRIGHT & LEGAL DISCLOSURES ── */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div>
-            © 2026 Soltkiz. All rights reserved. Built for ambitious candidates worldwide.
+            © 2026 ResumeBuilderOne by Soltkiz. All rights reserved. Built for ambitious candidates worldwide.
           </div>
 
           <div className="flex items-center gap-4 text-xs font-medium flex-wrap">

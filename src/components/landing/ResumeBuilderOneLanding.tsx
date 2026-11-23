@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { LandingTemplatesShowcase } from './LandingTemplatesShowcase';
+import { Footer } from '@/components/layout/footer';
 
 export function ResumeBuilderOneLanding() {
   const [billing, setBilling] = useState<'monthly' | 'yearly'>('monthly');
@@ -624,18 +625,7 @@ export function ResumeBuilderOneLanding() {
   </div>
 </section>
 
-<footer className="foot">
-  <div className="wrap">
-    <span>&copy; 2026 ResumeBuilderOne</span>
-    <nav>
-      <a href="#how">How it works</a>
-      <a href="#pricing">Pricing</a>
-      <Link href="/privacy">Privacy</Link>
-      <Link href="/terms">Terms</Link>
-      <Link href="/contact">Contact</Link>
-    </nav>
-  </div>
-</footer>
+<Footer />
 
 
 
