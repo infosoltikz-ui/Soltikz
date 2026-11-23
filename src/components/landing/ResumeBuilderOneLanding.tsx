@@ -521,8 +521,22 @@ export function ResumeBuilderOneLanding() {
     </div>
     <div style={{ textAlign: 'center' }}>
       <div className="bill">
-        <button aria-pressed="true" data-bill="m">Monthly</button>
-        <button data-bill="y">Yearly - two months free</button>
+        <button
+          type="button"
+          aria-pressed={billing === 'monthly'}
+          data-bill="m"
+          onClick={() => setBilling('monthly')}
+        >
+          Monthly
+        </button>
+        <button
+          type="button"
+          aria-pressed={billing === 'yearly'}
+          data-bill="y"
+          onClick={() => setBilling('yearly')}
+        >
+          Yearly - two months free
+        </button>
       </div>
     </div>
 
@@ -531,7 +545,7 @@ export function ResumeBuilderOneLanding() {
         <h3>Free</h3>
         <div className="amt">$0</div>
         <p className="blurb">Enough to build a real resume and judge the scoring for yourself.</p>
-        <a className="b b-line" style={{ width: '100%' }} href="#">Create a free account</a>
+        <Link className="b b-line" style={{ width: '100%' }} href="/login">Create a free account</Link>
         <ul>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3"><path d="m4 12 5 5L20 6"/></svg>10 tailored resumes</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3"><path d="m4 12 5 5L20 6"/></svg>All five templates</li>
@@ -545,8 +559,15 @@ export function ResumeBuilderOneLanding() {
       <div className="plan pro">
         <span className="pop">What most students pick</span>
         <h3>Pro</h3>
-        <div className="amt"><span data-price>$9</span><small data-per>/month</small></div>
-        <p className="blurb">For an active search - when every application needs its own version and you want to know why a score is what it is.</p>
+        <div className="amt">
+          <span data-price>{billing === 'yearly' ? '$89' : '$9'}</span>
+          <small data-per>{billing === 'yearly' ? '/year' : '/month'}</small>
+        </div>
+        <p className="blurb">
+          {billing === 'yearly'
+            ? 'Billed annually ($7.40/mo equivalent) - two full months free.'
+            : 'For an active search - when every application needs its own version and you want to know why a score is what it is.'}
+        </p>
         <Link className="b b-fill" style={{ width: '100%' }} href="/login">Start free, upgrade any time</Link>
         <ul>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3"><path d="m4 12 5 5L20 6"/></svg>Unlimited tailored resumes</li>

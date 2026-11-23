@@ -18,7 +18,8 @@ export async function POST(req: Request) {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
-      planId
+      planId,
+      currency = 'USD'
     } = await req.json();
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
@@ -58,12 +59,14 @@ export async function POST(req: Request) {
       validUntil.setMonth(validUntil.getMonth() + 1);
     }
 
+    const amountPaid = currency === 'INR' ? plan.amountInr : plan.amountUsd;
+
     // Log the payment
     const { error: paymentError } = await adminSupabase.from('payments_and_subscriptions').insert({
       user_id: user.id,
       razorpay_payment_id: razorpay_payment_id,
       razorpay_order_id: razorpay_order_id,
-      amount_paid: plan.amountInr,
+      amount_paid: amountPaid,
       status: 'SUCCESS',
       valid_until: validUntil.toISOString()
     });

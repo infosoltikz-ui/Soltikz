@@ -1,15 +1,8 @@
 import { createClient } from '@/utils/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
+import { ADMIN_EMAILS, isAuthorizedAdminEmail } from '@/constants/admin'
 
-export const ADMIN_EMAILS = [
-  'info.soltikz@gmail.com',
-  'balajiprojects049@gmail.com'
-]
-
-export function isAuthorizedAdminEmail(email?: string | null): boolean {
-  if (!email) return false
-  return ADMIN_EMAILS.includes(email.toLowerCase().trim())
-}
+export { ADMIN_EMAILS, isAuthorizedAdminEmail }
 
 /**
  * Validates that the current request is from an authenticated admin.

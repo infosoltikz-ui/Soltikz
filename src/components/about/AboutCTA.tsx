@@ -29,7 +29,7 @@ export function AboutCTA() {
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-slate-300 font-semibold">
               <span className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                20 Free Tailored Generations
+                10 Free Tailored Resumes
               </span>
               <span className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />

@@ -71,6 +71,7 @@ export function InsidePricingPlans() {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_signature: response.razorpay_signature,
               planId: selectedPlan.id,
+              currency,
             }),
           })
 

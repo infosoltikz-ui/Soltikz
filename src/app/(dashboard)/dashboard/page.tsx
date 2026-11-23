@@ -74,33 +74,29 @@ export default async function DashboardPage() {
 
   const jdsCount = userJds?.length || 0
 
-  // 4. Process resumes with live database scores
+  // 4. Process resumes with live database scores (honest calculation, zero simulated fallbacks)
   const processedResumes = (resumes || []).map((r: any) => {
     const rawScore = r.ats_analyses?.[0]?.overall_score
-    let hash = 0
-    for (let i = 0; i < (r.id || '').length; i++) {
-      hash = (hash * 31 + (r.id || '').charCodeAt(i)) % 1000
-    }
-    const score =
-      rawScore != null && rawScore > 0 ? rawScore : 91 + (Math.abs(hash) % 6)
     return {
       ...r,
-      ats_analyses: [{ overall_score: score }],
+      ats_analyses: rawScore != null && rawScore > 0 ? [{ overall_score: rawScore }] : [],
     }
   })
 
   // 5. Accurate live stats
   const totalResumes = processedResumes.length > 0 ? processedResumes.length : (profile?.resumes_generated || 0)
 
+  const scoredResumes = processedResumes.filter((r: any) => r.ats_analyses?.[0]?.overall_score != null)
+
   const avgAts =
-    processedResumes.length > 0
+    scoredResumes.length > 0
       ? Math.round(
-        processedResumes.reduce(
-          (sum: number, r: any) => sum + (r.ats_analyses?.[0]?.overall_score || 0),
+        scoredResumes.reduce(
+          (sum: number, r: any) => sum + (r.ats_analyses[0].overall_score || 0),
           0
-        ) / processedResumes.length
+        ) / scoredResumes.length
       )
-      : (totalResumes > 0 ? 92 : null)
+      : null
 
   // 6. Calculate Profile Completion & Strength dynamically from Master Resume Data
   const masterData = profile?.master_resume_data || {}
@@ -239,7 +235,7 @@ export default async function DashboardPage() {
 
   // 8. Build Recent Resumes from Database (ZERO Hardcoded Sample Resumes)
   const displayResumes = processedResumes.slice(0, 5).map((r: any) => {
-    const score = r.ats_analyses?.[0]?.overall_score ?? 91
+    const score = r.ats_analyses?.[0]?.overall_score ?? null
     const rawTitle = r.title || ''
     let jobTitle = r.parsed_job_descriptions?.job_title
     let company = r.parsed_job_descriptions?.company_name
@@ -403,13 +399,15 @@ export default async function DashboardPage() {
                   className="text-2xl font-bold tracking-tight num"
                   style={{ color: 'var(--ink)' }}
                 >
-                  {avgAts ?? 92}%
+                  {avgAts != null ? `${avgAts}%` : 'Ready'}
                 </span>
-                <span
-                  className="chip chip-hit text-[10.5px] px-1.5 py-0.5 rounded font-bold"
-                >
-                  +{Math.max(4, (avgAts ?? 92) - 80)}
-                </span>
+                {avgAts != null && (
+                  <span
+                    className="chip chip-hit text-[10.5px] px-1.5 py-0.5 rounded font-bold"
+                  >
+                    +{Math.max(4, avgAts - 80)}
+                  </span>
+                )}
               </div>
             </div>
             <div
@@ -566,10 +564,16 @@ export default async function DashboardPage() {
                         <span style={{ color: 'var(--ink-3)' }}>{r.meta}</span>
                       </div>
                       <div className="score">
-                        <div className={`meter ${r.isWarn ? 'warn' : ''}`} style={{ width: '56px' }}>
-                          <i style={{ width: `${r.score}%` }} />
-                        </div>
-                        <span className="num" style={{ color: 'var(--ink)' }}>{r.score}</span>
+                        {r.score != null ? (
+                          <>
+                            <div className={`meter ${r.isWarn ? 'warn' : ''}`} style={{ width: '56px' }}>
+                              <i style={{ width: `${r.score}%` }} />
+                            </div>
+                            <span className="num" style={{ color: 'var(--ink)' }}>{r.score}</span>
+                          </>
+                        ) : (
+                          <span className="text-[11px] font-semibold" style={{ color: 'var(--ink-3)' }}>Pending</span>
+                        )}
                       </div>
                       <div className="acts">
                         <Link
