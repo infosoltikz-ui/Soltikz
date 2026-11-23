@@ -21,9 +21,6 @@ export function ProfileContent({ initialProfile }: { initialProfile: any }) {
   const [importVersion, setImportVersion] = useState(0)
   const [showPreviewModal, setShowPreviewModal] = useState(false)
 
-  const hiddenFileInputRef = useRef<HTMLInputElement>(null)
-  const [isImporting, setIsImporting] = useState(false)
-
   const masterData = profile?.master_resume_data || {}
 
   const hasExistingData = !!(
@@ -42,38 +39,6 @@ export function ProfileContent({ initialProfile }: { initialProfile: any }) {
   const handleEdit = (tab: string) => {
     setActiveTab(tab)
     setViewMode(false)
-  }
-
-  const handleLinkedInImport = (parsedData: any) => {
-    setProfile((prev: any) => ({
-      ...prev,
-      full_name:
-        [parsedData.personal_info?.firstName, parsedData.personal_info?.lastName]
-          .filter(Boolean)
-          .join(' ') || prev.full_name,
-      master_resume_data: {
-        ...prev.master_resume_data,
-        personal_info: {
-          ...prev.master_resume_data?.personal_info,
-          ...parsedData.personal_info,
-        },
-        employment:
-          parsedData.employment?.length > 0
-            ? parsedData.employment
-            : prev.master_resume_data?.employment,
-        education:
-          parsedData.education?.length > 0
-            ? parsedData.education
-            : prev.master_resume_data?.education,
-        skills:
-          parsedData.skills?.length > 0
-            ? parsedData.skills
-            : prev.master_resume_data?.skills,
-      },
-    }))
-    setViewMode(false)
-    setActiveTab('personal')
-    setImportVersion((v) => v + 1)
   }
 
   const handleExcelImport = (parsedData: any) => {
@@ -114,35 +79,6 @@ export function ProfileContent({ initialProfile }: { initialProfile: any }) {
     setViewMode(false)
     setActiveTab('personal')
     setImportVersion((v) => v + 1)
-  }
-
-  const handleQuickImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    e.target.value = ''
-    if (!file) return
-
-    setIsImporting(true)
-    const toastId = toast.loading('Parsing LinkedIn PDF profile...')
-    try {
-      const formData = new FormData()
-      formData.append('file', file)
-
-      const res = await fetch('/api/ai/parse-linkedin-pdf', {
-        method: 'POST',
-        body: formData,
-      })
-      const data = await res.json()
-      if (!data.success) throw new Error(data.error || 'Failed to parse LinkedIn PDF')
-
-      handleLinkedInImport(data.parsed_data)
-      toast.success('LinkedIn PDF imported! Review and save each section below.', {
-        id: toastId,
-      })
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to import LinkedIn PDF', { id: toastId })
-    } finally {
-      setIsImporting(false)
-    }
   }
 
   useEffect(() => {
@@ -228,20 +164,10 @@ export function ProfileContent({ initialProfile }: { initialProfile: any }) {
 
   return (
     <>
-      <input
-        ref={hiddenFileInputRef}
-        type="file"
-        accept="application/pdf"
-        className="hidden"
-        disabled={isImporting}
-        onChange={handleQuickImportFile}
-      />
-
       <ProfileHeader
         profile={profile}
         viewMode={viewMode}
         onToggleViewMode={() => setViewMode(!viewMode)}
-        onOpenImport={() => hiddenFileInputRef.current?.click()}
         onPreviewModal={() => setShowPreviewModal(true)}
         onExcelImport={handleExcelImport}
       />
@@ -265,7 +191,6 @@ export function ProfileContent({ initialProfile }: { initialProfile: any }) {
             <div className="w-full lg:w-[300px] xl:w-[320px] shrink-0">
               <ProfileSidebar
                 profile={profile}
-                onImport={handleLinkedInImport}
                 onNavigateTab={handleEdit}
               />
             </div>
@@ -279,7 +204,6 @@ export function ProfileContent({ initialProfile }: { initialProfile: any }) {
             <div className="w-full lg:w-[300px] xl:w-[320px] shrink-0">
               <ProfileSidebar
                 profile={profile}
-                onImport={handleLinkedInImport}
                 onNavigateTab={(tab) => setActiveTab(tab)}
               />
             </div>

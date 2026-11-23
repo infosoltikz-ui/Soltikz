@@ -23,13 +23,29 @@ export default function ContactUs() {
     }
 
     setIsSubmitting(true);
-    // Simulate support ticket submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to send message');
+      }
+
       setSubmitted(true);
       toast.success('Your message has been sent successfully! Our team will respond within 24 hours.');
       setFormData({ name: '', email: '', subject: '', message: '' });
-    }, 1000);
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

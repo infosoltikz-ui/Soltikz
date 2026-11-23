@@ -21,7 +21,6 @@ interface ProfileHeaderProps {
   profile?: any
   viewMode?: boolean
   onToggleViewMode?: () => void
-  onOpenImport?: () => void
   onPreviewModal?: () => void
   onExcelImport?: (data: any) => void
 }
@@ -30,7 +29,6 @@ export function ProfileHeader({
   profile,
   viewMode,
   onToggleViewMode,
-  onOpenImport,
   onPreviewModal,
   onExcelImport,
 }: ProfileHeaderProps) {

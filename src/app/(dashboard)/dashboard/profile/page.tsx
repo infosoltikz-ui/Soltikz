@@ -61,7 +61,7 @@ export default async function ProfilePage() {
       bullets: [
         'Aim for 100% Profile Health shown in the right sidebar',
         'Add past roles so AI can pick the strongest matches for each JD',
-        'Import via LinkedIn PDF or Excel template to populate in seconds',
+        'Use our Excel template to populate your entire career record in seconds',
       ],
     },
   ]

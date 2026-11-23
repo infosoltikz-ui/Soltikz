@@ -1,4 +1,5 @@
 "use client";
+import Link from 'next/link'
 import { Check, X, User, Rocket, Crown } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/utils/cn'
@@ -128,13 +129,15 @@ export function PricingCards() {
               </ul>
 
               <div className="w-full mt-auto pt-4">
-                <Button 
-                  size="xl" 
-                  pill 
-                  className={cn("w-full text-[15px] font-bold border-2", plan.buttonColor)}
-                >
-                  {plan.buttonText}
-                </Button>
+                <Link href="/login" className="w-full block">
+                  <Button 
+                    size="xl" 
+                    pill 
+                    className={cn("w-full text-[15px] font-bold border-2 cursor-pointer", plan.buttonColor)}
+                  >
+                    {plan.buttonText}
+                  </Button>
+                </Link>
               </div>
 
             </div>

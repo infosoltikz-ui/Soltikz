@@ -9,6 +9,7 @@ import { ClassicCoverLetterTemplate } from './cover-letter-templates/ClassicTemp
 import { ModernDarkCoverLetterTemplate } from './cover-letter-templates/ModernDarkTemplate'
 import { MinimalCoverLetterTemplate } from './cover-letter-templates/MinimalTemplate'
 import { exportToPdf } from '@/utils/exportPdf'
+import { exportCoverLetterToDocx } from '@/utils/exportCoverLetterDocx'
 
 interface CoverLetterViewerProps {
   content: CoverLetterResponseData
@@ -41,6 +42,7 @@ export function CoverLetterViewer({
 }: CoverLetterViewerProps) {
   const [copied, setCopied] = useState(false)
   const [isDownloading, setIsDownloading] = useState(false)
+  const [isDownloadingDocx, setIsDownloadingDocx] = useState(false)
   const [activeVariationId, setActiveVariationId] = useState(content.variations[0]?.id || 'traditional')
   const [activeTemplateId, setActiveTemplateId] = useState('classic')
 
@@ -68,6 +70,31 @@ export function CoverLetterViewer({
       toast.error('Failed to generate PDF')
     } finally {
       setIsDownloading(false)
+    }
+  }
+
+  const handleDownloadDocx = async () => {
+    if (!activeVariation) return
+    setIsDownloadingDocx(true)
+    try {
+      const fileName = `${(candidateName || 'Cover_Letter').replace(/\s+/g, '_')}_Cover_Letter`
+      await exportCoverLetterToDocx({
+        content: activeVariation,
+        candidateName,
+        email,
+        phone,
+        location,
+        linkedin,
+        companyName,
+        jobTitle,
+        filename: fileName,
+      })
+      toast.success('Word document (.docx) downloaded!')
+    } catch (err) {
+      console.error('Failed to generate DOCX:', err)
+      toast.error('Failed to generate DOCX document')
+    } finally {
+      setIsDownloadingDocx(false)
     }
   }
 
@@ -153,6 +180,15 @@ export function CoverLetterViewer({
           >
             {copied ? <Check className="w-3.5 h-3.5 text-[#3FA57C]" /> : <Copy className="w-3.5 h-3.5" />}
             <span className="hidden sm:inline">{copied ? 'Copied' : 'Copy'}</span>
+          </button>
+          <button
+            onClick={handleDownloadDocx}
+            disabled={isDownloadingDocx}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-[#26313F] hover:border-[#3FA57C]/40 bg-[#1A2330] hover:bg-[#222E3F] text-[12px] font-bold text-[#E4EAF2] transition-all cursor-pointer shadow-2xs disabled:opacity-60"
+            title="Download Word (.docx)"
+          >
+            <Download className="w-3.5 h-3.5 text-[#3FA57C]" />
+            <span>{isDownloadingDocx ? 'Exporting...' : 'DOCX'}</span>
           </button>
           <button
             onClick={handleDownloadPdf}

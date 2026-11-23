@@ -313,7 +313,7 @@ export function InsidePricingPlans() {
                 'Full ATS gap diagnostics & 1-click bullet rewrites',
                 'Strict 2-line recruiter bullets & bold keywords',
                 'Role-specific Tech, HR & STAR interview prep sheet',
-                'Priority LinkedIn PDF parsing & support',
+                'Priority ATS optimization & 24/7 dedicated support',
               ].map((feature, idx) => (
                 <li key={idx} className="flex items-start gap-2.5 text-[13px]">
                   <Check className="w-4 h-4 text-[#D9A441] shrink-0 mt-0.5" strokeWidth={2.75} />

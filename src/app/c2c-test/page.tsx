@@ -1,14 +1,22 @@
 import React from 'react';
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
 import { C2CTemplate } from '@/components/create-resume/templates/c2c/C2CTemplate';
 import { c2cSampleData, sampleProfileData } from '@/components/create-resume/templates/sampleData';
 
-export default function C2CTestPage() {
+export default async function C2CTestPage() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect('/login');
+  }
+
   const PAGE_HEIGHT = 1123;
   const PAGE_WIDTH = 794;
 
   return (
     <div style={{ padding: '2rem', backgroundColor: '#f3f4f6', minHeight: '100vh', display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-      
       {/* Page 1 */}
       <div>
         <h2 style={{ textAlign: 'center', marginBottom: '1rem', fontWeight: 'bold' }}>Page 1</h2>
@@ -26,7 +34,6 @@ export default function C2CTestPage() {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

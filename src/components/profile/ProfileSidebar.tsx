@@ -12,11 +12,9 @@ import { cn } from '@/utils/cn'
 
 export function ProfileSidebar({
   profile,
-  onImport,
   onNavigateTab,
 }: {
   profile?: any
-  onImport?: (parsedData: any) => void
   onNavigateTab?: (tab: string) => void
 }) {
 
