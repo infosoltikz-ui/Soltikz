@@ -1038,24 +1038,26 @@ mark.n{background:#FAEBCB;color:inherit;padding:0 1px;border-radius:2px}
 .auth-pitch {
   position: relative;
   z-index: 2;
-  max-width: 440px;
+  max-width: 620px;
+  width: 100%;
   margin: 36px 0 0;
 }
 
 .auth-pitch h1 {
-  font-size: 38px;
-  line-height: 1.16;
-  letter-spacing: -0.03em;
+  font-size: 32px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
   font-weight: 700;
   color: #fff;
+  white-space: nowrap;
 }
 
 .auth-pitch p {
   color: var(--stage-ink, #9DAABB);
   font-size: 15px;
-  margin-top: 16px;
-  max-width: 38ch;
-  line-height: 1.55;
+  margin-top: 14px;
+  max-width: 52ch;
+  line-height: 1.6;
 }
 
 /* the demo object */
@@ -1604,7 +1606,8 @@ mark.n{background:#FAEBCB;color:inherit;padding:0 1px;border-radius:2px}
 
 @media (max-width: 1000px) {
   .auth-pitch h1 {
-    font-size: 31px;
+    font-size: 26px;
+    white-space: nowrap;
   }
   .auth-pin-kw {
     left: -14px;
@@ -1630,7 +1633,8 @@ mark.n{background:#FAEBCB;color:inherit;padding:0 1px;border-radius:2px}
     max-width: none;
   }
   .auth-pitch h1 {
-    font-size: 27px;
+    font-size: 24px;
+    white-space: normal;
   }
   .auth-stage-foot {
     margin-top: 24px;

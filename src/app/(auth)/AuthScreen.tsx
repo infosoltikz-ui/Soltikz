@@ -161,17 +161,14 @@ export default function AuthScreen({ initialMode = 'signin' }: AuthScreenProps) 
         <Link href="/" className="auth-stage-mark inline-flex items-center group transition-transform duration-150 hover:scale-[1.02]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/LOGO.png"
+            src="/LOGO-dark.png"
             alt="ResumeBuilderOne.com"
             className="h-12 sm:h-14 md:h-15 w-auto object-contain"
           />
         </Link>
 
         <div className="auth-pitch">
-          <h1>
-            One resume won&apos;t<br />
-            get you ten jobs.
-          </h1>
+          <h1>One resume won&apos;t get you ten jobs.</h1>
           <p>
             Paste the posting. Get a version written for that role, and a report showing exactly what matched and what didn&apos;t.
           </p>
