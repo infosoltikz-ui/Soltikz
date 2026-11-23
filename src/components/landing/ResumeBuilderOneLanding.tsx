@@ -23,7 +23,7 @@ export function ResumeBuilderOneLanding() {
   </Link>
     <nav>
       <a href="#how">How it works</a>
-      <a href="#formats">Resume types</a>
+      <a href="#templates">Resume types</a>
       <a href="#report">The match report</a>
       <a href="#features">Features</a>
       <a href="#pricing">Pricing</a>
@@ -159,7 +159,7 @@ export function ResumeBuilderOneLanding() {
 </section>
 
 {/*  ================= BEFORE / AFTER =================  */}
-<section className="sec sec-dark" style={{ paddingTop: '0' }}>
+<section className="sec sec-dark" id="before-after" style={{ paddingTop: '0' }}>
   <div className="wrap">
     <div className="lede">
       <h2 style={{ color: "#FFFFFF" }}>The same person. The same jobs. Two very different pages.</h2>
@@ -231,7 +231,8 @@ export function ResumeBuilderOneLanding() {
 </section>
 
 {/*  ================= RESUME FORMATS =================  */}
-<section className="sec sec-alt" id="formats">
+<section className="sec sec-alt" id="templates">
+  <div id="formats" />
   <div className="wrap">
     <div className="lede">
       <h2>Two resume types. One difference, and it's the part recruiters read first.</h2>
@@ -585,7 +586,7 @@ export function ResumeBuilderOneLanding() {
 </section>
 
 {/*  ================= FAQ =================  */}
-<section className="sec">
+<section className="sec" id="faq">
   <div className="wrap">
     <div className="lede mid"><h2>Questions worth asking</h2></div>
     <div className="faq">
