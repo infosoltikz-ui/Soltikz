@@ -158,16 +158,20 @@ export default function AuthScreen({ initialMode = 'signin' }: AuthScreenProps) 
 
       {/* ================= LEFT: the product itself ================= */}
       <section className="auth-stage">
-        <Link href="/" className="auth-stage-mark">
-          <div className="auth-mark">R1</div>
-          <div>
-            <b>ResumeBuilderOne</b>
-            <span>From résumé to dream job</span>
-          </div>
+        <Link href="/" className="auth-stage-mark inline-flex items-center group transition-transform duration-150 hover:scale-[1.02]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/LOGO.png"
+            alt="ResumeBuilderOne.com"
+            className="h-12 sm:h-14 md:h-15 w-auto object-contain"
+          />
         </Link>
 
         <div className="auth-pitch">
-          <h1>One résumé won&apos;t get you ten jobs.</h1>
+          <h1>
+            One resume won&apos;t<br />
+            get you ten jobs.
+          </h1>
           <p>
             Paste the posting. Get a version written for that role, and a report showing exactly what matched and what didn&apos;t.
           </p>
@@ -243,7 +247,7 @@ export default function AuthScreen({ initialMode = 'signin' }: AuthScreenProps) 
         <div className="auth-stage-foot">
           <div>
             <b>Free to start</b>
-            <span>10 résumés, no card needed</span>
+            <span>10 resumes, no card needed</span>
           </div>
           <div>
             <b>$9 a month after</b>
@@ -270,7 +274,7 @@ export default function AuthScreen({ initialMode = 'signin' }: AuthScreenProps) 
           {mode === 'signin' && (
             <div className="auth-pane on" id="p-in">
               <h2>Sign in</h2>
-              <p className="auth-lede">Your profile and every résumé you&apos;ve tailored are waiting.</p>
+              <p className="auth-lede">Your profile and every resume you&apos;ve tailored are waiting.</p>
 
               <button type="button" onClick={handleGoogleLogin} className="auth-google">
                 <svg viewBox="0 0 48 48" className="w-[17px] h-[17px] flex-none">
@@ -373,7 +377,7 @@ export default function AuthScreen({ initialMode = 'signin' }: AuthScreenProps) 
           {mode === 'signup' && (
             <div className="auth-pane on" id="p-up">
               <h2>Create your account</h2>
-              <p className="auth-lede">Ten tailored résumés free. No card, no trial countdown.</p>
+              <p className="auth-lede">Ten tailored resumes free. No card, no trial countdown.</p>
 
               <button type="button" onClick={handleGoogleLogin} className="auth-google">
                 <svg viewBox="0 0 48 48" className="w-[17px] h-[17px] flex-none">
@@ -407,7 +411,7 @@ export default function AuthScreen({ initialMode = 'signin' }: AuthScreenProps) 
                       required
                       value={signUpName}
                       onChange={(e) => setSignUpName(e.target.value)}
-                      placeholder="As it should appear on your résumé"
+                      placeholder="As it should appear on your resume"
                     />
                   </div>
                 </div>
