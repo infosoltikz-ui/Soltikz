@@ -35,7 +35,7 @@ export function ResumeBuilderOneLanding() {
 <section className="hero" id="top">
   <div className="wrap">
     <div>
-      <h1>One resume won't get you ten jobs.</h1>
+      <h1 style={{ color: "#FFFFFF" }}>One resume won't get you ten jobs.</h1>
       <p className="sub">Paste the job posting. Get a resume rewritten for that specific role - plus a report showing exactly which words matched, which are missing, and what to fix before you send it.</p>
       <div className="cta">
         <Link className="b b-fill b-lg" href="/register">Build my first resume free</Link>
@@ -114,7 +114,7 @@ export function ResumeBuilderOneLanding() {
 <section className="sec sec-dark" id="how">
   <div className="wrap">
     <div className="lede">
-      <h2>Three steps, about two minutes.</h2>
+      <h2 style={{ color: "#FFFFFF" }}>Three steps, about two minutes.</h2>
       <p>You write your career history once. After that, every application is a paste and a click.</p>
     </div>
 
@@ -158,7 +158,7 @@ export function ResumeBuilderOneLanding() {
 <section className="sec sec-dark" style={{ paddingTop: '0' }}>
   <div className="wrap">
     <div className="lede">
-      <h2>The same person. The same jobs. Two very different pages.</h2>
+      <h2 style={{ color: "#FFFFFF" }}>The same person. The same jobs. Two very different pages.</h2>
       <p>Nothing here is invented - we don't add experience you don't have. We choose what to lead with, and we say it in the employer's own vocabulary.</p>
     </div>
 
@@ -595,7 +595,7 @@ export function ResumeBuilderOneLanding() {
 {/*  ================= FINAL CTA =================  */}
 <section className="sec-dark">
   <div className="wrap final">
-    <h2>Your next application deserves its own resume.</h2>
+    <h2 style={{ color: "#FFFFFF" }}>Your next application deserves its own resume.</h2>
     <p>Build your profile once, then paste a posting and see what the report says. It costs nothing to find out.</p>
     <div className="cta">
       <Link className="b b-fill b-lg" href="/register">Build my first resume free</Link>

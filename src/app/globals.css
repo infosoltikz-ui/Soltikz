@@ -1647,9 +1647,6 @@ mark.n{background:#FAEBCB;color:inherit;padding:0 1px;border-radius:2px}
   }
 }
 
-
-
-
 /* ==========================================================================
    RESUMEBUILDERONE LANDING THEME VARIABLES
    ========================================================================== */
@@ -1727,7 +1724,6 @@ mark.n{background:#FAEBCB;color:inherit;padding:0 1px;border-radius:2px}
   --sh-paper: 0 2px 4px rgba(21, 30, 43, 0.12), 0 22px 50px -16px rgba(21, 30, 43, 0.34);
 }
 
-
 .landing-page {
   font-family: var(--ui, "Archivo", sans-serif);
   background: var(--desk);
@@ -1770,3 +1766,314 @@ mark.n{background:#FAEBCB;color:inherit;padding:0 1px;border-radius:2px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 
+
+
+/* ==========================================================================
+   HIGH-CONTRAST TYPOGRAPHY OVERRIDES FOR LANDING PAGE
+   ========================================================================== */
+
+/* Dark Stages: Hero, How It Works, Before/After, and Final CTA */
+.landing-page .hero {
+  background: var(--stage);
+  color: #FFFFFF !important;
+}
+
+.landing-page .hero h1 {
+  color: #FFFFFF !important;
+}
+
+.landing-page .hero .sub {
+  color: var(--stage-ink, #9DAABB) !important;
+}
+
+.landing-page .hero .fine {
+  color: var(--stage-dim, #69788B) !important;
+}
+
+.landing-page .sec-dark {
+  background: var(--stage);
+  color: #FFFFFF !important;
+}
+
+.landing-page .sec-dark h1,
+.landing-page .sec-dark h2,
+.landing-page .sec-dark h3,
+.landing-page .sec-dark h4 {
+  color: #FFFFFF !important;
+}
+
+.landing-page .sec-dark .lede h2 {
+  color: #FFFFFF !important;
+}
+
+.landing-page .sec-dark .lede p {
+  color: var(--stage-ink, #9DAABB) !important;
+}
+
+.landing-page .sec-dark .stp h3 {
+  color: #FFFFFF !important;
+}
+
+.landing-page .sec-dark .stp p {
+  color: var(--stage-ink, #9DAABB) !important;
+}
+
+.landing-page .sec-dark .ba-col .tag .tx b {
+  color: #FFFFFF !important;
+}
+
+.landing-page .sec-dark .ba-col .tag .tx span {
+  color: var(--stage-ink, #9DAABB) !important;
+}
+
+.landing-page .final {
+  color: #FFFFFF !important;
+}
+
+.landing-page .final h2 {
+  color: #FFFFFF !important;
+}
+
+.landing-page .final p {
+  color: var(--stage-ink, #9DAABB) !important;
+}
+
+.landing-page .final .fine {
+  color: var(--stage-dim, #69788B) !important;
+}
+
+/* Nav & Header */
+.landing-page .nav {
+  color: #FFFFFF !important;
+}
+
+.landing-page .nav .logo b {
+  color: #FFFFFF !important;
+}
+
+.landing-page .nav nav a {
+  color: var(--stage-ink, #9DAABB) !important;
+}
+
+.landing-page .nav nav a:hover {
+  color: #FFFFFF !important;
+}
+
+.landing-page .nav .acts a.sign {
+  color: var(--stage-ink, #9DAABB) !important;
+}
+
+.landing-page .nav .acts a.sign:hover {
+  color: #FFFFFF !important;
+}
+
+/* Light Sections: Problem, Formats, Report, Features, Templates, Pricing, FAQ */
+.landing-page .sec:not(.sec-dark) h1,
+.landing-page .sec:not(.sec-dark) h2,
+.landing-page .sec:not(.sec-dark) h3,
+.landing-page .sec:not(.sec-dark) h4,
+.landing-page .sec-alt h1,
+.landing-page .sec-alt h2,
+.landing-page .sec-alt h3,
+.landing-page .sec-alt h4 {
+  color: var(--ink) !important;
+}
+
+.landing-page .sec:not(.sec-dark) .lede h2,
+.landing-page .sec-alt .lede h2 {
+  color: var(--ink) !important;
+}
+
+.landing-page .sec:not(.sec-dark) .lede p,
+.landing-page .sec-alt .lede p {
+  color: var(--ink-2) !important;
+}
+
+.landing-page .prob-list b {
+  color: var(--ink) !important;
+}
+
+.landing-page .prob-list p {
+  color: var(--ink-2) !important;
+}
+
+.landing-page .rule b {
+  color: var(--ink) !important;
+}
+
+.landing-page .rule p {
+  color: var(--ink-2) !important;
+}
+
+.landing-page .why b {
+  color: var(--ink) !important;
+}
+
+.landing-page .why p {
+  color: var(--ink-2) !important;
+}
+
+.landing-page .ft b {
+  color: var(--ink) !important;
+}
+
+.landing-page .ft p {
+  color: var(--ink-2) !important;
+}
+
+.landing-page .plan h3 {
+  color: var(--ink) !important;
+}
+
+.landing-page .plan .amt {
+  color: var(--ink) !important;
+}
+
+.landing-page .plan .amt small {
+  color: var(--ink-3) !important;
+}
+
+.landing-page .plan .blurb {
+  color: var(--ink-2) !important;
+}
+
+.landing-page .plan li {
+  color: var(--ink) !important;
+}
+
+.landing-page .plan li.off {
+  color: var(--ink-3) !important;
+}
+
+.landing-page .faq summary {
+  color: var(--ink) !important;
+}
+
+.landing-page .faq p {
+  color: var(--ink-2) !important;
+}
+
+.landing-page .fmt-head b {
+  color: var(--ink) !important;
+}
+
+.landing-page .rep-head b {
+  color: var(--ink) !important;
+}
+
+.landing-page .rep-head p {
+  color: var(--ink-2) !important;
+}
+
+.landing-page .rep-head .ring .v {
+  color: var(--ink) !important;
+}
+
+.landing-page .rep-brk .l span {
+  color: var(--ink) !important;
+}
+
+.landing-page .rep-brk .l b {
+  color: var(--ink) !important;
+}
+
+.landing-page .cmp .r.h > div {
+  color: var(--ink) !important;
+}
+
+.landing-page .cmp .r > div:first-child {
+  color: var(--ink) !important;
+}
+
+/* Paper Document Mockups (Always dark text on white sheet) */
+.landing-page .doc,
+.landing-page .fmt-doc,
+.landing-page .ba-doc {
+  background: #FFFFFF !important;
+  color: #1A1A1A !important;
+}
+
+.landing-page .doc h4,
+.landing-page .fmt-doc h4,
+.landing-page .ba-doc h4 {
+  color: #1A1A1A !important;
+  border-bottom: 1px solid #1A1A1A !important;
+}
+
+.landing-page .doc .nm,
+.landing-page .fmt-doc .nm,
+.landing-page .ba-doc .nm {
+  color: #1A1A1A !important;
+}
+
+.landing-page .doc .ct,
+.landing-page .fmt-doc .ct,
+.landing-page .ba-doc .ct {
+  color: #5A5A5A !important;
+}
+
+.landing-page .doc p,
+.landing-page .fmt-doc p,
+.landing-page .ba-doc p {
+  color: #1A1A1A !important;
+}
+
+.landing-page .doc li,
+.landing-page .fmt-doc li,
+.landing-page .ba-doc li {
+  color: #1A1A1A !important;
+}
+
+.landing-page .doc .jb,
+.landing-page .fmt-doc .jb,
+.landing-page .ba-doc .jb {
+  color: #1A1A1A !important;
+}
+
+.landing-page .doc .jb b,
+.landing-page .fmt-doc .jb b,
+.landing-page .ba-doc .jb b {
+  color: #1A1A1A !important;
+}
+
+.landing-page .doc .jb i,
+.landing-page .fmt-doc .jb i,
+.landing-page .ba-doc .jb i {
+  color: #666666 !important;
+}
+
+.landing-page .skl b {
+  color: #1A1A1A !important;
+}
+
+/* Pins on Hero */
+.landing-page .pin {
+  background: rgba(15, 22, 32, 0.94) !important;
+  color: #FFFFFF !important;
+}
+
+.landing-page .pin b {
+  color: #FFFFFF !important;
+}
+
+.landing-page .pin .v {
+  color: #FFFFFF !important;
+}
+
+/* Footer text */
+.landing-page .foot {
+  background: var(--stage);
+  color: var(--stage-dim, #69788B);
+}
+
+.landing-page .foot span {
+  color: var(--stage-dim, #8B9BB0);
+}
+
+.landing-page .foot a {
+  color: var(--stage-dim, #8B9BB0);
+}
+
+.landing-page .foot a:hover {
+  color: #FFFFFF !important;
+}
