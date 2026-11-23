@@ -29,8 +29,8 @@ export function ResumeBuilderOneLanding() {
       <a href="#pricing">Pricing</a>
     </nav>
     <div className="acts">
-      <a className="sign" href="#">Sign in</a>
-      <a className="b b-fill" href="#pricing">Start free</a>
+      <Link className="sign" href="/login">Sign in</Link>
+      <Link className="b b-fill" href="/login">Start free</Link>
     </div>
   </div>
 </header>
@@ -547,7 +547,7 @@ export function ResumeBuilderOneLanding() {
         <h3>Pro</h3>
         <div className="amt"><span data-price>$9</span><small data-per>/month</small></div>
         <p className="blurb">For an active search - when every application needs its own version and you want to know why a score is what it is.</p>
-        <a className="b b-fill" style={{ width: '100%' }} href="#">Start free, upgrade any time</a>
+        <Link className="b b-fill" style={{ width: '100%' }} href="/login">Start free, upgrade any time</Link>
         <ul>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3"><path d="m4 12 5 5L20 6"/></svg>Unlimited tailored resumes</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3"><path d="m4 12 5 5L20 6"/></svg>The full match report, with one-click rewrites</li>

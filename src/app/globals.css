@@ -2077,3 +2077,63 @@ mark.n{background:#FAEBCB;color:inherit;padding:0 1px;border-radius:2px}
 .landing-page .foot a:hover {
   color: #FFFFFF !important;
 }
+
+/* ==========================================================================
+   BRIGHT, HIGH-CONTRAST NAVBAR LINKS & START FREE BUTTON
+   ========================================================================== */
+.landing-page .nav nav {
+  display: flex;
+  gap: 28px;
+  margin-left: 20px;
+  flex: 1;
+}
+
+.landing-page .nav nav a {
+  font-size: 14.5px !important;
+  font-weight: 500 !important;
+  color: #E2E8F0 !important;
+  transition: color 0.15s ease, opacity 0.15s ease;
+  opacity: 0.92 !important;
+}
+
+.landing-page .nav nav a:hover {
+  color: #4FBE92 !important;
+  opacity: 1 !important;
+}
+
+.landing-page .nav .acts {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.landing-page .nav .acts a.sign {
+  font-size: 14.5px !important;
+  font-weight: 500 !important;
+  color: #E2E8F0 !important;
+  padding: 8px 12px !important;
+  transition: color 0.15s ease;
+  opacity: 0.92 !important;
+}
+
+.landing-page .nav .acts a.sign:hover {
+  color: #4FBE92 !important;
+  opacity: 1 !important;
+}
+
+.landing-page .nav .acts a.b-fill {
+  background: #0A6E4E !important;
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  padding: 10px 22px !important;
+  border-radius: 9px !important;
+  box-shadow: 0 2px 8px rgba(10, 110, 78, 0.35);
+  transition: all 0.15s ease;
+}
+
+.landing-page .nav .acts a.b-fill:hover {
+  background: #0D8A62 !important;
+  box-shadow: 0 4px 14px rgba(13, 138, 98, 0.45);
+  transform: translateY(-1px);
+}
