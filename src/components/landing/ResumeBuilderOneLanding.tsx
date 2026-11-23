@@ -122,10 +122,10 @@ export function ResumeBuilderOneLanding() {
       <p>You write your career history once. After that, every application is a paste and a click.</p>
     </div>
 
-    <div className="steps">
+    <div className="steps" style={{ background: "transparent", border: "none", boxShadow: "none" }}>
       <div className="stp">
         <span className="n num">1</span>
-        <h3>Write your profile once</h3>
+        <h3 style={{ color: "#FFFFFF" }}>Write your profile once</h3>
         <p>Jobs, education, projects, certifications, skills. Import it from LinkedIn or type it in. You never re-enter it again.</p>
         <div className="shot">
           <div className="mini-field">Information Security Analyst - 2026 to now</div>
@@ -135,7 +135,7 @@ export function ResumeBuilderOneLanding() {
       </div>
       <div className="stp">
         <span className="n num">2</span>
-        <h3>Paste the job posting</h3>
+        <h3 style={{ color: "#FFFFFF" }}>Paste the job posting</h3>
         <p>The whole thing - responsibilities, requirements, the lot. We pull out the terms and priorities the employer actually wrote down.</p>
         <div className="shot">
           <div className="mini-field" style={{ height: '52px', lineHeight: '1.45' }}>We're hiring a Security Investigator to own end-to-end investigations across Sentinel and Defender XDR...</div>
@@ -146,7 +146,7 @@ export function ResumeBuilderOneLanding() {
       </div>
       <div className="stp">
         <span className="n num">3</span>
-        <h3>Get the resume and the report</h3>
+        <h3 style={{ color: "#FFFFFF" }}>Get the resume and the report</h3>
         <p>A finished page in your chosen template, and a breakdown of what matched, what's missing, and which bullets to strengthen.</p>
         <div className="shot">
           <div className="mini-lab"><span>Keywords</span><b className="num">88%</b></div><div className="mini-bar"><i style={{ width: '88%' }}></i></div>
