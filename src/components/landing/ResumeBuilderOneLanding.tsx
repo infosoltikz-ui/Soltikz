@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { LandingTemplatesShowcase } from './LandingTemplatesShowcase';
 
 export function ResumeBuilderOneLanding() {
   const [billing, setBilling] = useState<'monthly' | 'yearly'>('monthly');
@@ -126,7 +127,7 @@ export function ResumeBuilderOneLanding() {
       <div className="stp">
         <span className="n num">1</span>
         <h3 style={{ color: "#FFFFFF" }}>Write your profile once</h3>
-        <p>Jobs, education, projects, certifications, skills. Import it from LinkedIn or type it in. You never re-enter it again.</p>
+        <p>Jobs, education, projects, certifications, skills. Enter your career history once. You never re-enter it again.</p>
         <div className="shot">
           <div className="mini-field">Information Security Analyst - 2026 to now</div>
           <div className="mini-field">Cyber Security Analyst - 2023</div>
@@ -495,21 +496,13 @@ export function ResumeBuilderOneLanding() {
 </section>
 
 {/*  ================= TEMPLATES =================  */}
-<section className="sec">
+<section className="sec" id="templates">
   <div className="wrap">
     <div className="lede">
       <h2>ATS-friendly templates, all of them parser-safe.</h2>
       <p>No text boxes, no icons in place of words, no two-column tricks that scramble on the way in. Plain structure underneath, whichever one you pick.</p>
     </div>
-    <div className="tpls">
-      <div><div className="tp-prev"><i className="pl h"></i><i className="pl" style={{ width: '70%' }}></i><i className="pl r"></i><i className="pl"></i><i className="pl" style={{ width: '92%' }}></i><i className="pl" style={{ width: '80%' }}></i><i className="pl r"></i><i className="pl" style={{ width: '88%' }}></i><i className="pl" style={{ width: '64%' }}></i></div><b>Classic</b><span>Safest for large employers</span></div>
-      <div><div className="tp-prev"><i className="pl h" style={{ background: 'var(--brand)', width: '48%' }}></i><i className="pl" style={{ width: '66%' }}></i><i className="pl r a"></i><i className="pl"></i><i className="pl" style={{ width: '85%' }}></i><i className="pl r a"></i><i className="pl" style={{ width: '90%' }}></i><i className="pl" style={{ width: '58%' }}></i></div><b>Accent</b><span>Coloured section rules</span></div>
-      <div><div className="tp-prev"><i className="pl h" style={{ width: '100%', height: '18px', background: '#3E4A5C', marginBottom: '9px' }}></i><i className="pl" style={{ width: '74%' }}></i><i className="pl r"></i><i className="pl"></i><i className="pl" style={{ width: '83%' }}></i><i className="pl r"></i><i className="pl" style={{ width: '70%' }}></i></div><b>Header block</b><span>Reads well printed</span></div>
-      {/* Commented template 4 per user requirement:
-<div><div className="tp-prev"><i className="pl h" style={{ width: '64%' }}></i><i className="pl" style={{ width: '44%' }}></i><div style={{ display: 'flex', gap: '6px', marginTop: '9px' }}><div style={{ flex: '1' }}><i className="pl r" style={{ width: '70%' }}></i><i className="pl"></i><i className="pl" style={{ width: '86%' }}></i><i className="pl" style={{ width: '60%' }}></i></div><div style={{ width: '30%' }}><i className="pl r" style={{ width: '90%' }}></i><i className="pl"></i><i className="pl" style={{ width: '80%' }}></i></div></div></div><b>Two column</b><span>Fits more on one page</span></div>
-*/}
-      <div><div className="tp-prev"><i className="pl" style={{ width: '100%', height: '6px', background: 'var(--brand)', marginBottom: '9px' }}></i><i className="pl h" style={{ width: '58%' }}></i><i className="pl" style={{ width: '70%' }}></i><i className="pl r"></i><i className="pl"></i><i className="pl" style={{ width: '88%' }}></i><i className="pl" style={{ width: '62%' }}></i></div><b>Top rule</b><span>For design-adjacent roles</span></div>
-    </div>
+    <LandingTemplatesShowcase />
   </div>
 </section>
 
