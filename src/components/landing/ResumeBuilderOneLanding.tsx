@@ -15,7 +15,11 @@ export function ResumeBuilderOneLanding() {
   <div className="wrap">
     <Link className="logo" href="#top" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
     {/* eslint-disable-next-line @next/next/no-img-element */}
-    <img src="/LOGO-dark.png" alt="ResumeBuilderOne" className="h-9 w-auto object-contain" />
+    <img
+      src="/LOGO-dark.png"
+      alt="ResumeBuilderOne.com"
+      className="h-12 sm:h-14 md:h-15 w-auto object-contain transition-transform hover:scale-[1.02]"
+    />
   </Link>
     <nav>
       <a href="#how">How it works</a>
