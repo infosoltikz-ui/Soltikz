@@ -1,11 +1,22 @@
-import { Header } from "@/components/layout/navbar"
-import { Footer } from "@/components/layout/footer"
+"use client";
+
+import React from "react";
+import { usePathname } from "next/navigation";
+import { Header } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 
 export default function MainLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
+  if (isHome) {
+    return <>{children}</>;
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -14,5 +25,5 @@ export default function MainLayout({
       </main>
       <Footer />
     </div>
-  )
+  );
 }

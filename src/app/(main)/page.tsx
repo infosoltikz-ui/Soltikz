@@ -1,41 +1,19 @@
-import { Metadata } from 'next'
-import { HeroSection } from '@/components/landing/HeroSection'
-import { StatsSection } from '@/components/landing/StatsSection'
-import { BentoFeaturesSection } from '@/components/landing/BentoFeaturesSection'
-import { HowItWorksSection } from '@/components/landing/HowItWorksSection'
-import { TemplatesSection } from '@/components/landing/TemplatesSection'
-import { BeforeAfterSection } from '@/components/landing/BeforeAfterSection'
-import { PricingSection } from '@/components/landing/PricingSection'
-import { TestimonialsSection } from '@/components/landing/TestimonialsSection'
-import { FAQSection } from '@/components/landing/FAQSection'
-import { CTASection } from '@/components/landing/CTASection'
+import { Metadata } from 'next';
+import { ResumeBuilderOneLanding } from '@/components/landing/ResumeBuilderOneLanding';
 
 export const metadata: Metadata = {
-  title: 'AI Resume Builder & Instant ATS Checker | Soltkiz',
-  description: 'Create recruiter-ready, ATS-friendly resumes in minutes with AI. Real-time ATS scoring, keyword optimization, modern templates, and instant Word (.docx) & PDF downloads.',
+  title: "ResumeBuilderOne - a resume written for the job you're applying to",
+  description: "Paste the job posting. Get a resume rewritten for that specific role - plus a report showing exactly what matched, which words are missing, and what to fix before you send it.",
   alternates: {
     canonical: 'https://www.resumebuilderone.com',
   },
   openGraph: {
-    title: 'AI Resume Builder & Instant ATS Checker | Soltkiz',
-    description: 'Create recruiter-ready, ATS-friendly resumes in minutes with AI. Real-time ATS scoring, keyword optimization, modern templates, and instant Word (.docx) & PDF downloads.',
+    title: "ResumeBuilderOne - a resume written for the job you're applying to",
+    description: "Paste the job posting. Get a resume rewritten for that specific role - plus a report showing exactly what matched, which words are missing, and what to fix before you send it.",
     url: 'https://www.resumebuilderone.com',
   },
-}
+};
 
 export default function Home() {
-  return (
-    <>
-      <HeroSection />
-      <StatsSection />
-      <BentoFeaturesSection />
-      <HowItWorksSection />
-      <TemplatesSection />
-      <BeforeAfterSection />
-      <PricingSection />
-      <TestimonialsSection />
-      <FAQSection />
-      <CTASection />
-    </>
-  )
+  return <ResumeBuilderOneLanding />;
 }
