@@ -23,6 +23,7 @@ export interface ResumeTemplateMeta {
 }
 
 export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
+  // ── Full-Time Templates (3 Active) ──
   {
     id: 'classic',
     name: 'Classic ATS',
@@ -41,6 +42,8 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     description: 'Large colored header block, serif typography, and clean unlined section headers.',
     component: BannerTemplate,
   },
+  /*
+  // Commented out per client request - preserved for easy retrieval
   {
     id: 'certified',
     name: 'Certified Professional',
@@ -53,6 +56,9 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     description: 'Thick top color bar, left-aligned section headers, and indented content.',
     component: SidebarTemplate,
   },
+  */
+
+  // ── C2C Templates (3 Active) ──
   {
     id: 'c2c',
     name: 'C2C Classic Contractor',
@@ -71,6 +77,8 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     description: 'Clean centered header and distinct lines optimized for C2C strict formatting.',
     component: C2CModernTemplate,
   },
+  /*
+  // Commented out per client request - preserved for easy retrieval
   {
     id: 'c2c-certified',
     name: 'C2C Certified',
@@ -83,6 +91,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     description: 'Bold top bar and indented left-aligned C2C structure for high readability.',
     component: C2CSidebarTemplate,
   },
+  */
 ];
 
 export const DEFAULT_TEMPLATE_ID = RESUME_TEMPLATES[0].id;

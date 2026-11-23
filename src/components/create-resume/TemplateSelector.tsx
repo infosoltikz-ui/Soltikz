@@ -24,7 +24,7 @@ function TemplateThumbnail({ id, profileData }: { id: string; profileData?: any 
     <div className="w-full h-full relative overflow-hidden bg-white flex justify-center">
       <div 
         className="absolute top-0 origin-top pointer-events-none select-none" 
-        style={{ width: '850px', transform: 'scale(0.24)' }}
+        style={{ width: '850px', transform: 'scale(0.26)' }}
       >
         <Suspense fallback={<div className="w-full h-full bg-slate-100 animate-pulse" />}>
           <TemplateComponent 
@@ -39,6 +39,10 @@ function TemplateThumbnail({ id, profileData }: { id: string; profileData?: any 
 
 export function TemplateSelector({ selectedId, onChange, isSubscribed = true, onRequiresUpgrade, resumeType = 'fulltime', profileData }: TemplateSelectorProps) {
   const [previewTemplateId, setPreviewTemplateId] = useState<string | null>(null)
+
+  const activeTemplates = RESUME_TEMPLATES.filter(t => 
+    resumeType === 'c2c' ? t.id.startsWith('c2c') : !t.id.startsWith('c2c')
+  )
 
   const handleTemplateClick = (id: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation()
@@ -66,14 +70,12 @@ export function TemplateSelector({ selectedId, onChange, isSubscribed = true, on
             </p>
           </div>
           <span className="text-[11.5px] font-extrabold text-[#0F5132] dark:text-[#8FD3B6] bg-[#E6F4EA] dark:bg-[#123227] px-3.5 py-1.5 rounded-full border border-[#CEEAD6] dark:border-[#3FA57C]/30 self-start sm:self-auto shrink-0">
-            5 ATS Certified Layouts
+            {activeTemplates.length} ATS Certified Layouts
           </span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
-          {RESUME_TEMPLATES.filter(t => 
-            resumeType === 'c2c' ? t.id.startsWith('c2c') : !t.id.startsWith('c2c')
-          ).map((template) => {
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {activeTemplates.map((template) => {
             const isSelected = template.id === selectedId
             return (
               <div
@@ -87,15 +89,15 @@ export function TemplateSelector({ selectedId, onChange, isSubscribed = true, on
                 )}
               >
                 {/* Thumbnail Area with Hover Overlay */}
-                <div className="h-44 w-full border-b border-[#D8DEE7] dark:border-[#26313F] bg-white overflow-hidden relative">
+                <div className="h-48 sm:h-52 w-full border-b border-[#D8DEE7] dark:border-[#26313F] bg-white overflow-hidden relative">
                   <TemplateThumbnail id={template.id} profileData={profileData} />
                   
                   {/* Floating Action Buttons on Thumbnail Hover */}
-                  <div className="absolute inset-0 bg-white/85 dark:bg-[#0D131B]/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2 backdrop-blur-[1.5px]">
+                  <div className="absolute inset-0 bg-slate-900/35 dark:bg-slate-950/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2.5 p-2 backdrop-blur-[0.5px]">
                     <button
                       type="button"
                       onClick={(e) => handleTemplateClick(template.id, e)}
-                      className="bg-[#F8FAFC] dark:bg-[#1A2330] hover:bg-[#EEF2F6] dark:hover:bg-[#222E3F] text-[#16202E] dark:text-[#E4EAF2] text-[12px] font-bold px-3 py-1.5 rounded-lg shadow-md border border-[#D8DEE7] dark:border-[#26313F] transform translate-y-1 group-hover:translate-y-0 transition-all flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95"
+                      className="bg-white dark:bg-[#1A2330] hover:bg-slate-100 dark:hover:bg-[#222E3F] text-[#16202E] dark:text-[#E4EAF2] text-[12px] font-bold px-3 py-1.5 rounded-lg shadow-md border border-[#D8DEE7] dark:border-[#26313F] transform translate-y-1 group-hover:translate-y-0 transition-all flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95"
                       title="Preview Template"
                     >
                       <Eye className="w-3.5 h-3.5 text-[#0A6E4E] dark:text-[#3FA57C]" />
